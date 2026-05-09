@@ -1,4 +1,4 @@
-﻿# Python / Django
+# Python / Django
 venv/
 __pycache__/
 *.pyc
@@ -24,3 +24,9 @@ Thumbs.db
 
 # Zip deploy
 *.zip
+
+.env
+.env.*
+.env.local
+.env.server
+protected_media/

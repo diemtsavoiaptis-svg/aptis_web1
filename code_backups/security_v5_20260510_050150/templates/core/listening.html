@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="vi">
@@ -5,7 +6,7 @@
     <meta charset="UTF-8">
     <title>Listening Part {{ part }}</title>
     <link rel="stylesheet" href="{% static 'core/style.css' %}">
-    <link rel="stylesheet" href="{% static 'core/security_protect.css' %}">
+<link rel="stylesheet" href="{% static 'core/security_protect.css' %}">
 </head>
 <body>
 
@@ -43,14 +44,8 @@
 
                     <h2>{{ question.question_text }}</h2>
 
-                    {% if question.audio_provider == "supabase" and question.audio_key %}
-                        <audio controls class="audio-player secure-audio" preload="none" controlsList="nodownload noplaybackrate">
-                            <source src="{% url 'secure_audio' question.id %}" type="audio/mpeg">
-                            Tr?nh duy?t c?a b?n kh?ng h? tr? ph?t ?m thanh.
-                        </audio>
-                    {% elif question.audio_file %}
-                        <audio controls class="audio-player secure-audio" preload="none" controlsList="nodownload noplaybackrate">
-                            <source src="{% url 'secure_audio' question.id %}" type="audio/mpeg">
+                    {% if question.audio_file %}
+                        <audio controls class="audio-player secure-audio" preload="none" controlsList="nodownload noplaybackrate" data-audio-url="{% url 'secure_audio' question.id %}">
                             Tr?nh duy?t c?a b?n kh?ng h? tr? ph?t ?m thanh.
                         </audio>
                     {% elif question.audio_url %}
@@ -120,14 +115,6 @@
     </main>
 </div>
 
-{% if request.user.is_authenticated %}
-<div class="security-watermark" aria-hidden="true">
-    {% for i in "123456789012345678901234" %}
-        <span>{{ request.user.email|default:request.user.username }} ? TSA Aptis ? <span data-security-time></span></span>
-    {% endfor %}
-</div>
-{% endif %}
-
 <script>
     const radios = document.querySelectorAll('input[type="radio"]');
     const questionCards = document.querySelectorAll('.listening-question-card[data-question-id]');
@@ -135,7 +122,7 @@
     const remainingCount = document.getElementById('remainingCount');
     const scoreText = document.getElementById('scoreText');
     const scoreMessage = document.getElementById('scoreMessage');
-    const totalQuestions = questionCards.length;
+    const totalC?us = questionCards.length;
 
     function updateAnswered() {
         const names = new Set();
@@ -152,7 +139,7 @@
         });
 
         answeredCount.innerText = names.size;
-        remainingCount.innerText = totalQuestions - names.size;
+        remainingCount.innerText = totalC?us - names.size;
     }
 
     radios.forEach(radio => {
@@ -213,11 +200,11 @@
             }
         });
 
-        scoreText.innerText = score + '/' + totalQuestions;
+        scoreText.innerText = score + '/' + totalC?us;
 
-        if (score === totalQuestions && totalQuestions > 0) {
+        if (score === totalC?us && totalC?us > 0) {
             scoreMessage.innerText = 'Xu?t s?c! B?n ?? l?m ??ng to?n b?.';
-        } else if (score >= Math.ceil(totalQuestions * 0.7)) {
+        } else if (score >= Math.ceil(totalC?us * 0.7)) {
             scoreMessage.innerText = 'T?t r?i! B?n ch? c?n luy?n th?m m?t ch?t n?a.';
         } else {
             scoreMessage.innerText = 'B?n c?n luy?n th?m ph?n nghe n?y nh?.';
@@ -255,13 +242,21 @@
         });
 
         answeredCount.innerText = '0';
-        remainingCount.innerText = totalQuestions;
-        scoreText.innerText = '0/' + totalQuestions;
+        remainingCount.innerText = totalC?us;
+        scoreText.innerText = '0/' + totalC?us;
         scoreMessage.innerText = 'L?m b?i xong, h?y b?m n?t n?p b?i.';
     }
 </script>
 
+
+{% if request.user.is_authenticated %}
+<div class="security-watermark" aria-hidden="true">
+    {% for i in "123456789012345678901234" %}
+        <span>{{ request.user.email|default:request.user.username }} ? TSA Aptis ? <span data-security-time></span></span>
+    {% endfor %}
+</div>
 <script src="{% static 'core/security_protect.js' %}"></script>
+{% endif %}
 
 </body>
 </html>

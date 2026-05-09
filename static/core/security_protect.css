@@ -1,0 +1,93 @@
+html.tsa-protected,
+html.tsa-protected body,
+html.tsa-protected * {
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+.security-watermark {
+    pointer-events: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    opacity: 0.12;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 36px;
+    padding: 40px;
+    transform: rotate(-18deg);
+}
+
+.security-watermark span {
+    color: #7a0018;
+    font-size: 14px;
+    font-weight: 1000;
+    white-space: nowrap;
+}
+
+.security-focus-shield,
+.security-devtools-shield {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(60, 0, 15, 0.88);
+    backdrop-filter: blur(12px);
+    color: #fff;
+    text-align: center;
+    padding: 30px;
+}
+
+.security-focus-shield.show,
+.security-devtools-shield.show {
+    display: flex;
+}
+
+.security-focus-shield-box,
+.security-devtools-box {
+    max-width: 600px;
+    border-radius: 28px;
+    background: rgba(255,255,255,0.13);
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 32px;
+    box-shadow: 0 30px 90px rgba(0,0,0,0.30);
+}
+
+.security-focus-shield-box h2,
+.security-devtools-box h2 {
+    margin: 0 0 10px;
+    font-size: 29px;
+}
+
+.security-focus-shield-box p,
+.security-devtools-box p {
+    margin: 0;
+    line-height: 1.6;
+    font-weight: 800;
+}
+
+@media print {
+    html,
+    body {
+        background: #fff !important;
+    }
+
+    body * {
+        visibility: hidden !important;
+        display: none !important;
+    }
+
+    body::before {
+        content: "N?i dung n?y kh?ng cho ph?p in, l?u PDF ho?c ph?t t?n ??.";
+        visibility: visible !important;
+        display: block !important;
+        padding: 50px;
+        font-size: 24px;
+        line-height: 1.5;
+        font-weight: 1000;
+        color: #b80016;
+    }
+}
