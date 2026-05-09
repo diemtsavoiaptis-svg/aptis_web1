@@ -1,0 +1,100 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang h?c b?i</title>
+    <link rel="stylesheet" href="{% static 'core/style.css' %}">
+</head>
+<body>
+
+<div class="dashboard">
+    <aside class="sidebar">
+        <h2>?i?m TSA<br>v?i Aptis</h2>
+
+        <a class="active">?? Trang ch?</a>
+        <a href="{% url 'listening' %}">?? Listening</a>
+        <a>?? B?i h?c</a>
+        <a>?? Luy?n ??</a>
+        <a>?? T?i li?u</a>
+        <a>?? Ti?n ??</a>
+
+        <a href="{% url 'logout' %}" class="logout">??ng xu?t</a>
+    </aside>
+
+    <main class="learning-main">
+        <div class="learning-header">
+            <div>
+                <h1>Xin ch?o, {{ request.user.first_name }}</h1>
+                <p>Ch?n k? n?ng ?? b?t ??u luy?n t?p h?m nay.</p>
+            </div>
+        </div>
+
+        <div class="learning-cards">
+            <a href="{% url 'listening' %}" class="learn-card skill-card-link">
+                <div class="skill-icon">??</div>
+                <h3>Listening Practice</h3>
+                <p>Luy?n nghe Aptis v?i ??y ?? 4 ph?n.</p>
+                <span class="start-btn">V?o luy?n nghe ?</span>
+            </a>
+
+            <div class="learn-card">
+                <div class="skill-icon">??</div>
+                <h3>Reading Practice</h3>
+                <p>Luy?n ??c hi?u v? ch?n ??p ?n ??ng.</p>
+                <span class="coming-soon">S?p c?</span>
+            </div>
+
+            <div class="learn-card">
+                <div class="skill-icon">??</div>
+                <h3>Writing Practice</h3>
+                <p>Luy?n vi?t c?u, email v? ?o?n v?n ng?n.</p>
+                <span class="coming-soon">S?p c?</span>
+            </div>
+
+            <div class="learn-card">
+                <div class="skill-icon">???</div>
+                <h3>Speaking Practice</h3>
+                <p>Luy?n n?i theo c?c ch? ?? Aptis.</p>
+                <span class="coming-soon">S?p c?</span>
+            </div>
+
+            <div class="learn-card">
+                <div class="skill-icon">??</div>
+                <h3>T?i li?u PDF</h3>
+                <p>T?ng h?p t?i li?u v? ng?n h?ng ??.</p>
+                <span class="coming-soon">S?p c?</span>
+            </div>
+
+            <div class="learn-card">
+                <div class="skill-icon">??</div>
+                <h3>Ti?n ?? h?c</h3>
+                <p>Theo d?i ?i?m s? v? l?ch s? luy?n t?p.</p>
+                <span class="coming-soon">S?p c?</span>
+            </div>
+        </div>
+
+        <h2 class="section-title">Danh s?ch b?i h?c</h2>
+
+        <div class="lesson-list">
+            {% for lesson in lessons %}
+                <div class="lesson-item">
+                    <h3>{{ lesson.title }}</h3>
+                    <p>{{ lesson.description }}</p>
+
+                    {% if lesson.video_url %}
+                        <a href="{{ lesson.video_url }}" target="_blank">Xem video</a>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <div class="empty-box">
+                    Ch?a c? b?i h?c n?o. Admin c? th? th?m b?i h?c trong trang qu?n tr?.
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+</div>
+
+</body>
+</html>

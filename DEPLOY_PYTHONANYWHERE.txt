@@ -1,0 +1,56 @@
+HUONG DAN DEPLOY PYTHONANYWHERE FREE
+
+1. Dang ky tai khoan PythonAnywhere Free:
+   https://www.pythonanywhere.com/
+
+2. Upload file aptis_web_deploy.zip len PythonAnywhere.
+
+3. Mo Bash Console tren PythonAnywhere va chay:
+   unzip aptis_web_deploy.zip -d aptis_web
+   cd aptis_web
+   python3.13 -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   python manage.py migrate
+   python manage.py collectstatic --noinput
+   python manage.py createsuperuser
+
+Neu python3.13 khong co, dung python3.12:
+   python3.12 -m venv venv
+
+4. Vao tab Web:
+   Add a new web app
+   Manual configuration
+   Chon Python 3.13 hoac 3.12
+
+5. Virtualenv:
+   /home/YOUR_USERNAME/aptis_web/venv
+
+6. Source code:
+   /home/YOUR_USERNAME/aptis_web
+
+7. WSGI file:
+   Sua YOUR_USERNAME thanh username PythonAnywhere cua ban.
+
+import os
+import sys
+
+path = '/home/YOUR_USERNAME/aptis_web'
+if path not in sys.path:
+    sys.path.append(path)
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'config.settings'
+os.environ['DJANGO_DEBUG'] = 'False'
+
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()
+
+8. Static files trong tab Web:
+   URL: /static/
+   Directory: /home/YOUR_USERNAME/aptis_web/staticfiles
+
+9. Media files:
+   URL: /media/
+   Directory: /home/YOUR_USERNAME/aptis_web/media
+
+10. Bam Reload.

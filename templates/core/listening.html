@@ -1,0 +1,247 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Listening Part {{ part }}</title>
+    <link rel="stylesheet" href="{% static 'core/style.css' %}">
+</head>
+<body>
+
+<div class="listening-page">
+    <header class="listening-topbar">
+        <div>
+            <h1>Listening</h1>
+            <p>Ph?n {{ part }} - Luy?n nghe Aptis</p>
+        </div>
+
+        <a href="{% url 'dashboard' %}" class="back-dashboard">? Quay l?i Dashboard</a>
+    </header>
+
+    <div class="part-tabs">
+        {% for p in parts %}
+            <a href="{% url 'listening' %}?part={{ p }}" class="{% if p == part %}active{% endif %}">
+                Part {{ p }}
+            </a>
+        {% endfor %}
+    </div>
+
+    <main class="listening-layout">
+        <section class="question-area">
+            {% for question in questions %}
+                <div
+                    class="listening-question-card"
+                    id="question-{{ question.question_number }}"
+                    data-question-id="{{ question.id }}"
+                    data-correct="{{ question.correct_answer }}"
+                >
+                    <div class="question-head">
+                        <span class="question-number">C?u {{ question.question_number }}/{{ total_questions }}</span>
+                        <span class="question-part">Part {{ question.part }}</span>
+                    </div>
+
+                    <h2>{{ question.question_text }}</h2>
+
+                    {% if question.audio_url %}
+                        <audio controls class="audio-player">
+                            <source src="{{ question.audio_url }}">
+                            Tr?nh duy?t c?a b?n kh?ng h? tr? ph?t ?m thanh.
+                        </audio>
+                    {% endif %}
+
+                    <div class="answer-options">
+                        <label data-answer="A">
+                            <input type="radio" name="q{{ question.id }}" value="A">
+                            <span><b>A</b>. {{ question.option_a }}</span>
+                        </label>
+
+                        <label data-answer="B">
+                            <input type="radio" name="q{{ question.id }}" value="B">
+                            <span><b>B</b>. {{ question.option_b }}</span>
+                        </label>
+
+                        <label data-answer="C">
+                            <input type="radio" name="q{{ question.id }}" value="C">
+                            <span><b>C</b>. {{ question.option_c }}</span>
+                        </label>
+                    </div>
+
+                    <div class="answer-result" id="result-{{ question.id }}"></div>
+                </div>
+            {% empty %}
+                <div class="listening-question-card">
+                    <h2>Ch?a c? c?u h?i cho Ph?n {{ part }}</h2>
+                    <p>Admin h?y th?m c?u h?i trong m?c ?Danh s?ch c?u h?i Listening?.</p>
+                </div>
+            {% endfor %}
+        </section>
+
+        <aside class="listening-sidebar">
+            <div class="side-card result-summary-card">
+                <h3>K?t qu?</h3>
+                <div class="score-circle">
+                    <span id="scoreText">0/{{ total_questions }}</span>
+                </div>
+                <p id="scoreMessage">L?m b?i xong, h?y b?m n?t n?p b?i.</p>
+            </div>
+
+            <div class="side-card">
+                <h3>Ti?n ?? l?m b?i</h3>
+                <p>T?ng s? c?u: <b>{{ total_questions }}</b></p>
+                <p>?? l?m: <b id="answeredCount">0</b></p>
+                <p>Ch?a l?m: <b id="remainingCount">{{ total_questions }}</b></p>
+            </div>
+
+            <div class="side-card">
+                <h3>Danh s?ch c?u</h3>
+                <div class="question-nav">
+                    {% for question in questions %}
+                        <a href="#question-{{ question.question_number }}" id="nav-q{{ question.id }}">
+                            {{ question.question_number }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <button class="submit-test-btn" onclick="submitListening()">? N?p b?i</button>
+            <button class="reset-test-btn" onclick="resetListening()">L?m l?i</button>
+        </aside>
+    </main>
+</div>
+
+<script>
+    const radios = document.querySelectorAll('input[type="radio"]');
+    const questionCards = document.querySelectorAll('.listening-question-card[data-question-id]');
+    const answeredCount = document.getElementById('answeredCount');
+    const remainingCount = document.getElementById('remainingCount');
+    const scoreText = document.getElementById('scoreText');
+    const scoreMessage = document.getElementById('scoreMessage');
+    const totalC?us = questionCards.length;
+
+    function updateAnswered() {
+        const names = new Set();
+
+        radios.forEach(radio => {
+            if (radio.checked) {
+                names.add(radio.name);
+                const questionId = radio.name.replace('q', '');
+                const nav = document.getElementById('nav-q' + questionId);
+                if (nav) {
+                    nav.classList.add('done');
+                }
+            }
+        });
+
+        answeredCount.innerText = names.size;
+        remainingCount.innerText = totalC?us - names.size;
+    }
+
+    radios.forEach(radio => {
+        radio.addEventListener('change', updateAnswered);
+    });
+
+    function submitListening() {
+        let score = 0;
+
+        questionCards.forEach(card => {
+            const questionId = card.dataset.questionId;
+            const correctAnswer = card.dataset.correct;
+            const selected = card.querySelector('input[type="radio"]:checked');
+            const resultBox = document.getElementById('result-' + questionId);
+            const nav = document.getElementById('nav-q' + questionId);
+            const labels = card.querySelectorAll('.answer-options label');
+
+            card.classList.remove('question-correct', 'question-wrong', 'question-empty');
+
+            labels.forEach(label => {
+                label.classList.remove('correct-option', 'wrong-option');
+
+                if (label.dataset.answer === correctAnswer) {
+                    label.classList.add('correct-option');
+                }
+            });
+
+            if (!selected) {
+                card.classList.add('question-empty');
+                resultBox.innerHTML = '?? B?n ch?a ch?n ??p ?n. ??p ?n ??ng l? <b>' + correctAnswer + '</b>.';
+
+                if (nav) {
+                    nav.classList.remove('correct', 'wrong');
+                    nav.classList.add('empty');
+                }
+
+                return;
+            }
+
+            if (selected.value === correctAnswer) {
+                score += 1;
+                card.classList.add('question-correct');
+                resultBox.innerHTML = '? Ch?nh x?c! ??p ?n ??ng l? <b>' + correctAnswer + '</b>.';
+
+                if (nav) {
+                    nav.classList.remove('wrong', 'empty');
+                    nav.classList.add('correct');
+                }
+            } else {
+                card.classList.add('question-wrong');
+                selected.closest('label').classList.add('wrong-option');
+                resultBox.innerHTML = '? Ch?a ch?nh x?c. B?n ch?n <b>' + selected.value + '</b>, ??p ?n ??ng l? <b>' + correctAnswer + '</b>.';
+
+                if (nav) {
+                    nav.classList.remove('correct', 'empty');
+                    nav.classList.add('wrong');
+                }
+            }
+        });
+
+        scoreText.innerText = score + '/' + totalC?us;
+
+        if (score === totalC?us && totalC?us > 0) {
+            scoreMessage.innerText = 'Xu?t s?c! B?n ?? l?m ??ng to?n b?.';
+        } else if (score >= Math.ceil(totalC?us * 0.7)) {
+            scoreMessage.innerText = 'T?t r?i! B?n ch? c?n luy?n th?m m?t ch?t n?a.';
+        } else {
+            scoreMessage.innerText = 'B?n c?n luy?n th?m ph?n nghe n?y nh?.';
+        }
+
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }
+
+    function resetListening() {
+        radios.forEach(radio => {
+            radio.checked = false;
+        });
+
+        questionCards.forEach(card => {
+            card.classList.remove('question-correct', 'question-wrong', 'question-empty');
+
+            const labels = card.querySelectorAll('.answer-options label');
+            labels.forEach(label => {
+                label.classList.remove('correct-option', 'wrong-option');
+            });
+
+            const questionId = card.dataset.questionId;
+            const resultBox = document.getElementById('result-' + questionId);
+            if (resultBox) {
+                resultBox.innerHTML = '';
+            }
+
+            const nav = document.getElementById('nav-q' + questionId);
+            if (nav) {
+                nav.classList.remove('done', 'correct', 'wrong', 'empty');
+            }
+        });
+
+        answeredCount.innerText = '0';
+        remainingCount.innerText = totalC?us;
+        scoreText.innerText = '0/' + totalC?us;
+        scoreMessage.innerText = 'L?m b?i xong, h?y b?m n?t n?p b?i.';
+    }
+</script>
+
+</body>
+</html>
