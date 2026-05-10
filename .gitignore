@@ -1,38 +1,9 @@
-# Python / Django
 venv/
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
-*.sqlite3-journal
-
-# Database local - không đẩy dữ liệu học viên lên GitHub
 db.sqlite3
-
-# Upload files local - ảnh/audio upload sẽ quản lý riêng
-media/
-
-# Static collected
-staticfiles/
-
-# VS Code
-.vscode/
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Zip deploy
-*.zip
-
 .env
-.env.*
 .env.local
-.env.server
-protected_media/
-# Local database and uploads
-db.sqlite3-journal
-# Secrets
-# Backups and deploy zips
-code_backups/
-# Editor / OS
+media/
+aptis_web_deploy.zip
+.DS_Store

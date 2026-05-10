@@ -1,0 +1,592 @@
+
+:root {
+    --tsa-red: #b80016;
+    --tsa-red-2: #e9364b;
+    --tsa-red-dark: #71000d;
+    --tsa-red-soft: #fff1f3;
+    --tsa-bg: #fff7f8;
+    --tsa-card: rgba(255, 255, 255, 0.94);
+    --tsa-text: #2b1018;
+    --tsa-muted: #7a4b57;
+    --tsa-border: #ead6db;
+    --tsa-shadow: 0 18px 50px rgba(113, 0, 13, 0.10);
+}
+
+html[data-theme="light"],
+:root {
+    --primary: #b80016;
+    --secondary: #71000d;
+    --accent: #fff1f3;
+    --primary-fg: #ffffff;
+    --body-fg: #2b1018;
+    --body-bg: #fff7f8;
+    --body-quiet-color: #7a4b57;
+    --body-loud-color: #2b1018;
+    --header-color: #ffffff;
+    --header-branding-color: #ffffff;
+    --header-bg: #b80016;
+    --header-link-color: #ffffff;
+    --breadcrumbs-fg: #7a4b57;
+    --breadcrumbs-link-fg: #b80016;
+    --breadcrumbs-bg: #ffffff;
+    --link-fg: #b80016;
+    --link-hover-color: #71000d;
+    --link-selected-fg: #71000d;
+    --hairline-color: #ead6db;
+    --border-color: #ead6db;
+    --error-fg: #b80016;
+    --message-success-bg: #eafff1;
+    --message-warning-bg: #fff8dd;
+    --message-error-bg: #fff0f0;
+    --darkened-bg: #fff1f3;
+    --selected-bg: #ffe1e7;
+    --selected-row: #fff1f3;
+    --button-fg: #ffffff;
+    --button-bg: #b80016;
+    --button-hover-bg: #71000d;
+    --default-button-bg: #b80016;
+    --default-button-hover-bg: #71000d;
+    --close-button-bg: #555555;
+    --close-button-hover-bg: #333333;
+    --delete-button-bg: #444444;
+    --delete-button-hover-bg: #222222;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background:
+        radial-gradient(circle at top left, rgba(255, 200, 210, 0.42), transparent 28%),
+        radial-gradient(circle at top right, rgba(255, 230, 210, 0.52), transparent 30%),
+        linear-gradient(135deg, #fff7f8, #fff1f3, #fffaf5) !important;
+    color: var(--tsa-text) !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+}
+
+/* Header */
+#header {
+    min-height: 82px !important;
+    padding: 15px 34px !important;
+    background: linear-gradient(135deg, var(--tsa-red), var(--tsa-red-2)) !important;
+    box-shadow: 0 12px 34px rgba(113, 0, 13, 0.22);
+}
+
+#branding {
+    float: none !important;
+}
+
+.tsa-admin-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.tsa-admin-logo {
+    width: 52px;
+    height: 52px;
+    border-radius: 17px;
+    background: white;
+    color: var(--tsa-red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 1000;
+    font-size: 18px;
+    letter-spacing: -0.5px;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+}
+
+.tsa-admin-title h1 {
+    margin: 0 !important;
+    color: white !important;
+    font-size: 24px !important;
+    font-weight: 1000 !important;
+    line-height: 1.1;
+}
+
+.tsa-admin-title p {
+    margin: 4px 0 0 !important;
+    color: rgba(255, 255, 255, 0.86) !important;
+    font-size: 13px !important;
+    font-weight: 700;
+}
+
+.tsa-admin-quicklinks {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-left: auto;
+}
+
+.tsa-admin-quicklinks a {
+    color: white !important;
+    text-decoration: none !important;
+    font-weight: 900;
+    font-size: 13px;
+    padding: 9px 13px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    transition: 0.18s ease;
+}
+
+.tsa-admin-quicklinks a:hover {
+    background: rgba(255, 255, 255, 0.26);
+    color: white !important;
+}
+
+#user-tools {
+    top: 25px !important;
+    right: 30px !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-size: 13px !important;
+}
+
+#user-tools a {
+    color: white !important;
+    border-bottom: none !important;
+    font-weight: 900;
+}
+
+/* Breadcrumbs */
+div.breadcrumbs {
+    background: rgba(255, 255, 255, 0.94) !important;
+    color: var(--tsa-muted) !important;
+    padding: 14px 34px !important;
+    border-bottom: 1px solid var(--tsa-border);
+    box-shadow: 0 6px 18px rgba(113, 0, 13, 0.04);
+}
+
+div.breadcrumbs a {
+    color: var(--tsa-red) !important;
+    font-weight: 900;
+}
+
+/* Content */
+#content {
+    padding: 32px 34px !important;
+}
+
+#content h1 {
+    color: var(--tsa-red-dark) !important;
+    font-size: 30px !important;
+    font-weight: 1000 !important;
+    letter-spacing: -0.6px;
+    margin-bottom: 24px !important;
+}
+
+/* Modules */
+.module {
+    background: var(--tsa-card) !important;
+    border: 1px solid rgba(234, 214, 219, 0.95) !important;
+    border-radius: 22px !important;
+    overflow: hidden !important;
+    box-shadow: var(--tsa-shadow);
+    margin-bottom: 24px !important;
+}
+
+.module caption,
+.module h2 {
+    background: linear-gradient(135deg, var(--tsa-red), var(--tsa-red-2)) !important;
+    color: white !important;
+    padding: 15px 18px !important;
+    font-size: 15px !important;
+    font-weight: 1000 !important;
+    letter-spacing: 0.2px;
+}
+
+.module table {
+    border-collapse: collapse !important;
+}
+
+.module table th,
+.module table td {
+    padding: 14px 16px !important;
+    border-bottom: 1px solid #f2e3e7 !important;
+}
+
+.module table th {
+    background: #fff7f8 !important;
+    color: var(--tsa-red-dark) !important;
+    font-weight: 1000 !important;
+}
+
+.module table tr:hover td {
+    background: #fff8fa !important;
+}
+
+/* Links */
+a:link,
+a:visited {
+    color: var(--tsa-red) !important;
+    font-weight: 850;
+}
+
+a:hover {
+    color: var(--tsa-red-dark) !important;
+}
+
+/* Object tools */
+.object-tools {
+    margin-top: -50px !important;
+}
+
+.object-tools a {
+    background: linear-gradient(135deg, var(--tsa-red), var(--tsa-red-2)) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 999px !important;
+    padding: 11px 18px !important;
+    font-weight: 1000 !important;
+    box-shadow: 0 10px 24px rgba(184, 0, 22, 0.20);
+}
+
+.object-tools a:hover {
+    background: var(--tsa-red-dark) !important;
+    color: white !important;
+}
+
+/* Search toolbar */
+#toolbar {
+    background: var(--tsa-card) !important;
+    border: 1px solid var(--tsa-border) !important;
+    border-radius: 18px !important;
+    padding: 14px !important;
+    box-shadow: 0 12px 32px rgba(113, 0, 13, 0.06);
+    margin-bottom: 18px !important;
+}
+
+#toolbar form input[type="submit"] {
+    margin-left: 8px;
+}
+
+/* Change list */
+#changelist {
+    background: transparent !important;
+}
+
+#changelist-form,
+#changelist-filter {
+    border-radius: 22px !important;
+    overflow: hidden !important;
+    box-shadow: var(--tsa-shadow);
+}
+
+#changelist-filter {
+    background: white !important;
+    border: 1px solid var(--tsa-border) !important;
+}
+
+#changelist-filter h2 {
+    background: linear-gradient(135deg, var(--tsa-red), var(--tsa-red-2)) !important;
+    color: white !important;
+    padding: 15px 18px !important;
+    font-weight: 1000 !important;
+}
+
+#changelist-filter h3 {
+    color: var(--tsa-red-dark) !important;
+    font-weight: 1000 !important;
+}
+
+#changelist-filter a {
+    font-weight: 800 !important;
+}
+
+#changelist table {
+    border-radius: 20px !important;
+    overflow: hidden;
+}
+
+#changelist table thead th {
+    background: #fff1f3 !important;
+    color: var(--tsa-red-dark) !important;
+}
+
+.row1,
+.row2 {
+    background: white !important;
+}
+
+.row1:hover,
+.row2:hover {
+    background: #fff8fa !important;
+}
+
+/* Forms */
+input[type=text],
+input[type=password],
+input[type=email],
+input[type=url],
+input[type=number],
+textarea,
+select,
+.vTextField {
+    border: 1px solid var(--tsa-border) !important;
+    border-radius: 12px !important;
+    padding: 10px 12px !important;
+    background: #fffdfd !important;
+    color: var(--tsa-text) !important;
+    outline: none !important;
+}
+
+textarea {
+    min-height: 120px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--tsa-red-2) !important;
+    box-shadow: 0 0 0 4px rgba(233, 54, 75, 0.12) !important;
+}
+
+.aligned label {
+    color: var(--tsa-red-dark) !important;
+    font-weight: 1000 !important;
+}
+
+.form-row {
+    border-bottom: 1px solid #f2e3e7 !important;
+    padding: 17px 12px !important;
+}
+
+.help,
+.helptext {
+    color: var(--tsa-muted) !important;
+    font-size: 12px !important;
+}
+
+fieldset.module {
+    padding-bottom: 8px;
+}
+
+/* Submit buttons */
+.submit-row {
+    background: var(--tsa-card) !important;
+    border: 1px solid var(--tsa-border) !important;
+    border-radius: 20px !important;
+    box-shadow: 0 12px 34px rgba(113, 0, 13, 0.07);
+    padding: 14px !important;
+}
+
+.submit-row input,
+input[type=submit],
+input[type=button],
+.button {
+    background: linear-gradient(135deg, var(--tsa-red), var(--tsa-red-2)) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 999px !important;
+    padding: 10px 18px !important;
+    font-weight: 1000 !important;
+    box-shadow: 0 8px 18px rgba(184, 0, 22, 0.16);
+}
+
+.submit-row input:hover,
+input[type=submit]:hover,
+input[type=button]:hover,
+.button:hover {
+    background: var(--tsa-red-dark) !important;
+    color: white !important;
+}
+
+.deletelink {
+    background: #444 !important;
+    color: white !important;
+    border-radius: 999px !important;
+}
+
+.deletelink:hover {
+    background: #222 !important;
+}
+
+/* Messages */
+.messagelist li {
+    border-radius: 16px !important;
+    padding: 15px 18px !important;
+    font-weight: 900;
+    box-shadow: 0 10px 24px rgba(113, 0, 13, 0.08);
+}
+
+.errornote,
+.errorlist {
+    border-radius: 14px !important;
+    font-weight: 800;
+}
+
+.paginator {
+    background: white !important;
+    border-radius: 16px !important;
+    padding: 14px !important;
+    border: 1px solid var(--tsa-border) !important;
+}
+
+/* Custom badges */
+.tsa-badge {
+    color: white;
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-weight: 1000;
+    font-size: 12px;
+    display: inline-block;
+}
+
+.tsa-soft-badge {
+    padding: 7px 12px;
+    border-radius: 999px;
+    font-weight: 1000;
+    font-size: 12px;
+    display: inline-block;
+}
+
+.tsa-soft-badge.green {
+    color: #05703a;
+    background: #eafff1;
+}
+
+.tsa-soft-badge.gray {
+    color: #555;
+    background: #f1f1f1;
+}
+
+.tsa-soft-badge.red {
+    color: var(--tsa-red);
+    background: var(--tsa-red-soft);
+}
+
+.tsa-answer-badge {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    color: white;
+    background: linear-gradient(135deg, var(--tsa-red), var(--tsa-red-2));
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 1000;
+}
+
+.tsa-thumb {
+    width: 90px;
+    height: 52px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid var(--tsa-border);
+    box-shadow: 0 6px 16px rgba(113, 0, 13, 0.10);
+}
+
+.tsa-preview-large {
+    max-width: 520px;
+    width: 100%;
+    height: auto;
+    border-radius: 18px;
+    border: 1px solid var(--tsa-border);
+    box-shadow: 0 14px 34px rgba(113, 0, 13, 0.12);
+}
+
+/* Dashboard admin index */
+.dashboard #content {
+    max-width: 1180px;
+}
+
+.dashboard .module {
+    max-width: 860px;
+}
+
+.dashboard .module table td a {
+    font-size: 15px;
+}
+
+.app-auth,
+.app-core {
+    margin-bottom: 24px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    #header {
+        padding: 14px 18px !important;
+    }
+
+    #user-tools {
+        position: static !important;
+        margin-top: 12px !important;
+    }
+
+    .tsa-admin-brand {
+        align-items: flex-start;
+    }
+
+    .tsa-admin-logo {
+        width: 44px;
+        height: 44px;
+    }
+
+    .tsa-admin-title h1 {
+        font-size: 20px !important;
+    }
+
+    .tsa-admin-title p {
+        display: none;
+    }
+
+    .tsa-admin-quicklinks {
+        display: none;
+    }
+
+    #content {
+        padding: 22px 16px !important;
+    }
+
+    .object-tools {
+        margin-top: 0 !important;
+    }
+
+    .tsa-preview-large {
+        max-width: 100%;
+    }
+}
+
+
+
+/* === TSA SECURITY ALERT CSS START === */
+.tsa-red-alert {
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: #d40000;
+    color: #fff;
+    font-weight: 1000;
+    font-size: 12px;
+    box-shadow: 0 8px 20px rgba(212, 0, 0, 0.25);
+    animation: tsaAlertPulse 1.2s infinite;
+}
+
+.tsa-orange-alert {
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: #f97316;
+    color: #fff;
+    font-weight: 1000;
+    font-size: 12px;
+}
+
+.tsa-yellow-alert {
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: #f59e0b;
+    color: #fff;
+    font-weight: 1000;
+    font-size: 12px;
+}
+
+@keyframes tsaAlertPulse {
+    0% { box-shadow: 0 0 0 0 rgba(212, 0, 0, 0.35); }
+    70% { box-shadow: 0 0 0 10px rgba(212, 0, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(212, 0, 0, 0); }
+}
+/* === TSA SECURITY ALERT CSS END === */
