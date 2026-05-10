@@ -327,38 +327,6 @@
         }
     </style>
     <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
-
-<style id="remember-login-style">
-.remember-login-row{
-    margin: 14px 0 18px;
-    padding: 14px 16px;
-    border-radius: 18px;
-    background: rgba(255, 241, 244, .82);
-    border: 1px solid rgba(255, 95, 118, .22);
-    color: #5b0010;
-}
-.remember-login-label{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 900;
-    cursor: pointer;
-    user-select: none;
-}
-.remember-login-label input{
-    width: 18px;
-    height: 18px;
-    accent-color: #e60023;
-}
-.remember-login-row small{
-    display: block;
-    margin-top: 6px;
-    color: #9a5360;
-    font-weight: 700;
-    font-size: 13px;
-}
-</style>
-
 </head>
 <body>
 
@@ -395,16 +363,7 @@
             {% csrf_token %}
             {{ login_form.email }}
             {{ login_form.password }}
-            
-<div class="remember-login-row">
-    <label class="remember-login-label">
-        <input type="checkbox" id="rememberLoginInfo">
-        <span>Lưu thông tin đăng nhập</span>
-    </label>
-    <small>Trình duyệt sẽ hỗ trợ lưu mật khẩu an toàn.</small>
-</div>
-
-<button class="submit-btn" type="submit">Đăng nhập</button>
+            <button class="submit-btn" type="submit">Đăng nhập</button>
         </form>
 
         <form id="registerForm" class="auth-form" method="POST" action="{% url 'register' %}">
@@ -464,53 +423,6 @@
     });
 
     switchTab('login');
-</script>
-
-
-<script id="remember-login-script">
-(function(){
-    const STORAGE_KEY = "aptis_remember_login_value";
-    const CHECK_KEY = "aptis_remember_login_checked";
-
-    function findLoginInput(){
-        return document.querySelector(
-            'input[name="username"], input[name="email"], input[name="login"], input[type="email"], input[type="text"]'
-        );
-    }
-
-    function initRememberLogin(){
-        const checkbox = document.getElementById("rememberLoginInfo");
-        const loginInput = findLoginInput();
-        const form = checkbox ? checkbox.closest("form") : null;
-
-        if(!checkbox || !loginInput || !form) return;
-
-        const savedChecked = localStorage.getItem(CHECK_KEY) === "1";
-        const savedValue = localStorage.getItem(STORAGE_KEY) || "";
-
-        checkbox.checked = savedChecked;
-
-        if(savedChecked && savedValue && !loginInput.value){
-            loginInput.value = savedValue;
-        }
-
-        form.addEventListener("submit", function(){
-            if(checkbox.checked){
-                localStorage.setItem(CHECK_KEY, "1");
-                localStorage.setItem(STORAGE_KEY, loginInput.value || "");
-            }else{
-                localStorage.removeItem(CHECK_KEY);
-                localStorage.removeItem(STORAGE_KEY);
-            }
-        });
-    }
-
-    if(document.readyState === "loading"){
-        document.addEventListener("DOMContentLoaded", initRememberLogin);
-    }else{
-        initRememberLogin();
-    }
-})();
 </script>
 
 </body>

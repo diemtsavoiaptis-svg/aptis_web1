@@ -1,193 +1,28 @@
 
+/* Font tiếng Việt chuẩn cho toàn bộ web */
 :root {
-    --font-main: Georgia, "Times New Roman", "Times New Roman Vietnamese", serif;
-    --font-ui: Georgia, "Times New Roman", serif;
+    --font-vietnamese: "Segoe UI", Tahoma, Arial, "Helvetica Neue", sans-serif;
 }
 
 html, body,
 button, input, textarea, select,
-a, p, span, div, label, table, th, td,
-h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-main) !important;
+.card, .head, .body,
+.side-link, .brand-title, .brand-sub,
+.saved-table, .student-admin-wrap,
+.admin-shell, .admin-sidebar, .admin-main {
+    font-family: var(--font-vietnamese) !important;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
 }
 
-body {
-    font-size: 17px;
-    line-height: 1.65;
-    letter-spacing: -0.01em;
-}
-
-h1, h2, h3, h4, h5, h6 {
+/* Tiêu đề vẫn đậm, mượt nhưng không vỡ dấu */
+h1, h2, h3, h4,
+.profile-title,
+#panelTitle,
+.frame-label,
+.card-head h2,
+.head h2 {
+    font-family: var(--font-vietnamese) !important;
     font-weight: 900 !important;
-    letter-spacing: -0.035em;
-    line-height: 1.15;
-}
-
-h1 {
-    font-size: clamp(36px, 4.5vw, 58px);
-}
-
-h2 {
-    font-size: clamp(28px, 3vw, 40px);
-}
-
-h3 {
-    font-size: clamp(22px, 2vw, 30px);
-}
-
-button,
-.btn,
-.primary-btn,
-.ghost-btn,
-.side-link,
-.aptis-part-btn {
-    font-weight: 900 !important;
-    letter-spacing: -0.015em;
-}
-
-input,
-textarea,
-select {
-    font-size: 16px !important;
-}
-
-.muted,
-.aptis-parts-subtitle,
-.admin-header p,
-.topbar p {
-    font-size: 17px;
-    line-height: 1.7;
-}
-
-.brand strong,
-.brand-name,
-.aptis-part-name {
-    font-family: var(--font-main) !important;
-    font-weight: 900 !important;
-}
-
-.lesson-item,
-.part-card,
-.aptis-part-card,
-.stat-card,
-.question-card,
-.bulk-card,
-.toolbar-card {
-    font-family: var(--font-main) !important;
-}
-
-
-/* Giảm kích thước tiêu đề toàn web */
-h1 {
-    font-size: clamp(26px, 3vw, 38px) !important;
-    line-height: 1.18 !important;
-}
-
-h2 {
-    font-size: clamp(22px, 2.2vw, 30px) !important;
-    line-height: 1.22 !important;
-}
-
-h3 {
-    font-size: clamp(18px, 1.7vw, 24px) !important;
-    line-height: 1.28 !important;
-}
-
-.topbar h1,
-.admin-header h1,
-.aptis-part-name {
-    font-size: clamp(26px, 3vw, 38px) !important;
-}
-
-
-/* Thu nhỏ khối danh sách câu hỏi bên học viên */
-.question-side,
-.side-card {
-    max-width: 320px !important;
-}
-
-.side-card {
-    padding: 14px !important;
-    border-radius: 20px !important;
-}
-
-.side-card h3,
-.side-card h2 {
-    font-size: 22px !important;
-    margin-bottom: 12px !important;
-}
-
-.side-stats {
-    gap: 8px !important;
-    margin: 10px 0 14px !important;
-}
-
-.side-stats div {
-    padding: 10px !important;
-    border-radius: 14px !important;
-}
-
-.side-stats strong {
-    font-size: 28px !important;
-}
-
-.side-stats span {
-    font-size: 13px !important;
-}
-
-.question-numbers {
-    grid-template-columns: repeat(5, 1fr) !important;
-    gap: 7px !important;
-}
-
-.question-numbers a {
-    height: 38px !important;
-    min-width: 38px !important;
-    border-radius: 12px !important;
-    font-size: 18px !important;
-    font-weight: 900 !important;
-}
-
-.student-layout {
-    grid-template-columns: minmax(0, 1fr) 320px !important;
-    gap: 18px !important;
-}
-
-@media (max-width: 900px) {
-    .student-layout {
-        grid-template-columns: 1fr !important;
-    }
-
-    .question-side,
-    .side-card {
-        max-width: 100% !important;
-    }
-
-    .question-numbers {
-        grid-template-columns: repeat(8, 1fr) !important;
-    }
-
-    .question-numbers a {
-        height: 34px !important;
-        min-width: 34px !important;
-        font-size: 15px !important;
-    }
-}
-
-
-/* Ẩn danh sách câu hỏi bên giao diện học viên */
-.question-side,
-.side-card,
-.question-numbers,
-.side-stats {
-    display: none !important;
-}
-
-.student-layout {
-    grid-template-columns: 1fr !important;
-    max-width: 980px !important;
-}
-
-.exam-panel {
-    width: 100% !important;
+    letter-spacing: -0.025em;
 }

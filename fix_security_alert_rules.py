@@ -1,4 +1,9 @@
+﻿from pathlib import Path
 
+js = Path("static/core/security_protect.js")
+js.parent.mkdir(parents=True, exist_ok=True)
+
+js.write_text(r'''
 (function () {
     const EVENT_URL = "/security/event/";
     const PRINT_LIMIT = 3;
@@ -60,3 +65,30 @@
         }
     }, 1500);
 })();
+''', encoding="utf-8")
+
+# Xóa các cảnh báo cũ kiểu "rời khỏi tab" trong database local cho sạch danh sách
+cleanup = Path("cleanup_tab_leave_alerts.py")
+cleanup.write_text(r'''
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+
+import django
+django.setup()
+
+from django.apps import apps
+
+try:
+    SecurityAlert = apps.get_model("core", "SecurityAlert")
+except LookupError:
+    print("KHONG_CO_MODEL_SecurityAlert")
+    raise SystemExit
+
+qs = SecurityAlert.objects.filter(reason__icontains="rời khỏi tab")
+count = qs.count()
+qs.delete()
+
+print("DA_XOA_CANH_BAO_ROI_TAB_CU:", count)
+''', encoding="utf-8")
+
+print("DA_SUA_CANH_BAO_BAO_MAT_CHI_CANH_BAO_CHUP_MAN_HINH_LIEN_TUC_VA_DEVTOOLS")
