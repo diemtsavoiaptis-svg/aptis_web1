@@ -1,27 +1,28 @@
-{% extends "admin/base.html" %}
-{% load static %}
+﻿{% extends "admin/base.html" %}
+{% load i18n static %}
 
-{% block title %}Qu?n tr? TSA Aptis{% endblock %}
+{% block title %}
+{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | Quản trị TSA Aptis
+{% endblock %}
 
 {% block extrastyle %}
 {{ block.super }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{% static 'core/admin_v2.css' %}">
 {% endblock %}
 
 {% block branding %}
-<div class="tsa-admin-brand">
-    <div class="tsa-admin-logo">TSA</div>
-    <div class="tsa-admin-title">
-        <h1>Qu?n tr? TSA Aptis</h1>
-        <p>Qu?n l? h?c vi?n, b?i h?c, ?nh n?n v? c?u h?i luy?n t?p</p>
+<div class="tsa-branding">
+    <a class="tsa-brand-mark" href="{% url 'admin:index' %}">TSA</a>
+    <div class="tsa-brand-copy">
+        <h1 id="site-name">
+            <a href="{% url 'admin:index' %}">Quản trị TSA Aptis</a>
+        </h1>
+        <p>Quản lý học viên, bài học, ngân hàng câu hỏi luyện tập</p>
     </div>
 </div>
 {% endblock %}
 
-{% block nav-global %}
-<div class="tsa-admin-quicklinks">
-    <a href="/" target="_blank">Trang ch?</a>
-    <a href="/dashboard/" target="_blank">Dashboard</a>
-    <a href="/listening/" target="_blank">Listening</a>
-</div>
-{% endblock %}
+{% block nav-global %}{% endblock %}

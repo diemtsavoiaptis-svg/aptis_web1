@@ -30,3 +30,9 @@ Thumbs.db
 .env.local
 .env.server
 protected_media/
+# Local database and uploads
+db.sqlite3-journal
+# Secrets
+# Backups and deploy zips
+code_backups/
+# Editor / OS

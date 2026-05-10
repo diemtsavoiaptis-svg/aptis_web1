@@ -60,8 +60,11 @@ class ListeningQuestion(models.Model):
     part = models.IntegerField(choices=PART_CHOICES, default=1, verbose_name="Part")
     question_number = models.IntegerField(verbose_name=_vi(r"S\u1ed1 c\u00e2u"))
     question_text = models.TextField(verbose_name=_vi(r"C\u00e2u h\u1ecfi"))
+    listening_transcript = models.TextField(blank=True, verbose_name=_vi(r"\u0110\u1ec1 b\u00e0i nghe / transcript"))
 
     audio_url = models.URLField(blank=True, verbose_name=_vi(r"Link audio ngo\u00e0i"))
+    audio_drive_link = models.URLField(blank=True, verbose_name=_vi(r"Link Google Drive MP3"))
+    audio_drive_file_id = models.CharField(max_length=255, blank=True, default="", verbose_name=_vi(r"Google Drive File ID"))
     audio_file = models.FileField(upload_to="listening_audio/", blank=True, null=True, verbose_name=_vi(r"File audio local"))
 
     audio_provider = models.CharField(max_length=30, blank=True, default="", verbose_name=_vi(r"Kho audio"))

@@ -1,5 +1,7 @@
+from django.utils.html import format_html as django_format_html
 from django.contrib import admin
-from django.utils.html import format_html
+from django.utils.safestring import mark_safe
+from .drive_audio import extract_drive_file_id
 
 from .forms import ListeningQuestionAdminForm
 from .models import StudentProfile, Lesson, ListeningQuestion, HomeBackground, UserDeviceSession, SecurityAlert
@@ -11,7 +13,7 @@ def _vi(text):
 
 
 admin.site.site_header = _vi(r"Qu\u1ea3n tr\u1ecb TSA Aptis")
-admin.site.site_title = "TSA Aptis Admin"
+admin.site.site_title = "Qu?n tr? TSA Aptis"
 admin.site.index_title = _vi(r"Site qu\u1ea3n tr\u1ecb h\u1ec7 th\u1ed1ng")
 
 
@@ -110,64 +112,85 @@ class LessonAdmin(admin.ModelAdmin):
 
 @admin.register(ListeningQuestion)
 class ListeningQuestionAdmin(admin.ModelAdmin):
-    form = ListeningQuestionAdminForm
-    list_display = ("part_badge", "question_number", "short_question", "correct_answer_badge", "supabase_audio_status", "created_at")
-    list_filter = ("part", "correct_answer", "audio_provider", "created_at")
-    search_fields = ("question_text", "option_a", "option_b", "option_c", "audio_url", "audio_key", "audio_file_name")
+    list_display = (
+        "question_number",
+        "drive_audio_column",
+        "question_text",
+        "option_a",
+        "option_b",
+        "option_c",
+        "correct_answer",
+        "listening_transcript",
+    )
+
+    list_display_links = ("question_number",)
+
+    list_editable = (
+        "question_text",
+        "option_a",
+        "option_b",
+        "option_c",
+        "correct_answer",
+        "listening_transcript",
+    )
+
+    list_filter = ()
+    search_fields = (
+        "question_text",
+        "listening_transcript",
+        "option_a",
+        "option_b",
+        "option_c",
+        "audio_drive_link",
+        "audio_drive_file_id",
+        "audio_file_name",
+    )
+
     ordering = ("part", "question_number")
-    readonly_fields = ("created_at", "audio_provider", "audio_key", "audio_file_name", "audio_size", "audio_content_type")
-    list_per_page = 30
+    list_per_page = 200
+    readonly_fields = ("created_at", "audio_drive_file_id")
+    save_on_top = True
 
     fieldsets = (
-        (_vi(r"Th\u00f4ng tin c\u00e2u h\u1ecfi"), {"fields": ("part", "question_number", "question_text")}),
-        (_vi(r"\u00c2m thanh Supabase"), {"fields": ("upload_audio_mp3", "audio_provider", "audio_key", "audio_file_name", "audio_size", "audio_content_type")}),
-        (_vi(r"Audio d\u1ef1 ph\u00f2ng"), {"fields": ("audio_file", "audio_url")}),
-        (_vi(r"C\u00e1c \u0111\u00e1p \u00e1n"), {"fields": ("option_a", "option_b", "option_c", "correct_answer")}),
-        (_vi(r"Th\u1eddi gian"), {"fields": ("created_at",)}),
+        (_vi(r"Th\u00f4ng tin c\u00e2u h\u1ecfi"), {
+            "fields": ("part", "question_number", "question_text")
+        }),
+        (_vi(r"File nghe Google Drive"), {
+            "fields": ("audio_drive_link", "audio_drive_file_id"),
+            "description": _vi(r"D\u00e1n link Google Drive MP3 v\u00e0o \u00f4 Link Google Drive MP3.")
+        }),
+        (_vi(r"Audio d\u1ef1 ph\u00f2ng"), {
+            "fields": ("audio_file", "audio_url")
+        }),
+        (_vi(r"Ba c\u00e2u tr\u1ea3 l\u1eddi v\u00e0 \u0111\u00e1p \u00e1n \u0111\u00fang"), {
+            "fields": ("option_a", "option_b", "option_c", "correct_answer")
+        }),
+        (_vi(r"\u0110\u1ec1 b\u00e0i nghe hi\u1ec3n th\u1ecb sau khi ki\u1ec3m tra \u0111\u00e1p \u00e1n"), {
+            "fields": ("listening_transcript",)
+        }),
+        (_vi(r"Th\u1eddi gian"), {
+            "fields": ("created_at",)
+        }),
     )
 
     def save_model(self, request, obj, form, change):
-        upload_file = form.cleaned_data.get("upload_audio_mp3")
-
-        if upload_file:
-            key = build_audio_key(obj, upload_file.name)
-            result = upload_file_to_supabase(upload_file, key)
-
-            obj.audio_provider = "supabase"
-            obj.audio_key = result["key"]
-            obj.audio_file_name = upload_file.name
-            obj.audio_size = result["size"]
-            obj.audio_content_type = result["content_type"]
-
+        if obj.audio_drive_link:
+            obj.audio_drive_file_id = extract_drive_file_id(obj.audio_drive_link)
         super().save_model(request, obj, form, change)
 
-    def part_badge(self, obj):
-        return format_html('<span class="tsa-soft-badge red">Part {}</span>', obj.part)
-
-    part_badge.short_description = _vi(r"Ph\u1ea7n")
-
-    def short_question(self, obj):
-        text = obj.question_text or ""
-        return text[:90] + "..." if len(text) > 90 else text
-
-    short_question.short_description = _vi(r"C\u00e2u h\u1ecfi")
-
-    def correct_answer_badge(self, obj):
-        return format_html('<span class="tsa-answer-badge">{}</span>', obj.correct_answer)
-
-    correct_answer_badge.short_description = _vi(r"\u0110\u00e1p \u00e1n \u0111\u00fang")
-
-    def supabase_audio_status(self, obj):
-        if obj.audio_provider == "supabase" and obj.audio_key:
-            return format_html('<span class="tsa-soft-badge green">Supabase</span>')
+    def drive_audio_column(self, obj):
+        if obj.audio_drive_file_id:
+            return format_html(
+                '<span class="tsa-soft-badge green">Drive</span><br><small>{}</small>',
+                obj.audio_file_name or obj.audio_drive_file_id
+            )
         if obj.audio_file:
-            return format_html('<span class="tsa-soft-badge green">File local</span>')
+            return mark_safe('<span class="tsa-soft-badge green">File local</span>')
         if obj.audio_url:
-            return format_html('<span class="tsa-orange-alert">Link ngo?i</span>')
-        return format_html('<span class="tsa-soft-badge gray">Ch?a c?</span>')
+            return mark_safe('<span class="tsa-orange-alert">Link ngo?i</span>')
+        return mark_safe('<span class="tsa-soft-badge gray">Ch?a c? audio</span>')
 
-    supabase_audio_status.short_description = "Audio"
-
+    drive_audio_column.short_description = "File nghe"
 
 @admin.register(HomeBackground)
 class HomeBackgroundAdmin(admin.ModelAdmin):
@@ -257,17 +280,17 @@ class SecurityAlertAdmin(admin.ModelAdmin):
         if obj.severity == "critical":
             return format_html('<span class="tsa-red-alert">B?O ??NG ??</span>')
         if obj.severity == "high":
-            return format_html('<span class="tsa-orange-alert">C?NH B?O CAO</span>')
+            return mark_safe('<span class="tsa-orange-alert">C?NH B?O CAO</span>')
         if obj.severity == "medium":
-            return format_html('<span class="tsa-yellow-alert">C?NH B?O</span>')
-        return format_html('<span class="tsa-soft-badge gray">Theo d?i</span>')
+            return mark_safe('<span class="tsa-yellow-alert">C?NH B?O</span>')
+        return mark_safe('<span class="tsa-soft-badge gray">Theo d?i</span>')
 
     red_alert.short_description = "M?c c?nh b?o"
 
     def resolved_badge(self, obj):
         if obj.is_resolved:
-            return format_html('<span class="tsa-soft-badge green">?? x? l?</span>')
-        return format_html('<span class="tsa-red-alert">Ch?a x? l?</span>')
+            return mark_safe('<span class="tsa-soft-badge green">?? x? l?</span>')
+        return mark_safe('<span class="tsa-red-alert">Ch?a x? l?</span>')
 
     resolved_badge.short_description = "Tr?ng th?i"
 
@@ -276,3 +299,27 @@ class SecurityAlertAdmin(admin.ModelAdmin):
         return text[:90] + "..." if len(text) > 90 else text
 
     short_user_agent.short_description = "Thi?t b? / tr?nh duy?t"
+
+
+# Auto-register c?c model ch?a hi?n trong admin
+from django.apps import apps
+from django.contrib import admin
+
+# SAFE_FORMAT_HTML_START
+def format_html(format_string, *args, **kwargs):
+    """
+    Django 6 kh?ng cho format_html('<span>html t?nh</span>') n?u kh?ng truy?n args.
+    H?m n?y gi? code admin c? ch?y ?n:
+    - C? args/kwargs: d?ng format_html g?c c?a Django.
+    - Kh?ng c? args/kwargs: d?ng mark_safe cho HTML t?nh.
+    """
+    if not args and not kwargs:
+        return mark_safe(format_string)
+    return django_format_html(format_string, *args, **kwargs)
+# SAFE_FORMAT_HTML_END
+
+for model in apps.get_app_config("core").get_models():
+    try:
+        admin.site.register(model)
+    except admin.sites.AlreadyRegistered:
+        pass

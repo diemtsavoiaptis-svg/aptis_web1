@@ -1,13 +1,15 @@
+import requests
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.cache import cache
-from django.http import FileResponse, Http404, HttpResponseRedirect, JsonResponse
+from django.http import StreamingHttpResponse, FileResponse, Http404, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_POST
 
 from .forms import RegisterForm, LoginForm
+from .drive_audio import build_drive_audio_url, extract_drive_file_id
 from .models import StudentProfile, Lesson, ListeningQuestion, HomeBackground, SecurityAlert
 from .supabase_storage import create_signed_url
 
@@ -127,6 +129,59 @@ def login_view(request):
     return redirect("dashboard")
 
 
+
+def _google_drive_download_response(file_id):
+    session = requests.Session()
+
+    base_url = "https://drive.google.com/uc"
+    params = {
+        "export": "download",
+        "id": file_id,
+    }
+
+    response = session.get(base_url, params=params, stream=True, timeout=30)
+
+    # Google Drive ??i khi y?u c?u confirm token cho file l?n / b? qu?t virus.
+    token = None
+
+    for key, value in response.cookies.items():
+        if key.startswith("download_warning"):
+            token = value
+            break
+
+    if token:
+        params["confirm"] = token
+        response = session.get(base_url, params=params, stream=True, timeout=30)
+
+    content_type = response.headers.get("Content-Type", "")
+
+    if response.status_code != 200:
+        raise Http404("Kh?ng t?i ???c audio t? Google Drive.")
+
+    # N?u Google tr? v? HTML th? ngh?a l? link Drive ch?a public ho?c b? ch?n t?i tr?c ti?p.
+    if "text/html" in content_type.lower():
+        raise Http404("Google Drive ch?a tr? v? file MP3 tr?c ti?p. H?y b?t chia s? file: B?t k? ai c? ???ng li?n k?t ? Ng??i xem.")
+
+    django_response = StreamingHttpResponse(
+        response.iter_content(chunk_size=8192),
+        content_type=content_type or "audio/mpeg",
+    )
+
+    total_size = response.headers.get("Content-Length")
+
+    if total_size:
+        django_response["Content-Length"] = total_size
+
+    django_response["Accept-Ranges"] = "bytes"
+    django_response["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    django_response["Pragma"] = "no-cache"
+    django_response["Expires"] = "0"
+    django_response["X-Content-Type-Options"] = "nosniff"
+    django_response["Content-Disposition"] = 'inline; filename="tsa-audio.mp3"'
+
+    return django_response
+
+
 @login_required
 def dashboard(request):
     lessons = Lesson.objects.all().order_by("-created_at")
@@ -167,27 +222,25 @@ def listening_view(request):
 def secure_audio_view(request, question_id):
     question = get_object_or_404(ListeningQuestion, id=question_id)
 
-    if question.audio_provider == "supabase" and question.audio_key:
-        signed_url = create_signed_url(question.audio_key)
-        response = HttpResponseRedirect(signed_url)
-        response["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
-        response["Pragma"] = "no-cache"
-        response["Expires"] = "0"
-        return response
+    drive_file_id = getattr(question, "audio_drive_file_id", "") or extract_drive_file_id(getattr(question, "audio_drive_link", ""))
 
-    if question.audio_file:
+    if drive_file_id:
+        return _google_drive_download_response(drive_file_id)
+
+    if getattr(question, "audio_file", None):
         response = FileResponse(question.audio_file.open("rb"), content_type="audio/mpeg")
         response["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
         response["Pragma"] = "no-cache"
         response["Expires"] = "0"
-        response["X-Content-Type-Options"] = "nosniff"
-        response["X-Frame-Options"] = "DENY"
-        response["Referrer-Policy"] = "no-referrer"
         response["Content-Disposition"] = 'inline; filename="tsa-audio.mp3"'
         return response
 
-    raise Http404("Audio kh?ng t?n t?i.")
+    if getattr(question, "audio_url", ""):
+        response = HttpResponseRedirect(question.audio_url)
+        response["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+        return response
 
+    raise Http404("Audio kh?ng t?n t?i.")
 
 @login_required
 @require_POST

@@ -1,0 +1,43 @@
+========================================
+TSA APTIS WEB - CLEANUP & AUDIT
+========================================
+Project: C:\Users\Admin\Desktop\aptis_web
+
+? ?? backup code v?o: C:\Users\Admin\Desktop\aptis_web\code_backups\cleanup_20260510_054417
+? ?? xo? file cache/r?c: 3
+? ?? chu?n ho? UTF-8 / xo? BOM: 0 file
+? ?? t?i ?u requirements.txt
+? ?? t?i ?u .gitignore, tr?nh ??y key/database/media l?n GitHub
+?? C?n d?u hi?u l?i ti?ng Vi?t:
+   - fix_vietnamese_data.py ch?a d?u hi?u l?i: ?
+   - HEALTH_REPORT.txt ch?a d?u hi?u l?i: ?
+   - manage.py ch?a d?u hi?u l?i: ?
+   - core\admin.py ch?a d?u hi?u l?i: ?
+   - core\forms.py ch?a d?u hi?u l?i: ?
+   - core\middleware.py ch?a d?u hi?u l?i: ?
+   - core\supabase_storage.py ch?a d?u hi?u l?i: ?
+   - core\views.py ch?a d?u hi?u l?i: ?
+   - templates\home.html ch?a d?u hi?u l?i: ?
+   - templates\admin\base_site.html ch?a d?u hi?u l?i: ?
+   - templates\core\dashboard.html ch?a d?u hi?u l?i: ?
+   - templates\core\listening.html ch?a d?u hi?u l?i: ?
+   - static\core\security_protect.css ch?a d?u hi?u l?i: ?
+   - static\core\security_protect.js ch?a d?u hi?u l?i: ?
+   - static\core\style.css ch?a d?u hi?u l?i: ?
+   - core\migrations\0003_homebackground.py ch?a d?u hi?u l?i: ?
+? Kh?ng th?y Supabase secret key b? l? trong code
+
+? Django system check
+C:\Users\Admin\Desktop\aptis_web\venv\Scripts\python.exe manage.py check
+System check identified no issues (0 silenced).
+? Django system check: OK
+
+? Ki?m tra migration c?n thi?u
+C:\Users\Admin\Desktop\aptis_web\venv\Scripts\python.exe manage.py makemigrations --check --dry-run
+No changes detected
+? Ki?m tra migration c?n thi?u: OK
+
+========================================
+K?T LU?N
+========================================
+? Project ?ang ?n. C? th? ch?y: python manage.py runserver
