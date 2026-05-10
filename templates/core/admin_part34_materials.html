@@ -83,7 +83,7 @@ tr:nth-child(even) td{background:#fffafa}
                 {% for material in materials %}
                     <a class="material-item {% if selected and selected.id == material.id %}active{% endif %}" href="?material={{ material.id }}">
                         <div class="material-name">{{ material.title }}</div>
-                        <div class="material-meta">{{ material.questions.count }} câu hỏi · {% if material.is_active %}đang hiển thị{% else %}đang ẩn{% endif %}</div>
+                        <div class="material-meta"> · {% if material.is_active %}đang hiển thị{% else %}đang ẩn{% endif %}</div>
                     </a>
                 {% empty %}
                     <div class="empty">Chưa có tài liệu cho Part {{ part_number }}.</div>
@@ -190,7 +190,6 @@ tr:nth-child(even) td{background:#fffafa}
                                             <input class="mini" type="number" min="1" name="question_{{ question.id }}_order" value="{{ question.order }}">
                                         </td>
                                         <td>
-                                            <textarea class="question-textarea" name="question_{{ question.id }}_question_text">{{ question.question_text }}</textarea>
                                         </td>
                                         <td class="answer-col"><textarea class="mini" name="question_{{ question.id }}_option_a">{{ question.option_a }}</textarea></td>
                                         <td class="answer-col"><textarea class="mini" name="question_{{ question.id }}_option_b">{{ question.option_b }}</textarea></td>

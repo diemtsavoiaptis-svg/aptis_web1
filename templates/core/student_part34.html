@@ -95,7 +95,7 @@ h1{margin:0;font-size:44px;line-height:1.05;letter-spacing:-.04em}
                 {% for material in materials %}
                     <a class="material-item {% if selected and selected.id == material.id %}active{% endif %}" href="?material={{ material.id }}">
                         <div class="material-name">{{ material.title }}</div>
-                        <div class="material-meta">{{ material.questions.count }} câu hỏi</div>
+                        <div class="material-meta"></div>
                     </a>
                 {% empty %}
                     <div class="empty">Chưa có tài liệu Part {{ part_number }}.</div>
@@ -137,8 +137,6 @@ h1{margin:0;font-size:44px;line-height:1.05;letter-spacing:-.04em}
                         {% with question=row.question %}
                         <article class="question-card">
                             <div class="question-title">
-                                <div class="question-number">{{ question.order }}</div>
-                                <div class="question-text">{{ question.question_text }}</div>
                             </div>
                             <div class="options">
                                 {% for label, text in row.options %}
