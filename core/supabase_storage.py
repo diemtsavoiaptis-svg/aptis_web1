@@ -31,13 +31,13 @@ def get_supabase_config():
     bucket = getattr(settings, "SUPABASE_BUCKET_NAME", "aptis-audio")
 
     if not url:
-        raise SupabaseStorageError("Thi?u SUPABASE_URL.")
+        raise SupabaseStorageError("Thiếu SUPABASE_URL.")
 
     if not key:
-        raise SupabaseStorageError("Thi?u SUPABASE_SERVICE_ROLE_KEY.")
+        raise SupabaseStorageError("Thiếu SUPABASE_SERVICE_ROLE_KEY.")
 
     if not bucket:
-        raise SupabaseStorageError("Thi?u SUPABASE_BUCKET_NAME.")
+        raise SupabaseStorageError("Thiếu SUPABASE_BUCKET_NAME.")
 
     return url, key, bucket
 
@@ -69,7 +69,7 @@ def upload_file_to_supabase(file_obj, key):
 
     if response.status_code not in (200, 201):
         raise SupabaseStorageError(
-            f"Upload Supabase th?t b?i: {response.status_code} - {response.text[:300]}"
+            f"Upload Supabase thất bại: {response.status_code} - {response.text[:300]}"
         )
 
     return {
@@ -103,14 +103,14 @@ def create_signed_url(key, expires_in=None):
 
     if response.status_code not in (200, 201):
         raise SupabaseStorageError(
-            f"T?o signed URL th?t b?i: {response.status_code} - {response.text[:300]}"
+            f"Tạo signed URL thất bại: {response.status_code} - {response.text[:300]}"
         )
 
     payload = response.json()
     signed_path = payload.get("signedURL") or payload.get("signedUrl")
 
     if not signed_path:
-        raise SupabaseStorageError("Supabase kh?ng tr? v? signed URL.")
+        raise SupabaseStorageError("Supabase không trả về signed URL.")
 
     if signed_path.startswith("http"):
         return signed_path
@@ -138,5 +138,5 @@ def delete_file_from_supabase(key):
 
     if response.status_code not in (200, 204):
         raise SupabaseStorageError(
-            f"X?a file Supabase th?t b?i: {response.status_code} - {response.text[:300]}"
+            f"Xóa file Supabase thất bại: {response.status_code} - {response.text[:300]}"
         )

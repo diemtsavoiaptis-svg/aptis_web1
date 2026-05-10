@@ -75,31 +75,31 @@ class DeviceLimitMiddleware(MiddlewareMixin):
         )
 
         if not existed_ip_before:
-            self.create_alert_once(user, "high", "T?i kho?n ??ng nh?p t? IP m?i", ip_address, user_agent)
+            self.create_alert_once(user, "high", "Tài khoản đăng nhập từ IP mới", ip_address, user_agent)
 
         if not existed_agent_before:
-            self.create_alert_once(user, "medium", "T?i kho?n ??ng nh?p t? thi?t b? ho?c tr?nh duy?t m?i", ip_address, user_agent)
+            self.create_alert_once(user, "medium", "Tài khoản đăng nhập từ thiết bị hoặc trình duyệt mới", ip_address, user_agent)
 
         if not existed_device_before:
-            self.create_alert_once(user, "high", "T?i kho?n xu?t hi?n m? thi?t b? m?i", ip_address, user_agent)
+            self.create_alert_once(user, "high", "Tài khoản xuất hiện mã thiết bị mới", ip_address, user_agent)
 
         unique_ips = UserDeviceSession.objects.filter(user=user).exclude(ip_address__isnull=True).values("ip_address").distinct().count()
         unique_agents = UserDeviceSession.objects.filter(user=user).exclude(user_agent="").values("user_agent").distinct().count()
         unique_devices = UserDeviceSession.objects.filter(user=user).exclude(device_id="").values("device_id").distinct().count()
 
         if unique_ips > self.MAX_SAFE_IPS:
-            self.create_alert_once(user, "critical", f"T?i kho?n c? d?u hi?u b?t th??ng: ??ng nh?p t? {unique_ips} IP kh?c nhau", ip_address, user_agent)
+            self.create_alert_once(user, "critical", f"Tài khoản có dấu hiệu bất thường: đăng nhập từ {unique_ips} IP khác nhau", ip_address, user_agent)
 
         if unique_agents > self.MAX_SAFE_USER_AGENTS:
-            self.create_alert_once(user, "high", f"T?i kho?n c? d?u hi?u chia s?: xu?t hi?n {unique_agents} tr?nh duy?t kh?c nhau", ip_address, user_agent)
+            self.create_alert_once(user, "high", f"Tài khoản có dấu hiệu chia sẻ: xuất hiện {unique_agents} trình duyệt khác nhau", ip_address, user_agent)
 
         if unique_devices > self.MAX_STUDENT_SESSIONS:
-            self.create_alert_once(user, "critical", f"T?i kho?n c? d?u hi?u chia s?: xu?t hi?n {unique_devices} m? thi?t b? kh?c nhau", ip_address, user_agent)
+            self.create_alert_once(user, "critical", f"Tài khoản có dấu hiệu chia sẻ: xuất hiện {unique_devices} mã thiết bị khác nhau", ip_address, user_agent)
 
         active_sessions = list(UserDeviceSession.objects.filter(user=user).order_by("-last_seen"))
 
         if len(active_sessions) > self.MAX_STUDENT_SESSIONS:
-            self.create_alert_once(user, "critical", "T?i kho?n v??t qu? gi?i h?n 2 phi?n ??ng nh?p", ip_address, user_agent)
+            self.create_alert_once(user, "critical", "Tài khoản vượt quá giới hạn 2 phiên đăng nhập", ip_address, user_agent)
 
             current_item = None
             other_items = []

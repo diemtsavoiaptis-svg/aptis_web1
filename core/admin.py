@@ -13,7 +13,7 @@ def _vi(text):
 
 
 admin.site.site_header = _vi(r"Qu\u1ea3n tr\u1ecb TSA Aptis")
-admin.site.site_title = "Qu?n tr? TSA Aptis"
+admin.site.site_title = _vi(r"Qu\u1ea3n tr\u1ecb TSA Aptis")
 admin.site.index_title = _vi(r"Site qu\u1ea3n tr\u1ecb h\u1ec7 th\u1ed1ng")
 
 
@@ -76,8 +76,8 @@ class StudentProfileAdmin(admin.ModelAdmin):
     def security_count(self, obj):
         count = obj.user.security_alerts.filter(is_resolved=False).count()
         if count:
-            return format_html('<span class="tsa-red-alert">{} c?nh b?o</span>', count)
-        return format_html('<span class="tsa-soft-badge green">B?nh th??ng</span>')
+            return format_html('<span class="tsa-red-alert">{} cảnh báo</span>', count)
+        return format_html('<span class="tsa-soft-badge green">Bình thường</span>')
 
     security_count.short_description = _vi(r"B\u1ea3o m\u1eadt")
 
@@ -187,8 +187,8 @@ class ListeningQuestionAdmin(admin.ModelAdmin):
         if obj.audio_file:
             return mark_safe('<span class="tsa-soft-badge green">File local</span>')
         if obj.audio_url:
-            return mark_safe('<span class="tsa-orange-alert">Link ngo?i</span>')
-        return mark_safe('<span class="tsa-soft-badge gray">Ch?a c? audio</span>')
+            return mark_safe('<span class="tsa-orange-alert">Link ngoài</span>')
+        return mark_safe('<span class="tsa-soft-badge gray">Chưa có audio</span>')
 
     drive_audio_column.short_description = "File nghe"
 
@@ -250,12 +250,12 @@ class UserDeviceSessionAdmin(admin.ModelAdmin):
     short_device.short_description = _vi(r"Thi\u1ebft b\u1ecb / tr\u00ecnh duy\u1ec7t")
 
 
-@admin.action(description="??nh d?u ?? x? l?")
+@admin.action(description="Đánh dấu đã xử lý")
 def mark_alert_resolved(modeladmin, request, queryset):
     queryset.update(is_resolved=True)
 
 
-@admin.action(description="??nh d?u ch?a x? l?")
+@admin.action(description="Đánh dấu chưa xử lý")
 def mark_alert_unresolved(modeladmin, request, queryset):
     queryset.update(is_resolved=False)
 
@@ -271,47 +271,47 @@ class SecurityAlertAdmin(admin.ModelAdmin):
     list_per_page = 30
 
     fieldsets = (
-        ("Th?ng tin c?nh b?o", {"fields": ("user", "severity", "reason", "is_resolved")}),
-        ("D?u hi?u ??ng nh?p", {"fields": ("ip_address", "user_agent")}),
-        ("Th?i gian", {"fields": ("created_at", "updated_at")}),
+        ("Thông tin cảnh báo", {"fields": ("user", "severity", "reason", "is_resolved")}),
+        ("Dấu hiệu đăng nhập", {"fields": ("ip_address", "user_agent")}),
+        ("Thời gian", {"fields": ("created_at", "updated_at")}),
     )
 
     def red_alert(self, obj):
         if obj.severity == "critical":
-            return format_html('<span class="tsa-red-alert">B?O ??NG ??</span>')
+            return format_html('<span class="tsa-red-alert">BÁO ĐỘNG ĐỎ</span>')
         if obj.severity == "high":
-            return mark_safe('<span class="tsa-orange-alert">C?NH B?O CAO</span>')
+            return mark_safe('<span class="tsa-orange-alert">CẢNH BÁO CAO</span>')
         if obj.severity == "medium":
-            return mark_safe('<span class="tsa-yellow-alert">C?NH B?O</span>')
-        return mark_safe('<span class="tsa-soft-badge gray">Theo d?i</span>')
+            return mark_safe('<span class="tsa-yellow-alert">CẢNH BÁO</span>')
+        return mark_safe('<span class="tsa-soft-badge gray">Theo dõi</span>')
 
-    red_alert.short_description = "M?c c?nh b?o"
+    red_alert.short_description = "Mức cảnh báo"
 
     def resolved_badge(self, obj):
         if obj.is_resolved:
-            return mark_safe('<span class="tsa-soft-badge green">?? x? l?</span>')
-        return mark_safe('<span class="tsa-red-alert">Ch?a x? l?</span>')
+            return mark_safe('<span class="tsa-soft-badge green">Đã xử lý</span>')
+        return mark_safe('<span class="tsa-red-alert">Chưa xử lý</span>')
 
-    resolved_badge.short_description = "Tr?ng th?i"
+    resolved_badge.short_description = "Trạng thái"
 
     def short_user_agent(self, obj):
         text = obj.user_agent or ""
         return text[:90] + "..." if len(text) > 90 else text
 
-    short_user_agent.short_description = "Thi?t b? / tr?nh duy?t"
+    short_user_agent.short_description = "Thiết bị / trình duyệt"
 
 
-# Auto-register c?c model ch?a hi?n trong admin
+# Auto-register các model chưa hiện trong admin
 from django.apps import apps
 from django.contrib import admin
 
 # SAFE_FORMAT_HTML_START
 def format_html(format_string, *args, **kwargs):
     """
-    Django 6 kh?ng cho format_html('<span>html t?nh</span>') n?u kh?ng truy?n args.
-    H?m n?y gi? code admin c? ch?y ?n:
-    - C? args/kwargs: d?ng format_html g?c c?a Django.
-    - Kh?ng c? args/kwargs: d?ng mark_safe cho HTML t?nh.
+    Django 6 không cho format_html('<span>html tĩnh</span>') nếu không truyền args.
+    Hàm này giữ code admin cũ chạy ổn:
+    - Có args/kwargs: dùng format_html gốc của Django.
+    - Không có args/kwargs: dùng mark_safe cho HTML tĩnh.
     """
     if not args and not kwargs:
         return mark_safe(format_string)

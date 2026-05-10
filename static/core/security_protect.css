@@ -81,7 +81,7 @@ html.tsa-protected * {
     }
 
     body::before {
-        content: "N?i dung n?y kh?ng cho ph?p in, l?u PDF ho?c ph?t t?n ??.";
+        content: "Nội dung này không cho phép in, lưu PDF hoặc phát tán đề.";
         visibility: visible !important;
         display: block !important;
         padding: 50px;

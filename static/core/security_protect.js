@@ -63,7 +63,7 @@
 
         if (event.key === "PrintScreen") {
             try {
-                navigator.clipboard.writeText("N?i dung ???c b?o v? b?i TSA Aptis.");
+                navigator.clipboard.writeText("Nội dung được bảo vệ bởi TSA Aptis.");
             } catch (error) {}
             return blockEvent(event, "screenshot_key", "high");
         }
@@ -77,8 +77,8 @@
     focusShield.className = "security-focus-shield";
     focusShield.innerHTML = `
         <div class="security-focus-shield-box">
-            <h2>N?i dung ?ang ???c b?o v?</h2>
-            <p>Vui l?ng quay l?i c?a s? h?c t?p ?? ti?p t?c l?m b?i. N?i dung ?? ???c g?n watermark theo t?i kho?n ??ng nh?p.</p>
+            <h2>Nội dung đang được bảo vệ</h2>
+            <p>Vui lòng quay lại cửa sổ học tập để tiếp tục làm bài. Nội dung đã được gắn watermark theo tài khoản đăng nhập.</p>
         </div>
     `;
     document.body.appendChild(focusShield);

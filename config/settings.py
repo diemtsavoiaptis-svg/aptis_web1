@@ -32,7 +32,12 @@ SECRET_KEY = 'aptis-learning-secret-key'
 
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'tsaptis.com', 'www.tsaptis.com', '.pythonanywhere.com']
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://tsaptis.com',
+    'https://www.tsaptis.com',
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',

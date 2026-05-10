@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Điểm TSA Với Aptis - Listening</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="Điểm TSA Với Aptis">
+        <span class="brand-mark">A</span>
+        <span>
+          <strong>Điểm TSA Với Aptis</strong>
+          <small>Luyện nghe tự học</small>
+        </span>
+      </a>
+
+      <div class="top-actions">
+        <span id="dataSource" class="status-pill">Đang tải dữ liệu</span>
+        <button id="resetBtn" class="ghost-btn" type="button">Làm lại</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="practice-panel" aria-labelledby="pageTitle">
+        <div class="hero">
+          <div>
+            <p class="eyebrow">Listening Practice</p>
+            <h1 id="pageTitle">Luyện đề Aptis theo từng câu</h1>
+            <p>Nghe audio, chọn đáp án, tự kiểm tra và xem transcript. Không lưu bài làm của học sinh.</p>
+          </div>
+          <div class="hero-stat" aria-label="Tổng số câu">
+            <strong id="totalCount">0</strong>
+            <span>câu hỏi</span>
+          </div>
+        </div>
+
+        <nav id="partTabs" class="part-tabs" aria-label="Chọn Part">
+          <button class="active" type="button" data-part="1">Part 1</button>
+          <button type="button" data-part="2">Part 2</button>
+          <button type="button" data-part="3">Part 3</button>
+          <button type="button" data-part="4">Part 4</button>
+        </nav>
+
+        <div id="loadingBox" class="notice">Đang tải đề...</div>
+
+        <article id="questionCard" class="question-card" hidden>
+          <div class="question-head">
+            <span id="questionBadge" class="q-badge">Câu 1</span>
+            <span id="answerStatus" class="answer-status">Chưa chọn đáp án</span>
+          </div>
+
+          <h2 id="questionText">Câu hỏi</h2>
+
+          <div class="audio-box">
+            <div class="audio-title">
+              <span>Audio</span>
+              <a id="driveLink" href="#" target="_blank" rel="noopener">Mở file Drive</a>
+            </div>
+            <audio id="audioPlayer" controls controlsList="nodownload"></audio>
+            <p id="audioHint" class="audio-hint" hidden>Nếu audio không phát trực tiếp, bấm “Mở file Drive”.</p>
+          </div>
+
+          <div id="answerGrid" class="answer-grid" role="group" aria-label="Chọn đáp án">
+            <button type="button" class="answer-btn" data-answer="A"><b>A</b><span></span></button>
+            <button type="button" class="answer-btn" data-answer="B"><b>B</b><span></span></button>
+            <button type="button" class="answer-btn" data-answer="C"><b>C</b><span></span></button>
+          </div>
+
+          <div class="question-actions">
+            <button id="checkBtn" class="primary-btn" type="button">Kiểm tra đáp án</button>
+            <button id="prevBtn" class="ghost-btn" type="button">Câu trước</button>
+            <button id="nextBtn" class="ghost-btn" type="button">Câu tiếp theo</button>
+          </div>
+
+          <section id="resultBox" class="result-box" hidden>
+            <h3>Kết quả</h3>
+            <p>Đáp án đúng: <strong id="correctAnswer">A</strong></p>
+            <div class="transcript-box">
+              <strong>Transcript</strong>
+              <p id="transcriptText">Chưa có transcript.</p>
+            </div>
+          </section>
+        </article>
+      </section>
+
+      <aside class="side-panel" aria-label="Danh sách câu hỏi">
+        <div class="side-card">
+          <div class="side-title">
+            <h2>Danh sách câu</h2>
+            <span id="currentMeta">0/0</span>
+          </div>
+          <div id="questionNumbers" class="question-numbers"></div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

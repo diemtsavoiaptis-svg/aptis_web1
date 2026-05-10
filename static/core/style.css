@@ -1326,7 +1326,7 @@ body {
 }
 
 
-/* ?nh n?n trang ch? do admin upload */
+/* Ảnh nền trang chủ do admin upload */
 .custom-home-cover {
     background-image: var(--home-cover-image) !important;
     background-size: cover !important;
@@ -1355,7 +1355,7 @@ body {
 /* === CUSTOM DASHBOARD LISTENING START === */
 /* === CUSTOM DASHBOARD LISTENING START === */
 
-/* Dashboard m?m h?n */
+/* Dashboard mềm hơn */
 .dashboard {
     min-height: 100vh;
     display: flex;
@@ -1806,7 +1806,7 @@ body {
     transform: translateY(-2px);
 }
 
-/* Ch?m ?i?m Listening */
+/* Chấm điểm Listening */
 .result-summary-card {
     text-align: center;
 }

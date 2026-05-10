@@ -42,7 +42,7 @@ def register_view(request):
     form = RegisterForm(request.POST)
 
     if not form.is_valid():
-        messages.error(request, "Th?ng tin ??ng k? ch?a h?p l?.")
+        messages.error(request, "Thông tin đăng ký chưa hợp lệ.")
         return redirect("home")
 
     full_name = form.cleaned_data["full_name"]
@@ -51,7 +51,7 @@ def register_view(request):
     password = form.cleaned_data["password"]
 
     if User.objects.filter(username=email).exists():
-        messages.error(request, "Email n?y ?? ???c ??ng k?.")
+        messages.error(request, "Email này đã được đăng ký.")
         return redirect("home")
 
     user = User.objects.create_user(
@@ -70,7 +70,7 @@ def register_view(request):
         status="pending"
     )
 
-    messages.success(request, "??ng k? th?nh c?ng. Vui l?ng ch? admin duy?t t?i kho?n.")
+    messages.success(request, "Đăng ký thành công. Vui lòng chờ admin duyệt tài khoản.")
     return redirect("home")
 
 
@@ -147,7 +147,7 @@ def _google_drive_download_response(file_id):
 
     response = session.get(base_url, params=params, stream=True, timeout=30)
 
-    # Google Drive ??i khi y?u c?u confirm token cho file l?n / b? qu?t virus.
+    # Google Drive đôi khi yêu cầu confirm token cho file lớn hoặc bị quét virus.
     token = None
 
     for key, value in response.cookies.items():
@@ -162,11 +162,11 @@ def _google_drive_download_response(file_id):
     content_type = response.headers.get("Content-Type", "")
 
     if response.status_code != 200:
-        raise Http404("Kh?ng t?i ???c audio t? Google Drive.")
+        raise Http404("Không tải được audio từ Google Drive.")
 
-    # N?u Google tr? v? HTML th? ngh?a l? link Drive ch?a public ho?c b? ch?n t?i tr?c ti?p.
+    # Nếu Google trả về HTML thì link Drive chưa public hoặc bị chặn tải trực tiếp.
     if "text/html" in content_type.lower():
-        raise Http404("Google Drive ch?a tr? v? file MP3 tr?c ti?p. H?y b?t chia s? file: B?t k? ai c? ???ng li?n k?t ? Ng??i xem.")
+        raise Http404("Google Drive chưa trả về file MP3 trực tiếp. Hãy bật chia sẻ file: Bất kỳ ai có đường liên kết ở quyền Người xem.")
 
     django_response = StreamingHttpResponse(
         response.iter_content(chunk_size=8192),
@@ -259,7 +259,7 @@ def secure_audio_view(request, question_id):
         response["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
         return response
 
-    raise Http404("Audio kh?ng t?n t?i.")
+    raise Http404("Audio không tồn tại.")
 
 @login_required
 @require_POST
@@ -271,15 +271,15 @@ def security_event_view(request):
         severity = "medium"
 
     reason_map = {
-        "print_attempt": "H?c vi?n c? g?ng in ho?c l?u PDF",
-        "save_attempt": "H?c vi?n c? g?ng l?u trang",
-        "source_attempt": "H?c vi?n c? g?ng xem m? ngu?n trang",
-        "devtools_attempt": "H?c vi?n c? d?u hi?u m? c?ng c? ki?m tra trang",
-        "tab_blur": "H?c vi?n r?i kh?i tab l?m b?i",
-        "screenshot_key": "H?c vi?n b?m ph?m Print Screen",
+        "print_attempt": "Học viên cố gắng in hoặc lưu PDF",
+        "save_attempt": "Học viên cố gắng lưu trang",
+        "source_attempt": "Học viên cố gắng xem mã nguồn trang",
+        "devtools_attempt": "Học viên có dấu hiệu mở công cụ kiểm tra trang",
+        "tab_blur": "Học viên rời khỏi tab làm bài",
+        "screenshot_key": "Học viên bấm phím Print Screen",
     }
 
-    reason = reason_map.get(event_type, f"S? ki?n b?o m?t: {event_type}")
+    reason = reason_map.get(event_type, f"Sự kiện bảo mật: {event_type}")
 
     SecurityAlert.objects.create(
         user=request.user,
