@@ -173,3 +173,21 @@ h3 {
         font-size: 15px !important;
     }
 }
+
+
+/* Ẩn danh sách câu hỏi bên giao diện học viên */
+.question-side,
+.side-card,
+.question-numbers,
+.side-stats {
+    display: none !important;
+}
+
+.student-layout {
+    grid-template-columns: 1fr !important;
+    max-width: 980px !important;
+}
+
+.exam-panel {
+    width: 100% !important;
+}
