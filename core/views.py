@@ -14,7 +14,7 @@ from django.views.decorators.http import require_POST
 
 from .forms import RegisterForm, LoginForm
 from .drive_audio import build_drive_audio_url, extract_drive_file_id
-from .models import StudentProfile, Lesson, ListeningQuestion, HomeBackground, SecurityAlert, Part2Topic, Part2Voice
+from .models import StudentProfile, Lesson, ListeningQuestion, HomeBackground, SecurityAlert, Part2Topic, Part2Voice, ListeningPartMaterial, ListeningPartQuestion
 from .supabase_storage import create_signed_url
 
 
@@ -514,7 +514,7 @@ def admin_student_lookup(request):
 
 
 
-# ===== Admin management placeholders for Listening Parts =====
+# ===== Admin management placeholder for Listening Part 2 =====
 def admin_part2_questions(request):
     return render(request, "core/admin_part_placeholder.html", {
         "part_number": 2,
@@ -522,34 +522,34 @@ def admin_part2_questions(request):
         "part_desc": "Part 2 sẽ là khu vực quản lý topic, 4 voice, pool đáp án A-B-C-D, đáp án đúng và transcript. Hiện chưa nhập dữ liệu thật.",
     })
 
-def admin_part3_questions(request):
+def _legacy_admin_part3_questions_placeholder(request):
     return render(request, "core/admin_part_placeholder.html", {
         "part_number": 3,
         "part_title": "Part 3",
         "part_desc": "Part 3 đã mở khu vực quản lý dữ liệu. Hiện chưa có dữ liệu thật, sẽ thiết kế chi tiết sau.",
     })
 
-def admin_part4_questions(request):
+def _legacy_admin_part4_questions_placeholder(request):
     return render(request, "core/admin_part_placeholder.html", {
         "part_number": 4,
         "part_title": "Part 4",
         "part_desc": "Part 4 đã mở khu vực quản lý dữ liệu. Hiện chưa có dữ liệu thật, sẽ thiết kế chi tiết sau.",
     })
-# ===== End admin management placeholders =====
+# ===== End admin management placeholder for Listening Part 2 =====
 
 
 # ===== Student listening interfaces =====
 def student_part2_page(request):
     return render(request, "core/listening_part2.html")
 
-def student_part3_page(request):
+def _legacy_student_part3_page_placeholder(request):
     return render(request, "core/listening_part_placeholder.html", {
         "part_number": 3,
         "part_title": "Part 3",
         "part_desc": "Giao diện học viên Part 3 hiện chưa có dữ liệu.",
     })
 
-def student_part4_page(request):
+def _legacy_student_part4_page_placeholder(request):
     return render(request, "core/listening_part_placeholder.html", {
         "part_number": 4,
         "part_title": "Part 4",
@@ -1605,3 +1605,228 @@ def student_part2_gioi_page(request, topic_id):
         "options": options,
     })
 # ===== END FINAL: May Gioi voice info input + lock =====
+
+
+# ===== Listening Part 3/4 material upload + student practice =====
+def _is_admin_user_part34(user):
+    return user.is_authenticated and (user.is_staff or user.is_superuser)
+
+
+def _part34_question_options(question, include_blank=True):
+    options = [
+        ("A", question.option_a),
+        ("B", question.option_b),
+        ("C", question.option_c),
+        ("D", question.option_d),
+        ("E", question.option_e),
+        ("F", question.option_f),
+    ]
+    if include_blank:
+        return options
+    return [(label, text) for label, text in options if str(text or "").strip()]
+
+
+def _part34_question_rows(material, include_blank=True):
+    if not material:
+        return []
+
+    return [
+        {
+            "question": question,
+            "options": _part34_question_options(question, include_blank=include_blank),
+        }
+        for question in material.questions.all().order_by("order", "id")
+    ]
+
+
+def _part34_redirect(request, material_id=None):
+    if material_id:
+        return redirect(f"{request.path}?material={material_id}")
+    return redirect(request.path)
+
+
+def _admin_part34_page(request, part_number):
+    materials = ListeningPartMaterial.objects.filter(part=part_number).prefetch_related("questions").order_by("id")
+
+    if request.method == "POST":
+        action = request.POST.get("action", "").strip()
+        material_id = request.POST.get("material_id")
+
+        if action == "create_material":
+            material = ListeningPartMaterial.objects.create(
+                part=part_number,
+                title=request.POST.get("title", "").strip() or f"Listening Part {part_number}",
+                description=request.POST.get("description", "").strip(),
+                instructions=request.POST.get("instructions", "").strip(),
+                audio_url=request.POST.get("audio_url", "").strip(),
+                transcript=request.POST.get("transcript", "").strip(),
+                is_active=request.POST.get("is_active") == "on",
+            )
+            document_file = request.FILES.get("document_file")
+            if document_file:
+                material.document_file = document_file
+                material.save()
+
+            messages.success(request, f"Đã tạo tài liệu Part {part_number}.")
+            return _part34_redirect(request, material.id)
+
+        material = get_object_or_404(ListeningPartMaterial, id=material_id, part=part_number)
+
+        if action == "save_material":
+            material.title = request.POST.get("title", "").strip() or material.title
+            material.description = request.POST.get("description", "").strip()
+            material.instructions = request.POST.get("instructions", "").strip()
+            material.audio_url = request.POST.get("audio_url", "").strip()
+            material.transcript = request.POST.get("transcript", "").strip()
+            material.is_active = request.POST.get("is_active") == "on"
+
+            document_file = request.FILES.get("document_file")
+            if document_file:
+                material.document_file = document_file
+            if request.POST.get("clear_document") == "on" and material.document_file:
+                material.document_file.delete(save=False)
+                material.document_file = None
+
+            material.save()
+            messages.success(request, "Đã lưu tài liệu.")
+            return _part34_redirect(request, material.id)
+
+        if action == "delete_material":
+            material.delete()
+            messages.success(request, "Đã xóa tài liệu.")
+            return _part34_redirect(request)
+
+        if action == "add_question":
+            last_question = material.questions.order_by("-order", "-id").first()
+            next_order = (last_question.order + 1) if last_question else 1
+            ListeningPartQuestion.objects.create(
+                material=material,
+                order=next_order,
+                question_text=f"Câu {next_order}",
+            )
+            messages.success(request, "Đã thêm câu hỏi mới.")
+            return _part34_redirect(request, material.id)
+
+        if action == "save_questions":
+            delete_question_id = request.POST.get("delete_question")
+            if delete_question_id:
+                ListeningPartQuestion.objects.filter(id=delete_question_id, material=material).delete()
+                messages.success(request, "Đã xóa câu hỏi.")
+                return _part34_redirect(request, material.id)
+
+            valid_answers = {"A", "B", "C", "D", "E", "F"}
+            for question_id in request.POST.getlist("question_id"):
+                question = ListeningPartQuestion.objects.filter(id=question_id, material=material).first()
+                if not question:
+                    continue
+
+                prefix = f"question_{question.id}_"
+                try:
+                    question.order = int(request.POST.get(prefix + "order", question.order) or question.order)
+                except ValueError:
+                    pass
+
+                question.question_text = request.POST.get(prefix + "question_text", "").strip() or question.question_text
+                question.option_a = request.POST.get(prefix + "option_a", "").strip()
+                question.option_b = request.POST.get(prefix + "option_b", "").strip()
+                question.option_c = request.POST.get(prefix + "option_c", "").strip()
+                question.option_d = request.POST.get(prefix + "option_d", "").strip()
+                question.option_e = request.POST.get(prefix + "option_e", "").strip()
+                question.option_f = request.POST.get(prefix + "option_f", "").strip()
+                answer = request.POST.get(prefix + "correct_answer", "A").strip().upper()
+                question.correct_answer = answer if answer in valid_answers else "A"
+                question.explanation = request.POST.get(prefix + "explanation", "").strip()
+                question.save()
+
+            messages.success(request, "Đã lưu câu hỏi và đáp án.")
+            return _part34_redirect(request, material.id)
+
+    selected = None
+    selected_id = request.GET.get("material")
+    if selected_id:
+        selected = materials.filter(id=selected_id).first()
+    if not selected:
+        selected = materials.first()
+
+    return render(request, "core/admin_part34_materials.html", {
+        "part_number": part_number,
+        "part_title": f"Listening Part {part_number}",
+        "materials": materials,
+        "selected": selected,
+        "question_rows": _part34_question_rows(selected),
+        "answer_labels": ["A", "B", "C", "D", "E", "F"],
+    })
+
+
+def _part34_student_identity(request):
+    profile = StudentProfile.objects.filter(user=request.user).first()
+    student_id = ""
+    student_name = request.user.get_full_name() or request.user.username
+    student_email = request.user.email or request.user.username
+
+    if profile:
+        student_id = profile.student_id or profile.id
+        student_name = profile.full_name or student_name
+        student_email = profile.email or student_email
+    else:
+        student_id = request.user.id
+
+    return {
+        "student_id": student_id,
+        "student_name": student_name,
+        "student_email": student_email,
+        "student_watermark": f"ID {student_id} - {student_name} - {student_email}",
+    }
+
+
+def _student_part34_page(request, part_number):
+    materials = ListeningPartMaterial.objects.filter(part=part_number, is_active=True).prefetch_related("questions").order_by("id")
+
+    selected = None
+    selected_id = request.GET.get("material")
+    if selected_id:
+        selected = materials.filter(id=selected_id).first()
+    if not selected:
+        selected = materials.first()
+
+    is_checked = request.method == "POST" and request.POST.get("action") == "check_answers"
+    question_rows = _part34_question_rows(selected, include_blank=False)
+    for row in question_rows:
+        question = row["question"]
+        selected_answer = request.POST.get(f"question_{question.id}", "").strip().upper() if is_checked else ""
+        row["is_checked"] = is_checked
+        row["selected_answer"] = selected_answer
+        row["is_correct"] = bool(selected_answer and selected_answer == question.correct_answer)
+
+    context = {
+        "part_number": part_number,
+        "part_title": f"Listening Part {part_number}",
+        "materials": materials,
+        "selected": selected,
+        "question_rows": question_rows,
+        "is_checked": is_checked,
+    }
+    context.update(_part34_student_identity(request))
+
+    return render(request, "core/student_part34.html", context)
+
+
+@user_passes_test(_is_admin_user_part34)
+def admin_part3_questions(request):
+    return _admin_part34_page(request, 3)
+
+
+@user_passes_test(_is_admin_user_part34)
+def admin_part4_questions(request):
+    return _admin_part34_page(request, 4)
+
+
+@login_required
+def student_part3_page(request):
+    return _student_part34_page(request, 3)
+
+
+@login_required
+def student_part4_page(request):
+    return _student_part34_page(request, 4)
+# ===== End Listening Part 3/4 material upload + student practice =====

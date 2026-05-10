@@ -214,3 +214,66 @@ class Part2Voice(models.Model):
     def __str__(self):
         return f"{self.topic} - Voice {self.order}"
 # ===== End Listening Part 2 data models =====
+
+
+# ===== Listening Part 3/4 data models =====
+class ListeningPartMaterial(models.Model):
+    PART_CHOICES = [
+        (3, "Part 3"),
+        (4, "Part 4"),
+    ]
+
+    part = models.IntegerField("Part", choices=PART_CHOICES)
+    title = models.CharField("Tên tài liệu", max_length=255)
+    description = models.TextField("Mô tả ngắn", blank=True)
+    instructions = models.TextField("Hướng dẫn làm bài", blank=True)
+    audio_url = models.URLField("Link audio / Google Drive", blank=True)
+    document_file = models.FileField("Tài liệu đính kèm", upload_to="listening_part34_documents/", blank=True, null=True)
+    transcript = models.TextField("Transcript / nội dung nghe", blank=True)
+    is_active = models.BooleanField("Hiển thị cho học viên", default=True)
+    created_at = models.DateTimeField("Ngày tạo", auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Tài liệu Listening Part 3/4"
+        verbose_name_plural = "Tài liệu Listening Part 3/4"
+        ordering = ["part", "id"]
+
+    def __str__(self):
+        return f"Part {self.part} - {self.title}"
+
+
+class ListeningPartQuestion(models.Model):
+    ANSWER_CHOICES = [
+        ("A", "A"),
+        ("B", "B"),
+        ("C", "C"),
+        ("D", "D"),
+        ("E", "E"),
+        ("F", "F"),
+    ]
+
+    material = models.ForeignKey(
+        ListeningPartMaterial,
+        on_delete=models.CASCADE,
+        related_name="questions",
+        verbose_name="Tài liệu",
+    )
+    order = models.PositiveIntegerField("STT", default=1)
+    question_text = models.TextField("Câu hỏi")
+    option_a = models.CharField("Đáp án A", max_length=500, blank=True)
+    option_b = models.CharField("Đáp án B", max_length=500, blank=True)
+    option_c = models.CharField("Đáp án C", max_length=500, blank=True)
+    option_d = models.CharField("Đáp án D", max_length=500, blank=True)
+    option_e = models.CharField("Đáp án E", max_length=500, blank=True)
+    option_f = models.CharField("Đáp án F", max_length=500, blank=True)
+    correct_answer = models.CharField("Đáp án đúng", max_length=1, choices=ANSWER_CHOICES, default="A")
+    explanation = models.TextField("Giải thích / ghi chú", blank=True)
+
+    class Meta:
+        verbose_name = "Câu hỏi Listening Part 3/4"
+        verbose_name_plural = "Câu hỏi Listening Part 3/4"
+        ordering = ["material_id", "order", "id"]
+
+    def __str__(self):
+        return f"{self.material} - Câu {self.order}"
+# ===== End Listening Part 3/4 data models =====
