@@ -184,8 +184,8 @@
             <span class="aptis-status">Đang ưu tiên</span>
             <a class="aptis-part-btn" href="{% url 'admin_part1_questions' %}">Mở Part 1</a>
           {% else %}
-            <span class="aptis-status">Sẵn sàng thiết kế</span>
-            <button class="aptis-part-btn muted" type="button">Sắp mở</button>
+            <span class="aptis-status">Đã mở khung</span>
+            <button class="aptis-part-btn muted" type="button" onclick="window.location.href='/dashboard/part-2/'">Mở Part 2</button>
           {% endif %}
         </div>
       </div>

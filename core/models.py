@@ -64,6 +64,9 @@ class ListeningQuestion(models.Model):
     listening_transcript = models.TextField(blank=True, verbose_name=_vi(r"\u0110\u1ec1 b\u00e0i nghe / transcript"))
 
     audio_url = models.URLField(blank=True, verbose_name=_vi(r"Link audio ngo\u00e0i"))
+    voice_info = models.TextField("Thông tin của voice", blank=True)
+    voice_info_locked = models.BooleanField("Khóa thông tin voice", default=False)
+    voice_info = models.TextField("Thông tin của voice", blank=True)
     audio_drive_link = models.URLField(blank=True, verbose_name=_vi(r"Link Google Drive MP3"))
     audio_drive_file_id = models.CharField(max_length=255, blank=True, default="", verbose_name=_vi(r"Google Drive File ID"))
     audio_file = models.FileField(upload_to="listening_audio/", blank=True, null=True, verbose_name=_vi(r"File audio local"))
@@ -147,3 +150,67 @@ class SecurityAlert(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.reason}"
+
+
+# ===== Listening Part 2 data models =====
+class Part2Topic(models.Model):
+    VERSION_CHOICES = [
+        ("gioi", "Mày giỏi"),
+        ("kem", "Mày kém"),
+    ]
+
+    version = models.CharField("Phiên bản", max_length=20, choices=VERSION_CHOICES, default="gioi")
+    title = models.CharField("Tên chủ đề", max_length=255)
+    description = models.TextField("Mô tả", blank=True)
+    data_choices = models.TextField(
+        "Dữ liệu đáp án tổng",
+        blank=True,
+        help_text="Nhập nhiều dòng dữ liệu đáp án. 4 voice sẽ chọn đáp án đúng từ danh sách này."
+    )
+    audio_url = models.URLField("Audio Drive chung", blank=True)
+    created_at = models.DateTimeField("Ngày tạo", auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Chủ đề Part 2"
+        verbose_name_plural = "Chủ đề Part 2"
+        ordering = ["-id"]
+
+    def __str__(self):
+        return self.title
+
+
+class Part2Voice(models.Model):
+    correct_data = models.TextField("Đáp án đúng", blank=True)
+    is_locked = models.BooleanField("Khóa", default=False)
+    question_text = models.TextField("Câu hỏi", blank=True)
+    topic = models.ForeignKey(Part2Topic, on_delete=models.CASCADE, related_name="voices", verbose_name="Chủ đề")
+    order = models.PositiveIntegerField("Thứ tự người nói", default=1)
+
+    audio_url = models.URLField("File audio / Link audio", blank=True)
+    answer_a = models.CharField("Đáp án A", max_length=255, blank=True)
+    answer_b = models.CharField("Đáp án B", max_length=255, blank=True)
+    answer_c = models.CharField("Đáp án C", max_length=255, blank=True)
+    answer_d = models.CharField("Đáp án D", max_length=255, blank=True)
+
+    transcript = models.TextField("Nội dung file ghi âm", blank=True)
+    data_choices = models.TextField(
+        "Dữ liệu đáp án",
+        blank=True,
+        help_text="Nhập nhiều ý dữ liệu, mỗi ý một dòng. Khi làm bài chỉ chọn 4 ý tương ứng 4 người."
+    )
+
+    correct_answer = models.CharField(
+        "Đáp án đúng",
+        max_length=1,
+        choices=[("A", "A"), ("B", "B"), ("C", "C"), ("D", "D")],
+        blank=True
+    )
+
+    class Meta:
+        verbose_name = "Voice Part 2"
+        verbose_name_plural = "Voice Part 2"
+        ordering = ["topic_id", "order", "id"]
+
+    def __str__(self):
+        return f"{self.topic} - Voice {self.order}"
+# ===== End Listening Part 2 data models =====

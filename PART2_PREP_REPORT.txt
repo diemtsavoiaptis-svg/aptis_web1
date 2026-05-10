@@ -1,0 +1,179 @@
+===== PART 2 PREP REPORT =====
+
+
+
+===== FILE: core/models.py =====
+
+47: class ListeningQuestion(models.Model):
+48:     PART_CHOICES = [
+49:         (1, "Part 1"),
+50:         (2, "Part 2"),
+51:         (3, "Part 3"),
+52:         (4, "Part 4"),
+61:     part = models.IntegerField(choices=PART_CHOICES, default=1, verbose_name="Part")
+62:     question_number = models.IntegerField(verbose_name=_vi(r"S\u1ed1 c\u00e2u"))
+63:     question_text = models.TextField(verbose_name=_vi(r"C\u00e2u h\u1ecfi"))
+64:     listening_transcript = models.TextField(blank=True, verbose_name=_vi(r"\u0110\u1ec1 b\u00e0i nghe / transcript"))
+66:     audio_url = models.URLField(blank=True, verbose_name=_vi(r"Link audio ngo\u00e0i"))
+67:     audio_drive_link = models.URLField(blank=True, verbose_name=_vi(r"Link Google Drive MP3"))
+68:     audio_drive_file_id = models.CharField(max_length=255, blank=True, default="", verbose_name=_vi(r"Google Drive File ID"))
+69:     audio_file = models.FileField(upload_to="listening_audio/", blank=True, null=True, verbose_name=_vi(r"File audio local"))
+71:     audio_provider = models.CharField(max_length=30, blank=True, default="", verbose_name=_vi(r"Kho audio"))
+72:     audio_key = models.CharField(max_length=500, blank=True, default="", verbose_name=_vi(r"M\u00e3 file audio"))
+73:     audio_file_name = models.CharField(max_length=255, blank=True, default="", verbose_name=_vi(r"T\u00ean file audio"))
+74:     audio_size = models.PositiveIntegerField(default=0, verbose_name=_vi(r"Dung l\u01b0\u1ee3ng audio"))
+75:     audio_content_type = models.CharField(max_length=120, blank=True, default="", verbose_name=_vi(r"Lo\u1ea1i file audio"))
+85:         verbose_name = _vi(r"C\u00e2u h\u1ecfi Listening")
+86:         verbose_name_plural = _vi(r"Danh s\u00e1ch c\u00e2u h\u1ecfi Listening")
+87:         ordering = ["part", "question_number"]
+90:         return f"Part {self.part} - " + _vi(r"C\u00e2u") + f" {self.question_number}"
+
+
+===== FILE: core/views.py =====
+
+15: from .drive_audio import build_drive_audio_url, extract_drive_file_id
+16: from .models import StudentProfile, Lesson, ListeningQuestion, HomeBackground, SecurityAlert
+137:     return redirect("dashboard")
+168:         raise Http404("Không tải được audio từ Google Drive.")
+176:         content_type=content_type or "audio/mpeg",
+189:     django_response["Content-Disposition"] = 'inline; filename="tsa-audio.mp3"'
+195: def dashboard(request):
+206:         return render(request, "core/dashboard.html", {
+210:     return redirect("listening")
+212:     return redirect("listening")
+217: def listening_view(request):
+219:         part = int(request.GET.get("part", 1))
+221:         part = 1
+223:     if part not in [1, 2, 3, 4]:
+224:         part = 1
+226:     questions = ListeningQuestion.objects.filter(part=part).order_by("question_number")
+227:     parts = [1, 2, 3, 4]
+229:     response = render(request, "core/listening.html", {
+230:         "part": part,
+231:         "parts": parts,
+232:         "questions": questions,
+233:         "total_questions": questions.count(),
+244: def secure_audio_view(request, question_id):
+245:     question = get_object_or_404(ListeningQuestion, id=question_id)
+247:     drive_file_id = getattr(question, "audio_drive_file_id", "") or extract_drive_file_id(getattr(question, "audio_drive_link", ""))
+252:     if getattr(question, "audio_file", None):
+253:         response = FileResponse(question.audio_file.open("rb"), content_type="audio/mpeg")
+257:         response["Content-Disposition"] = 'inline; filename="tsa-audio.mp3"'
+260:     if getattr(question, "audio_url", ""):
+261:         response = HttpResponseRedirect(question.audio_url)
+265:     raise Http404("Audio không tồn tại.")
+304: def admin_listening_parts(request):
+306:         return redirect("listening")
+308:     part_counts = {
+309:         1: ListeningQuestion.objects.filter(part=1).count(),
+310:         2: ListeningQuestion.objects.filter(part=2).count(),
+311:         3: ListeningQuestion.objects.filter(part=3).count(),
+312:         4: ListeningQuestion.objects.filter(part=4).count(),
+315:     return render(request, "core/admin_listening_parts.html", {
+316:         "part_counts": part_counts,
+321: def admin_part1_questions(request):
+323:         return redirect("listening")
+337:             for q in ListeningQuestion.objects.filter(part=1):
+339:                     current_max = max(current_max, int(q.question_number or 0))
+344:                 ListeningQuestion.objects.create(
+345:                     part=1,
+346:                     question_number=current_max + i,
+347:                     question_text=f"Câu hỏi {current_max + i}",
+352:                     listening_transcript="",
+355:             messages.success(request, f"Đã tạo thêm {count} dòng Part 1.")
+356:             return redirect("admin_part1_questions")
+362:                 q = ListeningQuestion.objects.filter(id=row_id, part=1).first()
+367:                     q.question_number = int(request.POST.get(f"question_number_{row_id}") or q.question_number or 1)
+371:                 q.question_text = request.POST.get(f"question_text_{row_id}", "").strip()
+378:                 q.listening_transcript = request.POST.get(f"listening_transcript_{row_id}", "").strip()
+380:                 if hasattr(q, "audio_drive_link"):
+381:                     q.audio_drive_link = request.POST.get(f"audio_drive_link_{row_id}", "").strip()
+383:                 audio_url_key = f"audio_url_{row_id}"
+384:                 if hasattr(q, "audio_url") and audio_url_key in request.POST:
+385:                     q.audio_url = request.POST.get(audio_url_key, "").strip()
+389:             messages.success(request, "Đã cập nhật hàng loạt câu hỏi Part 1.")
+390:             return redirect("admin_part1_questions")
+394:             deleted_count, _ = ListeningQuestion.objects.filter(id__in=selected_ids, part=1).delete()
+395:             messages.success(request, f"Đã xóa {deleted_count} câu hỏi Part 1 đã chọn.")
+396:             return redirect("admin_part1_questions")
+400:             ListeningQuestion.objects.filter(id=delete_id, part=1).delete()
+401:             messages.success(request, "Đã xóa 1 câu hỏi Part 1.")
+402:             return redirect("admin_part1_questions")
+404:     questions = ListeningQuestion.objects.filter(part=1).order_by("question_number", "id")
+406:     return render(request, "core/admin_part1_questions.html", {
+407:         "questions": questions,
+408:         "total_questions": questions.count(),
+
+
+===== FILE: core/urls.py =====
+
+3: from . import listening_ui
+6:     path("dashboard/students/", views.admin_student_lookup, name="admin_student_lookup"),
+10:     path("dashboard/", views.dashboard, name="dashboard"),
+11:     path("dashboard/listening-parts/", views.admin_listening_parts, name="admin_listening_parts"),
+12:     path("dashboard/part-1/", views.admin_part1_questions, name="admin_part1_questions"),    path("listening/", listening_ui.listening_page, name="listening"),
+13:     path("secure/audio/<int:question_id>/", views.secure_audio_view, name="secure_audio"),
+
+
+===== FILE: templates/core/dashboard.html =====
+
+6:     <title>Dashboard quản trị | Điểm TSA với Aptis</title>
+344:                     data-title="Quản lý câu hỏi Listening"
+345:                     data-desc="Chọn Part và cập nhật dữ liệu câu hỏi, audio, đáp án, transcript."
+346:                     data-url="/dashboard/listening-parts/">
+347:                 🎧 Quản lý câu hỏi Listening
+353:                     data-url="/dashboard/students/">
+374:                     data-url="/listening/">
+387:                 <div class="eyebrow">Dashboard quản trị</div>
+412:                     <div class="quick-card" data-url="/dashboard/listening-parts/" data-title="Quản lý câu hỏi Listening" data-desc="Chọn Part và cập nhật dữ liệu câu hỏi, audio, đáp án, transcript.">
+414:                         <h3>Listening</h3>
+415:                         <p>Quản lý Part 1, Part 2, Part 3, Part 4 trong khung bên phải.</p>
+418:                     <div class="quick-card" data-url="/dashboard/students/" data-title="Duyệt học viên" data-desc="Duyệt tài khoản học viên mới đăng ký, quản lý trạng thái học viên.">
+446:     document.getElementById("panelTitle").textContent = title || "Dashboard quản trị";
+
+
+===== FILE: templates/core/admin_student_lookup.html =====
+
+
+
+===== FILE: templates/core/listening.html =====
+
+6:     <title>Listening Part {{ part_number }} | Điểm TSA Với Aptis</title>
+15: <style id="force-hide-question-list">
+16:     .question-side,
+18:     .question-numbers,
+20:     .question-list,
+21:     .question-panel,
+23:     aside:has(.question-numbers),
+33:     .listening-layout {
+41:     .listening-main,
+84:                 <span>Listening Practice</span>
+89:             <a href="{% url 'dashboard' %}" class="ghost-btn">Trang chính</a>
+97:                 <div class="part-card">
+98:                     <span>Part</span>
+99:                     <strong>{{ part_number }}</strong>
+102:                     <h1>Listening Practice</h1>
+107:             <div class="part-tabs">
+108:                 {% for part in part_tabs %}
+109:                     <a class="{% if part == part_number %}active{% endif %}" href="{% url 'listening' %}?part={{ part }}">Part {{ part }}</a>
+113:             {% if no_question %}
+115:                     <h2>Chưa có dữ liệu Listening cho Part {{ part_number }}</h2>
+121:                         <strong>Câu {{ current_index }}/{{ total_questions }}</strong>
+129:                 <article class="question-card">
+130:                     <div class="question-head">
+135:                     <h2>{{ question.prompt }}</h2>
+137:                     <audio class="audio-player" controls controlsList="nodownload noplaybackrate" src="{{ audio_url }}"></audio>
+141:                             <b>A</b><span>{{ question.option_a }}</span>
+144:                             <b>B</b><span>{{ question.option_b }}</span>
+147:                             <b>C</b><span>{{ question.option_c }}</span>
+155:                         <p>Đáp án đúng: <strong>{{ question.correct_answer }}</strong></p>
+156:                         <div class="transcript">
+157:                             <strong>Transcript:</strong>
+158:                             <p>{{ question.transcript }}</p>
+162:                     <div class="question-nav">
+
+
+===== FILE: static/core/security_protect.js =====
+
+12:         const parts = value.split(`; ${name}=`);
+13:         if (parts.length === 2) return parts.pop().split(";").shift();

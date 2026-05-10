@@ -1,0 +1,82 @@
+{% load static %}
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Part 2 - {{ version_title }}</title>
+<link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
+<style>
+:root{--red:#e60023;--red2:#ff5f76;--dark:#3f0011;--line:#ffd1dc;--muted:#667085}
+*{box-sizing:border-box}
+body{
+    margin:0;
+    min-height:100vh;
+    background:linear-gradient(135deg,#fffafa,#fff0f4 48%,#fff7f9);
+    font-family:"Segoe UI",Tahoma,Arial,sans-serif;
+    color:var(--dark);
+}
+.wrap{max-width:1180px;margin:0 auto;padding:32px 20px}
+.hero,.topic{
+    background:white;
+    border:1px solid var(--line);
+    border-radius:28px;
+    padding:26px;
+    box-shadow:0 18px 44px rgba(180,0,30,.07);
+}
+h1{margin:0;font-size:44px;letter-spacing:-.05em}
+.desc{margin-top:10px;color:var(--muted);font-size:17px;line-height:1.65;font-weight:650}
+.back{
+    display:inline-flex;
+    margin-top:16px;
+    min-height:44px;
+    padding:0 16px;
+    border-radius:999px;
+    background:#fff1f4;
+    color:#8a0015;
+    border:1px solid var(--line);
+    text-decoration:none;
+    font-weight:950;
+}
+.grid{margin-top:20px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.topic{text-decoration:none;color:inherit;display:block;transition:.15s ease}
+.topic:hover{transform:translateY(-3px);box-shadow:0 22px 48px rgba(180,0,30,.11)}
+.topic h2{margin:0;font-size:23px;color:#4a0010;letter-spacing:-.03em}
+.topic p{color:var(--muted);line-height:1.55}
+@media(max-width:920px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.grid{grid-template-columns:1fr}}
+</style>
+
+<style class="part-card-clickable-hover-fix">
+.card:hover,
+.part-card:hover,
+.part-item:hover,
+article:hover {
+    cursor: pointer;
+}
+</style>
+
+</head>
+<body>
+<main class="wrap">
+<section class="hero">
+    <h1>Part 2 - {{ version_title }}</h1>
+    <div class="desc">Chọn chủ đề để bắt đầu làm bài.</div>
+    <a class="back" href="{{ back_url }}">← Quay lại chọn phiên bản</a>
+</section>
+
+<section class="grid">
+{% for topic in topics %}
+<a class="topic" href="{{ topic_url_prefix }}{{ topic.id }}/">
+    <h2>{{ topic.title }}</h2>
+    <p>{{ topic.description|default:"Chủ đề luyện nghe" }}</p>
+</a>
+{% empty %}
+<div class="topic">
+    <h2>Chưa có chủ đề</h2>
+    <p>Admin chưa nhập dữ liệu cho phiên bản này.</p>
+</div>
+{% endfor %}
+</section>
+</main>
+</body>
+</html>

@@ -1,0 +1,429 @@
+﻿from pathlib import Path
+import re
+
+# ==================================================
+# 1) Đảm bảo model có đủ field cần cho Mày giỏi
+# ==================================================
+models = Path("core/models.py")
+s = models.read_text(encoding="utf-8", errors="ignore")
+
+topic_match = re.search(r"class\s+Part2Topic\(models\.Model\):\s*\n", s)
+if not topic_match:
+    raise SystemExit("KHONG_TIM_THAY_CLASS_Part2Topic")
+
+topic_block = re.search(r"class\s+Part2Topic\(models\.Model\):[\s\S]*?(?=\nclass\s+Part2Voice|\Z)", s).group(0)
+
+if "version = models.CharField" not in topic_block:
+    insert = '''    VERSION_CHOICES = [
+        ("gioi", "Mày giỏi"),
+        ("kem", "Mày kém"),
+    ]
+
+    version = models.CharField("Phiên bản", max_length=20, choices=VERSION_CHOICES, default="gioi")
+'''
+    s = s[:topic_match.end()] + insert + s[topic_match.end():]
+
+topic_block = re.search(r"class\s+Part2Topic\(models\.Model\):[\s\S]*?(?=\nclass\s+Part2Voice|\Z)", s).group(0)
+
+if "audio_url" not in topic_block:
+    s = re.sub(
+        r"(description\s*=\s*models\.TextField\([^\n]+\)\n)",
+        r'\1    audio_url = models.URLField("Audio Drive chung", blank=True)\n',
+        s,
+        count=1
+    )
+
+voice_match = re.search(r"class\s+Part2Voice\(models\.Model\):\s*\n", s)
+if not voice_match:
+    raise SystemExit("KHONG_TIM_THAY_CLASS_Part2Voice")
+
+voice_block = re.search(r"class\s+Part2Voice\(models\.Model\):[\s\S]*?(?=\n#|\nclass |\Z)", s).group(0)
+
+voice_insert = ""
+if "is_locked" not in voice_block:
+    voice_insert += '    is_locked = models.BooleanField("Khóa", default=False)\n'
+if "question_text" not in voice_block:
+    voice_insert += '    question_text = models.TextField("Câu hỏi", blank=True)\n'
+if "correct_data" not in voice_block:
+    voice_insert += '    correct_data = models.TextField("Đáp án đúng", blank=True)\n'
+
+if voice_insert:
+    s = s[:voice_match.end()] + voice_insert + s[voice_match.end():]
+
+models.write_text(s, encoding="utf-8")
+
+
+# ==================================================
+# 2) Ghi đè view Mày giỏi: chỉ dùng 1 voice tổng
+# ==================================================
+views = Path("core/views.py")
+v = views.read_text(encoding="utf-8", errors="ignore")
+
+imports = [
+    "from django.contrib.auth.decorators import user_passes_test",
+    "from django.shortcuts import render, redirect, get_object_or_404",
+    "from django.contrib import messages",
+]
+for imp in imports:
+    if imp not in v:
+        v = imp + "\n" + v
+
+if "Part2Topic" not in v or "Part2Voice" not in v:
+    if "from .models import" in v:
+        v = re.sub(
+            r"from \.models import ([^\n]+)",
+            lambda m: "from .models import " + m.group(1).rstrip() + ", Part2Topic, Part2Voice",
+            v,
+            count=1
+        )
+    else:
+        v = "from .models import Part2Topic, Part2Voice\n" + v
+
+block = r'''
+
+# ===== Part 2 May Gioi ONE VOICE final =====
+PART2_GIOI_TOPICS = [
+    "Topic Protect the environment",
+    "Topic Protect the environment 2",
+    "Topic Online shopping",
+    "Topic Listening to music",
+    "Topic Outdoor activities",
+    "Topic The place to run",
+    "Topic Do exercise",
+    "Topic The internet",
+    "Topic The Art",
+    "Topic Travel to work.",
+    "Topic Studying.",
+    "Topic Studying phiên bản 2.",
+]
+
+
+def _is_admin_user_part2_gioi_one(user):
+    return user.is_authenticated and (user.is_staff or user.is_superuser)
+
+
+def _seed_part2_gioi_topics_one_voice():
+    for title in PART2_GIOI_TOPICS:
+        topic, created = Part2Topic.objects.get_or_create(
+            version="gioi",
+            title=title,
+            defaults={"description": "Chủ đề Mày giỏi"}
+        )
+
+        # Mày giỏi chỉ giữ 1 voice tổng
+        topic.voices.exclude(order=1).delete()
+
+        voice, created_voice = Part2Voice.objects.get_or_create(
+            topic=topic,
+            order=1,
+            defaults={"question_text": "Câu hỏi tổng"}
+        )
+
+        if not voice.question_text:
+            voice.question_text = "Câu hỏi tổng"
+            voice.save()
+
+
+def _get_gioi_total_voice(topic):
+    topic.voices.exclude(order=1).delete()
+    voice, created = Part2Voice.objects.get_or_create(
+        topic=topic,
+        order=1,
+        defaults={"question_text": "Câu hỏi tổng"}
+    )
+    return voice
+
+
+@user_passes_test(_is_admin_user_part2_gioi_one)
+def admin_part2_gioi_topics(request):
+    _seed_part2_gioi_topics_one_voice()
+    topics = Part2Topic.objects.filter(version="gioi").order_by("id")
+
+    return render(request, "core/admin_part2_gioi_topics.html", {
+        "topics": topics,
+    })
+
+
+@user_passes_test(_is_admin_user_part2_gioi_one)
+def admin_part2_gioi_detail(request, topic_id):
+    topic = get_object_or_404(Part2Topic, id=topic_id, version="gioi")
+    voice = _get_gioi_total_voice(topic)
+
+    if request.method == "POST" and request.POST.get("action") == "save_topic":
+        topic.title = request.POST.get("title", "").strip() or topic.title
+        topic.description = request.POST.get("description", "").strip()
+        topic.audio_url = request.POST.get("audio_url", "").strip()
+        topic.save()
+
+        voice.is_locked = request.POST.get("voice_is_locked") == "on"
+        voice.order = int(request.POST.get("voice_order", 1) or 1)
+        voice.question_text = request.POST.get("question_text", "").strip()
+        voice.data_choices = request.POST.get("data_choices", "").strip()
+        voice.correct_data = request.POST.get("correct_data", "").strip()
+        voice.audio_url = topic.audio_url
+        voice.save()
+
+        messages.success(request, "Đã lưu dữ liệu chủ đề Mày giỏi.")
+        return redirect("admin_part2_gioi_detail", topic_id=topic.id)
+
+    options = [x.strip() for x in (voice.data_choices or "").splitlines() if x.strip()]
+
+    return render(request, "core/admin_part2_gioi_detail.html", {
+        "topic": topic,
+        "voice": voice,
+        "options": options,
+    })
+
+
+def student_part2_gioi_page(request, topic_id):
+    topic = get_object_or_404(Part2Topic, id=topic_id, version="gioi")
+    voice = _get_gioi_total_voice(topic)
+    options = [x.strip() for x in (voice.data_choices or "").splitlines() if x.strip()]
+
+    return render(request, "core/student_part2_gioi.html", {
+        "topic": topic,
+        "voice": voice,
+        "options": options,
+    })
+# ===== End Part 2 May Gioi ONE VOICE final =====
+'''
+
+if "Part 2 May Gioi ONE VOICE final" not in v:
+    v += block
+
+views.write_text(v, encoding="utf-8")
+
+
+# ==================================================
+# 3) Template admin chi tiết Mày giỏi: chỉ 1 dòng tổng
+# ==================================================
+Path("templates/core/admin_part2_gioi_detail.html").write_text(r'''{% load static %}
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>{{ topic.title }} | Mày giỏi</title>
+<link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
+<style>
+:root{--red:#e60023;--red2:#ff5f76;--deep:#7a0010;--dark:#3f0011;--line:#ffd1dc;--muted:#667085}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(circle at top right,rgba(255,95,118,.18),transparent 34%),linear-gradient(135deg,#fffafa,#fff0f4 48%,#fff7f9);font-family:"Segoe UI",Tahoma,Arial,sans-serif;color:var(--dark)}
+.wrap{max-width:1500px;margin:0 auto;padding:26px 18px 42px}
+.hero,.card{background:white;border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:0 18px 44px rgba(180,0,30,.07)}
+.hero{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}
+h1{margin:0;font-size:38px;letter-spacing:-.04em}
+.desc{margin-top:8px;color:var(--muted);line-height:1.6;font-weight:650}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn,.link{min-height:46px;border:0;border-radius:999px;padding:0 18px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font:inherit;font-weight:950;cursor:pointer}
+.btn{background:linear-gradient(135deg,var(--red),var(--red2));color:white;box-shadow:0 14px 28px rgba(230,0,35,.16)}
+.link{background:#fff1f4;color:#8a0015;border:1px solid var(--line)}
+.card{margin-top:16px}
+label{display:block;margin-bottom:7px;color:var(--deep);font-weight:900}
+input,textarea,select{width:100%;border:1px solid var(--line);border-radius:14px;padding:10px 12px;font:inherit;background:white;outline:none}
+textarea{min-height:92px;resize:vertical}
+input:focus,textarea:focus,select:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(230,0,35,.1)}
+.topic-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.audio-box{margin-top:14px}
+.note{margin-top:10px;padding:13px 15px;border-radius:16px;background:#fff1f4;border:1px solid var(--line);color:#8a0015;line-height:1.6;font-weight:750}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:20px;margin-top:12px}
+table{width:100%;min-width:1280px;border-collapse:collapse;background:white}
+th{background:linear-gradient(135deg,var(--red),var(--red2));color:white;padding:12px;text-align:left;font-weight:950;white-space:nowrap}
+td{padding:10px;border-bottom:1px solid #ffe1e7;vertical-align:top}
+.lock-col{width:80px;text-align:center}
+.stt-col{width:90px}
+.question-col{min-width:280px}
+.audio-col{min-width:260px}
+.correct-col{min-width:260px}
+.data-col{min-width:360px}
+.message{margin-top:14px;padding:12px 16px;border-radius:16px;background:#ecfdf3;color:#027a48;font-weight:850}
+.lock-check{width:22px;height:22px;accent-color:#e60023}
+@media(max-width:900px){.hero{flex-direction:column}.topic-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+<section class="hero">
+    <div>
+        <h1>{{ topic.title }}</h1>
+        <div class="desc">
+            Mày giỏi chỉ có <b>1 voice tổng</b>. Chủ đề này dùng 1 file nghe chung và 1 dòng dữ liệu tổng.
+        </div>
+    </div>
+    <div class="actions">
+        <a class="link" href="/dashboard/part-2/may-gioi/">← Danh sách 12 chủ đề</a>
+        <a class="link" href="/listening/part-2/may-gioi/{{ topic.id }}/">Xem giao diện học viên</a>
+    </div>
+</section>
+
+{% for message in messages %}
+    <div class="message">{{ message }}</div>
+{% endfor %}
+
+<form method="post">
+{% csrf_token %}
+<input type="hidden" name="action" value="save_topic">
+
+<section class="card">
+    <div class="topic-grid">
+        <div>
+            <label>Tên topic</label>
+            <input name="title" value="{{ topic.title }}">
+        </div>
+        <div>
+            <label>Mô tả</label>
+            <input name="description" value="{{ topic.description }}">
+        </div>
+    </div>
+
+    <div class="audio-box">
+        <label>Audio Drive chung của chủ đề</label>
+        <textarea name="audio_url" placeholder="Dán link Google Drive/audio. Mày giỏi chỉ dùng 1 file nghe chung.">{{ topic.audio_url }}</textarea>
+
+        {% if topic.audio_url %}
+        <div class="note">
+            Đã có link audio:
+            <a href="{{ topic.audio_url }}" target="_blank" style="color:#b8001c;font-weight:950">Mở file nghe</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<section class="card">
+    <h2 style="margin:0 0 8px;color:#4a0010">Dữ liệu voice tổng</h2>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Khóa</th>
+                    <th>STT</th>
+                    <th>Câu hỏi</th>
+                    <th>Audio Drive</th>
+                    <th>Đáp án đúng</th>
+                    <th>Nhập dữ liệu đáp án</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td class="lock-col">
+                        <input class="lock-check" type="checkbox" name="voice_is_locked" {% if voice.is_locked %}checked{% endif %}>
+                    </td>
+
+                    <td class="stt-col">
+                        <input name="voice_order" value="{{ voice.order }}">
+                    </td>
+
+                    <td class="question-col">
+                        <textarea name="question_text" placeholder="Nhập câu hỏi tổng">{{ voice.question_text }}</textarea>
+                    </td>
+
+                    <td class="audio-col">
+                        <div class="note" style="margin-top:0">Dùng audio chung của topic.</div>
+                        <textarea readonly>{{ topic.audio_url }}</textarea>
+                    </td>
+
+                    <td class="correct-col">
+                        <select name="correct_data">
+                            <option value="">-- Chọn đáp án đúng --</option>
+                            {% for option in options %}
+                                <option value="{{ option }}" {% if voice.correct_data == option %}selected{% endif %}>
+                                    {{ option }}
+                                </option>
+                            {% endfor %}
+                        </select>
+
+                        <div class="note">
+                            Nếu chưa thấy lựa chọn, nhập dữ liệu đáp án ở cột cuối rồi lưu trước.
+                        </div>
+                    </td>
+
+                    <td class="data-col">
+                        <textarea name="data_choices" placeholder="Mỗi dữ liệu đáp án một dòng">{{ voice.data_choices }}</textarea>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="actions" style="justify-content:flex-end;margin-top:16px">
+        <button class="btn" type="submit">Lưu dữ liệu chủ đề</button>
+    </div>
+</section>
+</form>
+
+</main>
+</body>
+</html>
+''', encoding="utf-8")
+
+
+# ==================================================
+# 4) Template học viên Mày giỏi: 1 audio + 1 câu tổng
+# ==================================================
+Path("templates/core/student_part2_gioi.html").write_text(r'''{% load static %}
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>{{ topic.title }} | Part 2 Mày giỏi</title>
+<link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
+<style>
+:root{--red:#e60023;--red2:#ff5f76;--deep:#7a0010;--dark:#3f0011;--line:#ffd1dc;--muted:#667085}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(circle at top right,rgba(255,95,118,.18),transparent 34%),linear-gradient(135deg,#fffafa,#fff0f4 48%,#fff7f9);font-family:"Segoe UI",Tahoma,Arial,sans-serif;color:var(--dark)}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 20px 42px}
+.exit{position:fixed;top:18px;right:22px;z-index:99;min-height:46px;padding:0 18px;border-radius:999px;background:linear-gradient(135deg,var(--red),var(--red2));color:white;text-decoration:none;font-weight:950;box-shadow:0 14px 28px rgba(230,0,35,.18);display:inline-flex;align-items:center}
+.topbar{border-left:4px solid var(--red);background:linear-gradient(90deg,#fff1f4,#fff7f9);border-radius:0 14px 14px 0;padding:14px 18px;font-weight:950;color:var(--deep);box-shadow:0 10px 24px rgba(180,0,30,.06)}
+.card{margin-top:16px;background:white;border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:0 18px 40px rgba(180,0,30,.07)}
+h1{margin:0;font-size:38px;letter-spacing:-.04em;color:#3f0011}
+.audio-box{margin-top:18px;border:1px solid #ffe1e7;background:#fff1f4;border-radius:18px;padding:18px}
+.audio-title{font-weight:950;color:#7a0010;margin-bottom:10px}
+.audio-link{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;background:linear-gradient(135deg,var(--red),var(--red2));color:white;text-decoration:none;font-weight:950}
+.q-title{font-weight:950;font-size:22px;margin-bottom:14px}
+select{width:100%;height:52px;border-radius:14px;border:1px dashed #f0aeb8;background:white;color:var(--muted);padding:0 13px;font-size:15px;font-weight:750}
+.actions{margin-top:18px;display:flex;justify-content:flex-end}
+.btn{min-width:128px;height:52px;border-radius:12px;border:0;padding:0 22px;font-size:17px;font-weight:950;cursor:pointer;background:linear-gradient(135deg,var(--red),var(--red2));color:white}
+@media(max-width:820px){.wrap{padding-top:78px}}
+</style>
+</head>
+<body>
+<a class="exit" href="/listening/">← Thoát bài</a>
+
+<main class="wrap">
+<section class="topbar">Part 2 - Mày giỏi</section>
+
+<section class="card">
+    <h1>{{ topic.title }}</h1>
+
+    <div class="audio-box">
+        <div class="audio-title">File nghe của chủ đề</div>
+        {% if topic.audio_url %}
+            <a class="audio-link" href="{{ topic.audio_url }}" target="_blank">▶ Mở file nghe</a>
+        {% else %}
+            <div style="color:#8a0015;font-weight:800">Chưa có file nghe cho chủ đề này.</div>
+        {% endif %}
+    </div>
+</section>
+
+<section class="card">
+    <div class="q-title">{{ voice.question_text|default:"Câu hỏi tổng" }}</div>
+
+    <select>
+        <option>Chọn đáp án...</option>
+        {% for option in options %}
+            <option>{{ option }}</option>
+        {% endfor %}
+    </select>
+</section>
+
+<section class="actions">
+    <button class="btn" type="button">Submit</button>
+</section>
+</main>
+</body>
+</html>
+''', encoding="utf-8")
+
+print("DA_DOI_MAY_GIOI_THANH_1_VOICE_TONG")

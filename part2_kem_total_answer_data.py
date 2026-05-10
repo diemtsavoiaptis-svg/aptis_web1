@@ -1,0 +1,374 @@
+﻿from pathlib import Path
+import re
+
+# ==================================================
+# 1) Thêm data_choices vào Part2Topic nếu chưa có
+# ==================================================
+models = Path("core/models.py")
+s = models.read_text(encoding="utf-8", errors="ignore")
+
+topic_block = re.search(r"class\s+Part2Topic\(models\.Model\):[\s\S]*?(?=\nclass\s+Part2Voice|\Z)", s)
+
+if topic_block and "data_choices" not in topic_block.group(0):
+    s = re.sub(
+        r"(class\s+Part2Topic\(models\.Model\):[\s\S]*?description\s*=\s*models\.TextField\([^\n]+\)\n)",
+        r'''\1    data_choices = models.TextField(
+        "Dữ liệu đáp án tổng",
+        blank=True,
+        help_text="Nhập nhiều dòng dữ liệu đáp án. 4 voice sẽ chọn đáp án đúng từ danh sách này."
+    )
+''',
+        s,
+        count=1
+    )
+
+models.write_text(s, encoding="utf-8")
+
+
+# ==================================================
+# 2) Sửa view Mày kém: dùng dữ liệu tổng của topic
+# ==================================================
+views = Path("core/views.py")
+v = views.read_text(encoding="utf-8", errors="ignore")
+
+# Trong save_topic: lưu data_choices tổng vào topic
+if 'topic.data_choices = request.POST.get("data_choices", "").strip()' not in v:
+    v = v.replace(
+        'topic.description = request.POST.get("description", "").strip()\n        topic.save()',
+        'topic.description = request.POST.get("description", "").strip()\n        topic.data_choices = request.POST.get("data_choices", "").strip()\n        topic.save()',
+        1
+    )
+
+# Bỏ việc lưu data_choices riêng từng voice nếu có
+v = v.replace(
+    '            voice.data_choices = request.POST.get(prefix + "data_choices", "").strip()\n',
+    ''
+)
+
+# Thay voice_options lấy options từ topic.data_choices tổng
+v = re.sub(
+    r'''voice_options\s*=\s*\[\]\s*
+    for voice in voices:
+        raw = voice\.data_choices or ""
+        options = \[x\.strip\(\) for x in raw\.splitlines\(\) if x\.strip\(\)\]
+        voice_options\.append\(\{
+            "voice": voice,
+            "options": options,
+        \}\)''',
+    '''topic_options = [x.strip() for x in (topic.data_choices or "").splitlines() if x.strip()]
+
+    voice_options = []
+    for voice in voices:
+        voice_options.append({
+            "voice": voice,
+            "options": topic_options,
+        })''',
+    v,
+    flags=re.M
+)
+
+views.write_text(v, encoding="utf-8")
+
+
+# ==================================================
+# 3) Ghi lại template chi tiết Mày kém cho gọn:
+#    1 ô dữ liệu tổng + bảng 4 voice chọn đáp án
+# ==================================================
+tpl = Path("templates/core/admin_part2_kem_detail.html")
+tpl.write_text(r'''{% load static %}
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>{{ topic.title }} | Mày kém</title>
+<link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
+<style>
+:root{
+    --red:#e60023;
+    --red2:#ff5f76;
+    --deep:#7a0010;
+    --dark:#3f0011;
+    --soft:#fff1f4;
+    --line:#ffd1dc;
+    --muted:#667085;
+}
+*{box-sizing:border-box}
+body{
+    margin:0;
+    min-height:100vh;
+    background:
+        radial-gradient(circle at top right,rgba(255,95,118,.18),transparent 34%),
+        linear-gradient(135deg,#fffafa,#fff0f4 48%,#fff7f9);
+    font-family:"Segoe UI",Tahoma,Arial,sans-serif;
+    color:var(--dark);
+}
+.wrap{
+    max-width:1320px;
+    margin:0 auto;
+    padding:28px 18px 42px;
+}
+.hero,.card{
+    background:white;
+    border:1px solid var(--line);
+    border-radius:28px;
+    padding:24px;
+    box-shadow:0 18px 44px rgba(180,0,30,.07);
+}
+.hero{
+    display:flex;
+    justify-content:space-between;
+    gap:18px;
+    align-items:flex-start;
+}
+h1{
+    margin:0;
+    font-size:38px;
+    letter-spacing:-.04em;
+}
+.desc{
+    margin-top:8px;
+    color:var(--muted);
+    line-height:1.6;
+    font-weight:650;
+}
+.actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+.btn,.link{
+    min-height:46px;
+    border:0;
+    border-radius:999px;
+    padding:0 18px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    font:inherit;
+    font-weight:950;
+    cursor:pointer;
+}
+.btn{
+    background:linear-gradient(135deg,var(--red),var(--red2));
+    color:white;
+    box-shadow:0 14px 28px rgba(230,0,35,.16);
+}
+.link{
+    background:#fff1f4;
+    color:#8a0015;
+    border:1px solid var(--line);
+}
+.danger{
+    background:#fff1f4;
+    color:#b8001c;
+    border:1px solid #ff9cac;
+    box-shadow:none;
+}
+.card{margin-top:16px}
+label{
+    display:block;
+    margin-bottom:7px;
+    color:var(--deep);
+    font-weight:900;
+}
+input,textarea,select{
+    width:100%;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:11px 13px;
+    font:inherit;
+    background:white;
+    outline:none;
+}
+textarea{
+    min-height:150px;
+    resize:vertical;
+}
+input:focus,textarea:focus,select:focus{
+    border-color:var(--red);
+    box-shadow:0 0 0 4px rgba(230,0,35,.1);
+}
+.topic-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+.data-total{
+    margin-top:14px;
+}
+.note{
+    margin-top:10px;
+    padding:13px 15px;
+    border-radius:16px;
+    background:#fff1f4;
+    border:1px solid var(--line);
+    color:#8a0015;
+    line-height:1.6;
+    font-weight:750;
+}
+.table-wrap{
+    overflow:auto;
+    border:1px solid var(--line);
+    border-radius:20px;
+    margin-top:12px;
+}
+table{
+    width:100%;
+    min-width:780px;
+    border-collapse:collapse;
+    background:white;
+}
+th{
+    background:linear-gradient(135deg,var(--red),var(--red2));
+    color:white;
+    padding:13px;
+    text-align:left;
+    font-weight:950;
+    white-space:nowrap;
+}
+td{
+    padding:13px;
+    border-bottom:1px solid #ffe1e7;
+    vertical-align:top;
+}
+tr:nth-child(even) td{background:#fffafa}
+.voice-col{
+    width:220px;
+    font-weight:950;
+    color:#4a0010;
+}
+.correct-col{
+    min-width:440px;
+}
+.message{
+    margin-top:14px;
+    padding:12px 16px;
+    border-radius:16px;
+    background:#ecfdf3;
+    color:#027a48;
+    font-weight:850;
+}
+@media(max-width:900px){
+    .hero{flex-direction:column}
+    .topic-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+<section class="hero">
+    <div>
+        <h1>{{ topic.title }}</h1>
+        <div class="desc">
+            Phiên bản: <b>Mày kém</b>. Nhập dữ liệu đáp án tổng một lần, sau đó 4 voice chọn đáp án đúng từ danh sách đó.
+        </div>
+    </div>
+    <div class="actions">
+        <a class="link" href="/dashboard/part-2/may-kem/">← Danh sách chủ đề</a>
+        <a class="link" href="/listening/part-2/">Xem giao diện học viên</a>
+    </div>
+</section>
+
+{% for message in messages %}
+    <div class="message">{{ message }}</div>
+{% endfor %}
+
+<form method="post">
+{% csrf_token %}
+<input type="hidden" name="action" value="save_topic">
+
+<section class="card">
+    <div class="topic-grid">
+        <div>
+            <label>Tên chủ đề</label>
+            <input name="title" value="{{ topic.title }}">
+        </div>
+        <div>
+            <label>Mô tả</label>
+            <input name="description" value="{{ topic.description }}">
+        </div>
+    </div>
+
+    <div class="data-total">
+        <label>Dữ liệu đáp án tổng</label>
+        <textarea name="data_choices" placeholder="Nhập toàn bộ dữ liệu đáp án ở đây, mỗi ý một dòng. Ví dụ:
+To relax
+While studying
+While singing
+After waking up">{{ topic.data_choices }}</textarea>
+    </div>
+
+    <div class="note">
+        Chỉ cần nhập danh sách dữ liệu đáp án ở đây một lần. Sau khi bấm lưu, 4 voice bên dưới sẽ dùng chung danh sách này để chọn đáp án đúng.
+    </div>
+</section>
+
+<section class="card">
+    <h2 style="margin:0 0 8px;color:#4a0010">4 voice của chủ đề</h2>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Voice</th>
+                    <th>Ô chọn đáp án đúng</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for row in voice_options %}
+                    {% with voice=row.voice %}
+                    <tr>
+                        <td class="voice-col">
+                            <input type="hidden" name="voice_{{ voice.id }}_order" value="{{ voice.order }}">
+                            Tên chủ đề<br>
+                            <span style="color:#b8001c">{{ topic.title }}</span>
+                            <br><br>
+                            Voice {{ voice.order }}
+                        </td>
+
+                        <td class="correct-col">
+                            <label>Chọn 1 trong dữ liệu đáp án tổng</label>
+                            <select name="voice_{{ voice.id }}_correct_data">
+                                <option value="">-- Chọn đáp án đúng --</option>
+                                {% for option in row.options %}
+                                    <option value="{{ option }}" {% if voice.correct_data == option %}selected{% endif %}>
+                                        {{ option }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+
+                            <div class="note">
+                                Nếu danh sách chưa hiện, hãy nhập “Dữ liệu đáp án tổng” ở trên rồi bấm lưu trước.
+                            </div>
+                        </td>
+                    </tr>
+                    {% endwith %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="actions" style="justify-content:flex-end;margin-top:16px">
+        <button class="btn" type="submit">Lưu dữ liệu chủ đề</button>
+    </div>
+</section>
+
+</form>
+
+<form method="post" onsubmit="return confirm('Bạn chắc chắn muốn xóa chủ đề này?');">
+{% csrf_token %}
+<input type="hidden" name="action" value="delete_topic">
+<section class="card">
+    <button class="btn danger" type="submit">Xóa chủ đề này</button>
+</section>
+</form>
+
+</main>
+</body>
+</html>
+''', encoding="utf-8")
+
+print("DA_DOI_PART2_MAY_KEM_THANH_DU_LIEU_DAP_AN_TONG")

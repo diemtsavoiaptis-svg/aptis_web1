@@ -1,3 +1,4 @@
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
@@ -13,7 +14,7 @@ from django.views.decorators.http import require_POST
 
 from .forms import RegisterForm, LoginForm
 from .drive_audio import build_drive_audio_url, extract_drive_file_id
-from .models import StudentProfile, Lesson, ListeningQuestion, HomeBackground, SecurityAlert
+from .models import StudentProfile, Lesson, ListeningQuestion, HomeBackground, SecurityAlert, Part2Topic, Part2Voice
 from .supabase_storage import create_signed_url
 
 
@@ -505,3 +506,1102 @@ def admin_student_lookup(request):
         "profile_name_value": selected.full_name if selected else "",
     })
 # ===== End custom admin student lookup/profile page =====
+
+
+
+
+
+
+
+
+# ===== Admin management placeholders for Listening Parts =====
+def admin_part2_questions(request):
+    return render(request, "core/admin_part_placeholder.html", {
+        "part_number": 2,
+        "part_title": "Part 2",
+        "part_desc": "Part 2 sẽ là khu vực quản lý topic, 4 voice, pool đáp án A-B-C-D, đáp án đúng và transcript. Hiện chưa nhập dữ liệu thật.",
+    })
+
+def admin_part3_questions(request):
+    return render(request, "core/admin_part_placeholder.html", {
+        "part_number": 3,
+        "part_title": "Part 3",
+        "part_desc": "Part 3 đã mở khu vực quản lý dữ liệu. Hiện chưa có dữ liệu thật, sẽ thiết kế chi tiết sau.",
+    })
+
+def admin_part4_questions(request):
+    return render(request, "core/admin_part_placeholder.html", {
+        "part_number": 4,
+        "part_title": "Part 4",
+        "part_desc": "Part 4 đã mở khu vực quản lý dữ liệu. Hiện chưa có dữ liệu thật, sẽ thiết kế chi tiết sau.",
+    })
+# ===== End admin management placeholders =====
+
+
+# ===== Student listening interfaces =====
+def student_part2_page(request):
+    return render(request, "core/listening_part2.html")
+
+def student_part3_page(request):
+    return render(request, "core/listening_part_placeholder.html", {
+        "part_number": 3,
+        "part_title": "Part 3",
+        "part_desc": "Giao diện học viên Part 3 hiện chưa có dữ liệu.",
+    })
+
+def student_part4_page(request):
+    return render(request, "core/listening_part_placeholder.html", {
+        "part_number": 4,
+        "part_title": "Part 4",
+        "part_desc": "Giao diện học viên Part 4 hiện chưa có dữ liệu.",
+    })
+# ===== End student listening interfaces =====
+
+
+# ===== Custom Admin Part 2 management =====
+def _is_admin_user_part2(user):
+    return user.is_authenticated and (user.is_staff or user.is_superuser)
+
+
+@user_passes_test(_is_admin_user_part2)
+def admin_part2_questions(request):
+    topics = Part2Topic.objects.all().order_by("-id")
+
+    if request.method == "POST" and request.POST.get("action") == "create_topic":
+        title = request.POST.get("title", "").strip()
+        description = request.POST.get("description", "").strip()
+
+        if not title:
+            messages.error(request, "Bạn cần nhập tên chủ đề.")
+            return redirect("admin_part2_questions")
+
+        topic = Part2Topic.objects.create(title=title, description=description)
+
+        # Tạo sẵn 4 voice cho 4 người
+        for i in range(1, 5):
+            Part2Voice.objects.create(topic=topic, order=i)
+
+        messages.success(request, "Đã tạo chủ đề Part 2.")
+        return redirect("admin_part2_topic_detail", topic_id=topic.id)
+
+    return render(request, "core/admin_part2_topics.html", {
+        "topics": topics,
+    })
+
+
+@user_passes_test(_is_admin_user_part2)
+def admin_part2_topic_detail(request, topic_id):
+    topic = get_object_or_404(Part2Topic, id=topic_id)
+
+    # Luôn đảm bảo có 4 voice chính
+    existing_orders = set(topic.voices.values_list("order", flat=True))
+    for i in range(1, 5):
+        if i not in existing_orders:
+            Part2Voice.objects.create(topic=topic, order=i)
+
+    voices = list(topic.voices.all().order_by("order", "id"))
+
+    if request.method == "POST" and request.POST.get("action") == "save_topic":
+        topic.title = request.POST.get("title", "").strip() or topic.title
+        topic.description = request.POST.get("description", "").strip()
+        topic.data_choices = request.POST.get("data_choices", "").strip()
+        topic.voice_info = request.POST.get("voice_info", "").strip()
+        topic.save()
+
+        for voice in voices:
+            prefix = f"voice_{voice.id}_"
+            voice.order = int(request.POST.get(prefix + "order", voice.order) or voice.order)
+            voice.audio_url = request.POST.get(prefix + "audio_url", "").strip()
+            voice.answer_a = request.POST.get(prefix + "answer_a", "").strip()
+            voice.answer_b = request.POST.get(prefix + "answer_b", "").strip()
+            voice.answer_c = request.POST.get(prefix + "answer_c", "").strip()
+            voice.answer_d = request.POST.get(prefix + "answer_d", "").strip()
+            voice.transcript = request.POST.get(prefix + "transcript", "").strip()
+            voice.correct_answer = request.POST.get(prefix + "correct_answer", "").strip()
+            voice.save()
+
+        messages.success(request, "Đã lưu dữ liệu chủ đề Part 2.")
+        return redirect("admin_part2_topic_detail", topic_id=topic.id)
+
+    if request.method == "POST" and request.POST.get("action") == "delete_topic":
+        topic.delete()
+        messages.success(request, "Đã xóa chủ đề Part 2.")
+        return redirect("admin_part2_questions")
+
+    return render(request, "core/admin_part2_topic_detail.html", {
+        "topic": topic,
+        "voices": voices,
+    })
+# ===== End Custom Admin Part 2 management =====
+
+
+# ===== Part 2 May Gioi final admin/student layout =====
+PART2_GIOI_TOPICS = [
+    "Topic Protect the environment",
+    "Topic Protect the environment 2",
+    "Topic Online shopping",
+    "Topic Listening to music",
+    "Topic Outdoor activities",
+    "Topic The place to run",
+    "Topic Do exercise",
+    "Topic The internet",
+    "Topic The Art",
+    "Topic Travel to work.",
+    "Topic Studying.",
+    "Topic Studying phiên bản 2.",
+]
+
+
+def _is_admin_user_part2_gioi(user):
+    return user.is_authenticated and (user.is_staff or user.is_superuser)
+
+
+def _seed_part2_gioi_topics():
+    for title in PART2_GIOI_TOPICS:
+        topic, created = Part2Topic.objects.get_or_create(
+            version="gioi",
+            title=title,
+            defaults={"description": "Chủ đề Mày giỏi"}
+        )
+
+        existing_orders = set(topic.voices.values_list("order", flat=True))
+        for i in range(1, 5):
+            if i not in existing_orders:
+                Part2Voice.objects.create(
+                    topic=topic,
+                    order=i,
+                    question_text=f"Câu hỏi {i}"
+                )
+
+
+def _ensure_four_gioi_rows(topic):
+    existing_orders = set(topic.voices.values_list("order", flat=True))
+    for i in range(1, 5):
+        if i not in existing_orders:
+            Part2Voice.objects.create(
+                topic=topic,
+                order=i,
+                question_text=f"Câu hỏi {i}"
+            )
+
+
+@user_passes_test(_is_admin_user_part2_gioi)
+def admin_part2_gioi_topics(request):
+    _seed_part2_gioi_topics()
+    topics = Part2Topic.objects.filter(version="gioi").order_by("id")
+
+    return render(request, "core/admin_part2_gioi_topics.html", {
+        "topics": topics,
+    })
+
+
+@csrf_exempt
+@user_passes_test(_is_admin_user_part2_gioi)
+def admin_part2_gioi_detail(request, topic_id):
+    topic = get_object_or_404(Part2Topic, id=topic_id, version="gioi")
+    _ensure_four_gioi_rows(topic)
+
+    voices = list(topic.voices.all().order_by("order", "id"))
+
+    if request.method == "POST" and request.POST.get("action") == "save_topic":
+        topic.title = request.POST.get("title", "").strip() or topic.title
+        topic.description = request.POST.get("description", "").strip()
+        topic.audio_url = request.POST.get("audio_url", "").strip()
+        topic.save()
+
+        for voice in voices:
+            prefix = f"voice_{voice.id}_"
+
+            voice.is_locked = request.POST.get(prefix + "is_locked") == "on"
+            voice.order = int(request.POST.get(prefix + "order", voice.order) or voice.order)
+            voice.question_text = f"Person {voice.order}"
+            voice.data_choices = request.POST.get(prefix + "data_choices", "").strip()
+            voice.correct_data = request.POST.get(prefix + "correct_data", "").strip()
+
+            # Mày giỏi dùng 1 audio chung theo topic
+            voice.audio_url = topic.audio_url
+            voice.save()
+
+        messages.success(request, "Đã lưu dữ liệu chủ đề Mày giỏi.")
+        return redirect("admin_part2_gioi_detail", topic_id=topic.id)
+
+    if request.method == "POST" and request.POST.get("action") == "delete_topic":
+        topic.delete()
+        messages.success(request, "Đã xóa chủ đề Mày giỏi.")
+        return redirect("admin_part2_gioi_topics")
+
+    rows = []
+    for voice in voices:
+        options = [x.strip() for x in (voice.data_choices or "").splitlines() if x.strip()]
+        rows.append({
+            "voice": voice,
+            "options": options,
+        })
+
+    return render(request, "core/admin_part2_gioi_detail.html", {
+        "topic": topic,
+        "rows": rows,
+    })
+
+
+def student_part2_gioi_page(request, topic_id):
+    topic = get_object_or_404(Part2Topic, id=topic_id, version="gioi")
+    voices = list(topic.voices.all().order_by("order", "id"))
+
+    rows = []
+    for voice in voices:
+        options = [x.strip() for x in (voice.data_choices or "").splitlines() if x.strip()]
+        rows.append({
+            "voice": voice,
+            "options": options,
+        })
+
+    return render(request, "core/student_part2_gioi.html", {
+        "topic": topic,
+        "rows": rows,
+    })
+# ===== End Part 2 May Gioi final admin/student layout =====
+
+
+# ===== Part 2 May Gioi ONE VOICE final =====
+PART2_GIOI_TOPICS = [
+    "Topic Protect the environment",
+    "Topic Protect the environment 2",
+    "Topic Online shopping",
+    "Topic Listening to music",
+    "Topic Outdoor activities",
+    "Topic The place to run",
+    "Topic Do exercise",
+    "Topic The internet",
+    "Topic The Art",
+    "Topic Travel to work.",
+    "Topic Studying.",
+    "Topic Studying phiên bản 2.",
+]
+
+
+def _is_admin_user_part2_gioi_one(user):
+    return user.is_authenticated and (user.is_staff or user.is_superuser)
+
+
+def _seed_part2_gioi_topics_one_voice():
+    for title in PART2_GIOI_TOPICS:
+        topic, created = Part2Topic.objects.get_or_create(
+            version="gioi",
+            title=title,
+            defaults={"description": "Chủ đề Mày giỏi"}
+        )
+
+        # Mày giỏi chỉ giữ 1 voice tổng
+        topic.voices.exclude(order=1).delete()
+
+        voice, created_voice = Part2Voice.objects.get_or_create(
+            topic=topic,
+            order=1,
+            defaults={"question_text": "Câu hỏi tổng"}
+        )
+
+        if not voice.question_text:
+            voice.question_text = "Câu hỏi tổng"
+            voice.save()
+
+
+def _get_gioi_total_voice(topic):
+    topic.voices.exclude(order=1).delete()
+    voice, created = Part2Voice.objects.get_or_create(
+        topic=topic,
+        order=1,
+        defaults={"question_text": "Câu hỏi tổng"}
+    )
+    return voice
+
+
+@user_passes_test(_is_admin_user_part2_gioi_one)
+def admin_part2_gioi_topics(request):
+    _seed_part2_gioi_topics_one_voice()
+    topics = Part2Topic.objects.filter(version="gioi").order_by("id")
+
+    return render(request, "core/admin_part2_gioi_topics.html", {
+        "topics": topics,
+    })
+
+
+@csrf_exempt
+@user_passes_test(_is_admin_user_part2_gioi_one)
+def admin_part2_gioi_detail(request, topic_id):
+    topic = get_object_or_404(Part2Topic, id=topic_id, version="gioi")
+    voice = _get_gioi_total_voice(topic)
+
+    if request.method == "POST" and request.POST.get("action") == "save_topic":
+        topic.title = request.POST.get("title", "").strip() or topic.title
+        topic.description = request.POST.get("description", "").strip()
+        topic.audio_url = request.POST.get("audio_url", "").strip()
+        topic.save()
+
+        voice.is_locked = request.POST.get("voice_is_locked") == "on"
+        voice.order = int(request.POST.get("voice_order", 1) or 1)
+        voice.question_text = f"Person {voice.order}"
+        voice.data_choices = request.POST.get("data_choices", "").strip()
+        voice.correct_data = request.POST.get("correct_data", "").strip()
+        voice.audio_url = topic.audio_url
+        voice.save()
+
+        messages.success(request, "Đã lưu dữ liệu chủ đề Mày giỏi.")
+        return redirect("admin_part2_gioi_detail", topic_id=topic.id)
+
+    options = [x.strip() for x in (voice.data_choices or "").splitlines() if x.strip()]
+
+    return render(request, "core/admin_part2_gioi_detail.html", {
+        "topic": topic,
+        "voice": voice,
+        "options": options,
+    })
+
+
+def student_part2_gioi_page(request, topic_id):
+    topic = get_object_or_404(Part2Topic, id=topic_id, version="gioi")
+    voice = _get_gioi_total_voice(topic)
+    options = [x.strip() for x in (voice.data_choices or "").splitlines() if x.strip()]
+
+    return render(request, "core/student_part2_gioi.html", {
+        "topic": topic,
+        "voice": voice,
+        "options": options,
+    })
+# ===== End Part 2 May Gioi ONE VOICE final =====
+
+
+# ===== Part 2 final clean: admin gioi one audio, student choose version =====
+PART2_GIOI_TOPICS = [
+    "Topic Protect the environment",
+    "Topic Protect the environment 2",
+    "Topic Online shopping",
+    "Topic Listening to music",
+    "Topic Outdoor activities",
+    "Topic The place to run",
+    "Topic Do exercise",
+    "Topic The internet",
+    "Topic The Art",
+    "Topic Travel to work.",
+    "Topic Studying.",
+    "Topic Studying phiên bản 2.",
+]
+
+
+def _is_admin_user_part2_final(user):
+    return user.is_authenticated and (user.is_staff or user.is_superuser)
+
+
+def _seed_part2_gioi_topics_final():
+    for title in PART2_GIOI_TOPICS:
+        topic, _ = Part2Topic.objects.get_or_create(
+            version="gioi",
+            title=title,
+            defaults={"description": "Chủ đề Mày giỏi"}
+        )
+
+        # Mày giỏi chỉ được có 1 voice tổng
+        topic.voices.exclude(order=1).delete()
+
+        voice, _ = Part2Voice.objects.get_or_create(
+            topic=topic,
+            order=1,
+            defaults={"question_text": "Câu hỏi tổng"}
+        )
+
+        if not voice.question_text:
+            voice.question_text = "Câu hỏi tổng"
+            voice.save()
+
+
+def _get_part2_gioi_total_voice(topic):
+    topic.voices.exclude(order=1).delete()
+    voice, _ = Part2Voice.objects.get_or_create(
+        topic=topic,
+        order=1,
+        defaults={"question_text": "Câu hỏi tổng"}
+    )
+    return voice
+
+
+@user_passes_test(_is_admin_user_part2_final)
+def admin_part2_gioi_topics(request):
+    _seed_part2_gioi_topics_final()
+    topics = Part2Topic.objects.filter(version="gioi").order_by("id")
+    return render(request, "core/admin_part2_gioi_topics.html", {"topics": topics})
+
+
+@csrf_exempt
+@user_passes_test(_is_admin_user_part2_final)
+def admin_part2_gioi_detail(request, topic_id):
+    topic = get_object_or_404(Part2Topic, id=topic_id, version="gioi")
+    voice = _get_part2_gioi_total_voice(topic)
+
+    if request.method == "POST" and request.POST.get("action") == "save_topic":
+        topic.title = request.POST.get("title", "").strip() or topic.title
+        topic.description = request.POST.get("description", "").strip()
+        topic.audio_url = request.POST.get("audio_url", "").strip()
+        topic.save()
+
+        voice.is_locked = request.POST.get("voice_is_locked") == "on"
+        voice.order = 1
+        voice.question_text = f"Person {voice.order}"
+        voice.data_choices = request.POST.get("data_choices", "").strip()
+        voice.correct_data = request.POST.get("correct_data", "").strip()
+        voice.audio_url = topic.audio_url
+        voice.save()
+
+        messages.success(request, "Đã lưu dữ liệu Mày giỏi.")
+        return redirect("admin_part2_gioi_detail", topic_id=topic.id)
+
+    options = [x.strip() for x in (voice.data_choices or "").splitlines() if x.strip()]
+
+    return render(request, "core/admin_part2_gioi_detail.html", {
+        "topic": topic,
+        "voice": voice,
+        "options": options,
+    })
+
+
+def student_part2_page(request):
+    return render(request, "core/student_part2_choose_version.html")
+
+
+def student_part2_gioi_topics(request):
+    _seed_part2_gioi_topics_final()
+    topics = Part2Topic.objects.filter(version="gioi").order_by("id")
+    return render(request, "core/student_part2_topic_list.html", {
+        "version_title": "Mày giỏi",
+        "topics": topics,
+        "back_url": "/listening/part-2/",
+        "topic_url_prefix": "/listening/part-2/may-gioi/",
+    })
+
+
+def student_part2_dot_topics(request):
+    topics = Part2Topic.objects.filter(version="kem").order_by("id")
+    return render(request, "core/student_part2_topic_list.html", {
+        "version_title": "Mày dốt",
+        "topics": topics,
+        "back_url": "/listening/part-2/",
+        "topic_url_prefix": "/listening/part-2/may-dot/",
+    })
+
+
+def student_part2_gioi_page(request, topic_id):
+    topic = get_object_or_404(Part2Topic, id=topic_id, version="gioi")
+    voice = _get_part2_gioi_total_voice(topic)
+    options = [x.strip() for x in (voice.data_choices or "").splitlines() if x.strip()]
+    return render(request, "core/student_part2_gioi.html", {
+        "topic": topic,
+        "voice": voice,
+        "options": options,
+    })
+
+
+def student_part2_dot_page(request, topic_id):
+    topic = get_object_or_404(Part2Topic, id=topic_id, version="kem")
+    voices = list(topic.voices.all().order_by("order", "id"))
+    return render(request, "core/listening_part2.html", {
+        "topic": topic,
+        "voices": voices,
+    })
+# ===== End Part 2 final clean =====
+
+
+# ===== Part 2 choose version for admin and student =====
+def _is_admin_user_part2_choose(user):
+    return user.is_authenticated and (user.is_staff or user.is_superuser)
+
+
+@user_passes_test(_is_admin_user_part2_choose)
+def admin_part2_questions(request):
+    gioi_count = Part2Topic.objects.filter(version="gioi").count() if hasattr(Part2Topic, "version") else 0
+    kem_count = Part2Topic.objects.filter(version="kem").count() if hasattr(Part2Topic, "version") else 0
+
+    return render(request, "core/admin_part2_choose_version.html", {
+        "gioi_count": gioi_count,
+        "kem_count": kem_count,
+    })
+
+
+def student_part2_page(request):
+    gioi_count = Part2Topic.objects.filter(version="gioi").count() if hasattr(Part2Topic, "version") else 0
+    kem_count = Part2Topic.objects.filter(version="kem").count() if hasattr(Part2Topic, "version") else 0
+
+    return render(request, "core/student_part2_choose_version.html", {
+        "gioi_count": gioi_count,
+        "kem_count": kem_count,
+    })
+# ===== End Part 2 choose version for admin and student =====
+
+
+# ===== Part 2 May Gioi final: 1 audio + 4 person questions =====
+PART2_GIOI_TOPICS = [
+    "Topic Protect the environment",
+    "Topic Protect the environment 2",
+    "Topic Online shopping",
+    "Topic Listening to music",
+    "Topic Outdoor activities",
+    "Topic The place to run",
+    "Topic Do exercise",
+    "Topic The internet",
+    "Topic The Art",
+    "Topic Travel to work.",
+    "Topic Studying.",
+    "Topic Studying phiên bản 2.",
+]
+
+
+def _is_admin_user_part2_gioi_4p(user):
+    return user.is_authenticated and (user.is_staff or user.is_superuser)
+
+
+def _seed_part2_gioi_topics_4p():
+    for title in PART2_GIOI_TOPICS:
+        topic, _ = Part2Topic.objects.get_or_create(
+            version="gioi",
+            title=title,
+            defaults={"description": "Chủ đề Mày giỏi"}
+        )
+
+        existing_orders = set(topic.voices.values_list("order", flat=True))
+        for i in range(1, 5):
+            if i not in existing_orders:
+                Part2Voice.objects.create(
+                    topic=topic,
+                    order=i,
+                    question_text=f"Person {i}"
+                )
+
+        # Mày giỏi chỉ giữ đúng 4 person
+        topic.voices.exclude(order__in=[1, 2, 3, 4]).delete()
+
+
+def _ensure_gioi_four_persons(topic):
+    existing_orders = set(topic.voices.values_list("order", flat=True))
+    for i in range(1, 5):
+        if i not in existing_orders:
+            Part2Voice.objects.create(
+                topic=topic,
+                order=i,
+                question_text=f"Person {i}"
+            )
+
+    topic.voices.exclude(order__in=[1, 2, 3, 4]).delete()
+
+
+@user_passes_test(_is_admin_user_part2_gioi_4p)
+def admin_part2_gioi_topics(request):
+    _seed_part2_gioi_topics_4p()
+    topics = Part2Topic.objects.filter(version="gioi").order_by("id")
+
+    return render(request, "core/admin_part2_gioi_topics.html", {
+        "topics": topics,
+    })
+
+
+@csrf_exempt
+@user_passes_test(_is_admin_user_part2_gioi_4p)
+def admin_part2_gioi_detail(request, topic_id):
+    topic = get_object_or_404(Part2Topic, id=topic_id, version="gioi")
+    _ensure_gioi_four_persons(topic)
+
+    voices = list(topic.voices.all().order_by("order", "id")[:4])
+
+    if request.method == "POST" and request.POST.get("action") == "save_topic":
+        topic.title = request.POST.get("title", "").strip() or topic.title
+        topic.description = request.POST.get("description", "").strip()
+        topic.audio_url = request.POST.get("audio_url", "").strip()
+        topic.data_choices = request.POST.get("data_choices", "").strip()
+        topic.voice_info = request.POST.get("voice_info", "").strip()
+        topic.save()
+
+        for voice in voices:
+            prefix = f"voice_{voice.id}_"
+            voice.is_locked = request.POST.get(prefix + "is_locked") == "on"
+            voice.order = int(request.POST.get(prefix + "order", voice.order) or voice.order)
+            voice.question_text = f"Person {voice.order}"
+            voice.correct_data = request.POST.get(prefix + "correct_data", "").strip()
+            voice.audio_url = topic.audio_url
+            voice.save()
+
+        messages.success(request, "Đã lưu dữ liệu Mày giỏi.")
+        return redirect("admin_part2_gioi_detail", topic_id=topic.id)
+
+    options = [x.strip() for x in (topic.data_choices or "").splitlines() if x.strip()]
+
+    rows = []
+    for voice in voices:
+        rows.append({
+            "voice": voice,
+            "options": options,
+        })
+
+    return render(request, "core/admin_part2_gioi_detail.html", {
+        "topic": topic,
+        "rows": rows,
+        "options": options,
+    })
+
+
+def student_part2_gioi_page(request, topic_id):
+    topic = get_object_or_404(Part2Topic, id=topic_id, version="gioi")
+    _ensure_gioi_four_persons(topic)
+
+    voices = list(topic.voices.all().order_by("order", "id")[:4])
+    options = [x.strip() for x in (topic.data_choices or "").splitlines() if x.strip()]
+
+    rows = []
+    for voice in voices:
+        rows.append({
+            "voice": voice,
+            "options": options,
+        })
+
+    return render(request, "core/student_part2_gioi.html", {
+        "topic": topic,
+        "rows": rows,
+        "options": options,
+    })
+# ===== End Part 2 May Gioi final: 1 audio + 4 person questions =====
+
+
+# ===== Fix student Part 2 topic list routes =====
+def student_part2_gioi_topics(request):
+    topics = Part2Topic.objects.filter(version="gioi").order_by("id")
+    return render(request, "core/student_part2_topic_list.html", {
+        "version_title": "Mày giỏi",
+        "topics": topics,
+        "back_url": "/listening/part-2/",
+        "topic_url_prefix": "/listening/part-2/may-gioi/",
+    })
+
+
+def student_part2_kem_topics(request):
+    topics = Part2Topic.objects.filter(version="kem").order_by("id")
+    return render(request, "core/student_part2_topic_list.html", {
+        "version_title": "Mày kém",
+        "topics": topics,
+        "back_url": "/listening/part-2/",
+        "topic_url_prefix": "/listening/part-2/may-kem/",
+    })
+
+
+# Alias phòng khi code cũ gọi may-dot
+def student_part2_dot_topics(request):
+    return student_part2_kem_topics(request)
+# ===== End fix student Part 2 topic list routes =====
+
+
+# ===== FINAL FIX: Part 2 May Gioi dropdown options from total data =====
+def _is_admin_user_part2_gioi_dropdown(user):
+    return user.is_authenticated and (user.is_staff or user.is_superuser)
+
+
+def _ensure_gioi_4_person_dropdown(topic):
+    existing_orders = set(topic.voices.values_list("order", flat=True))
+    for i in range(1, 5):
+        if i not in existing_orders:
+            Part2Voice.objects.create(
+                topic=topic,
+                order=i,
+                question_text=f"Person {i}"
+            )
+
+    topic.voices.exclude(order__in=[1, 2, 3, 4]).delete()
+
+    for voice in topic.voices.filter(order__in=[1, 2, 3, 4]):
+        voice.question_text = f"Person {voice.order}"
+        voice.audio_url = topic.audio_url
+        voice.save()
+
+
+def _split_total_answer_options(topic):
+    return [
+        line.strip()
+        for line in (topic.data_choices or "").splitlines()
+        if line.strip()
+    ]
+
+
+@csrf_exempt
+@user_passes_test(_is_admin_user_part2_gioi_dropdown)
+def admin_part2_gioi_detail(request, topic_id):
+    topic = get_object_or_404(Part2Topic, id=topic_id, version="gioi")
+    _ensure_gioi_4_person_dropdown(topic)
+
+    voices = list(topic.voices.all().order_by("order", "id")[:4])
+
+    if request.method == "POST" and request.POST.get("action") == "save_total_answers":
+        topic.title = request.POST.get("title", "").strip() or topic.title
+        topic.description = request.POST.get("description", "").strip()
+        topic.audio_url = request.POST.get("audio_url", "").strip()
+        topic.data_choices = request.POST.get("data_choices", "").strip()
+        topic.voice_info = request.POST.get("voice_info", "").strip()
+        topic.save()
+
+        for voice in voices:
+            voice.audio_url = topic.audio_url
+            voice.question_text = f"Person {voice.order}"
+            voice.save()
+
+        messages.success(request, "Đã lưu dữ liệu đáp án tổng. Bây giờ bạn có thể chọn đáp án đúng cho từng Person.")
+        return redirect("admin_part2_gioi_detail", topic_id=topic.id)
+
+    if request.method == "POST" and request.POST.get("action") == "save_topic":
+        topic.title = request.POST.get("title", "").strip() or topic.title
+        topic.description = request.POST.get("description", "").strip()
+        topic.audio_url = request.POST.get("audio_url", "").strip()
+        topic.data_choices = request.POST.get("data_choices", "").strip()
+        topic.voice_info = request.POST.get("voice_info", "").strip()
+        topic.save()
+
+        # Lưu đáp án đúng từng person
+        for voice in voices:
+            prefix = f"voice_{voice.id}_"
+            voice.is_locked = request.POST.get(prefix + "is_locked") == "on"
+            voice.order = int(request.POST.get(prefix + "order", voice.order) or voice.order)
+            voice.question_text = f"Person {voice.order}"
+            voice.correct_data = request.POST.get(prefix + "correct_data", "").strip()
+            voice.audio_url = topic.audio_url
+            voice.save()
+
+        messages.success(request, "Đã lưu. Các lựa chọn đáp án đã được cập nhật từ dữ liệu đáp án tổng.")
+        return redirect("admin_part2_gioi_detail", topic_id=topic.id)
+
+    options = _split_total_answer_options(topic)
+
+    rows = []
+    for voice in voices:
+        rows.append({
+            "voice": voice,
+            "options": options,
+        })
+
+    return render(request, "core/admin_part2_gioi_detail.html", {
+        "topic": topic,
+        "rows": rows,
+        "options": options,
+    })
+
+
+def student_part2_gioi_page(request, topic_id):
+    topic = get_object_or_404(Part2Topic, id=topic_id, version="gioi")
+    _ensure_gioi_4_person_dropdown(topic)
+
+    voices = list(topic.voices.all().order_by("order", "id")[:4])
+    options = _split_total_answer_options(topic)
+
+    rows = []
+    for voice in voices:
+        rows.append({
+            "voice": voice,
+            "options": options,
+        })
+
+    return render(request, "core/student_part2_gioi.html", {
+        "topic": topic,
+        "rows": rows,
+        "options": options,
+    })
+# ===== END FINAL FIX: Part 2 May Gioi dropdown options from total data =====
+
+
+# ===== FINAL OVERRIDE May Gioi save total answers button =====
+def _is_admin_user_part2_gioi_save_total(user):
+    return user.is_authenticated and (user.is_staff or user.is_superuser)
+
+
+def _ensure_gioi_four_person_save_total(topic):
+    existing_orders = set(topic.voices.values_list("order", flat=True))
+    for i in range(1, 5):
+        if i not in existing_orders:
+            Part2Voice.objects.create(
+                topic=topic,
+                order=i,
+                question_text=f"Person {i}"
+            )
+
+    topic.voices.exclude(order__in=[1, 2, 3, 4]).delete()
+
+    for voice in topic.voices.filter(order__in=[1, 2, 3, 4]):
+        voice.question_text = f"Person {voice.order}"
+        voice.audio_url = topic.audio_url
+        voice.save()
+
+
+def _gioi_total_options_save_total(topic):
+    return [
+        x.strip()
+        for x in (topic.data_choices or "").splitlines()
+        if x.strip()
+    ]
+
+
+@csrf_exempt
+@user_passes_test(_is_admin_user_part2_gioi_save_total)
+def admin_part2_gioi_detail(request, topic_id):
+    topic = get_object_or_404(Part2Topic, id=topic_id, version="gioi")
+    _ensure_gioi_four_person_save_total(topic)
+
+    voices = list(topic.voices.all().order_by("order", "id")[:4])
+
+    if request.method == "POST" and request.POST.get("action") == "save_total_answers":
+        topic.title = request.POST.get("title", "").strip() or topic.title
+        topic.description = request.POST.get("description", "").strip()
+        topic.audio_url = request.POST.get("audio_url", "").strip()
+        topic.data_choices = request.POST.get("data_choices", "").strip()
+        topic.voice_info = request.POST.get("voice_info", "").strip()
+        topic.save()
+
+        for voice in voices:
+            voice.question_text = f"Person {voice.order}"
+            voice.audio_url = topic.audio_url
+            voice.save()
+
+        messages.success(request, "Đã lưu đáp án tổng. Bây giờ có thể chọn đáp án đúng cho Person 1-4.")
+        return redirect("admin_part2_gioi_detail", topic_id=topic.id)
+
+    if request.method == "POST" and request.POST.get("action") == "save_correct_answers":
+        for voice in voices:
+            prefix = f"voice_{voice.id}_"
+            voice.is_locked = request.POST.get(prefix + "is_locked") == "on"
+            voice.order = int(request.POST.get(prefix + "order", voice.order) or voice.order)
+            voice.question_text = f"Person {voice.order}"
+            voice.correct_data = request.POST.get(prefix + "correct_data", "").strip()
+            voice.audio_url = topic.audio_url
+            voice.save()
+
+        messages.success(request, "Đã lưu đáp án đúng cho 4 Person.")
+        return redirect("admin_part2_gioi_detail", topic_id=topic.id)
+
+    options = _gioi_total_options_save_total(topic)
+
+    rows = []
+    for voice in voices:
+        rows.append({
+            "voice": voice,
+            "options": options,
+        })
+
+    return render(request, "core/admin_part2_gioi_detail.html", {
+        "topic": topic,
+        "rows": rows,
+        "options": options,
+    })
+
+
+def student_part2_gioi_page(request, topic_id):
+    topic = get_object_or_404(Part2Topic, id=topic_id, version="gioi")
+    _ensure_gioi_four_person_save_total(topic)
+
+    voices = list(topic.voices.all().order_by("order", "id")[:4])
+    options = _gioi_total_options_save_total(topic)
+
+    rows = []
+    for voice in voices:
+        rows.append({
+            "voice": voice,
+            "options": options,
+        })
+
+    return render(request, "core/student_part2_gioi.html", {
+        "topic": topic,
+        "rows": rows,
+        "options": options,
+    })
+# ===== END FINAL OVERRIDE May Gioi save total answers button =====
+
+
+# ===== FINAL FIX voice_info + correct answers for May Gioi =====
+def _is_admin_user_part2_gioi_voice_info_final(user):
+    return user.is_authenticated and (user.is_staff or user.is_superuser)
+
+
+def _ensure_gioi_four_person_voice_info_final(topic):
+    existing_orders = set(topic.voices.values_list("order", flat=True))
+    for i in range(1, 5):
+        if i not in existing_orders:
+            Part2Voice.objects.create(topic=topic, order=i, question_text=f"Person {i}")
+
+    topic.voices.exclude(order__in=[1, 2, 3, 4]).delete()
+
+    for voice in topic.voices.filter(order__in=[1, 2, 3, 4]):
+        voice.question_text = f"Person {voice.order}"
+        voice.audio_url = topic.audio_url
+        voice.save()
+
+
+def _gioi_options_voice_info_final(topic):
+    return [x.strip() for x in (topic.data_choices or "").splitlines() if x.strip()]
+
+
+@user_passes_test(_is_admin_user_part2_gioi_voice_info_final)
+def admin_part2_gioi_detail(request, topic_id):
+    topic = get_object_or_404(Part2Topic, id=topic_id, version="gioi")
+    _ensure_gioi_four_person_voice_info_final(topic)
+
+    voices = list(topic.voices.all().order_by("order", "id")[:4])
+
+    if request.method == "POST" and request.POST.get("action") == "save_total_answers":
+        topic.title = request.POST.get("title", "").strip() or topic.title
+        topic.description = request.POST.get("description", "").strip()
+        topic.audio_url = request.POST.get("audio_url", "").strip()
+        topic.data_choices = request.POST.get("data_choices", "").strip()
+        topic.voice_info = request.POST.get("voice_info", "").strip()
+        topic.save()
+
+        for voice in voices:
+            voice.question_text = f"Person {voice.order}"
+            voice.audio_url = topic.audio_url
+            voice.save()
+
+        messages.success(request, "Đã lưu đáp án tổng và thông tin voice.")
+        return redirect("admin_part2_gioi_detail", topic_id=topic.id)
+
+    if request.method == "POST" and request.POST.get("action") == "save_correct_answers":
+        for voice in voices:
+            prefix = f"voice_{voice.id}_"
+            voice.is_locked = request.POST.get(prefix + "is_locked") == "on"
+            voice.order = int(request.POST.get(prefix + "order", voice.order) or voice.order)
+            voice.question_text = f"Person {voice.order}"
+            voice.correct_data = request.POST.get(prefix + "correct_data", "").strip()
+            voice.audio_url = topic.audio_url
+            voice.save()
+
+        messages.success(request, "Đã lưu đáp án đúng cho 4 Person.")
+        return redirect("admin_part2_gioi_detail", topic_id=topic.id)
+
+    options = _gioi_options_voice_info_final(topic)
+    rows = [{"voice": voice, "options": options} for voice in voices]
+
+    return render(request, "core/admin_part2_gioi_detail.html", {
+        "topic": topic,
+        "rows": rows,
+        "options": options,
+    })
+
+
+def student_part2_gioi_page(request, topic_id):
+    topic = get_object_or_404(Part2Topic, id=topic_id, version="gioi")
+    _ensure_gioi_four_person_voice_info_final(topic)
+
+    voices = list(topic.voices.all().order_by("order", "id")[:4])
+    options = _gioi_options_voice_info_final(topic)
+    rows = [{"voice": voice, "options": options} for voice in voices]
+
+    return render(request, "core/student_part2_gioi.html", {
+        "topic": topic,
+        "rows": rows,
+        "options": options,
+    })
+# ===== END FINAL FIX voice_info + correct answers for May Gioi =====
+
+
+# ===== FINAL: May Gioi voice info input + lock =====
+def _is_admin_user_part2_gioi_voice_lock(user):
+    return user.is_authenticated and (user.is_staff or user.is_superuser)
+
+
+def _ensure_gioi_four_person_voice_lock(topic):
+    existing_orders = set(topic.voices.values_list("order", flat=True))
+    for i in range(1, 5):
+        if i not in existing_orders:
+            Part2Voice.objects.create(topic=topic, order=i, question_text=f"Person {i}")
+
+    topic.voices.exclude(order__in=[1, 2, 3, 4]).delete()
+
+    for voice in topic.voices.filter(order__in=[1, 2, 3, 4]):
+        voice.question_text = f"Person {voice.order}"
+        voice.audio_url = topic.audio_url
+        voice.save()
+
+
+def _gioi_options_voice_lock(topic):
+    return [x.strip() for x in (topic.data_choices or "").splitlines() if x.strip()]
+
+
+@user_passes_test(_is_admin_user_part2_gioi_voice_lock)
+def admin_part2_gioi_detail(request, topic_id):
+    topic = get_object_or_404(Part2Topic, id=topic_id, version="gioi")
+    _ensure_gioi_four_person_voice_lock(topic)
+
+    voices = list(topic.voices.all().order_by("order", "id")[:4])
+
+    if request.method == "POST":
+        action = request.POST.get("action")
+
+        if action == "save_total_answers":
+            topic.title = request.POST.get("title", "").strip() or topic.title
+            topic.description = request.POST.get("description", "").strip()
+            topic.audio_url = request.POST.get("audio_url", "").strip()
+            topic.data_choices = request.POST.get("data_choices", "").strip()
+
+            # Chỉ cập nhật voice_info nếu chưa khóa
+            if not getattr(topic, "voice_info_locked", False):
+                topic.voice_info = request.POST.get("voice_info", "").strip()
+
+            topic.save()
+
+            for voice in voices:
+                voice.question_text = f"Person {voice.order}"
+                voice.audio_url = topic.audio_url
+                voice.save()
+
+            messages.success(request, "Đã lưu đáp án tổng.")
+            return redirect("admin_part2_gioi_detail", topic_id=topic.id)
+
+        if action == "save_and_lock_voice_info":
+            if not getattr(topic, "voice_info_locked", False):
+                topic.voice_info = request.POST.get("voice_info", "").strip()
+                topic.voice_info_locked = True
+                topic.save()
+                messages.success(request, "Đã lưu và khóa thông tin voice.")
+            else:
+                messages.warning(request, "Thông tin voice đang bị khóa.")
+            return redirect("admin_part2_gioi_detail", topic_id=topic.id)
+
+        if action == "unlock_voice_info":
+            topic.voice_info_locked = False
+            topic.save()
+            messages.success(request, "Đã mở khóa thông tin voice. Bây giờ có thể sửa lại.")
+            return redirect("admin_part2_gioi_detail", topic_id=topic.id)
+
+        if action == "save_correct_answers":
+            for voice in voices:
+                prefix = f"voice_{voice.id}_"
+                voice.is_locked = request.POST.get(prefix + "is_locked") == "on"
+                voice.order = int(request.POST.get(prefix + "order", voice.order) or voice.order)
+                voice.question_text = f"Person {voice.order}"
+                voice.correct_data = request.POST.get(prefix + "correct_data", "").strip()
+                voice.audio_url = topic.audio_url
+                voice.save()
+
+            messages.success(request, "Đã lưu đáp án đúng cho 4 Person.")
+            return redirect("admin_part2_gioi_detail", topic_id=topic.id)
+
+    options = _gioi_options_voice_lock(topic)
+    rows = [{"voice": voice, "options": options} for voice in voices]
+
+    return render(request, "core/admin_part2_gioi_detail.html", {
+        "topic": topic,
+        "rows": rows,
+        "options": options,
+    })
+
+
+def student_part2_gioi_page(request, topic_id):
+    topic = get_object_or_404(Part2Topic, id=topic_id, version="gioi")
+    _ensure_gioi_four_person_voice_lock(topic)
+
+    voices = list(topic.voices.all().order_by("order", "id")[:4])
+    options = _gioi_options_voice_lock(topic)
+    rows = [{"voice": voice, "options": options} for voice in voices]
+
+    return render(request, "core/student_part2_gioi.html", {
+        "topic": topic,
+        "rows": rows,
+        "options": options,
+    })
+# ===== END FINAL: May Gioi voice info input + lock =====

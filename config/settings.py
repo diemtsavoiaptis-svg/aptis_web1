@@ -40,6 +40,10 @@ ALLOWED_HOSTS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
+    "https://diemtsavoiaptis.pythonanywhere.com",
+    "http://diemtsavoiaptis.pythonanywhere.com",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
     'https://tsaptis.com',
     'https://www.tsaptis.com',
 ]
