@@ -4,7 +4,7 @@ from . import listening_ui
 
 urlpatterns = [
     path("dashboard/students/", views.admin_student_lookup, name="admin_student_lookup"),
-    path("", views.home, name="home"),
+path("", views.home, name="home"),
     path("dang-ky/", views.register_view, name="register"),
     path("dang-nhap/", views.login_view, name="login"),
     path("dashboard/", views.dashboard, name="dashboard"),
