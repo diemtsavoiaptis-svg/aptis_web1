@@ -1,600 +1,152 @@
 {% load static %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listening Part {{ part_number }}</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: linear-gradient(180deg, #ffe0e8 0%, #fff8fa 100%);
-            color: #321824;
-        }
-
-        .page {
-            max-width: 1120px;
-            margin: 0 auto;
-            padding: 26px 18px 50px;
-        }
-
-        .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 18px;
-            margin-bottom: 22px;
-            flex-wrap: wrap;
-        }
-
-        .title h1 {
-            margin: 0;
-            font-size: 30px;
-            color: #8a1028;
-        }
-
-        .title p {
-            margin: 6px 0 0;
-            color: #8b5b68;
-            font-weight: 700;
-        }
-
-        .part-tabs {
-            display: flex;
-            gap: 10px;
-            padding: 10px;
-            border-radius: 999px;
-            background: rgba(255,255,255,0.75);
-            box-shadow: 0 12px 28px rgba(150, 35, 60, 0.10);
-        }
-
-        .part-tabs a {
-            text-decoration: none;
-            padding: 12px 22px;
-            border-radius: 999px;
-            font-weight: 900;
-            color: #92344d;
-        }
-
-        .part-tabs a.active {
-            background: linear-gradient(135deg, #ff3659, #d81334);
-            color: #fff;
-            box-shadow: 0 10px 22px rgba(216, 19, 52, 0.24);
-        }
-
-        .progress-wrap {
-            margin-bottom: 18px;
-        }
-
-        .progress-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-weight: 900;
-            color: #8a334c;
-        }
-
-        .progress-track {
-            height: 12px;
-            border-radius: 999px;
-            background: #f4cfd8;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            border-radius: 999px;
-            background: linear-gradient(90deg, #ff4c6c, #d81334);
-        }
-
-        .card {
-            background: rgba(255,255,255,0.95);
-            border-radius: 34px;
-            padding: 34px;
-            box-shadow: 0 24px 60px rgba(150, 35, 60, 0.14);
-            border: 1px solid rgba(210, 70, 100, 0.14);
-        }
-
-        .meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-
-        .pill {
-            display: inline-flex;
-            align-items: center;
-            padding: 10px 18px;
-            border-radius: 999px;
-            font-weight: 900;
-        }
-
-        .pill.red {
-            background: #fff0f4;
-            color: #c81032;
-        }
-
-        .pill.purple {
-            background: #f1eaff;
-            color: #7a3df0;
-        }
-
-        .question-title {
-            margin: 0 0 26px;
-            font-size: 30px;
-            line-height: 1.35;
-            color: #321824;
-        }
-
-        .audio-ui {
-            display: grid;
-            grid-template-columns: 54px 96px 1fr 42px 42px;
-            align-items: center;
-            gap: 14px;
-            background: #f5f4ef;
-            border: 1px solid #dedbd1;
-            border-radius: 12px;
-            padding: 12px 16px;
-            margin-bottom: 30px;
-        }
-
-        .audio-ui audio {
-            display: none;
-        }
-
-        .play-btn {
-            width: 46px;
-            height: 46px;
-            border: 0;
-            border-radius: 50%;
-            background: #075f52;
-            color: #fff;
-            cursor: pointer;
-            font-size: 19px;
-            font-weight: 900;
-            display: grid;
-            place-items: center;
-            box-shadow: 0 10px 20px rgba(7, 95, 82, 0.22);
-        }
-
-        .time {
-            font-weight: 900;
-            color: #3d3a38;
-            font-size: 14px;
-            white-space: nowrap;
-        }
-
-        .range {
-            width: 100%;
-            accent-color: #9fb0ad;
-            cursor: pointer;
-        }
-
-        .small-btn {
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            border: 1px solid #d9d4ca;
-            background: #fff;
-            cursor: pointer;
-            font-weight: 900;
-            color: #675f5b;
-        }
-
-        .options {
-            display: grid;
-            gap: 16px;
-        }
-
-        .option {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            min-height: 70px;
-            padding: 18px 22px;
-            border-radius: 22px;
-            border: 2px solid #ffd3dd;
-            background: #fff;
-            cursor: pointer;
-            transition: 0.18s ease;
-            font-size: 18px;
-            font-weight: 900;
-        }
-
-        .option:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 14px 28px rgba(160, 45, 70, 0.08);
-        }
-
-        .option input {
-            width: 22px;
-            height: 22px;
-            accent-color: #d81334;
-        }
-
-        .option.correct {
-            border-color: #22a464;
-            background: #effcf5;
-        }
-
-        .option.wrong {
-            border-color: #e24040;
-            background: #fff1f1;
-        }
-
-        .actions {
-            display: flex;
-            justify-content: space-between;
-            gap: 14px;
-            flex-wrap: wrap;
-            margin-top: 28px;
-        }
-
-        .btn {
-            border: 0;
-            text-decoration: none;
-            cursor: pointer;
-            border-radius: 16px;
-            padding: 14px 20px;
-            font-size: 15px;
-            font-weight: 900;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn.main {
-            background: linear-gradient(135deg, #ff3659, #d81334);
-            color: #fff;
-            box-shadow: 0 12px 24px rgba(216, 19, 52, 0.22);
-        }
-
-        .btn.light {
-            background: #fff0f4;
-            color: #b7112d;
-            border: 1px solid #f4cbd5;
-        }
-
-        .answer-box {
-            margin-top: 24px;
-            padding: 22px;
-            border-radius: 22px;
-            background: #fff8fa;
-            border: 1px solid #f1ccd6;
-        }
-
-        .answer-box h3 {
-            margin: 0 0 10px;
-            color: #8a1028;
-        }
-
-        .answer-status {
-            font-weight: 900;
-            margin-bottom: 12px;
-        }
-
-        .answer-status.ok {
-            color: #138c56;
-        }
-
-        .answer-status.no {
-            color: #c01834;
-        }
-
-        .transcript {
-            white-space: pre-line;
-            line-height: 1.7;
-            font-weight: 700;
-        }
-
-        .jump {
-            margin-top: 20px;
-            padding: 18px;
-            border-radius: 22px;
-            background: rgba(255,255,255,0.72);
-            box-shadow: 0 12px 28px rgba(150, 35, 60, 0.08);
-        }
-
-        .jump-title {
-            font-weight: 900;
-            color: #8a334c;
-            margin-bottom: 10px;
-        }
-
-        .jump-list {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .jump-list a {
-            width: 42px;
-            height: 42px;
-            border-radius: 14px;
-            display: grid;
-            place-items: center;
-            text-decoration: none;
-            font-weight: 900;
-            color: #a32945;
-            background: #fff;
-            border: 1px solid #f3cbd5;
-        }
-
-        .jump-list a.active {
-            background: linear-gradient(135deg, #ff3659, #d81334);
-            color: #fff;
-            border-color: transparent;
-        }
-
-        .empty {
-            padding: 40px;
-            border-radius: 28px;
-            background: #fff;
-            text-align: center;
-            box-shadow: 0 18px 44px rgba(150, 35, 60, 0.10);
-        }
-
-        @media (max-width: 760px) {
-            .card {
-                padding: 22px;
-            }
-
-            .question-title {
-                font-size: 24px;
-            }
-
-            .audio-ui {
-                grid-template-columns: 54px 1fr;
-            }
-
-            .time,
-            .range,
-            .small-btn {
-                grid-column: span 2;
-            }
-
-            .part-tabs {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .part-tabs a {
-                padding: 10px 14px;
-            }
-        }
-    </style>
+    <title>Listening Part {{ part_number }} | Điểm TSA Với Aptis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'core/css/app_red.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
 </head>
+<body class="student-body">
+<div class="student-shell">
+    <header class="student-top">
+        <div class="brand-inline">
+            <div class="brand-logo">A</div>
+            <div>
+                <strong>Điểm TSA Với Aptis</strong>
+                <span>Listening Practice</span>
+            </div>
+        </div>
+        <div class="student-actions">
+            <a href="{% url 'dashboard' %}" class="ghost-btn">Trang chính</a>
+            <a href="{% url 'logout' %}" class="ghost-btn">Đăng xuất</a>
+        </div>
+    </header>
 
-<body>
-    <div class="page">
-        <div class="topbar">
-            <div class="title">
-                <h1>Listening Practice</h1>
-                <p>Luy?n nghe t?ng c?u, giao di?n g?n v? d? thao t?c</p>
+    <main class="student-layout">
+        <section class="exam-panel">
+            <div class="exam-title">
+                <div class="part-card">
+                    <span>Part</span>
+                    <strong>{{ part_number }}</strong>
+                </div>
+                <div>
+                    <h1>Listening Practice</h1>
+                    <p>Luyện nghe từng câu, rõ ràng và dễ thao tác.</p>
+                </div>
             </div>
 
             <div class="part-tabs">
                 {% for part in part_tabs %}
-                    <a href="{% url 'listening' %}?part={{ part }}&q=1" class="{% if part == part_number %}active{% endif %}">
-                        Part {{ part }}
-                    </a>
+                    <a class="{% if part == part_number %}active{% endif %}" href="{% url 'listening' %}?part={{ part }}">Part {{ part }}</a>
                 {% endfor %}
             </div>
-        </div>
 
-        {% if no_question %}
-            <div class="empty">
-                <h2>Ch?a c? d? li?u Listening cho Part {{ part_number }}</h2>
-                <p>H?y nh?p d? li?u trong admin tr??c.</p>
-            </div>
-        {% else %}
-            <div class="progress-wrap">
-                <div class="progress-label">
-                    <span>Part {{ part_number }}</span>
-                    <span>C?u {{ current_index }}/{{ total_questions }}</span>
+            {% if no_question %}
+                <div class="empty-box">
+                    <h2>Chưa có dữ liệu Listening cho Part {{ part_number }}</h2>
+                    <p>Admin cần nhập câu hỏi trong trang quản trị trước.</p>
                 </div>
-                <div class="progress-track">
-                    <div class="progress-fill" style="width: {{ progress_percent }}%;"></div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="meta">
-                    <span class="pill red">C?u {{ current_index }}/{{ total_questions }}</span>
-                    <span class="pill purple">Part {{ part_number }}</span>
-                </div>
-
-                <h2 class="question-title">{{ question.prompt }}</h2>
-
-                <div class="audio-ui">
-                    <audio id="audio" preload="metadata" controlsList="nodownload noplaybackrate">
-                        <source src="{{ audio_url }}" type="audio/mpeg">
-                    </audio>
-
-                    <button type="button" class="play-btn" id="playBtn">?</button>
-                    <div class="time" id="timeText">0:00 / 0:00</div>
-                    <input class="range" id="progress" type="range" min="0" max="100" value="0">
-                    <button type="button" class="small-btn" id="muteBtn">??</button>
-                    <button type="button" class="small-btn" id="resetBtn">?</button>
-                </div>
-
-                <div class="options" id="options" data-correct="{{ question.correct_answer }}">
-                    <label class="option" data-value="A">
-                        <input type="radio" name="answer" value="A">
-                        <span>A. {{ question.option_a }}</span>
-                    </label>
-
-                    <label class="option" data-value="B">
-                        <input type="radio" name="answer" value="B">
-                        <span>B. {{ question.option_b }}</span>
-                    </label>
-
-                    <label class="option" data-value="C">
-                        <input type="radio" name="answer" value="C">
-                        <span>C. {{ question.option_c }}</span>
-                    </label>
-                </div>
-
-                <div class="actions">
-                    <button type="button" class="btn main" id="checkBtn">Ki?m tra ??p ?n</button>
-
-                    <div class="actions">
-                        {% if prev_url %}
-                            <a class="btn light" href="{{ prev_url }}">? C?u tr??c</a>
-                        {% endif %}
-
-                        {% if next_url %}
-                            <a class="btn main" href="{{ next_url }}">C?u ti?p theo ?</a>
-                        {% endif %}
+            {% else %}
+                <div class="progress-wrap">
+                    <div class="progress-info">
+                        <strong>Câu {{ current_index }}/{{ total_questions }}</strong>
+                        <span>{{ progress_percent }}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div style="width: {{ progress_percent }}%"></div>
                     </div>
                 </div>
 
-                <div class="answer-box" id="answerBox" hidden>
-                    <h3>K?t qu?</h3>
-                    <div class="answer-status" id="answerStatus"></div>
-                    <div><b>??p ?n ??ng:</b> {{ question.correct_answer }}</div>
-                    <hr>
-                    <div class="transcript">{{ question.transcript }}</div>
-                </div>
-            </div>
+                <article class="question-card">
+                    <div class="question-head">
+                        <span class="q-badge">Câu {{ current_index }}</span>
+                        <span class="flag">⚐</span>
+                    </div>
 
-            <div class="jump">
-                <div class="jump-title">?i nhanh:</div>
-                <div class="jump-list">
-                    {% for n in jump_numbers %}
-                        <a href="{% url 'listening' %}?part={{ part_number }}&q={{ n }}" class="{% if n == current_index %}active{% endif %}">
-                            {{ n }}
-                        </a>
+                    <h2>{{ question.prompt }}</h2>
+
+                    <audio class="audio-player" controls controlsList="nodownload" src="{{ audio_url }}"></audio>
+
+                    <div class="answer-grid">
+                        <button type="button" class="answer-btn" data-answer="A">
+                            <b>A</b><span>{{ question.option_a }}</span>
+                        </button>
+                        <button type="button" class="answer-btn" data-answer="B">
+                            <b>B</b><span>{{ question.option_b }}</span>
+                        </button>
+                        <button type="button" class="answer-btn" data-answer="C">
+                            <b>C</b><span>{{ question.option_c }}</span>
+                        </button>
+                    </div>
+
+                    <button class="primary-btn full check-answer" type="button">Kiểm tra đáp án</button>
+
+                    <div class="answer-result" hidden>
+                        <h3>Kết quả</h3>
+                        <p>Đáp án đúng: <strong>{{ question.correct_answer }}</strong></p>
+                        <div class="transcript">
+                            <strong>Transcript:</strong>
+                            <p>{{ question.transcript }}</p>
+                        </div>
+                    </div>
+
+                    <div class="question-nav">
+                        {% if prev_url %}
+                            <a class="ghost-btn" href="{{ prev_url }}">← Câu trước</a>
+                        {% endif %}
+                        {% if next_url %}
+                            <a class="primary-btn" href="{{ next_url }}">Câu tiếp theo →</a>
+                        {% endif %}
+                    </div>
+                </article>
+            {% endif %}
+        </section>
+
+        <aside class="question-side">
+            <div class="side-card">
+                <h3>Danh sách câu hỏi</h3>
+                <div class="side-stats">
+                    <div>
+                        <strong>{{ current_index|default:0 }}</strong>
+                        <span>Đang làm</span>
+                    </div>
+                    <div>
+                        <strong>{{ total_questions|default:0 }}</strong>
+                        <span>Tổng câu</span>
+                    </div>
+                </div>
+
+                <div class="question-numbers">
+                    {% for n in all_question_numbers %}
+                        <a class="{% if n == current_index %}current{% endif %}" href="{% url 'listening' %}?part={{ part_number }}&q={{ n }}">{{ n }}</a>
                     {% endfor %}
                 </div>
+
+                {% if next_url %}
+                    <a class="primary-btn full" href="{{ next_url }}">Đi tới câu tiếp theo</a>
+                {% endif %}
             </div>
-        {% endif %}
-    </div>
+        </aside>
+    </main>
+</div>
 
 <script>
-(function () {
-    const audio = document.getElementById("audio");
-    const playBtn = document.getElementById("playBtn");
-    const progress = document.getElementById("progress");
-    const timeText = document.getElementById("timeText");
-    const muteBtn = document.getElementById("muteBtn");
-    const resetBtn = document.getElementById("resetBtn");
+document.querySelectorAll(".answer-btn").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+        document.querySelectorAll(".answer-btn").forEach(function(x) { x.classList.remove("selected"); });
+        btn.classList.add("selected");
+    });
+});
 
-    function fmt(sec) {
-        if (!isFinite(sec)) return "0:00";
-        const m = Math.floor(sec / 60);
-        const s = Math.floor(sec % 60);
-        return m + ":" + String(s).padStart(2, "0");
-    }
-
-    function update() {
-        if (!audio) return;
-        const d = audio.duration || 0;
-        const c = audio.currentTime || 0;
-        timeText.textContent = fmt(c) + " / " + fmt(d);
-        progress.value = d ? (c / d) * 100 : 0;
-    }
-
-    if (audio) {
-        playBtn.addEventListener("click", async function () {
-            if (audio.paused) {
-                try {
-                    await audio.play();
-                } catch (err) {
-                    alert("Kh?ng ph?t ???c audio. H?y ki?m tra quy?n chia s? Google Drive.");
-                }
-            } else {
-                audio.pause();
-            }
-        });
-
-        audio.addEventListener("play", function () {
-            playBtn.textContent = "??";
-        });
-
-        audio.addEventListener("pause", function () {
-            playBtn.textContent = "?";
-        });
-
-        audio.addEventListener("loadedmetadata", update);
-        audio.addEventListener("timeupdate", update);
-        audio.addEventListener("ended", function () {
-            playBtn.textContent = "?";
-            progress.value = 100;
-        });
-
-        progress.addEventListener("input", function () {
-            if (audio.duration) {
-                audio.currentTime = (progress.value / 100) * audio.duration;
-            }
-        });
-
-        muteBtn.addEventListener("click", function () {
-            audio.muted = !audio.muted;
-            muteBtn.textContent = audio.muted ? "??" : "??";
-        });
-
-        resetBtn.addEventListener("click", function () {
-            audio.currentTime = 0;
-            audio.play();
-        });
-    }
-
-    const checkBtn = document.getElementById("checkBtn");
-    const options = document.getElementById("options");
-    const answerBox = document.getElementById("answerBox");
-    const answerStatus = document.getElementById("answerStatus");
-
-    if (checkBtn && options) {
-        checkBtn.addEventListener("click", function () {
-            const correct = (options.dataset.correct || "").trim().toUpperCase();
-            const picked = document.querySelector('input[name="answer"]:checked');
-
-            document.querySelectorAll(".option").forEach(function (el) {
-                el.classList.remove("correct", "wrong");
-            });
-
-            answerBox.hidden = false;
-
-            if (!picked) {
-                answerStatus.textContent = "B?n ch?a ch?n ??p ?n.";
-                answerStatus.className = "answer-status no";
-                return;
-            }
-
-            const value = picked.value.trim().toUpperCase();
-
-            document.querySelectorAll(".option").forEach(function (el) {
-                const v = (el.dataset.value || "").trim().toUpperCase();
-
-                if (v === correct) {
-                    el.classList.add("correct");
-                }
-
-                if (v === value && v !== correct) {
-                    el.classList.add("wrong");
-                }
-            });
-
-            if (value === correct) {
-                answerStatus.textContent = "Ch?nh x?c!";
-                answerStatus.className = "answer-status ok";
-            } else {
-                answerStatus.textContent = "Ch?a ??ng.";
-                answerStatus.className = "answer-status no";
-            }
-        });
-    }
-})();
+const checkBtn = document.querySelector(".check-answer");
+if (checkBtn) {
+    checkBtn.addEventListener("click", function() {
+        const box = document.querySelector(".answer-result");
+        if (box) box.hidden = false;
+    });
+}
 </script>
 </body>
 </html>

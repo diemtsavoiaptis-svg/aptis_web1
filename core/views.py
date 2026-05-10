@@ -295,3 +295,112 @@ def security_event_view(request):
 def logout_view(request):
     logout(request)
     return redirect("home")
+
+
+@login_required
+def admin_listening_parts(request):
+    if not (request.user.is_staff or request.user.is_superuser or request.user.username == "admin"):
+        return redirect("listening")
+
+    part_counts = {
+        1: ListeningQuestion.objects.filter(part=1).count(),
+        2: ListeningQuestion.objects.filter(part=2).count(),
+        3: ListeningQuestion.objects.filter(part=3).count(),
+        4: ListeningQuestion.objects.filter(part=4).count(),
+    }
+
+    return render(request, "core/admin_listening_parts.html", {
+        "part_counts": part_counts,
+    })
+
+
+@login_required
+def admin_part1_questions(request):
+    if not (request.user.is_staff or request.user.is_superuser or request.user.username == "admin"):
+        return redirect("listening")
+
+    if request.method == "POST":
+        action = request.POST.get("action", "")
+
+        if action == "create_blank":
+            try:
+                count = int(request.POST.get("create_count", 13))
+            except ValueError:
+                count = 13
+
+            count = max(1, min(count, 100))
+
+            current_max = 0
+            for q in ListeningQuestion.objects.filter(part=1):
+                try:
+                    current_max = max(current_max, int(q.question_number or 0))
+                except Exception:
+                    pass
+
+            for i in range(1, count + 1):
+                ListeningQuestion.objects.create(
+                    part=1,
+                    question_number=current_max + i,
+                    question_text=f"Câu hỏi {current_max + i}",
+                    option_a="",
+                    option_b="",
+                    option_c="",
+                    correct_answer="A",
+                    listening_transcript="",
+                )
+
+            messages.success(request, f"Đã tạo thêm {count} dòng Part 1.")
+            return redirect("admin_part1_questions")
+
+        if action == "save_all":
+            row_ids = request.POST.getlist("row_id")
+
+            for row_id in row_ids:
+                q = ListeningQuestion.objects.filter(id=row_id, part=1).first()
+                if not q:
+                    continue
+
+                try:
+                    q.question_number = int(request.POST.get(f"question_number_{row_id}") or q.question_number or 1)
+                except ValueError:
+                    pass
+
+                q.question_text = request.POST.get(f"question_text_{row_id}", "").strip()
+                q.option_a = request.POST.get(f"option_a_{row_id}", "").strip()
+                q.option_b = request.POST.get(f"option_b_{row_id}", "").strip()
+                q.option_c = request.POST.get(f"option_c_{row_id}", "").strip()
+                posted_correct = request.POST.get(f"correct_answer_{row_id}")
+                if posted_correct is not None:
+                    q.correct_answer = posted_correct.strip().upper()[:1] or q.correct_answer or "A"
+                q.listening_transcript = request.POST.get(f"listening_transcript_{row_id}", "").strip()
+
+                if hasattr(q, "audio_drive_link"):
+                    q.audio_drive_link = request.POST.get(f"audio_drive_link_{row_id}", "").strip()
+
+                audio_url_key = f"audio_url_{row_id}"
+                if hasattr(q, "audio_url") and audio_url_key in request.POST:
+                    q.audio_url = request.POST.get(audio_url_key, "").strip()
+
+                q.save()
+
+            messages.success(request, "Đã cập nhật hàng loạt câu hỏi Part 1.")
+            return redirect("admin_part1_questions")
+
+        if action == "delete_selected":
+            selected_ids = request.POST.getlist("selected_id")
+            deleted_count, _ = ListeningQuestion.objects.filter(id__in=selected_ids, part=1).delete()
+            messages.success(request, f"Đã xóa {deleted_count} câu hỏi Part 1 đã chọn.")
+            return redirect("admin_part1_questions")
+
+        if action == "delete_one":
+            delete_id = request.POST.get("delete_id")
+            ListeningQuestion.objects.filter(id=delete_id, part=1).delete()
+            messages.success(request, "Đã xóa 1 câu hỏi Part 1.")
+            return redirect("admin_part1_questions")
+
+    questions = ListeningQuestion.objects.filter(part=1).order_by("question_number", "id")
+
+    return render(request, "core/admin_part1_questions.html", {
+        "questions": questions,
+        "total_questions": questions.count(),
+    })

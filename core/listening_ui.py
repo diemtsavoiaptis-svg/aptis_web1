@@ -36,20 +36,21 @@ def listening_page(request):
             "part_number": part_number,
             "part_tabs": [1, 2, 3, 4],
             "no_question": True,
+            "total_questions": 0,
+            "all_question_numbers": [],
         })
 
     if current_index < 1:
         current_index = 1
-
     if current_index > total_questions:
         current_index = total_questions
 
     current = questions[current_index - 1]
 
-    question_text = pick_value(current, "question_text", "question", "title", default="Ch?a c? c?u h?i")
-    option_a = pick_value(current, "option_a", "answer_a", "choice_a", default="??p ?n A")
-    option_b = pick_value(current, "option_b", "answer_b", "choice_b", default="??p ?n B")
-    option_c = pick_value(current, "option_c", "answer_c", "choice_c", default="??p ?n C")
+    question_text = pick_value(current, "question_text", "question", "title", default=f"Câu hỏi {current_index}")
+    option_a = pick_value(current, "option_a", "answer_a", "choice_a", default="Đáp án A")
+    option_b = pick_value(current, "option_b", "answer_b", "choice_b", default="Đáp án B")
+    option_c = pick_value(current, "option_c", "answer_c", "choice_c", default="Đáp án C")
     correct_answer = pick_value(current, "correct_answer", "correct_option", "answer_key", default="A")
     transcript = pick_value(
         current,
@@ -59,7 +60,7 @@ def listening_page(request):
         "listening_text",
         "explanation",
         "answer_explanation",
-        default="Ch?a c? n?i dung nghe / gi?i th?ch.",
+        default="Chưa có transcript.",
     )
 
     context = {
@@ -80,7 +81,6 @@ def listening_page(request):
         "progress_percent": round((current_index / total_questions) * 100, 2),
         "prev_url": f"{reverse('listening')}?part={part_number}&q={current_index - 1}" if current_index > 1 else "",
         "next_url": f"{reverse('listening')}?part={part_number}&q={current_index + 1}" if current_index < total_questions else "",
-        "jump_numbers": list(range(max(1, current_index - 3), min(total_questions, current_index + 3) + 1)),
+        "all_question_numbers": list(range(1, total_questions + 1)),
     }
-
     return render(request, "core/listening.html", context)

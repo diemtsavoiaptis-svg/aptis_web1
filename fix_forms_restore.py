@@ -1,4 +1,6 @@
-from django import forms
+﻿from pathlib import Path
+
+Path("core/forms.py").write_text(r'''from django import forms
 
 from .models import ListeningQuestion
 
@@ -87,3 +89,6 @@ class ListeningQuestionAdminForm(forms.ModelForm):
             raise forms.ValidationError("File MP3 quá lớn. Giới hạn hiện tại là 80MB/file.")
 
         return file_obj
+''', encoding="utf-8")
+
+print("DA_KHOI_PHUC_CORE_FORMS")
