@@ -7,7 +7,7 @@ class RegisterForm(forms.Form):
         max_length=150,
         widget=forms.TextInput(attrs={
             "class": "auth-input",
-            "placeholder": "H? v? t?n h?c vi?n"
+            "placeholder": "Họ và tên học viên"
         })
     )
 
@@ -15,37 +15,39 @@ class RegisterForm(forms.Form):
         max_length=20,
         widget=forms.TextInput(attrs={
             "class": "auth-input",
-            "placeholder": "S? ?i?n tho?i"
+            "placeholder": "Số điện thoại"
         })
     )
 
-    email = forms.EmailField(
-        widget=forms.EmailInput(attrs={
+    email = forms.CharField(
+        widget=forms.TextInput(attrs={
             "class": "auth-input",
-            "placeholder": "Email"
+            "placeholder": "Tài khoản hoặc email",
+            "autocomplete": "username"
         })
     )
 
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
             "class": "auth-input",
-            "placeholder": "M?t kh?u"
+            "placeholder": "Mật khẩu"
         })
     )
 
 
 class LoginForm(forms.Form):
-    email = forms.EmailField(
-        widget=forms.EmailInput(attrs={
+    email = forms.CharField(
+        widget=forms.TextInput(attrs={
             "class": "auth-input",
-            "placeholder": "Email"
+            "placeholder": "Tài khoản hoặc email",
+            "autocomplete": "username"
         })
     )
 
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
             "class": "auth-input",
-            "placeholder": "M?t kh?u"
+            "placeholder": "Mật khẩu"
         })
     )
 
