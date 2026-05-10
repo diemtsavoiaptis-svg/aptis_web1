@@ -186,9 +186,12 @@ def _google_drive_download_response(file_id):
 def dashboard(request):
     lessons = Lesson.objects.all().order_by("-created_at")
 
-    return render(request, "core/dashboard.html", {
-        "lessons": lessons
-    })
+    if request.user.is_staff or request.user.is_superuser:
+        return render(request, "core/dashboard.html", {
+            "lessons": lessons
+        })
+
+    return redirect("listening")
 
 
 @login_required
