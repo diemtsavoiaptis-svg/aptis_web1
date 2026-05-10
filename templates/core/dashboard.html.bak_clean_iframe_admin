@@ -350,7 +350,7 @@
             <button class="side-link" type="button"
                     data-title="Duyệt học viên"
                     data-desc="Duyệt tài khoản học viên mới đăng ký, quản lý trạng thái học viên."
-                    data-url="/dashboard/students/">
+                    data-url="/admin/core/studentprofile/">
                 ✅ Duyệt học viên
             </button>
 
@@ -415,7 +415,7 @@
                         <p>Quản lý Part 1, Part 2, Part 3, Part 4 trong khung bên phải.</p>
                     </div>
 
-                    <div class="quick-card" data-url="/dashboard/students/" data-title="Duyệt học viên" data-desc="Duyệt tài khoản học viên mới đăng ký, quản lý trạng thái học viên.">
+                    <div class="quick-card" data-url="/admin/core/studentprofile/" data-title="Duyệt học viên" data-desc="Duyệt tài khoản học viên mới đăng ký, quản lý trạng thái học viên.">
                         <div class="quick-icon">✅</div>
                         <h3>Học viên</h3>
                         <p>Duyệt tài khoản, xem trạng thái và thông tin học viên.</p>

@@ -1,4 +1,28 @@
-{% load static %}
+﻿from pathlib import Path
+import re
+
+# =========================
+# 1) Cho phép nhúng admin cùng domain vào khung bên phải
+# =========================
+settings = Path("config/settings.py")
+s = settings.read_text(encoding="utf-8", errors="ignore")
+
+# X_FRAME_OPTIONS = SAMEORIGIN để iframe admin chạy được trong dashboard cùng web
+if "X_FRAME_OPTIONS" in s:
+    s = re.sub(r"X_FRAME_OPTIONS\s*=\s*['\"].*?['\"]", 'X_FRAME_OPTIONS = "SAMEORIGIN"', s)
+else:
+    s += '\nX_FRAME_OPTIONS = "SAMEORIGIN"\n'
+
+settings.write_text(s, encoding="utf-8")
+
+
+# =========================
+# 2) Ghi lại dashboard: sidebar trái cố định, nội dung bên phải đổi bằng iframe
+# =========================
+p = Path("templates/core/dashboard.html")
+p.parent.mkdir(parents=True, exist_ok=True)
+
+p.write_text(r'''{% load static %}
 <!doctype html>
 <html lang="vi">
 <head>
@@ -300,25 +324,7 @@
                 grid-template-columns:1fr;
             }
         }
-    
-/* Làm khung bên phải rộng, sạch, không có admin mini sidebar */
-#adminFrame {
-    width: 100% !important;
-    height: calc(100vh - 245px) !important;
-    min-height: 720px !important;
-    border: 0 !important;
-    background: #fffafa !important;
-}
-
-.content-card {
-    min-height: calc(100vh - 185px) !important;
-}
-
-.frame-toolbar {
-    display: none !important;
-}
-
-</style>
+    </style>
 </head>
 
 <body>
@@ -350,7 +356,7 @@
             <button class="side-link" type="button"
                     data-title="Duyệt học viên"
                     data-desc="Duyệt tài khoản học viên mới đăng ký, quản lý trạng thái học viên."
-                    data-url="/dashboard/students/">
+                    data-url="/admin/core/studentprofile/">
                 ✅ Duyệt học viên
             </button>
 
@@ -415,7 +421,7 @@
                         <p>Quản lý Part 1, Part 2, Part 3, Part 4 trong khung bên phải.</p>
                     </div>
 
-                    <div class="quick-card" data-url="/dashboard/students/" data-title="Duyệt học viên" data-desc="Duyệt tài khoản học viên mới đăng ký, quản lý trạng thái học viên.">
+                    <div class="quick-card" data-url="/admin/core/studentprofile/" data-title="Duyệt học viên" data-desc="Duyệt tài khoản học viên mới đăng ký, quản lý trạng thái học viên.">
                         <div class="quick-icon">✅</div>
                         <h3>Học viên</h3>
                         <p>Duyệt tài khoản, xem trạng thái và thông tin học viên.</p>
@@ -462,178 +468,9 @@ function openFrame(url, title, desc){
     const frame = document.getElementById("adminFrame");
     document.getElementById("welcomePanel").hidden = true;
     frame.hidden = false;
-    frame.addEventListener("load", cleanAdminIframe);
 
     if(frame.src !== location.origin + url){
         frame.src = url;
-        setTimeout(cleanAdminIframe, 300);
-    }
-}
-
-
-function cleanAdminIframe(){
-    const frame = document.getElementById("adminFrame");
-    if(!frame || frame.hidden) return;
-
-    try {
-        const doc = frame.contentDocument || frame.contentWindow.document;
-        if(!doc) return;
-
-        if(doc.getElementById("clean-admin-iframe-style")) return;
-
-        const style = doc.createElement("style");
-        style.id = "clean-admin-iframe-style";
-        style.textContent = `
-            /* Ẩn toàn bộ phần admin phụ bên trong iframe */
-            #header,
-            div.breadcrumbs,
-            #nav-sidebar,
-            .toggle-nav-sidebar,
-            #changelist-filter,
-            .object-tools,
-            .paginator,
-            .actions label,
-            .actions select,
-            .actions button,
-            .actions span,
-            #toolbar,
-            #changelist-search img {
-                display: none !important;
-            }
-
-            html, body {
-                margin: 0 !important;
-                padding: 0 !important;
-                background: #fffafa !important;
-                overflow-x: hidden !important;
-                font-family: Georgia, "Times New Roman", serif !important;
-            }
-
-            #container,
-            #main,
-            .main,
-            #content,
-            .content,
-            .content-main,
-            #changelist,
-            #changelist-form,
-            .results {
-                width: 100% !important;
-                max-width: none !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                left: 0 !important;
-                float: none !important;
-                box-sizing: border-box !important;
-            }
-
-            #content {
-                padding: 22px 24px !important;
-            }
-
-            #content h1 {
-                font-size: 34px !important;
-                line-height: 1.15 !important;
-                margin: 0 0 22px !important;
-                color: #3f0011 !important;
-                font-weight: 950 !important;
-                letter-spacing: -0.04em !important;
-            }
-
-            /* Thanh tìm kiếm đẹp hơn */
-            #changelist-search {
-                display: flex !important;
-                align-items: center !important;
-                gap: 10px !important;
-                margin: 0 0 18px !important;
-                padding: 14px !important;
-                background: #fff1f4 !important;
-                border: 1px solid #ffd1dc !important;
-                border-radius: 18px !important;
-            }
-
-            #changelist-search input[type="text"] {
-                flex: 1 !important;
-                height: 44px !important;
-                border-radius: 14px !important;
-                border: 1px solid #ffd1dc !important;
-                padding: 0 16px !important;
-                font-size: 16px !important;
-            }
-
-            #changelist-search input[type="submit"] {
-                height: 44px !important;
-                border-radius: 14px !important;
-                border: 0 !important;
-                background: linear-gradient(135deg, #e60023, #ff5f76) !important;
-                color: white !important;
-                font-weight: 900 !important;
-                padding: 0 22px !important;
-            }
-
-            /* Bảng rộng, dễ thao tác */
-            table {
-                width: 100% !important;
-                border-collapse: separate !important;
-                border-spacing: 0 !important;
-                background: white !important;
-                border: 1px solid #ffd1dc !important;
-                border-radius: 20px !important;
-                overflow: hidden !important;
-                font-size: 15px !important;
-            }
-
-            thead th {
-                background: #fff1f4 !important;
-                color: #7a0010 !important;
-                font-weight: 950 !important;
-                padding: 12px !important;
-                white-space: nowrap !important;
-            }
-
-            tbody td,
-            tbody th {
-                padding: 12px !important;
-                border-bottom: 1px solid #ffe1e7 !important;
-                vertical-align: middle !important;
-            }
-
-            tbody tr:hover {
-                background: #fff8fa !important;
-            }
-
-            a {
-                color: #8a0015 !important;
-                font-weight: 850 !important;
-            }
-
-            input, select, textarea {
-                border-radius: 12px !important;
-                border: 1px solid #ffd1dc !important;
-            }
-
-            .button,
-            input[type="submit"],
-            input[type="button"],
-            a.button {
-                border-radius: 12px !important;
-                background: #e60023 !important;
-                color: white !important;
-                border: 0 !important;
-                font-weight: 900 !important;
-            }
-        `;
-
-        doc.head.appendChild(style);
-
-        // Đổi một số chữ cho gọn
-        const h1 = doc.querySelector("#content h1");
-        if(h1 && h1.textContent.includes("Chọn Học viên")) {
-            h1.textContent = "Duyệt học viên";
-        }
-
-    } catch(e) {
-        console.log("Không thể làm sạch iframe admin:", e);
     }
 }
 
@@ -682,3 +519,6 @@ document.querySelectorAll(".quick-card").forEach(card => {
 </script>
 </body>
 </html>
+''', encoding="utf-8")
+
+print("DA_GIU_SIDEBAR_DASHBOARD_VA_DOI_NOI_DUNG_BEN_PHAI")

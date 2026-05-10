@@ -1,10 +1,9 @@
-{% extends "admin/base.html" %}
-{% load i18n static %}
+﻿from pathlib import Path
 
-{% block title %}
-{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | Quản trị TSA Aptis
-<style>
+p = Path("templates/admin/base_site.html")
+s = p.read_text(encoding="utf-8", errors="ignore")
 
+extra_css = r'''
 /* Tối ưu sidebar Django Admin: ẩn cột "+ Thêm vào", gọn dễ thao tác */
 #nav-sidebar .addlink,
 #nav-sidebar td.addlink,
@@ -104,78 +103,28 @@
     word-break: normal !important;
     overflow-wrap: anywhere !important;
 }
+'''
 
-</style>
-{% endblock %}
+marker = "Tối ưu sidebar Django Admin: ẩn cột"
+if marker not in s:
+    if "{% block extrastyle %}" in s:
+        s = s.replace("{% endblock %}", extra_css + "\n{% endblock %}", 1)
+    else:
+        s += f"""
 
-{% block branding %}
-<div id="site-name">
-    <a href="{% url 'admin:index' %}">Quản trị TSA Aptis</a>
-</div>
-{% endblock %}
-
-{% block extrastyle %}
-{{ block.super }}
-<link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
+{{% block extrastyle %}}
+{{{{ block.super }}}}
 <style>
-    :root {
-        --primary: #e60023;
-        --secondary: #8a0015;
-        --accent: #ff5f76;
-        --primary-fg: #fff;
-        --body-bg: #fff7f9;
-        --body-fg: #3f0011;
-        --header-color: #fff;
-        --breadcrumbs-bg: #fff1f4;
-        --breadcrumbs-fg: #7a0010;
-    }
-
-    #header {
-        background: linear-gradient(135deg, #e60023, #ff5f76);
-        color: white;
-    }
-
-    #site-name a {
-        color: white !important;
-        font-weight: 900;
-    }
-
-    .module h2,
-    .module caption,
-    .inline-group h2 {
-        background: linear-gradient(135deg, #e60023, #ff5f76);
-        color: white;
-    }
-
-    div.breadcrumbs {
-        background: #fff1f4;
-        color: #7a0010;
-    }
-
-    div.breadcrumbs a {
-        color: #7a0010;
-        font-weight: 700;
-    }
-
-    a:link,
-    a:visited {
-        color: #8a0015;
-    }
-
-    input[type=submit],
-    input[type=button],
-    .submit-row input,
-    a.button {
-        background: #e60023;
-        border-radius: 10px;
-        font-weight: 800;
-    }
-
-    input[type=submit]:hover,
-    input[type=button]:hover,
-    .submit-row input:hover,
-    a.button:hover {
-        background: #b8001c;
-    }
+{extra_css}
 </style>
-{% endblock %}
+{{% endblock %}}
+"""
+else:
+    print("CSS_DA_CO_SAN")
+
+# Nếu extra_css chưa nằm trong thẻ style thì bọc lại
+if marker in s and "<style>" not in s[s.find(marker)-50:s.find(marker)+50]:
+    s = s.replace(extra_css, "<style>\n" + extra_css + "\n</style>")
+
+p.write_text(s, encoding="utf-8")
+print("DA_AN_COT_THEM_VAO_VA_TOI_UU_ADMIN_SIDEBAR")

@@ -7,6 +7,7 @@ def _vi(text):
 
 
 class StudentProfile(models.Model):
+    student_id = models.CharField('ID học viên', max_length=80, blank=True)
     STATUS_CHOICES = [
         ("pending", _vi(r"Ch\u1edd duy\u1ec7t")),
         ("approved", _vi(r"\u0110\u00e3 duy\u1ec7t")),

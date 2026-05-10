@@ -162,3 +162,8 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+
+
+# Cho phép dashboard nhúng các trang nội bộ vào khung bên phải
+X_FRAME_OPTIONS = "SAMEORIGIN"

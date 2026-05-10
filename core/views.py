@@ -1,3 +1,6 @@
+from django.contrib.auth.decorators import user_passes_test
+from django.db.models import Q
+from django.views.decorators.csrf import csrf_exempt
 import requests
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -404,3 +407,101 @@ def admin_part1_questions(request):
         "questions": questions,
         "total_questions": questions.count(),
     })
+
+
+
+
+# ===== Custom admin student lookup/profile page =====
+def _is_admin_user(user):
+    return user.is_authenticated and (user.is_staff or user.is_superuser)
+
+@csrf_exempt
+@user_passes_test(_is_admin_user)
+def admin_student_lookup(request):
+    q = (request.GET.get("q") or request.POST.get("q") or "").strip()
+    profile_id = (request.GET.get("profile_id") or request.POST.get("profile_id") or "").strip()
+
+    results = StudentProfile.objects.none()
+    selected = None
+
+    if q:
+        filters = (
+            Q(user__username__icontains=q) |
+            Q(user__email__icontains=q) |
+            Q(user__first_name__icontains=q) |
+            Q(user__last_name__icontains=q) |
+            Q(full_name__icontains=q) |
+            Q(email__icontains=q) |
+            Q(phone__icontains=q) |
+            Q(student_id__icontains=q)
+        )
+
+        if q.isdigit():
+            filters |= Q(id=int(q)) | Q(user__id=int(q))
+
+        results = StudentProfile.objects.filter(filters).select_related("user").distinct().order_by("-id")[:20]
+
+    if profile_id:
+        selected = StudentProfile.objects.filter(id=profile_id).select_related("user").first()
+    elif results:
+        selected = results.first()
+
+    if request.method == "POST" and request.POST.get("action") == "save_profile":
+        selected = StudentProfile.objects.filter(id=request.POST.get("profile_id")).select_related("user").first()
+
+        if not selected:
+            messages.error(request, "Chưa chọn học viên để lưu.")
+            return redirect("admin_student_lookup")
+
+        gmail = request.POST.get("gmail", "").strip()
+        phone = request.POST.get("phone", "").strip()
+        full_name = request.POST.get("full_name", "").strip()
+        student_id = request.POST.get("student_id", "").strip()
+
+        selected.email = gmail
+        selected.phone = phone
+        selected.full_name = full_name
+        selected.student_id = student_id
+        selected.save()
+
+        if selected.user:
+            selected.user.email = gmail
+            selected.user.first_name = full_name
+            selected.user.save()
+
+        messages.success(request, "Đã lưu hồ sơ học viên.")
+        return redirect(f"{request.path}?profile_id={selected.id}&q={gmail or phone or full_name or student_id or q}")
+
+    if request.method == "POST" and request.POST.get("action") == "delete_profile":
+        target = StudentProfile.objects.filter(id=request.POST.get("profile_id")).select_related("user").first()
+
+        if target:
+            target.email = ""
+            target.phone = ""
+            target.full_name = ""
+            target.student_id = ""
+            target.save()
+
+            if target.user:
+                target.user.email = ""
+                target.user.first_name = ""
+                target.user.last_name = ""
+                target.user.save()
+
+            messages.success(request, "Đã xóa thông tin hồ sơ học viên.")
+
+        return redirect("admin_student_lookup")
+
+    saved_profiles = StudentProfile.objects.select_related("user").all().order_by("-id")
+
+    return render(request, "core/admin_student_lookup.html", {
+        "q": q,
+        "results": results,
+        "selected": selected,
+        "saved_profiles": saved_profiles,
+        "student_id_value": selected.student_id if selected else "",
+        "phone_value": selected.phone if selected else "",
+        "profile_email_value": selected.email if selected else "",
+        "profile_name_value": selected.full_name if selected else "",
+    })
+# ===== End custom admin student lookup/profile page =====

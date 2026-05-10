@@ -21,7 +21,7 @@ class SecurityHeadersMiddleware(MiddlewareMixin):
             response["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
             response["Pragma"] = "no-cache"
             response["Expires"] = "0"
-            response["X-Frame-Options"] = "DENY"
+            response["X-Frame-Options"] = "SAMEORIGIN"
             response["Referrer-Policy"] = "no-referrer"
             response["X-Content-Type-Options"] = "nosniff"
             response["Permissions-Policy"] = "camera=(), microphone=(), geolocation=(), payment=(), usb=(), display-capture=()"
