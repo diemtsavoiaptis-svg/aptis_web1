@@ -7,3 +7,6 @@ db.sqlite3
 media/
 aptis_web_deploy.zip
 .DS_Store
+
+staticfiles/
+*.log

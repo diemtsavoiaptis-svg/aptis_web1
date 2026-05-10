@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -28,11 +29,15 @@ _load_env_file(".env.local")
 _load_env_file(".env.server")
 # === TSA ENV LOADER END ===
 
-SECRET_KEY = 'aptis-learning-secret-key'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key-change-me')
 
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'tsaptis.com', 'www.tsaptis.com', '.pythonanywhere.com']
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    ".onrender.com",
+]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://tsaptis.com',
@@ -52,6 +57,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'core.middleware.SecurityHeadersMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -124,3 +130,35 @@ SUPABASE_SERVICE_ROLE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
 SUPABASE_BUCKET_NAME = os.environ.get("SUPABASE_BUCKET_NAME", "aptis-audio")
 SUPABASE_SIGNED_URL_EXPIRES = int(os.environ.get("SUPABASE_SIGNED_URL_EXPIRES", "300"))
 # === SUPABASE STORAGE SETTINGS END ===
+
+
+# ==============================
+# Render + Supabase PostgreSQL config
+# Local vẫn dùng db.sqlite3 nếu chưa có DATABASE_URL
+# ==============================
+DATABASES = {
+    "default": dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
+        ssl_require=bool(os.environ.get("DATABASE_URL")),
+    )
+}
+
+RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+CUSTOM_DOMAIN = os.environ.get("CUSTOM_DOMAIN")
+
+for host in [RENDER_EXTERNAL_HOSTNAME, CUSTOM_DOMAIN]:
+    if host and host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(host)
+
+CSRF_TRUSTED_ORIGINS = []
+for host in [RENDER_EXTERNAL_HOSTNAME, CUSTOM_DOMAIN]:
+    if host:
+        CSRF_TRUSTED_ORIGINS.append(f"https://{host}")
+
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
