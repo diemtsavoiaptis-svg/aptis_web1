@@ -5,11 +5,21 @@
     <meta charset="UTF-8">
     <title>Listening Part {{ part_number }} | Điểm TSA Với Aptis</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="student-id" content="{{ student_id }}">
+    <meta name="student-name" content="{{ student_name }}">
+    <meta name="student-email" content="{{ student_email }}">
     <link rel="stylesheet" href="{% static 'core/css/app_red.css' %}">
     <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
+    <link rel="stylesheet" href="{% static 'core/security_protect.css' %}">
 </head>
-<body class="student-body">
-<div class="student-shell">
+<body class="student-body" data-watermark="{{ student_watermark }}">
+<div class="security-watermark" aria-hidden="true">
+    {% for _ in "123456789012345678901234567890123456" %}
+        <span>{{ student_watermark }} · <span data-security-time></span></span>
+    {% endfor %}
+</div>
+
+<div class="student-shell protected-content">
     <header class="student-top">
         <div class="brand-inline">
             <div class="brand-logo">A</div>
@@ -19,6 +29,7 @@
             </div>
         </div>
         <div class="student-actions">
+            <span class="student-identity">ID {{ student_id }} · {{ student_name }}</span>
             <a href="{% url 'dashboard' %}" class="ghost-btn">Trang chính</a>
             <a href="{% url 'logout' %}" class="ghost-btn">Đăng xuất</a>
         </div>
@@ -62,12 +73,12 @@
                 <article class="question-card">
                     <div class="question-head">
                         <span class="q-badge">Câu {{ current_index }}</span>
-                        <span class="flag">⚐</span>
+                        <span class="flag">Được bảo vệ</span>
                     </div>
 
                     <h2>{{ question.prompt }}</h2>
 
-                    <audio class="audio-player" controls controlsList="nodownload" src="{{ audio_url }}"></audio>
+                    <audio class="audio-player" controls controlsList="nodownload noplaybackrate" src="{{ audio_url }}"></audio>
 
                     <div class="answer-grid">
                         <button type="button" class="answer-btn" data-answer="A">
@@ -132,6 +143,7 @@
     </main>
 </div>
 
+<script src="{% static 'core/security_protect.js' %}" defer></script>
 <script>
 document.querySelectorAll(".answer-btn").forEach(function(btn) {
     btn.addEventListener("click", function() {

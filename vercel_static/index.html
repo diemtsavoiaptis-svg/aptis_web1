@@ -7,6 +7,20 @@
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
+  <div id="securityWatermark" class="security-watermark" aria-hidden="true"></div>
+
+  <section id="authPanel" class="auth-panel" hidden>
+    <form id="authForm" class="auth-card">
+      <p class="eyebrow">Tài khoản học viên</p>
+      <h1>Đăng nhập để làm bài</h1>
+      <p>Watermark sẽ hiển thị theo ID, họ tên và email của học viên.</p>
+      <input id="emailInput" type="email" autocomplete="username" placeholder="Email" required>
+      <input id="passwordInput" type="password" autocomplete="current-password" placeholder="Mật khẩu" required>
+      <button class="primary-btn" type="submit">Đăng nhập</button>
+      <div id="authMessage" class="auth-message"></div>
+    </form>
+  </section>
+
   <div class="app-shell">
     <header class="topbar">
       <a class="brand" href="./" aria-label="Điểm TSA Với Aptis">
@@ -18,6 +32,8 @@
       </a>
 
       <div class="top-actions">
+        <span id="studentBadge" class="status-pill">Chưa đăng nhập</span>
+        <button id="logoutBtn" class="ghost-btn" type="button" hidden>Đăng xuất</button>
         <span id="dataSource" class="status-pill">Đang tải dữ liệu</span>
         <button id="resetBtn" class="ghost-btn" type="button">Làm lại</button>
       </div>

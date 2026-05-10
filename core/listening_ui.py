@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import ListeningQuestion
+from .models import ListeningQuestion, StudentProfile
 
 
 def pick_value(obj, *names, default=""):
@@ -46,6 +46,18 @@ def listening_page(request):
         current_index = total_questions
 
     current = questions[current_index - 1]
+    student_profile = StudentProfile.objects.filter(user=request.user).first()
+    student_id = student_profile.id if student_profile else request.user.id
+    student_name = (
+        student_profile.full_name
+        if student_profile
+        else (request.user.get_full_name() or request.user.username)
+    )
+    student_email = (
+        student_profile.email
+        if student_profile
+        else (request.user.email or request.user.username)
+    )
 
     question_text = pick_value(current, "question_text", "question", "title", default=f"Câu hỏi {current_index}")
     option_a = pick_value(current, "option_a", "answer_a", "choice_a", default="Đáp án A")
@@ -82,5 +94,9 @@ def listening_page(request):
         "prev_url": f"{reverse('listening')}?part={part_number}&q={current_index - 1}" if current_index > 1 else "",
         "next_url": f"{reverse('listening')}?part={part_number}&q={current_index + 1}" if current_index < total_questions else "",
         "all_question_numbers": list(range(1, total_questions + 1)),
+        "student_watermark": f"ID {student_id} - {student_name} - {student_email}",
+        "student_id": student_id,
+        "student_name": student_name,
+        "student_email": student_email,
     }
     return render(request, "core/listening.html", context)

@@ -36,6 +36,27 @@
         return false;
     }
 
+    function setClipboardWarning() {
+        try {
+            navigator.clipboard.writeText("Nội dung được bảo vệ bởi TSA Aptis. Tài khoản đã được gắn watermark.");
+        } catch (error) {}
+    }
+
+    ["contextmenu", "copy", "cut", "paste", "dragstart", "selectstart"].forEach(function (eventName) {
+        document.addEventListener(eventName, function (event) {
+            const eventMap = {
+                contextmenu: "contextmenu_attempt",
+                copy: "copy_attempt",
+                cut: "copy_attempt",
+                paste: "paste_attempt",
+                dragstart: "save_attempt",
+                selectstart: "select_attempt"
+            };
+            setClipboardWarning();
+            return blockEvent(event, eventMap[eventName], eventName === "contextmenu" ? "high" : "medium");
+        }, true);
+    });
+
     document.addEventListener("keydown", function (event) {
         const key = String(event.key || "").toLowerCase();
 
@@ -44,27 +65,26 @@
         }
 
         if (event.ctrlKey || event.metaKey) {
-            if (key === "s") {
-                return blockEvent(event, "save_attempt", "high");
-            }
-            if (key === "p") {
-                return blockEvent(event, "print_attempt", "critical");
-            }
-            if (key === "u") {
-                return blockEvent(event, "source_attempt", "high");
+            if (["s", "p", "u", "c", "x", "a"].includes(key)) {
+                const eventMap = {
+                    s: "save_attempt",
+                    p: "print_attempt",
+                    u: "source_attempt",
+                    c: "copy_attempt",
+                    x: "copy_attempt",
+                    a: "select_attempt"
+                };
+                setClipboardWarning();
+                return blockEvent(event, eventMap[key], key === "p" ? "critical" : "high");
             }
         }
 
-        if (event.ctrlKey && event.shiftKey) {
-            if (["i", "j", "c"].includes(key)) {
-                return blockEvent(event, "devtools_attempt", "high");
-            }
+        if (event.ctrlKey && event.shiftKey && ["i", "j", "c"].includes(key)) {
+            return blockEvent(event, "devtools_attempt", "high");
         }
 
         if (event.key === "PrintScreen") {
-            try {
-                navigator.clipboard.writeText("Nội dung được bảo vệ bởi TSA Aptis.");
-            } catch (error) {}
+            setClipboardWarning();
             return blockEvent(event, "screenshot_key", "high");
         }
     }, true);
@@ -91,6 +111,22 @@
             focusShield.classList.remove("show");
         }
     });
+
+    let devtoolsOpen = false;
+    setInterval(function () {
+        const widthGap = window.outerWidth - window.innerWidth;
+        const heightGap = window.outerHeight - window.innerHeight;
+        const likelyOpen = widthGap > 180 || heightGap > 180;
+
+        if (likelyOpen && !devtoolsOpen) {
+            devtoolsOpen = true;
+            reportSecurityEvent("devtools_attempt", "high");
+        }
+
+        if (!likelyOpen) {
+            devtoolsOpen = false;
+        }
+    }, 1500);
 
     setInterval(function () {
         const now = new Date();

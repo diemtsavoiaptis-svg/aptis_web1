@@ -11,11 +11,22 @@ const state = {
   selectedAnswer: "",
   checked: false,
   firebaseReady: false,
-  db: null
+  db: null,
+  auth: null,
+  user: null,
+  studentLabel: "TSA APTIS - CHƯA ĐĂNG NHẬP"
 };
 
 const els = {
   dataSource: document.querySelector("#dataSource"),
+  securityWatermark: document.querySelector("#securityWatermark"),
+  authPanel: document.querySelector("#authPanel"),
+  authForm: document.querySelector("#authForm"),
+  authMessage: document.querySelector("#authMessage"),
+  emailInput: document.querySelector("#emailInput"),
+  passwordInput: document.querySelector("#passwordInput"),
+  studentBadge: document.querySelector("#studentBadge"),
+  logoutBtn: document.querySelector("#logoutBtn"),
   totalCount: document.querySelector("#totalCount"),
   loadingBox: document.querySelector("#loadingBox"),
   questionCard: document.querySelector("#questionCard"),
@@ -45,15 +56,122 @@ function hasFirebaseConfig() {
 async function initFirebase() {
   if (!hasFirebaseConfig() || state.firebaseReady) return state.firebaseReady;
 
-  const [{ initializeApp }, { getFirestore }] = await Promise.all([
+  const [{ initializeApp }, { getFirestore }, authApi] = await Promise.all([
     import("https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js"),
-    import("https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js")
+    import("https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js"),
+    import("https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js")
   ]);
 
   const app = initializeApp(firebaseConfig);
   state.db = getFirestore(app);
+  state.auth = authApi.getAuth(app);
   state.firebaseReady = true;
   return true;
+}
+
+function renderWatermark(label) {
+  const now = new Date().toLocaleString("vi-VN");
+  const text = `${label} · ${now}`;
+  els.securityWatermark.innerHTML = "";
+
+  for (let index = 0; index < 54; index += 1) {
+    const span = document.createElement("span");
+    span.textContent = text;
+    els.securityWatermark.append(span);
+  }
+}
+
+function installSecurityGuards() {
+  document.documentElement.classList.add("tsa-protected");
+
+  function block(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    return false;
+  }
+
+  ["contextmenu", "copy", "cut", "paste", "dragstart", "selectstart"].forEach((eventName) => {
+    document.addEventListener(eventName, block, true);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    const key = String(event.key || "").toLowerCase();
+    if (event.key === "F12") return block(event);
+    if ((event.ctrlKey || event.metaKey) && ["s", "p", "u", "c", "x", "a"].includes(key)) return block(event);
+    if (event.ctrlKey && event.shiftKey && ["i", "j", "c"].includes(key)) return block(event);
+    if (event.key === "PrintScreen") return block(event);
+    return true;
+  }, true);
+
+  window.addEventListener("beforeprint", block);
+  setInterval(() => renderWatermark(state.studentLabel), 1000);
+}
+
+async function fetchStudentLabel(user) {
+  const uid = user.uid || "NO-ID";
+  const email = user.email || "NO-EMAIL";
+  let fullName = user.displayName || "";
+  let studentId = uid;
+
+  try {
+    const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js");
+    const snap = await getDoc(doc(state.db, "students", uid));
+    if (snap.exists()) {
+      const profile = snap.data();
+      fullName = profile.fullName || profile.name || fullName;
+      studentId = profile.studentId || profile.id || uid;
+    }
+  } catch (error) {}
+
+  if (!fullName) fullName = email.split("@")[0] || "Học viên";
+  return `ID ${studentId} - ${fullName} - ${email}`;
+}
+
+async function setupAuthGate() {
+  renderWatermark(state.studentLabel);
+  installSecurityGuards();
+
+  if (!hasFirebaseConfig()) {
+    els.studentBadge.textContent = "Demo chưa cấu hình Firebase";
+    return true;
+  }
+
+  await initFirebase();
+  const { onAuthStateChanged, signInWithEmailAndPassword, signOut } = await import("https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js");
+
+  els.authForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    els.authMessage.textContent = "Đang đăng nhập...";
+    try {
+      await signInWithEmailAndPassword(state.auth, els.emailInput.value.trim(), els.passwordInput.value);
+      els.authMessage.textContent = "";
+    } catch (error) {
+      els.authMessage.textContent = "Đăng nhập không thành công. Kiểm tra email/mật khẩu.";
+    }
+  });
+
+  els.logoutBtn.addEventListener("click", () => signOut(state.auth));
+
+  return new Promise((resolve) => {
+    onAuthStateChanged(state.auth, async (user) => {
+      state.user = user;
+      if (!user) {
+        state.studentLabel = "TSA APTIS - CHƯA ĐĂNG NHẬP";
+        els.studentBadge.textContent = "Chưa đăng nhập";
+        els.logoutBtn.hidden = true;
+        els.authPanel.hidden = false;
+        renderWatermark(state.studentLabel);
+        return;
+      }
+
+      state.studentLabel = await fetchStudentLabel(user);
+      els.studentBadge.textContent = state.studentLabel;
+      els.logoutBtn.hidden = false;
+      els.authPanel.hidden = true;
+      renderWatermark(state.studentLabel);
+      resolve(true);
+    });
+  });
 }
 
 async function loadFromFirestore(part) {
@@ -259,4 +377,4 @@ els.prevBtn.addEventListener("click", () => moveQuestion(-1));
 els.nextBtn.addEventListener("click", () => moveQuestion(1));
 els.resetBtn.addEventListener("click", () => renderQuestion());
 
-loadPart(1);
+setupAuthGate().then(() => loadPart(1));
