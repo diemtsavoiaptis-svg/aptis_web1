@@ -1,3 +1,6 @@
+from django.core.files.base import ContentFile
+from uuid import uuid4
+import base64
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
@@ -14,7 +17,7 @@ from django.views.decorators.http import require_POST
 
 from .forms import RegisterForm, LoginForm
 from .drive_audio import build_drive_audio_url, extract_drive_file_id
-from .models import StudentProfile, Lesson, ListeningQuestion, HomeBackground, SecurityAlert, Part2Topic, Part2Voice, ListeningPartMaterial, ListeningPartQuestion, SiteBackground, LoginThumbnail
+from .models import StudentProfile, Lesson, ListeningQuestion, HomeBackground, SecurityAlert, Part2Topic, Part2Voice, ListeningPartMaterial, ListeningPartQuestion, SiteBackground, LoginThumbnail, LoginOverlayImage
 from .supabase_storage import create_signed_url
 
 
@@ -1985,3 +1988,312 @@ def admin_lessons_placeholder(request):
 # ===== End admin dashboard safe placeholder views =====
 
 
+
+
+# ===== OVERRIDE: live login thumbnail with video =====
+@csrf_exempt
+@user_passes_test(_is_admin_login_thumbnail_user)
+def admin_login_thumbnail_settings(request):
+    current = LoginThumbnail.objects.filter(is_active=True).order_by("-id").first()
+
+    if request.method == "POST":
+        action = request.POST.get("action")
+
+        if action == "save_thumbnail":
+            name = request.POST.get("name", "").strip()
+            image_url = request.POST.get("image_url", "").strip()
+            video_url = request.POST.get("video_url", "").strip()
+
+            image_file = request.FILES.get("image")
+            video_file = request.FILES.get("video")
+
+            ticker_text_1 = request.POST.get("ticker_text_1", "").strip()
+            ticker_text_2 = request.POST.get("ticker_text_2", "").strip()
+            ticker_text_3 = request.POST.get("ticker_text_3", "").strip()
+            ticker_text_4 = request.POST.get("ticker_text_4", "").strip()
+            ticker_text_5 = request.POST.get("ticker_text_5", "").strip()
+
+            if current:
+                current.name = name or current.name or "Thumbnail m?n h?nh ??ng nh?p"
+
+                if image_file:
+                    current.image = image_file
+                    current.image_url = ""
+                elif image_url:
+                    current.image_url = image_url
+
+                if video_file:
+                    current.video = video_file
+                    current.video_url = ""
+                elif video_url:
+                    current.video_url = video_url
+
+                current.ticker_text_1 = ticker_text_1
+                current.ticker_text_2 = ticker_text_2
+                current.ticker_text_3 = ticker_text_3
+                current.ticker_text_4 = ticker_text_4
+                current.ticker_text_5 = ticker_text_5
+                current.is_active = True
+                current.save()
+            else:
+                current = LoginThumbnail.objects.create(
+                    name=name or "Thumbnail m?n h?nh ??ng nh?p",
+                    image=image_file if image_file else None,
+                    image_url=image_url,
+                    video=video_file if video_file else None,
+                    video_url=video_url,
+                    ticker_text_1=ticker_text_1,
+                    ticker_text_2=ticker_text_2,
+                    ticker_text_3=ticker_text_3,
+                    ticker_text_4=ticker_text_4,
+                    ticker_text_5=ticker_text_5,
+                    is_active=True,
+                )
+
+            messages.success(request, "?? l?u thumbnail/video ??ng nh?p.")
+            return redirect("admin_login_thumbnail_settings")
+
+        if action == "delete_video":
+            if current:
+                if getattr(current, "video", None):
+                    current.video.delete(save=False)
+                current.video = None
+                current.video_url = ""
+                current.save()
+            messages.success(request, "?? x?a video thumbnail.")
+            return redirect("admin_login_thumbnail_settings")
+
+        if action == "delete_thumbnail":
+            if current:
+                if current.image:
+                    current.image.delete(save=False)
+                current.image = None
+                current.image_url = ""
+                current.save()
+            messages.success(request, "?? x?a ?nh thumbnail.")
+            return redirect("admin_login_thumbnail_settings")
+
+        if action == "restore_default":
+            LoginThumbnail.objects.update(is_active=False)
+            LoginThumbnail.objects.create(
+                name="Thumbnail m?c ??nh",
+                ticker_text_1="",
+                ticker_text_2="",
+                ticker_text_3="",
+                ticker_text_4="",
+                ticker_text_5="",
+                is_active=True,
+            )
+            messages.success(request, "?? kh?i ph?c thumbnail m?c ??nh.")
+            return redirect("admin_login_thumbnail_settings")
+
+    return render(request, "core/admin_login_thumbnail_settings.html", {
+        "current": current,
+    })
+# ===== END OVERRIDE: live login thumbnail with video =====
+
+
+def _safe_int(value, default):
+    try:
+        return int(float(value))
+    except Exception:
+        return default
+
+
+# ===== FINAL OVERRIDE: draggable overlay images =====
+@csrf_exempt
+@user_passes_test(_is_admin_login_thumbnail_user)
+def admin_login_thumbnail_settings(request):
+    current = LoginThumbnail.objects.filter(is_active=True).order_by("-id").first()
+
+    if request.method == "POST":
+        action = request.POST.get("action", "save_thumbnail")
+
+        if action == "save_thumbnail":
+            if not current:
+                current = LoginThumbnail(is_active=True)
+
+            current.name = request.POST.get("name", "").strip() or "KH?A H?C ONLINE"
+
+            image_url = request.POST.get("image_url", "").strip()
+            video_url = request.POST.get("video_url", "").strip()
+
+            image_file = request.FILES.get("image")
+            video_file = request.FILES.get("video")
+
+            overlay_left_file = request.FILES.get("overlay_left_image")
+            overlay_right_file = request.FILES.get("overlay_right_image")
+
+            if image_file:
+                current.image = image_file
+                current.image_url = ""
+            elif image_url:
+                current.image_url = image_url
+
+            if video_file:
+                current.video = video_file
+                current.video_url = ""
+            elif video_url:
+                current.video_url = video_url
+
+            if overlay_left_file:
+                current.overlay_left_image = overlay_left_file
+
+            if overlay_right_file:
+                current.overlay_right_image = overlay_right_file
+
+            current.ticker_text_1 = request.POST.get("ticker_text_1", "").strip()
+            current.ticker_text_2 = request.POST.get("ticker_text_2", "").strip()
+            current.ticker_text_3 = request.POST.get("ticker_text_3", "").strip()
+            current.ticker_text_4 = request.POST.get("ticker_text_4", "").strip()
+            current.ticker_text_5 = request.POST.get("ticker_text_5", "").strip()
+
+            current.overlay_left_x = max(0, min(90, _safe_int(request.POST.get("overlay_left_x"), 6)))
+            current.overlay_left_y = max(0, min(90, _safe_int(request.POST.get("overlay_left_y"), 58)))
+            current.overlay_left_w = max(8, min(60, _safe_int(request.POST.get("overlay_left_w"), 26)))
+
+            current.overlay_right_x = max(0, min(90, _safe_int(request.POST.get("overlay_right_x"), 58)))
+            current.overlay_right_y = max(0, min(90, _safe_int(request.POST.get("overlay_right_y"), 50)))
+            current.overlay_right_w = max(8, min(60, _safe_int(request.POST.get("overlay_right_w"), 24)))
+
+            current.is_active = True
+            current.save()
+            messages.success(request, "?? l?u thumbnail/video v? v? tr? 2 ?nh n?i.")
+            return redirect("admin_login_thumbnail_settings")
+
+        if action == "delete_video" and current:
+            if getattr(current, "video", None):
+                current.video.delete(save=False)
+            current.video = None
+            current.video_url = ""
+            current.save()
+            messages.success(request, "?? x?a video.")
+            return redirect("admin_login_thumbnail_settings")
+
+        if action == "delete_thumbnail" and current:
+            if getattr(current, "image", None):
+                current.image.delete(save=False)
+            current.image = None
+            current.image_url = ""
+            current.save()
+            messages.success(request, "?? x?a ?nh n?n.")
+            return redirect("admin_login_thumbnail_settings")
+
+        if action == "delete_overlay_left" and current:
+            if getattr(current, "overlay_left_image", None):
+                current.overlay_left_image.delete(save=False)
+            current.overlay_left_image = None
+            current.save()
+            messages.success(request, "?? x?a ?nh n?i 1.")
+            return redirect("admin_login_thumbnail_settings")
+
+        if action == "delete_overlay_right" and current:
+            if getattr(current, "overlay_right_image", None):
+                current.overlay_right_image.delete(save=False)
+            current.overlay_right_image = None
+            current.save()
+            messages.success(request, "?? x?a ?nh n?i 2.")
+            return redirect("admin_login_thumbnail_settings")
+
+    return render(request, "core/admin_login_thumbnail_settings.html", {
+        "current": current,
+    })
+# ===== END FINAL OVERRIDE =====
+
+
+# ===== FINAL OVERRIDE: basic multiple overlay images =====
+@csrf_exempt
+@user_passes_test(_is_admin_login_thumbnail_user)
+def admin_login_thumbnail_settings(request):
+    current = LoginThumbnail.objects.filter(is_active=True).order_by("-id").first()
+
+    if request.method == "POST":
+        action = request.POST.get("action", "save_thumbnail")
+
+        if action == "save_thumbnail":
+            if not current:
+                current = LoginThumbnail.objects.create(
+                    name="KH?A H?C ONLINE",
+                    is_active=True,
+                )
+
+            # Gi? nguy?n video/?nh n?n c? n?u kh?ng upload m?i
+            video_file = request.FILES.get("video")
+            image_file = request.FILES.get("image")
+
+            if video_file:
+                current.video = video_file
+                current.video_url = ""
+
+            if image_file:
+                current.image = image_file
+                current.image_url = ""
+
+            
+            captured_thumbnail_data = request.POST.get("captured_thumbnail_data", "").strip()
+            if captured_thumbnail_data.startswith("data:image/"):
+                try:
+                    header, data = captured_thumbnail_data.split(",", 1)
+                    ext = "png"
+                    if "image/jpeg" in header:
+                        ext = "jpg"
+                    file_data = ContentFile(
+                        base64.b64decode(data),
+                        name=f"captured_thumbnail_{uuid4().hex}.{ext}"
+                    )
+                    current.image = file_data
+                    current.image_url = ""
+                except Exception:
+                    pass
+
+            current.name = request.POST.get("name", "").strip() or current.name or "KH?A H?C ONLINE"
+            current.save()
+
+            # L?u v? tr? ?nh n?i ?? c?
+            for overlay_id in request.POST.getlist("overlay_id"):
+                overlay = LoginOverlayImage.objects.filter(id=overlay_id, thumbnail=current).first()
+                if not overlay:
+                    continue
+
+                prefix = f"overlay_{overlay.id}_"
+                overlay.x = max(0, min(95, _safe_int(request.POST.get(prefix + "x"), overlay.x)))
+                overlay.y = max(0, min(95, _safe_int(request.POST.get(prefix + "y"), overlay.y)))
+                overlay.w = max(5, min(90, _safe_int(request.POST.get(prefix + "w"), overlay.w)))
+                overlay.save()
+
+            # Th?m bao nhi?u ?nh c?ng ???c
+            existing_count = LoginOverlayImage.objects.filter(thumbnail=current).count()
+            files = request.FILES.getlist("overlay_images")
+
+            for idx, file in enumerate(files, start=1):
+                LoginOverlayImage.objects.create(
+                    thumbnail=current,
+                    image=file,
+                    x=8 + ((existing_count + idx) * 7) % 55,
+                    y=58,
+                    w=24,
+                    order=existing_count + idx,
+                    is_active=True,
+                )
+
+            messages.success(request, "?? l?u ?nh n?i v? v? tr?.")
+            return redirect("admin_login_thumbnail_settings")
+
+        if action == "delete_overlay":
+            overlay_id = request.POST.get("overlay_id_delete")
+            overlay = LoginOverlayImage.objects.filter(id=overlay_id, thumbnail=current).first() if current else None
+            if overlay:
+                overlay.image.delete(save=False)
+                overlay.delete()
+                messages.success(request, "?? x?a ?nh n?i.")
+            return redirect("admin_login_thumbnail_settings")
+
+    overlay_images = []
+    if current:
+        overlay_images = current.overlay_images.filter(is_active=True).order_by("order", "id")
+
+    return render(request, "core/admin_login_thumbnail_settings.html", {
+        "current": current,
+        "overlay_images": overlay_images,
+    })
+# ===== END FINAL OVERRIDE =====

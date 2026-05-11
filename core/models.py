@@ -315,20 +315,46 @@ class SiteBackground(models.Model):
         ]
 
 
-
 class LoginThumbnail(models.Model):
-    name = models.CharField("Tên thumbnail", max_length=255, blank=True)
-    image = models.ImageField("Ảnh thumbnail upload", upload_to="login_thumbnails/", blank=True, null=True)
-    image_url = models.URLField("Đường dẫn ảnh thumbnail", blank=True)
-    is_active = models.BooleanField("Đang sử dụng", default=True)
+    name = models.CharField("T?n thumbnail", max_length=255, blank=True)
+    image = models.ImageField("?nh thumbnail upload", upload_to="login_thumbnails/", blank=True, null=True)
+    image_url = models.URLField("???ng d?n ?nh thumbnail", blank=True)
+
+    video = models.FileField("Video thumbnail upload", upload_to="login_thumbnail_videos/", blank=True, null=True)
+    video_url = models.URLField("???ng d?n video thumbnail", blank=True)
+
+    overlay_left_image = models.ImageField("?nh n?i 1", upload_to="login_overlay_images/", blank=True, null=True)
+    overlay_right_image = models.ImageField("?nh n?i 2", upload_to="login_overlay_images/", blank=True, null=True)
+
+    overlay_left_x = models.PositiveIntegerField("X ?nh n?i 1 (%)", default=6)
+    overlay_left_y = models.PositiveIntegerField("Y ?nh n?i 1 (%)", default=58)
+    overlay_left_w = models.PositiveIntegerField("K?ch th??c ?nh n?i 1 (%)", default=26)
+
+    overlay_right_x = models.PositiveIntegerField("X ?nh n?i 2 (%)", default=58)
+    overlay_right_y = models.PositiveIntegerField("Y ?nh n?i 2 (%)", default=50)
+    overlay_right_w = models.PositiveIntegerField("K?ch th??c ?nh n?i 2 (%)", default=24)
+
+    ticker_text_1 = models.CharField("Ch? ch?y 1", max_length=255, blank=True, default="")
+    ticker_text_2 = models.CharField("Ch? ch?y 2", max_length=255, blank=True, default="")
+    ticker_text_3 = models.CharField("Ch? ch?y 3", max_length=255, blank=True, default="")
+    ticker_text_4 = models.CharField("Ch? ch?y 4", max_length=255, blank=True, default="")
+    ticker_text_5 = models.CharField("Ch? ch?y 5", max_length=255, blank=True, default="")
+
+    is_active = models.BooleanField("?ang s? d?ng", default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = "Thumbnail đăng nhập"
-        verbose_name_plural = "Thumbnail đăng nhập"
+        verbose_name = "Thumbnail ??ng nh?p"
+        verbose_name_plural = "Thumbnail ??ng nh?p"
 
     def __str__(self):
-        return self.name or "Thumbnail đăng nhập"
+        return self.name or "Thumbnail ??ng nh?p"
+
+    @property
+    def display_video_url(self):
+        if self.video:
+            return self.video.url
+        return self.video_url
 
     @property
     def display_url(self):
@@ -337,3 +363,32 @@ class LoginThumbnail(models.Model):
         return self.image_url
 
 
+
+class LoginOverlayImage(models.Model):
+    thumbnail = models.ForeignKey(
+        LoginThumbnail,
+        on_delete=models.CASCADE,
+        related_name="overlay_images",
+        verbose_name="Thumbnail ??ng nh?p",
+    )
+    image = models.ImageField("?nh n?i", upload_to="login_overlay_images/")
+    x = models.PositiveIntegerField("X (%)", default=10)
+    y = models.PositiveIntegerField("Y (%)", default=55)
+    w = models.PositiveIntegerField("K?ch th??c (%)", default=24)
+    order = models.PositiveIntegerField("Th? t?", default=0)
+    is_active = models.BooleanField("?ang d?ng", default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "?nh n?i ??ng nh?p"
+        verbose_name_plural = "?nh n?i ??ng nh?p"
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return f"?nh n?i {self.id}"
+
+    @property
+    def display_url(self):
+        if self.image:
+            return self.image.url
+        return ""

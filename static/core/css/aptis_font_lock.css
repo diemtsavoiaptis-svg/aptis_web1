@@ -1,0 +1,28 @@
+:root{
+    --aptis-font: Arial, Helvetica, sans-serif;
+}
+
+html,
+body,
+button,
+input,
+textarea,
+select,
+a,
+p,
+span,
+div,
+label,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6{
+    font-family: var(--aptis-font) !important;
+}
+
+body{
+    -webkit-font-smoothing: antialiased;
+    text-rendering: geometricPrecision;
+}

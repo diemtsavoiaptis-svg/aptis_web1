@@ -1,844 +1,399 @@
-﻿{% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Điểm TSA Với Aptis</title>
-
-    <style>
-        :root {
-            --red-main: #d40000;
-            --red-soft: #ff7482;
-            --red-dark: #4a0010;
-            --pink-bg: #fff1f4;
-            --white: #ffffff;
-            --glass: rgba(255, 255, 255, 0.82);
-            --shadow: 0 24px 70px rgba(80, 0, 20, 0.22);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html,
-        body {
-            width: 100%;
-            min-height: 100%;
-            font-family: Arial, Helvetica, sans-serif;
-            color: var(--red-dark);
-        }
-
-        body {
-            overflow-x: hidden;
-            background: #ffe5e8;
-        }
-
-        .home-page {
-            position: relative;
-            width: 100vw;
-            min-height: 100vh;
-            background-color: #ffe5e8;
-            background-image: {% if home_background %}url('{{ home_background.image.url }}'){% else %}linear-gradient(135deg, #ffe3e8, #fff4e6){% endif %};
-            background-size: cover;
-            background-position: center center;
-            background-repeat: no-repeat;
-            isolation: isolate;
-        }
-
-        .home-page::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            z-index: -1;
-            background:
-                radial-gradient(circle at top left, rgba(255, 255, 255, 0.20), transparent 34%),
-                linear-gradient(180deg, rgba(255, 225, 230, 0.04), rgba(80, 0, 20, 0.10));
-        }
-
-        .home-header {
-            position: fixed;
-            top: 26px;
-            left: 0;
-            right: 0;
-            z-index: 20;
-            padding: 0 36px;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-        }
-
-        .auth-actions {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            padding: 8px;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.28);
-            backdrop-filter: blur(18px);
-            box-shadow: 0 16px 44px rgba(80, 0, 20, 0.14);
-        }
-
-        .auth-btn {
-            border: none;
-            outline: none;
-            border-radius: 999px;
-            padding: 14px 28px;
-            font-size: 15px;
-            font-weight: 900;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-        }
-
-        .auth-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .auth-btn.login {
-            color: white;
-            background: linear-gradient(135deg, var(--red-main), var(--red-soft));
-            box-shadow: 0 14px 30px rgba(212, 0, 0, 0.28);
-        }
-
-        .auth-btn.register {
-            color: #7a0018;
-            background: rgba(255, 255, 255, 0.94);
-            box-shadow: 0 12px 26px rgba(90, 0, 20, 0.13);
-        }
-
-        .message-box {
-            position: fixed;
-            top: 28px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 90;
-            width: min(560px, calc(100% - 32px));
-        }
-
-        .message {
-            margin-bottom: 10px;
-            padding: 17px 20px;
-            border-radius: 22px;
-            background: rgba(255, 255, 255, 0.95);
-            color: #650000;
-            box-shadow: var(--shadow);
-            font-weight: 900;
-            backdrop-filter: blur(18px);
-        }
-
-        .message.success {
-            border-left: 8px solid #12a150;
-        }
-
-        .message.error {
-            border-left: 8px solid var(--red-main);
-        }
-
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 80;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
-            background: rgba(70, 0, 18, 0.46);
-            backdrop-filter: blur(14px);
-        }
-
-        .modal-overlay.show {
-            display: flex;
-        }
-
-        .auth-modal {
-            width: min(560px, 100%);
-            position: relative;
-            border-radius: 38px;
-            padding: 44px;
-            background:
-                radial-gradient(circle at top right, rgba(255, 220, 228, 0.85), transparent 36%),
-                rgba(255, 255, 255, 0.96);
-            box-shadow: 0 34px 100px rgba(70, 0, 18, 0.34);
-            border: 1px solid rgba(255, 255, 255, 0.86);
-            animation: modalIn 0.22s ease;
-        }
-
-        @keyframes modalIn {
-            from {
-                opacity: 0;
-                transform: translateY(16px) scale(0.98);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 28px;
-            right: 30px;
-            width: 44px;
-            height: 44px;
-            border: none;
-            border-radius: 50%;
-            background: #fff1f4;
-            color: var(--red-main);
-            font-size: 28px;
-            font-weight: 900;
-            cursor: pointer;
-            transition: transform 0.2s ease, background 0.2s ease;
-        }
-
-        .close-btn:hover {
-            transform: rotate(90deg) scale(1.04);
-            background: #ffe1e7;
-        }
-
-        .auth-modal h1 {
-            font-size: 32px;
-            line-height: 1.15;
-            color: #3b0012;
-            letter-spacing: -0.8px;
-            margin-bottom: 8px;
-            padding-right: 58px;
-        }
-
-        .auth-modal .subtitle {
-            color: #8a4254;
-            font-size: 16px;
-            font-weight: 700;
-            margin-bottom: 28px;
-        }
-
-        .auth-tabs {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 6px;
-            margin-bottom: 24px;
-            padding: 6px;
-            border-radius: 999px;
-            background: #fff1f4;
-        }
-
-        .auth-tabs button {
-            border: none;
-            border-radius: 999px;
-            padding: 15px;
-            background: transparent;
-            color: #9b001f;
-            font-size: 16px;
-            font-weight: 900;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .auth-tabs button.active {
-            color: white;
-            background: linear-gradient(135deg, var(--red-main), var(--red-soft));
-            box-shadow: 0 12px 26px rgba(212, 0, 0, 0.24);
-        }
-
-        .auth-form {
-            display: grid;
-            gap: 15px;
-        }
-
-        .auth-input {
-            width: 100%;
-            border: 2px solid #ffe0e7;
-            background: #fff9fa;
-            border-radius: 22px;
-            padding: 17px 19px;
-            color: #3b0012;
-            font-size: 16px;
-            outline: none;
-            transition: border 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-        }
-
-        .auth-input::placeholder {
-            color: #a88790;
-        }
-
-        .auth-input:focus {
-            border-color: #ff7182;
-            background: white;
-            box-shadow: 0 0 0 5px rgba(255, 113, 130, 0.12);
-        }
-
-        .submit-btn {
-            width: 100%;
-            margin-top: 4px;
-            border: none;
-            border-radius: 999px;
-            padding: 17px;
-            color: white;
-            background: linear-gradient(135deg, var(--red-main), var(--red-soft));
-            font-size: 17px;
-            font-weight: 900;
-            cursor: pointer;
-            box-shadow: 0 16px 36px rgba(212, 0, 0, 0.26);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 22px 48px rgba(212, 0, 0, 0.34);
-        }
-
-        .note {
-            margin-top: 20px;
-            padding: 16px;
-            border-radius: 22px;
-            color: #8a001b;
-            background: #fff1f4;
-            font-size: 14px;
-            font-weight: 800;
-            line-height: 1.5;
-        }
-
-        @media (max-width: 768px) {
-            .home-header {
-                top: 18px;
-                padding: 0 18px;
-                justify-content: center;
-            }
-
-            .auth-actions {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .auth-btn {
-                flex: 1;
-                padding: 13px 18px;
-            }
-
-            .auth-modal {
-                padding: 34px 24px;
-                border-radius: 30px;
-            }
-
-            .auth-modal h1 {
-                font-size: 27px;
-            }
-        }
-    </style>
-    <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
-
-<style id="remember-login-style">
-.remember-login-row{
-    margin: 14px 0 18px;
-    padding: 14px 16px;
-    border-radius: 18px;
-    background: rgba(255, 241, 244, .82);
-    border: 1px solid rgba(255, 95, 118, .22);
-    color: #5b0010;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>?i?m TSA V?i Aptis</title>
+<link rel="stylesheet" href="{% static 'core/css/aptis_font_lock.css' %}">
+<style>
+:root{
+    --red:#d60012;
+    --dark:#5a0010;
+    --line:#efc9d0;
 }
-.remember-login-label{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 900;
-    cursor: pointer;
-    user-select: none;
-}
-.remember-login-label input{
-    width: 18px;
-    height: 18px;
-    accent-color: #e60023;
-}
-.remember-login-row small{
-    display: block;
-    margin-top: 6px;
-    color: #9a5360;
-    font-weight: 700;
-    font-size: 13px;
-}
-</style>
-
-
-<style id="force-home-hero-bg">
-html, body{
-    min-height:100vh;
-}
-body{
-    background-image:url("{% static 'core/img/home_hero.jpg' %}") !important;
-    background-size:cover !important;
-    background-position:center center !important;
-    background-repeat:no-repeat !important;
-    background-attachment:fixed !important;
-}
-</style>
-
-
-<style id="dynamic-home-background">
-{% if active_background_url %}
+*{box-sizing:border-box}
 html,body{
-    min-height:100vh;
+    margin:0;width:100%;height:100%;overflow:hidden;
 }
-body{
-    background-image:url("{{ active_background_url }}") !important;
-    background-size:cover !important;
-    background-position:center center !important;
-    background-repeat:no-repeat !important;
-    background-attachment:fixed !important;
+.login-page{
+    position:relative;width:100vw;height:100vh;background:#180008;overflow:hidden;
 }
-{% endif %}
-</style>
+.bg-video,.bg-image{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;
+}
+.bg-layer{
+    position:absolute;inset:0;z-index:1;
+    background:linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,.28));
+}
+.top-actions{
+    position:absolute;top:28px;right:28px;z-index:8;display:flex;gap:10px;padding:8px;
+    border-radius:999px;background:rgba(255,255,255,.82);box-shadow:0 16px 38px rgba(105,0,24,.18);backdrop-filter:blur(14px)
+}
+.top-actions button{
+    border:0;border-radius:999px;padding:14px 26px;font-size:16px;font-weight:900;cursor:pointer
+}
+.top-actions .primary{background:linear-gradient(180deg,#f33a5e,#d60012);color:#fff}
+.top-actions .plain{background:#fff;color:var(--dark)}
+
+.stage{
+    position:absolute;inset:0;z-index:2;pointer-events:none;
+}
+.overlay{
+    position:absolute;pointer-events:none;
+}
+.overlay img{
+    display:block;width:100%;height:auto;border-radius:24px;box-shadow:0 24px 70px rgba(0,0,0,.25)
+}
+
+.auth-modal-wrap{
+    position:absolute;inset:0;z-index:20;display:none;align-items:center;justify-content:center;padding:24px;
+    background:rgba(0,0,0,.18);backdrop-filter:blur(7px)
+}
+.auth-modal-wrap.show{display:flex}
+.auth-modal{
+    position:relative;width:min(680px,calc(100vw - 34px));background:rgba(255,255,255,.97);border-radius:36px;
+    padding:42px 46px 46px;box-shadow:0 36px 100px rgba(68,0,16,.34)
+}
+.close-btn{
+    position:absolute;top:34px;right:34px;width:52px;height:52px;border:0;border-radius:50%;
+    background:#fff0f3;color:#a90012;font-size:26px;font-weight:900;cursor:pointer
+}
+.brand-title{margin:0 70px 8px 0;color:var(--dark);font-size:34px;font-weight:1000}
+.brand-desc{margin:0 0 30px;color:#641829;font-size:19px}
+.tabs{
+    display:grid;grid-template-columns:1fr 1fr;background:#fff1f3;border-radius:21px;margin-bottom:32px;overflow:hidden
+}
+.tab-btn{
+    border:0;background:transparent;color:#6b1c2b;padding:19px 18px;font-size:18px;font-weight:900;cursor:pointer;border-radius:18px
+}
+.tab-btn.active{background:linear-gradient(180deg,#d60012,#c40012);color:#fff}
+.form-panel{display:none}.form-panel.active{display:block}.form-panel form{display:grid;gap:22px}
+.form-panel input{
+    width:100%;border:1.5px solid var(--line);border-radius:18px;padding:22px 24px;font-size:20px;outline:none;background:#fff;color:#351018
+}
+.submit-btn{
+    width:100%;border:0;border-radius:20px;background:linear-gradient(180deg,#d60012,#c40012);color:white;padding:22px 24px;font-size:21px;font-weight:1000;cursor:pointer
+}
+.note-box{
+    margin-top:30px;background:#fff0f2;color:#8a1b2d;border-radius:20px;padding:22px 24px;font-size:18px;line-height:1.45
+}
+.ticker{
+    position:absolute;z-index:7;left:0;right:0;bottom:18px;overflow:hidden;white-space:nowrap;pointer-events:none
+}
+.ticker-track{
+    display:inline-flex;gap:38px;padding-left:100%;animation:marquee 30s linear infinite
+}
+.ticker-pill{
+    display:inline-flex;min-width:max-content;align-items:center;justify-content:center;padding:14px 34px;border-radius:999px;
+    background:rgba(255,255,255,.92);color:var(--dark);font-size:17px;font-weight:1000
+}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(max-width:760px){
+    .auth-modal{padding:28px 20px 28px;border-radius:28px}
+    .close-btn{top:18px;right:18px;width:42px;height:42px;font-size:20px}
+    .brand-title{font-size:28px}
+    .form-panel input{padding:18px 18px;font-size:16px}
+    .submit-btn{padding:18px 20px;font-size:18px}
+}
 
 
-<style id="login-ticker-style">
-.login-floating-ticker{
-    position:fixed;
-    left:0;
-    right:0;
-    bottom:28px;
-    z-index:50;
-    pointer-events:none;
-    overflow:hidden;
-}
-.login-floating-ticker-inner{
-    display:flex;
-    width:max-content;
-    animation:loginTickerMove 28s linear infinite;
-}
-.login-floating-ticker-item{
-    margin-right:38px;
-    padding:12px 22px;
-    border-radius:999px;
-    background:rgba(255,255,255,.82);
-    border:1px solid rgba(255,209,220,.9);
-    color:#8a0015;
-    font-weight:950;
-    font-size:17px;
-    box-shadow:0 12px 26px rgba(180,0,30,.12);
-    backdrop-filter:blur(10px);
-    white-space:nowrap;
-}
-@keyframes loginTickerMove{
-    from{transform:translateX(0)}
-    to{transform:translateX(-50%)}
-}
-@media(max-width:700px){
-    .login-floating-ticker{bottom:16px}
-    .login-floating-ticker-item{font-size:14px;padding:10px 16px}
-}
-</style>
 
 
-
-
-
-<style id="login-course-thumbnail-ui-style">
-body{
-    min-height:100vh !important;
-    overflow-x:hidden;
-    background:#111827 !important;
-}
-.login-course-bg{
+/* Hover zoom ?nh n?i ? m?n h?nh ??ng nh?p - ch? xem, kh?ng ch?nh s?a */
+.overlay-hover-backdrop{
     position:fixed;
     inset:0;
-    z-index:-5;
+    z-index:9980;
     background:
-        linear-gradient(90deg,rgba(8,15,30,.88),rgba(8,15,30,.58),rgba(8,15,30,.84)),
-        radial-gradient(circle at 22% 24%,rgba(20,184,166,.28),transparent 34%),
-        linear-gradient(135deg,#0f172a,#1f2937);
-}
-.login-course-bg img,
-.login-course-bg video{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    opacity:.42;
-    filter:brightness(.72);
-}
-.login-course-stage{
-    position:fixed;
-    inset:0;
-    z-index:0;
+        radial-gradient(circle at center, rgba(0,0,0,.10) 0%, rgba(0,0,0,.36) 45%, rgba(0,0,0,.70) 100%);
+    backdrop-filter:blur(16px) saturate(.85);
+    -webkit-backdrop-filter:blur(16px) saturate(.85);
+    opacity:0;
     pointer-events:none;
-    padding:32px;
+    transition:opacity .55s cubic-bezier(.16,1,.3,1);
 }
-.login-course-top-title{
-    position:absolute;
-    top:38px;
-    left:50%;
-    transform:translateX(-50%);
-    min-width:min(560px,72vw);
-    min-height:70px;
-    padding:0 34px;
-    border-radius:999px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:rgba(255,255,255,.13);
-    border:1px solid rgba(255,255,255,.22);
-    box-shadow:inset 0 1px 18px rgba(255,255,255,.14),0 18px 50px rgba(0,0,0,.25);
-    backdrop-filter:blur(10px);
-}
-.login-course-top-title span{
-    color:white;
-    font-size:43px;
-    letter-spacing:.12em;
-    font-weight:950;
-    text-shadow:0 0 10px rgba(255,255,255,.72),0 8px 22px rgba(0,0,0,.65);
-}
-.login-course-main-text{
-    position:absolute;
-    left:19%;
-    top:43%;
-    color:white;
-    font-size:70px;
-    line-height:1;
-    font-weight:950;
-    text-shadow:0 0 12px rgba(255,255,255,.75),0 12px 28px rgba(0,0,0,.65);
-}
-.login-course-card{
-    position:absolute;
-    width:300px;
-    height:220px;
-    border-radius:16px;
-    overflow:hidden;
-    background:rgba(255,255,255,.91);
-    border:4px solid rgba(255,255,255,.85);
-    box-shadow:0 22px 50px rgba(0,0,0,.34);
-    display:grid;
-    grid-template-rows:1fr 58px;
-    transform:rotate(var(--r,0deg));
-}
-.login-course-card.big{
-    width:540px;
-    height:400px;
-    border-radius:30px;
-}
-.login-course-card .icon-zone{
-    display:grid;
-    place-items:center;
-    font-size:62px;
-    background:rgba(255,255,255,.72);
-}
-.login-course-card.big .icon-zone{font-size:96px}
-.login-course-card .label-zone{
-    display:grid;
-    place-items:center;
-    color:white;
-    font-size:18px;
-    font-weight:950;
-}
-.login-course-card.big .label-zone{font-size:34px}
-.login-card-road{left:7%;top:19%;--r:-3deg}
-.login-card-task{right:3%;top:11%;--r:0deg}
-.login-card-doc{left:9%;bottom:16%;--r:2deg}
-.login-card-cert{right:18%;bottom:24%;--r:-1deg}
-.login-label-teal{background:linear-gradient(135deg,#0f9f91,#0d9488)}
-.login-label-red{background:linear-gradient(135deg,#ef4444,#f43f5e)}
-.login-label-blue{background:linear-gradient(135deg,#2563eb,#1d4ed8)}
-.login-label-amber{background:linear-gradient(135deg,#f59e0b,#e89000)}
-.login-course-controls{
-    position:absolute;
-    left:28px;
-    right:28px;
-    bottom:26px;
-    height:78px;
-    background:linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.76));
-    display:flex;
-    align-items:flex-end;
-    padding:0 0 18px;
-}
-.login-progress{
-    position:absolute;
-    left:0;
-    right:0;
-    top:13px;
-    height:7px;
-    background:rgba(255,255,255,.18);
-    border-radius:999px;
-    overflow:hidden;
-}
-.login-progress:before{
-    content:"";
-    display:block;
-    width:34%;
-    height:100%;
-    background:linear-gradient(90deg,#ef4444,#e11d48);
-}
-.login-control-icons{
-    width:100%;
-    display:flex;
-    align-items:center;
-    gap:24px;
-    color:white;
-    font-weight:850;
-    padding:0 14px;
-}
-.login-control-icons .time{font-size:14px;opacity:.85}
-.login-control-icons .spacer{flex:1}
-body > main,
-body > .container,
-body > .wrap,
-body > .auth-container,
-body > .login-container{
-    position:relative;
-    z-index:20;
-}
-@media(max-width:700px){
-    .login-course-card,.login-course-main-text{display:none}
-    .login-course-top-title{top:92px}
-    .login-course-top-title span{font-size:28px}
-}
-</style>
 
+.overlay-hover-backdrop.show{
+    opacity:1;
+}
+
+.stage{
+    pointer-events:none !important;
+}
+
+.stage .overlay{
+    pointer-events:auto !important;
+    cursor:pointer !important;
+    transform-origin:center center;
+    transition:
+        left .62s cubic-bezier(.16,1,.3,1),
+        top .62s cubic-bezier(.16,1,.3,1),
+        width .62s cubic-bezier(.16,1,.3,1),
+        transform .62s cubic-bezier(.16,1,.3,1),
+        filter .42s ease,
+        opacity .42s ease;
+}
+
+.stage .overlay img{
+    pointer-events:none !important;
+    user-select:none !important;
+    -webkit-user-drag:none !important;
+    transition:
+        transform .62s cubic-bezier(.16,1,.3,1),
+        box-shadow .62s cubic-bezier(.16,1,.3,1),
+        filter .62s cubic-bezier(.16,1,.3,1),
+        border-radius .62s cubic-bezier(.16,1,.3,1);
+}
+
+.stage .overlay.hover-zoom{
+    position:fixed !important;
+    left:15vw !important;
+    top:50% !important;
+    width:70vw !important;
+    max-height:82vh !important;
+    transform:translate3d(0,-50%,0) scale(1) !important;
+    z-index:9995 !important;
+    pointer-events:auto !important;
+}
+
+.stage .overlay.hover-zoom::before{
+    content:"";
+    position:absolute;
+    inset:-38px;
+    z-index:-1;
+    border-radius:44px;
+    background:rgba(255,255,255,.10);
+    filter:blur(28px);
+    box-shadow:
+        0 0 80px rgba(255,255,255,.18),
+        0 0 140px rgba(0,0,0,.42);
+    pointer-events:none;
+}
+
+.stage .overlay.hover-zoom img{
+    width:100% !important;
+    max-height:82vh !important;
+    object-fit:contain !important;
+    border-radius:30px !important;
+    filter:drop-shadow(0 34px 90px rgba(0,0,0,.52));
+    box-shadow:
+        0 34px 100px rgba(0,0,0,.48),
+        0 0 0 1px rgba(255,255,255,.22) !important;
+    transform:translateZ(0) scale(1.015);
+}
+
+body.overlay-zooming .stage .overlay:not(.hover-zoom){
+    filter:blur(6px) brightness(.72);
+    opacity:.42;
+}
+
+body.overlay-zooming .bg-video,
+body.overlay-zooming .bg-image{
+    filter:blur(4px) brightness(.78);
+    transition:filter .55s cubic-bezier(.16,1,.3,1);
+}
+
+@media(max-width:760px){
+    .stage .overlay.hover-zoom{
+        left:5vw !important;
+        width:90vw !important;
+    }
+
+    .stage .overlay.hover-zoom::before{
+        inset:-22px;
+        border-radius:32px;
+        filter:blur(22px);
+    }
+}
+
+</style>
 </head>
 <body>
+<div class="login-page">
+    {% if active_login_thumbnail and active_login_thumbnail.display_video_url %}
+        <video class="bg-video" autoplay muted loop playsinline preload="auto" src="{{ active_login_thumbnail.display_video_url }}"></video>
+    {% elif active_login_thumbnail and active_login_thumbnail.display_url %}
+        <img class="bg-image" src="{{ active_login_thumbnail.display_url }}" alt="N?n ??ng nh?p">
+    {% endif %}
+    <div class="bg-layer"></div>
 
-<div class="login-course-bg">
-    {% if active_login_video_url %}
-        <video autoplay muted loop playsinline>
-            <source src="{{ active_login_video_url }}" type="video/mp4">
-        </video>
-    {% elif active_login_thumbnail_url %}
-        <img src="{{ active_login_thumbnail_url }}" alt="Ảnh nền đăng nhập">
+    <div class="top-actions">
+        <button class="primary" type="button" onclick="openAuth('login')">??ng nh?p</button>
+        <button class="plain" type="button" onclick="openAuth('register')">??ng k?</button>
+    </div>
+
+    <div class="stage">
+        {% if active_login_thumbnail %}
+            {% for item in active_login_thumbnail.overlay_images.all %}
+                {% if item.is_active %}
+                <div class="overlay" style="left:{{ item.x }}%; top:{{ item.y }}%; width:{{ item.w }}%;">
+                    <img src="{{ item.display_url }}" alt="?nh n?i {{ forloop.counter }}">
+                </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <div id="authWrap" class="auth-modal-wrap">
+        <main class="auth-modal">
+            <button class="close-btn" type="button" onclick="closeAuth()">?</button>
+            <h1 class="brand-title">?i?m TSA V?i Aptis</h1>
+            <p id="modeDesc" class="brand-desc">Nh?p th?ng tin ?? v?o h?c.</p>
+
+            <div class="tabs">
+                <button id="loginTab" class="tab-btn active" type="button" onclick="switchTab('login')">??ng nh?p</button>
+                <button id="registerTab" class="tab-btn" type="button" onclick="switchTab('register')">??ng k?</button>
+            </div>
+
+            <section id="loginPanel" class="form-panel active">
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <input type="text" name="email" placeholder="Email" autocomplete="username" required>
+                    <input type="password" name="password" placeholder="M?t kh?u" autocomplete="current-password" required>
+                    <button class="submit-btn" type="submit">??ng nh?p</button>
+                </form>
+                <div class="note-box">T?i kho?n m?i ??ng k? c?n ???c admin duy?t tr??c khi ??ng nh?p.</div>
+            </section>
+
+            <section id="registerPanel" class="form-panel">
+                <form method="post" action="{% url 'register' %}">
+                    {% csrf_token %}
+                    <input type="text" name="full_name" placeholder="H? t?n h?c vi?n" required>
+                    <input type="text" name="phone" placeholder="S? ?i?n tho?i" required>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="password" name="password" placeholder="M?t kh?u" required>
+                    <button class="submit-btn" type="submit">T?o t?i kho?n</button>
+                </form>
+                <div class="note-box">T?i kho?n m?i ??ng k? c?n ???c admin duy?t tr??c khi ??ng nh?p.</div>
+            </section>
+        </main>
+    </div>
+
+    {% if active_login_thumbnail %}
+    <div class="ticker"><div class="ticker-track">
+        {% if active_login_thumbnail.ticker_text_1 %}<span class="ticker-pill">{{ active_login_thumbnail.ticker_text_1 }}</span>{% endif %}
+        {% if active_login_thumbnail.ticker_text_2 %}<span class="ticker-pill">{{ active_login_thumbnail.ticker_text_2 }}</span>{% endif %}
+        {% if active_login_thumbnail.ticker_text_3 %}<span class="ticker-pill">{{ active_login_thumbnail.ticker_text_3 }}</span>{% endif %}
+        {% if active_login_thumbnail.ticker_text_4 %}<span class="ticker-pill">{{ active_login_thumbnail.ticker_text_4 }}</span>{% endif %}
+        {% if active_login_thumbnail.ticker_text_5 %}<span class="ticker-pill">{{ active_login_thumbnail.ticker_text_5 }}</span>{% endif %}
+        {% if active_login_thumbnail.ticker_text_1 %}<span class="ticker-pill">{{ active_login_thumbnail.ticker_text_1 }}</span>{% endif %}
+        {% if active_login_thumbnail.ticker_text_2 %}<span class="ticker-pill">{{ active_login_thumbnail.ticker_text_2 }}</span>{% endif %}
+        {% if active_login_thumbnail.ticker_text_3 %}<span class="ticker-pill">{{ active_login_thumbnail.ticker_text_3 }}</span>{% endif %}
+        {% if active_login_thumbnail.ticker_text_4 %}<span class="ticker-pill">{{ active_login_thumbnail.ticker_text_4 }}</span>{% endif %}
+        {% if active_login_thumbnail.ticker_text_5 %}<span class="ticker-pill">{{ active_login_thumbnail.ticker_text_5 }}</span>{% endif %}
+    </div></div>
     {% endif %}
 </div>
 
-<div class="login-course-stage" aria-hidden="true">
-    <div class="login-course-top-title"><span>KHÓA HỌC ONLINE</span></div>
-    <div class="login-course-main-text">BÀI GIẢNG</div>
-
-    <div class="login-course-card login-card-road">
-        <div class="icon-zone" style="color:#0f9f91;">🗺</div>
-        <div class="label-zone login-label-teal">LỘ TRÌNH</div>
-    </div>
-
-    <div class="login-course-card big login-card-task">
-        <div class="icon-zone" style="color:#ef4444;">📋</div>
-        <div class="label-zone login-label-red">BÀI TẬP</div>
-    </div>
-
-    <div class="login-course-card login-card-doc">
-        <div class="icon-zone" style="color:#2563eb;">📖</div>
-        <div class="label-zone login-label-blue">TÀI LIỆU</div>
-    </div>
-
-    <div class="login-course-card login-card-cert">
-        <div class="icon-zone" style="color:#f59e0b;">🏅</div>
-        <div class="label-zone login-label-amber">CHỨNG CHỈ</div>
-    </div>
-
-    <div class="login-course-controls">
-        <div class="login-progress"></div>
-        <div class="login-control-icons">
-            <span>▶</span><span>⏭</span><span>🔊</span>
-            <span class="time">06:45 / 24:30</span>
-            <span class="spacer"></span>
-            <span>⚙</span><span>▣</span><span>⛶</span>
-        </div>
-    </div>
-</div>
-
-
-
-
-
-    <div class="login-course-card big login-card-task">
-        <div class="icon-zone" style="color:#ef4444;">📋</div>
-        <div class="label-zone login-label-red">BÀI TẬP</div>
-    </div>
-
-    <div class="login-course-card login-card-doc">
-        <div class="icon-zone" style="color:#2563eb;">📖</div>
-        <div class="label-zone login-label-blue">TÀI LIỆU</div>
-    </div>
-
-    <div class="login-course-card login-card-cert">
-        <div class="icon-zone" style="color:#f59e0b;">🏅</div>
-        <div class="label-zone login-label-amber">CHỨNG CHỈ</div>
-    </div>
-
-    <div class="login-course-controls">
-        <div class="login-progress"></div>
-        <div class="login-control-icons">
-            <span>▶</span>
-            <span>⏭</span>
-            <span>🔊</span>
-            <span class="time">06:45 / 24:30</span>
-            <span class="spacer"></span>
-            <span>⚙</span>
-            <span>▣</span>
-            <span>⛶</span>
-        </div>
-    </div>
-</div>
-
-
-
-<main class="home-page">
-    <header class="home-header">
-        <nav class="auth-actions" aria-label="Tài khoản">
-            <button type="button" onclick="openModal('login')" class="auth-btn login">Đăng nhập</button>
-            <button type="button" onclick="openModal('register')" class="auth-btn register">Đăng ký</button>
-        </nav>
-    </header>
-</main>
-
-{% if messages %}
-<section class="message-box" aria-live="polite">
-    {% for message in messages %}
-        <div class="message {{ message.tags }}">{{ message }}</div>
-    {% endfor %}
-</section>
-{% endif %}
-
-<section id="authModal" class="modal-overlay" aria-hidden="true">
-    <article class="auth-modal">
-        <button type="button" class="close-btn" onclick="closeModal()">×</button>
-
-        <h1>Điểm TSA Với Aptis</h1>
-        <p class="subtitle" id="modalDesc">Nhập thông tin để vào học.</p>
-
-        <div class="auth-tabs">
-            <button type="button" id="loginTab" onclick="switchTab('login')" class="active">Đăng nhập</button>
-            <button type="button" id="registerTab" onclick="switchTab('register')">Đăng ký</button>
-        </div>
-
-        <form id="loginForm" class="auth-form" method="POST" action="{% url 'login' %}">
-            {% csrf_token %}
-            {{ login_form.email }}
-            {{ login_form.password }}
-            
-<div class="remember-login-row">
-    <label class="remember-login-label">
-        <input type="checkbox" id="rememberLoginInfo">
-        <span>Lưu thông tin đăng nhập</span>
-    </label>
-    <small>Trình duyệt sẽ hỗ trợ lưu mật khẩu an toàn.</small>
-</div>
-
-<button class="submit-btn" type="submit">Đăng nhập</button>
-        </form>
-
-        <form id="registerForm" class="auth-form" method="POST" action="{% url 'register' %}">
-            {% csrf_token %}
-            {{ register_form.full_name }}
-            {{ register_form.phone }}
-            {{ register_form.email }}
-            {{ register_form.password }}
-            <button class="submit-btn" type="submit">Tạo tài khoản</button>
-        </form>
-
-        <div class="note">
-            Tài khoản mới đăng ký cần được admin duyệt trước khi đăng nhập.
-        </div>
-    </article>
-</section>
-
 <script>
-    const modal = document.getElementById('authModal');
-    const loginForm = document.getElementById('loginForm');
-    const registerForm = document.getElementById('registerForm');
-    const loginTab = document.getElementById('loginTab');
-    const registerTab = document.getElementById('registerTab');
-    const modalDesc = document.getElementById('modalDesc');
+function openAuth(type){
+    document.getElementById("authWrap").classList.add("show");
+    switchTab(type);
+}
+function closeAuth(){
+    document.getElementById("authWrap").classList.remove("show");
+}
+function switchTab(type){
+    const loginTab=document.getElementById("loginTab");
+    const registerTab=document.getElementById("registerTab");
+    const loginPanel=document.getElementById("loginPanel");
+    const registerPanel=document.getElementById("registerPanel");
+    const modeDesc=document.getElementById("modeDesc");
 
-    function openModal(type) {
-        modal.classList.add('show');
-        modal.setAttribute('aria-hidden', 'false');
-        switchTab(type);
+    loginTab.classList.remove("active");
+    registerTab.classList.remove("active");
+    loginPanel.classList.remove("active");
+    registerPanel.classList.remove("active");
+
+    if(type==="login"){
+        loginTab.classList.add("active");
+        loginPanel.classList.add("active");
+        modeDesc.textContent="Nh?p th?ng tin ?? v?o h?c.";
+    }else{
+        registerTab.classList.add("active");
+        registerPanel.classList.add("active");
+        modeDesc.textContent="?i?n th?ng tin h?c vi?n ?? ch? duy?t.";
     }
-
-    function closeModal() {
-        modal.classList.remove('show');
-        modal.setAttribute('aria-hidden', 'true');
-    }
-
-    function switchTab(type) {
-        if (type === 'login') {
-            loginForm.style.display = 'grid';
-            registerForm.style.display = 'none';
-            loginTab.classList.add('active');
-            registerTab.classList.remove('active');
-            modalDesc.innerText = 'Nhập thông tin để vào học.';
-        } else {
-            loginForm.style.display = 'none';
-            registerForm.style.display = 'grid';
-            registerTab.classList.add('active');
-            loginTab.classList.remove('active');
-            modalDesc.innerText = 'Điền thông tin học viên để chờ duyệt.';
-        }
-    }
-
-    modal.addEventListener('click', function(event) {
-        if (event.target === modal) {
-            closeModal();
-        }
-    });
-
-    switchTab('login');
+}
 </script>
 
 
-<script id="remember-login-script">
-(function(){
-    const STORAGE_KEY = "aptis_remember_login_value";
-    const CHECK_KEY = "aptis_remember_login_checked";
 
-    function findLoginInput(){
-        return document.querySelector(
-            'input[name="username"], input[name="email"], input[name="login"], input[type="email"], input[type="text"]'
-        );
+
+
+
+
+
+
+
+
+
+
+<script>
+(function(){
+    let backdrop = document.getElementById("overlayHoverBackdrop");
+
+    if(!backdrop){
+        backdrop = document.createElement("div");
+        backdrop.id = "overlayHoverBackdrop";
+        backdrop.className = "overlay-hover-backdrop";
+        document.body.appendChild(backdrop);
     }
 
-    function initRememberLogin(){
-        const checkbox = document.getElementById("rememberLoginInfo");
-        const loginInput = findLoginInput();
-        const form = checkbox ? checkbox.closest("form") : null;
+    let closeTimer = null;
 
-        if(!checkbox || !loginInput || !form) return;
+    function openZoom(item){
+        clearTimeout(closeTimer);
 
-        const savedChecked = localStorage.getItem(CHECK_KEY) === "1";
-        const savedValue = localStorage.getItem(STORAGE_KEY) || "";
+        document.querySelectorAll(".stage .overlay.hover-zoom").forEach(function(other){
+            if(other !== item) other.classList.remove("hover-zoom");
+        });
 
-        checkbox.checked = savedChecked;
+        item.classList.add("hover-zoom");
+        backdrop.classList.add("show");
+        document.body.classList.add("overlay-zooming");
+    }
 
-        if(savedChecked && savedValue && !loginInput.value){
-            loginInput.value = savedValue;
-        }
+    function closeZoom(item){
+        closeTimer = setTimeout(function(){
+            item.classList.remove("hover-zoom");
 
-        form.addEventListener("submit", function(){
-            if(checkbox.checked){
-                localStorage.setItem(CHECK_KEY, "1");
-                localStorage.setItem(STORAGE_KEY, loginInput.value || "");
-            }else{
-                localStorage.removeItem(CHECK_KEY);
-                localStorage.removeItem(STORAGE_KEY);
+            if(!document.querySelector(".stage .overlay.hover-zoom")){
+                backdrop.classList.remove("show");
+                document.body.classList.remove("overlay-zooming");
             }
+        }, 110);
+    }
+
+    function bindLoginZoom(){
+        document.querySelectorAll(".stage .overlay").forEach(function(item){
+            if(item.dataset.loginZoomBound === "1") return;
+            item.dataset.loginZoomBound = "1";
+
+            item.addEventListener("mouseenter", function(){
+                openZoom(item);
+            });
+
+            item.addEventListener("mouseleave", function(){
+                closeZoom(item);
+            });
         });
     }
 
-    if(document.readyState === "loading"){
-        document.addEventListener("DOMContentLoaded", initRememberLogin);
-    }else{
-        initRememberLogin();
-    }
+    bindLoginZoom();
+
+    window.addEventListener("keydown", function(e){
+        if(e.key === "Escape"){
+            document.querySelectorAll(".stage .overlay.hover-zoom").forEach(function(item){
+                item.classList.remove("hover-zoom");
+            });
+            backdrop.classList.remove("show");
+            document.body.classList.remove("overlay-zooming");
+        }
+    });
 })();
 </script>
-
-
-<div class="login-floating-ticker">
-    <div class="login-floating-ticker-inner">
-        {% for text in login_ticker_texts %}
-            <span class="login-floating-ticker-item">{{ text }}</span>
-        {% endfor %}
-        {% for text in login_ticker_texts %}
-            <span class="login-floating-ticker-item">{{ text }}</span>
-        {% endfor %}
-    </div>
-</div>
 
 </body>
 </html>

@@ -1,393 +1,877 @@
 {% load static %}
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Thumbnail màn hình đăng nhập</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thumbnail m?n h?nh ??ng nh?p</title>
+<link rel="stylesheet" href="{% static 'core/css/aptis_font_lock.css' %}">
 <style>
 :root{
-    --red:#ef4444;
-    --red2:#f43f5e;
-    --teal:#0f9f91;
-    --blue:#2563eb;
-    --amber:#f59e0b;
-    --dark:#4a0010;
-    --line:#ffd1dc;
-    --muted:#667085;
+    --red:#ef244b;
+    --dark:#5a0010;
+    --line:#f3c8d2;
 }
 *{box-sizing:border-box}
 body{
     margin:0;
-    min-height:100vh;
-    background:linear-gradient(135deg,#fffafa,#fff0f4,#fff7f9);
-    font-family:"Segoe UI",Arial,sans-serif;
+    background:linear-gradient(180deg,#fffafb,#fff1f5);
     color:var(--dark);
 }
-.wrap{max-width:1480px;margin:0 auto;padding:28px 22px 48px}
+.page{
+    max-width:1500px;
+    margin:0 auto;
+    padding:24px;
+}
 .hero,.panel{
-    background:white;
-    border:1px solid var(--line);
+    background:#fff;
+    border:1px solid #f3d3da;
     border-radius:28px;
-    padding:30px;
-    box-shadow:0 18px 44px rgba(180,0,30,.07);
+    box-shadow:0 14px 40px rgba(130,0,25,.08);
 }
-.hero{display:flex;justify-content:space-between;gap:20px;align-items:center}
-.kicker{color:#e60023;font-weight:950;letter-spacing:.08em;text-transform:uppercase}
-h1{margin:10px 0;font-size:48px;line-height:1.05;letter-spacing:-.05em}
-.desc{color:var(--muted);font-size:18px;font-weight:650}
+.hero{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:18px;
+    padding:28px;
+    margin-bottom:20px;
+}
+.hero small{
+    color:#e3123b;
+    font-weight:900;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+.hero h1{
+    margin:8px 0;
+    font-size:48px;
+    line-height:1;
+}
+.hero p{
+    margin:0;
+    color:#64748b;
+    font-weight:700;
+}
 .back{
-    min-height:52px;padding:0 22px;border-radius:16px;
-    background:linear-gradient(135deg,#e60023,#ff5f76);
-    color:white;text-decoration:none;display:inline-flex;align-items:center;font-weight:950;
+    background:linear-gradient(90deg,#f52950,#ff637c);
+    color:#fff;
+    text-decoration:none;
+    padding:16px 24px;
+    border-radius:18px;
+    font-weight:900;
 }
-.panel{margin-top:22px}
-.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:24px}
-.card{background:white;border:1px solid var(--line);border-radius:22px;padding:22px}
-h2{margin:0 0 16px;font-size:24px}
-.login-preview{
+.msg{
+    background:#fff;
+    border:1px solid #ffd0d8;
+    color:#8d001c;
+    padding:12px 16px;
+    border-radius:14px;
+    margin-bottom:14px;
+    font-weight:800;
+}
+.grid{
+    display:grid;
+    grid-template-columns:minmax(0,1.55fr) minmax(320px,.65fr);
+    gap:18px;
+    align-items:start;
+}
+.panel{
+    padding:20px;
+}
+.panel h2{
+    margin:0 0 10px;
+    font-size:32px;
+}
+.note{
+    margin:0 0 16px;
+    color:#64748b;
+    font-weight:700;
+}
+.preview-shell{
+    border-radius:30px;
+    overflow:hidden;
+    background:#080c19;
+    border:1px solid rgba(255,255,255,.14);
+}
+.preview{
     position:relative;
     width:100%;
     aspect-ratio:16/9;
-    border-radius:10px;
     overflow:hidden;
-    background:#111827;
-    box-shadow:0 26px 70px rgba(0,0,0,.22);
+    background:linear-gradient(135deg,#050814,#151d2e 65%,#2b0710);
 }
-.login-preview-bg{
+.preview video,
+.preview img.bg{
     position:absolute;
     inset:0;
-    background:
-        linear-gradient(90deg,rgba(8,15,30,.88),rgba(8,15,30,.55),rgba(8,15,30,.84)),
-        radial-gradient(circle at 20% 20%,rgba(20,184,166,.22),transparent 30%),
-        linear-gradient(135deg,#111827,#243447);
-}
-.login-preview-bg img,.login-preview-bg video{
     width:100%;
     height:100%;
     object-fit:cover;
-    opacity:.44;
-    filter:brightness(.75);
 }
-.back-admin{
+.preview .shade{
     position:absolute;
-    top:22px;
-    left:22px;
-    z-index:3;
-    min-height:38px;
-    padding:0 16px;
-    border-radius:8px;
-    background:rgba(255,255,255,.18);
-    color:white;
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    font-size:14px;
-    font-weight:850;
+    inset:0;
+    background:linear-gradient(180deg,rgba(0,0,0,.10),rgba(0,0,0,.22));
 }
-.top-title{
+.overlay-item{
     position:absolute;
-    top:30px;
-    left:50%;
-    transform:translateX(-50%);
-    min-width:500px;
-    min-height:66px;
-    padding:0 34px;
-    border-radius:999px;
+    cursor:grab;
+    user-select:none;
+    touch-action:none;
+    z-index:5;
+}
+.overlay-item.dragging{
+    cursor:grabbing;
+}
+.overlay-item img{
+    display:block;
+    width:100%;
+    height:auto;
+    border-radius:22px;
+    box-shadow:0 20px 60px rgba(0,0,0,.25);
+    pointer-events:none;
+}
+.add-box{
+    border:2px dashed #f0a8b9;
+    background:#fff8fa;
+    border-radius:20px;
+    padding:18px;
+}
+.add-line{
     display:flex;
     align-items:center;
     justify-content:center;
-    background:rgba(255,255,255,.13);
-    border:1px solid rgba(255,255,255,.22);
-    box-shadow:inset 0 1px 18px rgba(255,255,255,.14),0 18px 50px rgba(0,0,0,.25);
-    backdrop-filter:blur(10px);
-    z-index:2;
+    min-height:58px;
+    border-radius:16px;
+    background:#fff;
+    color:#8c001d;
+    font-size:18px;
+    font-weight:900;
+    cursor:pointer;
+    border:1px solid #f3c8d2;
+    margin-bottom:10px;
 }
-.top-title span{
-    color:white;
-    font-size:38px;
-    letter-spacing:.13em;
-    font-weight:950;
-    text-shadow:0 0 10px rgba(255,255,255,.72),0 8px 22px rgba(0,0,0,.65);
+.add-line input{
+    width:100%;
 }
-.big-text{
-    position:absolute;
-    left:21%;
-    top:46%;
-    color:white;
-    font-size:62px;
-    line-height:1;
-    font-weight:950;
-    letter-spacing:.02em;
-    text-shadow:0 0 12px rgba(255,255,255,.75),0 12px 28px rgba(0,0,0,.65);
-    z-index:1;
+.basic-actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:14px;
 }
-.preview-card-item{
-    position:absolute;
-    width:290px;
-    height:205px;
+button{
+    border:none;
     border-radius:14px;
-    overflow:hidden;
-    background:rgba(255,255,255,.93);
-    border:4px solid rgba(255,255,255,.86);
-    box-shadow:0 22px 50px rgba(0,0,0,.34);
+    padding:12px 16px;
+    font-weight:900;
+    cursor:pointer;
+}
+.primary{
+    background:linear-gradient(90deg,#f2244c,#ff607b);
+    color:#fff;
+}
+.light{
+    background:#fff;
+    border:1px solid #efccd5;
+    color:#8c001d;
+}
+.current-list{
+    margin-top:16px;
     display:grid;
-    grid-template-rows:1fr 54px;
-    transform:rotate(var(--r,0deg));
-    z-index:3;
+    gap:10px;
 }
-.preview-card-item.big{
-    width:520px;
-    height:375px;
-    border-radius:28px;
+.current-row{
+    border:1px solid #f3c8d2;
+    border-radius:16px;
+    padding:12px;
+    background:#fff;
 }
-.preview-card-item .icon-zone{
-    display:grid;
-    place-items:center;
-    font-size:58px;
-    background:rgba(255,255,255,.75);
-}
-.preview-card-item.big .icon-zone{font-size:95px}
-.preview-card-item .label-zone{
-    display:grid;
-    place-items:center;
-    color:white;
-    font-weight:950;
-    font-size:17px;
-}
-.preview-card-item.big .label-zone{font-size:34px}
-.card-road{left:7%;top:19%;--r:-3deg}
-.card-task{right:.8%;top:10%;--r:0deg}
-.card-doc{left:8%;bottom:18%;--r:2deg}
-.card-cert{right:16%;bottom:24%;--r:-1deg}
-.label-teal{background:linear-gradient(135deg,#0f9f91,#0d9488)}
-.label-red{background:linear-gradient(135deg,#ef4444,#f43f5e)}
-.label-blue{background:linear-gradient(135deg,#2563eb,#1d4ed8)}
-.label-amber{background:linear-gradient(135deg,#f59e0b,#e89000)}
-.controls{
-    position:absolute;
-    left:20px;
-    right:20px;
-    bottom:18px;
-    height:70px;
-    border-radius:0 0 16px 16px;
-    background:linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.76));
-    z-index:4;
-}
-.progress{
-    position:absolute;
-    left:0;
-    right:0;
-    top:16px;
-    height:7px;
-    background:rgba(255,255,255,.18);
-    border-radius:999px;
-    overflow:hidden;
-}
-.progress:before{
-    content:"";
+.current-row b{
     display:block;
-    width:34%;
-    height:100%;
-    background:linear-gradient(90deg,#ef4444,#e11d48);
+    margin-bottom:8px;
 }
-.ctrl-icons{
+.current-row small{
+    color:#64748b;
+    font-weight:700;
+}
+.hidden-position{
+    display:none;
+}
+.fullscreen-btn{
+    border:none;
+    border-radius:14px;
+    padding:12px 18px;
+    font-weight:900;
+    background:linear-gradient(90deg,#f2244c,#ff607b);
+    color:#fff;
+    cursor:pointer;
+    box-shadow:0 10px 24px rgba(242,36,76,.20);
+    margin-bottom:12px;
+}
+.preview-shell.fullscreen-mode{
+    position:fixed !important;
+    inset:0 !important;
+    z-index:9999 !important;
+    width:100vw !important;
+    height:100vh !important;
+    border-radius:0 !important;
+    background:#050006 !important;
+    padding:0 !important;
+}
+.preview-shell.fullscreen-mode .preview{
+    width:100vw !important;
+    height:100vh !important;
+    aspect-ratio:auto !important;
+    border-radius:0 !important;
+}
+body.preview-fullscreen-lock{
+    overflow:hidden !important;
+}
+@media(max-width:1100px){
+    .grid{
+        grid-template-columns:1fr;
+    }
+}
+
+
+/* Hover zoom CH? trong khung preview admin */
+.preview{
+    isolation:isolate;
+}
+
+.preview.admin-zooming::after{
+    content:"";
     position:absolute;
-    left:0;
-    right:0;
-    bottom:12px;
+    inset:0;
+    z-index:20;
+    background:rgba(0,0,0,.45);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    pointer-events:none;
+    opacity:1;
+}
+
+.preview .overlay-item{
+    pointer-events:auto !important;
+    transition:
+        left .55s cubic-bezier(.16,1,.3,1),
+        top .55s cubic-bezier(.16,1,.3,1),
+        width .55s cubic-bezier(.16,1,.3,1),
+        transform .55s cubic-bezier(.16,1,.3,1),
+        opacity .35s ease,
+        filter .35s ease;
+}
+
+.preview .overlay-item img{
+    transition:
+        transform .55s cubic-bezier(.16,1,.3,1),
+        box-shadow .55s cubic-bezier(.16,1,.3,1),
+        filter .55s cubic-bezier(.16,1,.3,1),
+        border-radius .55s cubic-bezier(.16,1,.3,1);
+}
+
+.preview.admin-zooming .overlay-item:not(.hover-zoom){
+    filter:blur(4px) brightness(.65);
+    opacity:.38;
+}
+
+.preview .overlay-item.hover-zoom{
+    position:absolute !important;
+    left:15% !important;
+    top:50% !important;
+    width:70% !important;
+    max-height:82% !important;
+    transform:translateY(-50%) !important;
+    z-index:30 !important;
+    cursor:pointer !important;
+}
+
+.preview .overlay-item.hover-zoom img{
+    width:100% !important;
+    max-height:82vh !important;
+    object-fit:contain !important;
+    border-radius:26px !important;
+    box-shadow:
+        0 30px 90px rgba(0,0,0,.50),
+        0 0 0 1px rgba(255,255,255,.24) !important;
+    transform:scale(1.01);
+}
+
+.preview .overlay-item.hover-zoom::before{
+    content:"";
+    position:absolute;
+    inset:-26px;
+    z-index:-1;
+    border-radius:34px;
+    background:rgba(255,255,255,.10);
+    filter:blur(22px);
+    box-shadow:0 0 90px rgba(0,0,0,.42);
+    pointer-events:none;
+}
+
+
+/* N?t l?u to?n b? giao di?n */
+.save-all-bar{
+    position:sticky;
+    bottom:18px;
+    z-index:100;
+    margin-top:18px;
+    display:flex;
+    justify-content:center;
+    pointer-events:none;
+}
+.save-all-btn{
+    pointer-events:auto;
+    border:none;
+    border-radius:999px;
+    padding:18px 34px;
+    background:linear-gradient(90deg,#d60012,#ff4165);
+    color:#fff;
+    font-size:18px;
+    font-weight:1000;
+    cursor:pointer;
+    box-shadow:0 18px 45px rgba(214,0,18,.26);
+}
+.save-all-btn:hover{
+    transform:translateY(-1px);
+    box-shadow:0 22px 55px rgba(214,0,18,.32);
+}
+.preview.right-dragging{
+    cursor:grabbing !important;
+}
+.preview.right-dragging .overlay-item{
+    transition:none !important;
+}
+.preview.right-dragging::before{
+    content:"?ang k?o ?nh b?ng chu?t ph?i ? th? chu?t ?? ??t v? tr?";
+    position:absolute;
+    left:50%;
+    top:16px;
+    transform:translateX(-50%);
+    z-index:80;
+    background:rgba(255,255,255,.92);
+    color:#5a0010;
+    padding:10px 16px;
+    border-radius:999px;
+    font-weight:900;
+    box-shadow:0 12px 30px rgba(0,0,0,.18);
+}
+
+
+.size-control{
+    margin-top:12px;
+    padding-top:10px;
+    border-top:1px dashed #f1c7d0;
+}
+.size-control label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:900;
+    color:#7a0018;
+}
+.size-control .size-row{
     display:flex;
     align-items:center;
-    gap:22px;
-    color:white;
-    padding:0 14px;
-    font-weight:850;
+    gap:12px;
 }
-.ctrl-icons .spacer{flex:1}
-.ctrl-icons .time{font-size:13px;opacity:.86}
-label{display:block;margin:14px 0 8px;font-weight:950}
-.upload{
-    min-height:118px;
-    border:2px dashed #ffb6c2;
-    border-radius:18px;
-    display:grid;
-    place-items:center;
+.size-control input[type=range]{
+    flex:1;
+    accent-color:#d60012;
+    cursor:pointer;
+}
+.size-badge{
+    min-width:64px;
     text-align:center;
-    background:#fffafa;
-    cursor:pointer;
-    font-weight:850;
-    padding:18px;
+    padding:6px 10px;
+    border-radius:999px;
+    background:#fff3f6;
+    border:1px solid #f0c7d0;
+    color:#8b001c;
+    font-weight:900;
+    font-size:14px;
 }
-.upload input{display:none}
-input[type=text],input[type=url]{
-    width:100%;
-    height:52px;
-    border:1px solid var(--line);
+
+
+.capture-bar{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:12px;
+}
+.capture-btn{
+    border:none;
     border-radius:14px;
-    padding:0 14px;
-    font:inherit;
-}
-.ticker-grid{display:grid;gap:12px}
-.note{
-    margin-top:16px;
-    padding:14px 16px;
-    border:1px solid #ffb6c2;
-    background:#fff1f4;
-    border-radius:16px;
-    color:#9f0018;
-    font-weight:750;
-}
-.actions{margin-top:22px;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:14px}
-button{
-    min-height:56px;
-    border-radius:16px;
-    border:1px solid var(--line);
-    font:inherit;
-    font-weight:950;
+    padding:12px 18px;
+    font-weight:900;
+    background:linear-gradient(90deg,#2563eb,#3b82f6);
+    color:#fff;
     cursor:pointer;
+    box-shadow:0 10px 24px rgba(37,99,235,.20);
 }
-.save{background:linear-gradient(135deg,#e60023,#ff5f76);color:white;border:0}
-.light{background:white;color:#e60023}
-.msg{margin-top:14px;padding:13px 16px;border-radius:16px;background:#ecfdf3;color:#027a48;font-weight:850}
-@media(max-width:1100px){
-    .grid{grid-template-columns:1fr}
-    .top-title{min-width:360px}
-    .top-title span{font-size:26px}
-    .preview-card-item{width:200px;height:145px}
-    .preview-card-item.big{width:330px;height:235px}
-    .big-text{font-size:42px}
+.capture-btn:hover{
+    transform:translateY(-1px);
 }
-@media(max-width:800px){
-    .preview-card-item{display:none}
-    .big-text{display:none}
+.capture-note{
+    font-size:13px;
+    color:#64748b;
+    font-weight:700;
+    margin:6px 0 12px;
 }
+
 </style>
 </head>
 <body>
-<main class="wrap">
-
-<section class="hero">
-    <div>
-        <div class="kicker">Dashboard quản trị</div>
-        <h1>Thumbnail màn hình đăng nhập</h1>
-        <div class="desc">Thiết kế ảnh/video động và các thẻ nổi cho màn hình đăng nhập.</div>
+<div class="page">
+    <div class="hero">
+        <div>
+            <small>Dashboard qu?n tr?</small>
+            <h1>Thumbnail m?n h?nh ??ng nh?p</h1>
+            <p>Giao di?n basic: ch? th?m ?nh, k?o ?nh trong preview r?i l?u.</p>
+        </div>
+        <a class="back" href="{% url 'dashboard' %}">? Quay l?i Dashboard</a>
     </div>
-    <a class="back" href="/dashboard/">← Quay lại Dashboard</a>
-</section>
 
-{% for message in messages %}
-<div class="msg">{{ message }}</div>
-{% endfor %}
+    {% for message in messages %}
+        <div class="msg">{{ message }}</div>
+    {% endfor %}
 
-<section class="panel">
-<form method="post" enctype="multipart/form-data">
-{% csrf_token %}
+    <form id="thumbnailForm" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="captured_thumbnail_data" id="capturedThumbnailData">
 
-<div class="grid">
-    <div class="card">
-        <h2>Preview màn hình đăng nhập</h2>
+        <div class="grid">
+            <div class="panel">
+                <h2>Preview</h2>
+                <p class="note">K?o ?nh ?? ??t v? tr?. Admin kh?ng ph?ng to ?nh khi hover n?a.</p>
+                <div class="capture-bar">
+                    <button class="capture-btn" type="button" id="captureVideoFrameBtn">?? L?y thumbnail t? video</button>
+                </div>
+                <div class="capture-note">M?o: ph?t video ??n ??ng b? c?c b?n mu?n, r?i b?m n?t n?y ?? ch?p frame l?m thumbnail.</div>
 
-        <div class="login-preview">
-            <div class="login-preview-bg">
-                {% if current and current.display_video_url %}
-                    <video src="{{ current.display_video_url }}" autoplay muted loop playsinline></video>
-                {% elif current and current.display_url %}
-                    <img src="{{ current.display_url }}" alt="Thumbnail đăng nhập">
-                {% endif %}
-            </div>
+                <button class="fullscreen-btn" type="button" id="previewFullscreenBtn">? Ph?ng to to?n m?n h?nh</button>
 
-            <div class="back-admin">▦ Quay lại Admin</div>
+                <div class="preview-shell" id="previewShell">
+                    <div id="preview" class="preview">
+                        {% if current and current.display_video_url %}
+                            <video autoplay muted loop playsinline src="{{ current.display_video_url }}"></video>
+                        {% elif current and current.display_url %}
+                            <img class="bg" src="{{ current.display_url }}" alt="">
+                        {% endif %}
+                        <div class="shade"></div>
 
-            <div class="top-title">
-                <span>KHÓA HỌC ONLINE</span>
-            </div>
+                        {% for item in overlay_images %}
+                        <div
+                            class="overlay-item"
+                            data-id="{{ item.id }}"
+                            style="left:{{ item.x }}%; top:{{ item.y }}%; width:{{ item.w }}%;">
+                            <img src="{{ item.display_url }}" alt="?nh n?i {{ forloop.counter }}">
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
 
-            <div class="big-text">BÀI GIẢNG</div>
-
-            <div class="preview-card-item card-road">
-                <div class="icon-zone" style="color:#0f9f91;">🗺</div>
-                <div class="label-zone label-teal">LỘ TRÌNH</div>
-            </div>
-
-            <div class="preview-card-item big card-task">
-                <div class="icon-zone" style="color:#ef4444;">📋</div>
-                <div class="label-zone label-red">BÀI TẬP</div>
-            </div>
-
-            <div class="preview-card-item card-doc">
-                <div class="icon-zone" style="color:#2563eb;">📖</div>
-                <div class="label-zone label-blue">TÀI LIỆU</div>
-            </div>
-
-            <div class="preview-card-item card-cert">
-                <div class="icon-zone" style="color:#f59e0b;">🏅</div>
-                <div class="label-zone label-amber">CHỨNG CHỈ</div>
-            </div>
-
-            <div class="controls">
-                <div class="progress"></div>
-                <div class="ctrl-icons">
-                    <span>▶</span>
-                    <span>⏭</span>
-                    <span>🔊</span>
-                    <span class="time">06:45 / 24:30</span>
-                    <span class="spacer"></span>
-                    <span>⚙</span>
-                    <span>▣</span>
-                    <span>⛶</span>
+                <div id="positionInputs">
+                    {% for item in overlay_images %}
+                    <div class="hidden-position" data-id="{{ item.id }}">
+                        <input type="hidden" name="overlay_id" value="{{ item.id }}">
+                        <input type="hidden" name="overlay_{{ item.id }}_x" id="overlay_{{ item.id }}_x" value="{{ item.x }}">
+                        <input type="hidden" name="overlay_{{ item.id }}_y" id="overlay_{{ item.id }}_y" value="{{ item.y }}">
+                        <input type="hidden" name="overlay_{{ item.id }}_w" id="overlay_{{ item.id }}_w" value="{{ item.w }}">
+                    </div>
+                    {% endfor %}
                 </div>
             </div>
+
+            <div class="panel">
+                <h2>Th?m ?nh</h2>
+
+                <div class="add-box" id="addBox">
+                    <div class="add-line">
+                        + Th?m ?nh
+                        <input type="file" name="overlay_images" accept="image/*" style="display:none">
+                    </div>
+                </div>
+
+                <div class="basic-actions">
+                    <button class="primary" type="submit" name="action" value="save_thumbnail">L?u ?nh / v? tr?</button>
+                </div>
+
+                <div class="current-list">
+                    {% for item in overlay_images %}
+                    <div class="current-row">
+                        <b>?nh {{ forloop.counter }}</b>
+                        <small>
+                            X: <span id="info_x_{{ item.id }}">{{ item.x }}</span>% ?
+                            Y: <span id="info_y_{{ item.id }}">{{ item.y }}</span>% ?
+                            Size: <span id="info_w_{{ item.id }}">{{ item.w }}</span>%
+                        </small>
+
+                        <div class="size-control">
+                            <label>Ph?ng to / thu nh? ?nh</label>
+                            <div class="size-row">
+                                <input
+                                    type="range"
+                                    min="5"
+                                    max="90"
+                                    value="{{ item.w }}"
+                                    data-overlay-size-slider="{{ item.id }}">
+                                <span class="size-badge" data-overlay-size-value="{{ item.id }}">{{ item.w }}%</span>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:10px">
+                            <button class="light" type="submit" name="action" value="delete_overlay" onclick="document.getElementById('deleteOverlayId').value='{{ item.id }}'">X?a ?nh n?y</button>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="current-row">
+                        <b>Ch?a c? ?nh n?i</b>
+                        <small>B?m + Th?m ?nh ?? upload ?nh ??u ti?n.</small>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <input type="hidden" name="overlay_id_delete" id="deleteOverlayId">
+            </div>
+        </div>
+    
+        <div class="save-all-bar">
+            <button class="save-all-btn" type="submit" name="action" value="save_thumbnail">?? L?u to?n b? giao di?n</button>
         </div>
 
-        <div class="note">
-            Preview này là giao diện màn hình đăng nhập. Nếu upload video, video sẽ chạy nền động.
-        </div>
-    </div>
-
-    <div class="card">
-        <h2>Cài đặt video/ảnh</h2>
-
-        <label>Chọn video động từ máy</label>
-        <label class="upload">
-            <input type="file" name="video" accept="video/mp4,video/webm">
-            🎬 Bấm để chọn video MP4/WebM
-        </label>
-
-        <label>Chọn ảnh từ máy</label>
-        <label class="upload">
-            <input type="file" name="image" accept="image/png,image/jpeg,image/webp">
-            🖼 Bấm để chọn ảnh thumbnail
-        </label>
-
-        <label>Dán link video</label>
-        <input type="url" name="video_url" placeholder="https://example.com/video.mp4">
-
-        <label>Dán link ảnh</label>
-        <input type="url" name="image_url" placeholder="https://example.com/image.jpg">
-
-        <label>Tên thumbnail</label>
-        <input type="text" name="name" value="{{ current.name|default:'' }}" placeholder="Ví dụ: Thumbnail đăng nhập">
-
-        <h2 style="margin-top:22px">5 chữ chạy ngang</h2>
-        <div class="ticker-grid">
-            <input type="text" name="ticker_text_1" value="{{ current.ticker_text_1|default:'18 HỌC VIÊN ĐÃ ĐĂNG KÝ' }}">
-            <input type="text" name="ticker_text_2" value="{{ current.ticker_text_2|default:'CAM KẾT B1+ APTIS' }}">
-            <input type="text" name="ticker_text_3" value="{{ current.ticker_text_3|default:'30 NGÀY TĂNG TỐC' }}">
-            <input type="text" name="ticker_text_4" value="{{ current.ticker_text_4|default:'KÈM 1:1 LINH HOẠT' }}">
-            <input type="text" name="ticker_text_5" value="{{ current.ticker_text_5|default:'LUYỆN NGHE 4 PART' }}">
-        </div>
-    </div>
+    </form>
 </div>
 
-<div class="actions">
-    <button class="save" name="action" value="save_thumbnail" type="submit">💾 Lưu video/ảnh</button>
-    <button class="light" name="action" value="delete_video" type="submit">🎬 Xóa video</button>
-    <button class="light" name="action" value="delete_image" type="submit">🖼 Xóa ảnh</button>
-    <button class="light" name="action" value="restore_default" type="submit">↻ Mặc định</button>
-</div>
+<script>
+(function(){
+    const addBox = document.getElementById("addBox");
 
-</form>
-</section>
+    function createAddLine(){
+        const line = document.createElement("div");
+        line.className = "add-line";
+        line.innerHTML = '+ Th?m ?nh <input type="file" name="overlay_images" accept="image/*" style="display:none">';
+        const input = line.querySelector("input");
 
-</main>
+        line.addEventListener("click", function(){
+            input.click();
+        });
+
+        input.addEventListener("change", function(){
+            if(input.files && input.files.length){
+                line.style.background = "#fff0f4";
+                line.style.color = "#d60012";
+                line.childNodes[0].textContent = "? ?? ch?n ?nh ";
+                createAddLine();
+            }
+        });
+
+        addBox.appendChild(line);
+    }
+
+    addBox.innerHTML = "";
+    createAddLine();
+
+    const preview = document.getElementById("preview");
+    let active = null;
+
+    function clamp(v,min,max){
+        return Math.max(min, Math.min(max, v));
+    }
+
+    function startDrag(el,e){
+        active = el;
+        active.classList.add("dragging");
+        e.preventDefault();
+    }
+
+    document.querySelectorAll(".overlay-item").forEach(function(item){
+        item.addEventListener("mousedown", function(e){
+            startDrag(item,e);
+        });
+    });
+
+    window.addEventListener("mousemove", function(e){
+        if(!active) return;
+
+        const rect = preview.getBoundingClientRect();
+        const w = active.offsetWidth;
+        const h = active.offsetHeight;
+
+        let leftPx = e.clientX - rect.left - w / 2;
+        let topPx = e.clientY - rect.top - h / 2;
+
+        leftPx = clamp(leftPx, 0, rect.width - w);
+        topPx = clamp(topPx, 0, rect.height - h);
+
+        const leftPct = Math.round((leftPx / rect.width) * 100);
+        const topPct = Math.round((topPx / rect.height) * 100);
+
+        active.style.left = leftPct + "%";
+        active.style.top = topPct + "%";
+
+        const id = active.dataset.id;
+        document.getElementById("overlay_" + id + "_x").value = leftPct;
+        document.getElementById("overlay_" + id + "_y").value = topPct;
+    });
+
+    window.addEventListener("mouseup", function(){
+        if(active){
+            active.classList.remove("dragging");
+            active = null;
+        }
+    });
+
+    
+    // ??ng b? X/Y/Size ra ph?n danh s?ch b?n ph?i
+    function syncOverlayInfo(id){
+        const xInput = document.getElementById("overlay_" + id + "_x");
+        const yInput = document.getElementById("overlay_" + id + "_y");
+        const wInput = document.getElementById("overlay_" + id + "_w");
+
+        const xInfo = document.getElementById("info_x_" + id);
+        const yInfo = document.getElementById("info_y_" + id);
+        const wInfo = document.getElementById("info_w_" + id);
+        const sizeBadge = document.querySelector('[data-overlay-size-value="' + id + '"]');
+
+        if(xInput && xInfo) xInfo.textContent = xInput.value;
+        if(yInput && yInfo) yInfo.textContent = yInput.value;
+        if(wInput && wInfo) wInfo.textContent = wInput.value;
+        if(wInput && sizeBadge) sizeBadge.textContent = wInput.value + "%";
+    }
+
+    // Slider ph?ng to / thu nh? t?ng ?nh
+    document.querySelectorAll("[data-overlay-size-slider]").forEach(function(slider){
+        slider.addEventListener("input", function(){
+            const id = this.getAttribute("data-overlay-size-slider");
+            const value = this.value;
+
+            const item = document.querySelector('.overlay-item[data-id="' + id + '"]');
+            const hiddenW = document.getElementById("overlay_" + id + "_w");
+
+            if(item) item.style.width = value + "%";
+            if(hiddenW) hiddenW.value = value;
+
+            syncOverlayInfo(id);
+        });
+    });
+
+
+    const btn = document.getElementById("previewFullscreenBtn");
+    const shell = document.getElementById("previewShell");
+
+    btn.addEventListener("click", function(){
+        shell.classList.toggle("fullscreen-mode");
+        document.body.classList.toggle("preview-fullscreen-lock");
+        btn.textContent = shell.classList.contains("fullscreen-mode") ? "? Tho?t to?n m?n h?nh" : "? Ph?ng to to?n m?n h?nh";
+    });
+
+    window.addEventListener("keydown", function(e){
+        if(e.key === "Escape"){
+            shell.classList.remove("fullscreen-mode");
+            document.body.classList.remove("preview-fullscreen-lock");
+            btn.textContent = "? Ph?ng to to?n m?n h?nh";
+        }
+    });
+})();
+</script>
+
+
+
+
+<script>
+(function(){
+    const preview = document.getElementById("preview");
+    if(!preview) return;
+
+    let closeTimer = null;
+    let isDragging = false;
+
+    window.addEventListener("mousedown", function(){
+        isDragging = true;
+    });
+
+    window.addEventListener("mouseup", function(){
+        setTimeout(function(){ isDragging = false; }, 120);
+    });
+
+    function bindAdminPreviewZoom(){
+        preview.querySelectorAll(".overlay-item").forEach(function(item){
+            if(item.dataset.adminPreviewZoomBound === "1") return;
+            item.dataset.adminPreviewZoomBound = "1";
+
+            item.addEventListener("mouseenter", function(){
+                if(isDragging) return;
+                clearTimeout(closeTimer);
+
+                preview.querySelectorAll(".overlay-item.hover-zoom").forEach(function(other){
+                    if(other !== item) other.classList.remove("hover-zoom");
+                });
+
+                item.classList.add("hover-zoom");
+                preview.classList.add("admin-zooming");
+            });
+
+            item.addEventListener("mouseleave", function(){
+                closeTimer = setTimeout(function(){
+                    item.classList.remove("hover-zoom");
+
+                    if(!preview.querySelector(".overlay-item.hover-zoom")){
+                        preview.classList.remove("admin-zooming");
+                    }
+                }, 90);
+            });
+        });
+    }
+
+    bindAdminPreviewZoom();
+
+    window.addEventListener("keydown", function(e){
+        if(e.key === "Escape"){
+            preview.querySelectorAll(".overlay-item.hover-zoom").forEach(function(item){
+                item.classList.remove("hover-zoom");
+            });
+            preview.classList.remove("admin-zooming");
+        }
+    });
+})();
+</script>
+
+
+<script>
+(function(){
+    const preview = document.getElementById("preview");
+    if(!preview) return;
+
+    let rightDragItem = null;
+
+    function clamp(v, min, max){
+        return Math.max(min, Math.min(max, v));
+    }
+
+    function stopZoomState(){
+        preview.classList.remove("admin-zooming");
+        document.querySelectorAll(".overlay-item.hover-zoom").forEach(function(item){
+            item.classList.remove("hover-zoom");
+        });
+    }
+
+    function updateItemPosition(item, clientX, clientY){
+        const rect = preview.getBoundingClientRect();
+        const w = item.offsetWidth;
+        const h = item.offsetHeight;
+
+        let leftPx = clientX - rect.left - w / 2;
+        let topPx = clientY - rect.top - h / 2;
+
+        leftPx = clamp(leftPx, 0, rect.width - w);
+        topPx = clamp(topPx, 0, rect.height - h);
+
+        const leftPct = Math.round((leftPx / rect.width) * 100);
+        const topPct = Math.round((topPx / rect.height) * 100);
+
+        item.style.left = leftPct + "%";
+        item.style.top = topPct + "%";
+
+        const id = item.dataset.id;
+        const xInput = document.getElementById("overlay_" + id + "_x");
+        const yInput = document.getElementById("overlay_" + id + "_y");
+
+        if(xInput) xInput.value = leftPct;
+        if(yInput) yInput.value = topPct;
+
+        if(typeof syncOverlayInfo === "function"){
+            syncOverlayInfo(id);
+        }
+    }
+
+    preview.addEventListener("contextmenu", function(e){
+        if(e.target.closest(".overlay-item")){
+            e.preventDefault();
+        }
+    });
+
+    preview.querySelectorAll(".overlay-item").forEach(function(item){
+        if(item.dataset.rightDragBound === "1") return;
+        item.dataset.rightDragBound = "1";
+
+        item.addEventListener("mousedown", function(e){
+            if(e.button !== 2) return;
+
+            e.preventDefault();
+            e.stopPropagation();
+
+            stopZoomState();
+
+            rightDragItem = item;
+            preview.classList.add("right-dragging");
+            item.classList.add("dragging");
+
+            updateItemPosition(item, e.clientX, e.clientY);
+        });
+    });
+
+    window.addEventListener("mousemove", function(e){
+        if(!rightDragItem) return;
+
+        e.preventDefault();
+        updateItemPosition(rightDragItem, e.clientX, e.clientY);
+    });
+
+    window.addEventListener("mouseup", function(e){
+        if(!rightDragItem) return;
+
+        rightDragItem.classList.remove("dragging");
+        rightDragItem = null;
+        preview.classList.remove("right-dragging");
+    });
+
+    window.addEventListener("keydown", function(e){
+        if(e.key === "Escape" && rightDragItem){
+            rightDragItem.classList.remove("dragging");
+            rightDragItem = null;
+            preview.classList.remove("right-dragging");
+        }
+    });
+})();
+</script>
+
+
+<script>
+(function(){
+    const captureBtn = document.getElementById("captureVideoFrameBtn");
+    const hiddenInput = document.getElementById("capturedThumbnailData");
+    const preview = document.getElementById("preview");
+
+    if(!captureBtn || !hiddenInput || !preview) return;
+
+    captureBtn.addEventListener("click", function(){
+        const video = preview.querySelector("video");
+        if(!video){
+            alert("Hi?n ch?a c? video trong preview ?? ch?p.");
+            return;
+        }
+
+        const canvas = document.createElement("canvas");
+        const w = video.videoWidth || 1280;
+        const h = video.videoHeight || 720;
+
+        canvas.width = w;
+        canvas.height = h;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(video, 0, 0, w, h);
+
+        hiddenInput.value = canvas.toDataURL("image/png");
+
+        captureBtn.textContent = "? ?? l?y thumbnail t? video";
+        setTimeout(function(){
+            captureBtn.textContent = "?? L?y thumbnail t? video";
+        }, 1800);
+    });
+})();
+</script>
+
 </body>
 </html>
