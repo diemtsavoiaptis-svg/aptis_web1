@@ -2,13 +2,13 @@
 import re
 
 # ==================================================
-# 1) Sửa listening_ui.py: Part 2 chưa có dữ liệu vẫn render demo
+# 1) Edit listening_ui.py: Part 2 chưa có data vẫn render demo
 # ==================================================
 p = Path("core/listening_ui.py")
 s = p.read_text(encoding="utf-8", errors="ignore")
 
-# Nếu file đang trả về "Chưa có dữ liệu Listening cho Part 2" thì chuyển sang render template demo
-if "Chưa có dữ liệu Listening cho Part 2" in s or "part == 2" in s:
+# Nếu file đang trả về "Chưa có data Listening cho Part 2" thì chuyển sang render template demo
+if "Chưa có data Listening cho Part 2" in s or "part == 2" in s:
     # Chèn view helper nếu chưa có
     if "def listening_part2_demo_page" not in s:
         s += r'''
@@ -23,7 +23,7 @@ p.write_text(s, encoding="utf-8")
 
 
 # ==================================================
-# 2) Sửa core/views.py: đảm bảo có view học viên Part 2 demo
+# 2) Edit core/views.py: đảm bảo có view student Part 2 demo
 # ==================================================
 views = Path("core/views.py")
 v = views.read_text(encoding="utf-8", errors="ignore")
@@ -41,7 +41,7 @@ views.write_text(v, encoding="utf-8")
 
 
 # ==================================================
-# 3) Sửa core/urls.py: đảm bảo /listening/part-2/ mở demo
+# 3) Edit core/urls.py: đảm bảo /listening/part-2/ mở demo
 # ==================================================
 urls = Path("core/urls.py")
 u = urls.read_text(encoding="utf-8", errors="ignore")
@@ -61,7 +61,7 @@ urls.write_text(u, encoding="utf-8")
 
 
 # ==================================================
-# 4) Sửa trang listening chính: nút Part 2 dẫn sang demo /listening/part-2/
+# 4) Edit trang listening chính: nút Part 2 dẫn sang demo /listening/part-2/
 # ==================================================
 for f in [
     Path("templates/core/listening.html"),
@@ -78,14 +78,14 @@ for f in [
     text = text.replace('href="/listening/?part=2"', 'href="/listening/part-2/"')
     text = text.replace('data-part="2"', 'data-part="2" onclick="window.location.href=\'/listening/part-2/\'"')
 
-    # Nếu có text báo chưa có dữ liệu thì thêm link xem demo
+    # Nếu có text báo chưa có data thì thêm link xem demo
     text = text.replace(
-        "Chưa có dữ liệu Listening cho Part 2",
-        "Part 2 hiện đang hiển thị bản demo giao diện"
+        "Chưa có data Listening cho Part 2",
+        "Part 2 hiện đang hiển thị bản demo interface"
     )
     text = text.replace(
-        "Admin cần nhập câu hỏi trong trang quản trị trước.",
-        "Dữ liệu thật sẽ được admin nhập sau. Hiện có thể xem trước bố cục demo."
+        "Admin cần nhập questions trong trang admin trước.",
+        "Data thật sẽ được admin nhập sau. Hiện có thể xem trước bố cục demo."
     )
 
     if text != old:
@@ -94,7 +94,7 @@ for f in [
 
 
 # ==================================================
-# 5) Ghi lại template demo Part 2 học viên theo tone đỏ/hồng/trắng
+# 5) Ghi lại template demo Part 2 student theo tone đỏ/hồng/trắng
 # ==================================================
 tpl = Path("templates/core/listening_part2.html")
 tpl.parent.mkdir(parents=True, exist_ok=True)
@@ -502,7 +502,7 @@ tpl.write_text(r'''{% load static %}
 </head>
 
 <body>
-    <a class="back-exit-btn" href="/listening/">← Thoát bài</a>
+    <a class="back-exit-btn" href="/listening/">← Exit bài</a>
 
     <main class="part2-page">
         <section class="part2-topbar">
@@ -510,7 +510,7 @@ tpl.write_text(r'''{% load static %}
         </section>
 
         <div class="demo-note">
-            Đây là bản demo giao diện Part 2. Dữ liệu thật sẽ được admin nhập sau.
+            Đây là bản demo interface Part 2. Data thật sẽ được admin nhập sau.
         </div>
 
         <section class="topic-card">
@@ -520,8 +520,8 @@ tpl.write_text(r'''{% load static %}
 
         <section class="answer-pool">
             <div class="pool-head">
-                <div>☰ Pool đáp án</div>
-                <small>Mỗi đáp án đúng 1 lần</small>
+                <div>☰ Pool answer</div>
+                <small>Mỗi answer đúng 1 lần</small>
             </div>
 
             <div class="pool-grid">
@@ -554,7 +554,7 @@ tpl.write_text(r'''{% load static %}
 
                 <div class="voice-actions">
                     <select class="answer-select">
-                        <option>Chọn đáp án...</option>
+                        <option>Choose answer...</option>
                         <option>A - To relax</option>
                         <option>B - While studying</option>
                         <option>C - While singing</option>
@@ -579,11 +579,11 @@ tpl.write_text(r'''{% load static %}
         function refreshOptions() {
             const chosen = selects
                 .map(s => s.value)
-                .filter(v => v && v !== "Chọn đáp án...");
+                .filter(v => v && v !== "Choose answer...");
 
             selects.forEach(select => {
                 Array.from(select.options).forEach(opt => {
-                    if (!opt.value || opt.value === "Chọn đáp án...") return;
+                    if (!opt.value || opt.value === "Choose answer...") return;
                     opt.disabled = chosen.includes(opt.value) && select.value !== opt.value;
                 });
             });

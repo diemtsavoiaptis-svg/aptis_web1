@@ -50,7 +50,7 @@ def admin_student_lookup(request):
         selected = StudentProfile.objects.filter(id=request.POST.get("profile_id")).select_related("user").first()
 
         if not selected:
-            messages.error(request, "Chưa chọn học viên.")
+            messages.error(request, "Chưa chọn student.")
             return redirect("admin_student_lookup")
 
         gmail = request.POST.get("gmail", "").strip()
@@ -77,7 +77,7 @@ def admin_student_lookup(request):
                 setattr(selected, field, value)
 
         selected.save()
-        messages.success(request, "Đã lưu hồ sơ học viên.")
+        messages.success(request, "Đã lưu hồ sơ student.")
         return redirect(f"{request.path}?profile_id={selected.id}&q={q}")
 
     def val(obj, names):
@@ -117,7 +117,7 @@ if "from django.urls import path" not in u:
 if "from . import views" not in u:
     u = u.replace("from django.urls import path\n", "from django.urls import path\nfrom . import views\n", 1)
 
-# Xóa dòng dashboard/students cũ nếu có lỗi
+# Delete dòng dashboard/students cũ nếu có lỗi
 u = re.sub(r'\s*path\(["\']dashboard/students/["\'],\s*.*?\),\s*', "\n", u)
 
 # Chèn ngay sau urlpatterns = [
@@ -140,7 +140,7 @@ tpl.write_text(r'''<!doctype html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Duyệt học viên</title>
+<title>Duyệt student</title>
 <style>
 *{box-sizing:border-box}
 body{
@@ -275,15 +275,15 @@ input:focus{
 <div class="wrap">
     <section class="card">
         <div class="head">
-            <h2>Tra học viên</h2>
-            <p>Nhập tên, Gmail, SĐT hoặc ID học viên.</p>
+            <h2>Tra student</h2>
+            <p>Nhập tên, Gmail, SĐT hoặc ID student.</p>
         </div>
         <div class="body">
             <form method="get">
-                <label>Thông tin cần tra</label>
-                <input name="q" value="{{ q }}" placeholder="Tên, Gmail, SĐT, ID học viên...">
+                <label>Information cần tra</label>
+                <input name="q" value="{{ q }}" placeholder="Tên, Gmail, SĐT, ID student...">
                 <div style="height:12px"></div>
-                <button class="btn" type="submit">Tra học viên</button>
+                <button class="btn" type="submit">Tra student</button>
             </form>
 
             <div class="result-list">
@@ -298,11 +298,11 @@ input:focus{
                         </div>
                         <div class="result-meta">
                             Gmail: {{ item.user.email|default:"Chưa có" }}<br>
-                            Tài khoản: {{ item.user.username }}
+                            Account: {{ item.user.username }}
                         </div>
                     </a>
                 {% empty %}
-                    {% if q %}<div class="empty">Không tìm thấy học viên phù hợp.</div>{% endif %}
+                    {% if q %}<div class="empty">Không tìm thấy student phù hợp.</div>{% endif %}
                 {% endfor %}
             </div>
         </div>
@@ -310,8 +310,8 @@ input:focus{
 
     <section class="card">
         <div class="head">
-            <h2>Hồ sơ học viên</h2>
-            <p>Cập nhật Gmail, SĐT, tên và ID học viên.</p>
+            <h2>Hồ sơ student</h2>
+            <p>Update Gmail, SĐT, tên và ID student.</p>
         </div>
         <div class="body">
             {% if messages %}
@@ -339,22 +339,22 @@ input:focus{
                             <input name="phone" value="{{ phone_value }}">
                         </div>
                         <div>
-                            <label>Tên học viên</label>
+                            <label>Tên student</label>
                             <input name="full_name" value="{% if profile_name_value %}{{ profile_name_value }}{% else %}{{ selected.user.first_name }}{% endif %}">
                         </div>
                         <div>
-                            <label>ID học viên</label>
+                            <label>ID student</label>
                             <input name="student_id" value="{{ student_id_value }}" placeholder="Bạn tự thêm">
                         </div>
                     </div>
 
                     <div class="save-row">
-                        <button class="btn" type="submit">Lưu hồ sơ học viên</button>
+                        <button class="btn" type="submit">Save hồ sơ student</button>
                     </div>
                 </form>
             {% else %}
                 <div class="empty">
-                    Chưa chọn học viên. Hãy tra học viên bên trái trước.
+                    Chưa chọn student. Hãy tra student bên trái trước.
                 </div>
             {% endif %}
         </div>

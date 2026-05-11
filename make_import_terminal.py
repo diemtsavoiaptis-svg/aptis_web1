@@ -12,8 +12,8 @@ django.setup()
 
 from core.models import ListeningQuestion
 
-print("Dán dữ liệu 32 câu Part 1 vào đây.")
-print("Mỗi dòng theo dạng: STT[TAB]Câu hỏi[TAB]Đáp án A[TAB]Đáp án B[TAB]Đáp án C[TAB]voice/transcript")
+print("Dán data 32 câu Part 1 vào đây.")
+print("Mỗi dòng theo dạng: No.[TAB]Question[TAB]Answer A[TAB]Answer B[TAB]Answer C[TAB]voice/transcript")
 print("Dán xong thì gõ END rồi bấm Enter.")
 print("-" * 80)
 

@@ -28,10 +28,10 @@
         } catch (e) {}
     }
 
-    // Không cảnh báo khi học viên rời tab/quay lại tab nữa.
+    // Không cảnh báo khi student rời tab/quay lại tab nữa.
     // visibilitychange / blur / focus được bỏ để tránh báo sai.
 
-    // Cảnh báo nếu học viên bấm PrintScreen nhiều lần.
+    // Cảnh báo nếu student bấm PrintScreen nhiều lần.
     document.addEventListener("keyup", function (e) {
         if (e.key !== "PrintScreen") return;
 
@@ -40,7 +40,7 @@
         printScreenTimes.push(now);
 
         if (printScreenTimes.length >= PRINT_LIMIT) {
-            sendSecurityEvent("Học viên có dấu hiệu chụp màn hình liên tục");
+            sendSecurityEvent("Student có dấu hiệu chụp màn hình liên tục");
             printScreenTimes = [];
         }
     });
@@ -52,7 +52,7 @@
 
         if (!devtoolsWarned && (widthGap > 180 || heightGap > 180)) {
             devtoolsWarned = true;
-            sendSecurityEvent("Học viên có dấu hiệu mở công cụ kiểm tra trang");
+            sendSecurityEvent("Student có dấu hiệu mở công cụ kiểm tra trang");
         }
 
         if (widthGap <= 120 && heightGap <= 120) {

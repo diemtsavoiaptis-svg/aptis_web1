@@ -78,7 +78,7 @@
 344:                 ListeningQuestion.objects.create(
 345:                     part=1,
 346:                     question_number=current_max + i,
-347:                     question_text=f"Câu hỏi {current_max + i}",
+347:                     question_text=f"Question {current_max + i}",
 352:                     listening_transcript="",
 355:             messages.success(request, f"Đã tạo thêm {count} dòng Part 1.")
 356:             return redirect("admin_part1_questions")
@@ -91,13 +91,13 @@
 383:                 audio_url_key = f"audio_url_{row_id}"
 384:                 if hasattr(q, "audio_url") and audio_url_key in request.POST:
 385:                     q.audio_url = request.POST.get(audio_url_key, "").strip()
-389:             messages.success(request, "Đã cập nhật hàng loạt câu hỏi Part 1.")
+389:             messages.success(request, "Đã cập nhật hàng loạt questions Part 1.")
 390:             return redirect("admin_part1_questions")
 394:             deleted_count, _ = ListeningQuestion.objects.filter(id__in=selected_ids, part=1).delete()
-395:             messages.success(request, f"Đã xóa {deleted_count} câu hỏi Part 1 đã chọn.")
+395:             messages.success(request, f"Đã xóa {deleted_count} questions Part 1 đã chọn.")
 396:             return redirect("admin_part1_questions")
 400:             ListeningQuestion.objects.filter(id=delete_id, part=1).delete()
-401:             messages.success(request, "Đã xóa 1 câu hỏi Part 1.")
+401:             messages.success(request, "Đã xóa 1 questions Part 1.")
 402:             return redirect("admin_part1_questions")
 404:     questions = ListeningQuestion.objects.filter(part=1).order_by("question_number", "id")
 406:     return render(request, "core/admin_part1_questions.html", {
@@ -117,19 +117,19 @@
 
 ===== FILE: templates/core/dashboard.html =====
 
-6:     <title>Dashboard quản trị | Điểm TSA với Aptis</title>
-344:                     data-title="Quản lý câu hỏi Listening"
-345:                     data-desc="Chọn Part và cập nhật dữ liệu câu hỏi, audio, đáp án, transcript."
+6:     <title>Admin Dashboard | Score TSA với Aptis</title>
+344:                     data-title="Manage questions Listening"
+345:                     data-desc="Choose Part và cập nhật data questions, audio, answer, transcript."
 346:                     data-url="/dashboard/listening-parts/">
-347:                 🎧 Quản lý câu hỏi Listening
+347:                 🎧 Manage questions Listening
 353:                     data-url="/dashboard/students/">
 374:                     data-url="/listening/">
-387:                 <div class="eyebrow">Dashboard quản trị</div>
-412:                     <div class="quick-card" data-url="/dashboard/listening-parts/" data-title="Quản lý câu hỏi Listening" data-desc="Chọn Part và cập nhật dữ liệu câu hỏi, audio, đáp án, transcript.">
+387:                 <div class="eyebrow">Admin Dashboard</div>
+412:                     <div class="quick-card" data-url="/dashboard/listening-parts/" data-title="Manage questions Listening" data-desc="Choose Part và cập nhật data questions, audio, answer, transcript.">
 414:                         <h3>Listening</h3>
-415:                         <p>Quản lý Part 1, Part 2, Part 3, Part 4 trong khung bên phải.</p>
-418:                     <div class="quick-card" data-url="/dashboard/students/" data-title="Duyệt học viên" data-desc="Duyệt tài khoản học viên mới đăng ký, quản lý trạng thái học viên.">
-446:     document.getElementById("panelTitle").textContent = title || "Dashboard quản trị";
+415:                         <p>Manage Part 1, Part 2, Part 3, Part 4 trong khung bên phải.</p>
+418:                     <div class="quick-card" data-url="/dashboard/students/" data-title="Duyệt student" data-desc="Duyệt account student mới đăng ký, manage status student.">
+446:     document.getElementById("panelTitle").textContent = title || "Admin Dashboard";
 
 
 ===== FILE: templates/core/admin_student_lookup.html =====
@@ -138,7 +138,7 @@
 
 ===== FILE: templates/core/listening.html =====
 
-6:     <title>Listening Part {{ part_number }} | Điểm TSA Với Aptis</title>
+6:     <title>Listening Part {{ part_number }} | Score TSA Với Aptis</title>
 15: <style id="force-hide-question-list">
 16:     .question-side,
 18:     .question-numbers,
@@ -157,7 +157,7 @@
 108:                 {% for part in part_tabs %}
 109:                     <a class="{% if part == part_number %}active{% endif %}" href="{% url 'listening' %}?part={{ part }}">Part {{ part }}</a>
 113:             {% if no_question %}
-115:                     <h2>Chưa có dữ liệu Listening cho Part {{ part_number }}</h2>
+115:                     <h2>Chưa có data Listening cho Part {{ part_number }}</h2>
 121:                         <strong>Câu {{ current_index }}/{{ total_questions }}</strong>
 129:                 <article class="question-card">
 130:                     <div class="question-head">
@@ -166,7 +166,7 @@
 141:                             <b>A</b><span>{{ question.option_a }}</span>
 144:                             <b>B</b><span>{{ question.option_b }}</span>
 147:                             <b>C</b><span>{{ question.option_c }}</span>
-155:                         <p>Đáp án đúng: <strong>{{ question.correct_answer }}</strong></p>
+155:                         <p>Answer đúng: <strong>{{ question.correct_answer }}</strong></p>
 156:                         <div class="transcript">
 157:                             <strong>Transcript:</strong>
 158:                             <p>{{ question.transcript }}</p>

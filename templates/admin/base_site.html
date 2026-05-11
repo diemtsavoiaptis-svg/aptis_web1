@@ -3,7 +3,7 @@
 {% load i18n static %}
 
 {% block title %}
-{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | Quản trị TSA Aptis
+{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | Admin TSA Aptis
 <style>
 
 /* Tối ưu sidebar Django Admin: ẩn cột "+ Thêm vào", gọn dễ thao tác */
@@ -17,7 +17,7 @@
     display: none !important;
 }
 
-/* Làm sidebar chỉ còn danh sách mục quản lý */
+/* Làm sidebar chỉ còn danh sách mục manage */
 #nav-sidebar table {
     width: 100% !important;
 }
@@ -111,7 +111,7 @@
 
 {% block branding %}
 <div id="site-name">
-    <a href="{% url 'admin:index' %}">Quản trị TSA Aptis</a>
+    <a href="{% url 'admin:index' %}">Admin TSA Aptis</a>
 </div>
 {% endblock %}
 

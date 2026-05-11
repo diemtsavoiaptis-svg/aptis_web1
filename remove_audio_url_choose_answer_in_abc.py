@@ -1,7 +1,7 @@
 ﻿from pathlib import Path
 
 # =========================
-# 1) Sửa view: không xóa audio_url khi cột Audio URL không còn trên form
+# 1) Edit view: không xóa audio_url khi cột Audio URL không còn trên form
 # =========================
 vp = Path("core/views.py")
 v = vp.read_text(encoding="utf-8", errors="ignore")
@@ -27,14 +27,14 @@ vp.write_text(v, encoding="utf-8")
 
 
 # =========================
-# 2) Ghi lại template Part 1: bỏ Audio URL, chọn đáp án ngay trong A/B/C
+# 2) Ghi lại template Part 1: bỏ Audio URL, chọn answer ngay trong A/B/C
 # =========================
 Path("templates/core/admin_part1_questions.html").write_text(r'''{% load static %}
 <!doctype html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Quản lý Part 1 | Điểm TSA Với Aptis</title>
+    <title>Manage Part 1 | Score TSA Với Aptis</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <style>
@@ -427,14 +427,14 @@ Path("templates/core/admin_part1_questions.html").write_text(r'''{% load static 
 <div class="page">
     <header class="topbar">
         <div>
-            <h1>Quản lý câu hỏi Part 1</h1>
-            <p>Cập nhật hàng loạt dữ liệu: audio, câu hỏi, đáp án và transcript.</p>
+            <h1>Manage Part 1 Questions</h1>
+            <p>Bulk update data: audio, questions, answers, and transcripts.</p>
         </div>
 
         <div class="actions">
-            <a class="btn btn-ghost" href="{% url 'admin_listening_parts' %}">← Chọn Part</a>
-            <a class="btn btn-ghost" href="{% url 'dashboard' %}">Tổng quan</a>
-            <a class="btn btn-primary" href="{% url 'logout' %}">Thoát</a>
+            <a class="btn btn-ghost" href="{% url 'admin_listening_parts' %}">← Choose Part</a>
+            <a class="btn btn-ghost" href="{% url 'dashboard' %}">Overview</a>
+            <a class="btn btn-primary" href="{% url 'logout' %}">Exit</a>
         </div>
     </header>
 
@@ -446,19 +446,19 @@ Path("templates/core/admin_part1_questions.html").write_text(r'''{% load static 
 
     <section class="stat-row">
         <div class="stat-card">
-            <span>Tổng câu Part 1</span>
+            <span>Total Part 1 Questions</span>
             <strong>{{ total_questions }}</strong>
         </div>
         <div class="stat-card">
-            <span>Audio đã có</span>
+            <span>Audio Available</span>
             <strong>{{ audio_count|default:0 }}</strong>
         </div>
         <div class="stat-card">
-            <span>Chưa có câu hỏi</span>
+            <span>Missing Questions</span>
             <strong>{{ empty_question_count|default:0 }}</strong>
         </div>
         <div class="stat-card">
-            <span>Đang chỉnh</span>
+            <span>Editing</span>
             <strong>Part 1</strong>
         </div>
     </section>
@@ -466,14 +466,14 @@ Path("templates/core/admin_part1_questions.html").write_text(r'''{% load static 
     <section class="toolbar">
         <div class="searchbox">
             <strong>🔎</strong>
-            <input id="quickSearch" type="text" placeholder="Tìm nhanh theo số câu, nội dung, transcript, đáp án...">
+            <input id="quickSearch" type="text" placeholder="Quick search by question number, content, transcript, or answer...">
         </div>
 
         <form method="post" class="create-form">
             {% csrf_token %}
             <input type="hidden" name="action" value="create_blank">
             <input type="number" name="create_count" min="1" max="100" value="10">
-            <button class="btn btn-ghost" type="submit">+ Tạo dòng</button>
+            <button class="btn btn-ghost" type="submit">+ Add Row</button>
         </form>
     </section>
 
@@ -483,14 +483,14 @@ Path("templates/core/admin_part1_questions.html").write_text(r'''{% load static 
 
         <div class="bulk-head">
             <div>
-                <h2>Bảng cập nhật hàng loạt</h2>
-                <p>Chọn nút tròn trong cột A/B/C để đặt đáp án đúng. Cột Audio URL đã được bỏ.</p>
+                <h2>Bulk Update Table</h2>
+                <p>Select the radio button in column A/B/C to set the correct answer. The Audio URL column has been removed.</p>
             </div>
 
             <div class="bulk-tools">
-                <button class="btn btn-ghost" type="button" onclick="toggleAllLocks()">🔒 Khóa/Mở tất cả</button>
-                <button class="btn btn-danger" type="submit" onclick="return deleteSelectedRows()">🗑️ Xóa dòng đã chọn</button>
-                <button class="btn btn-primary" type="submit" onclick="setSaveAction()">💾 Lưu toàn bộ</button>
+                <button class="btn btn-ghost" type="button" onclick="toggleAllLocks()">🔒 Lock/Unlock All</button>
+                <button class="btn btn-danger" type="submit" onclick="return deleteSelectedRows()">🗑️ Delete Selected Rows</button>
+                <button class="btn btn-primary" type="submit" onclick="setSaveAction()">💾 Save All</button>
             </div>
         </div>
 
@@ -499,13 +499,13 @@ Path("templates/core/admin_part1_questions.html").write_text(r'''{% load static 
                 <thead>
                     <tr>
                         <th class="col-check"><input type="checkbox" class="row-check" id="checkAll"></th>
-                        <th class="col-lock">Khóa</th>
-                        <th class="col-num">STT</th>
-                        <th class="col-question">Câu hỏi</th>
+                        <th class="col-lock">Lock</th>
+                        <th class="col-num">No.</th>
+                        <th class="col-question">Question</th>
                         <th class="col-audio">Audio Drive</th>
-                        <th class="col-answer">Đáp án A</th>
-                        <th class="col-answer">Đáp án B</th>
-                        <th class="col-answer">Đáp án C</th>
+                        <th class="col-answer">Answer A</th>
+                        <th class="col-answer">Answer B</th>
+                        <th class="col-answer">Answer C</th>
                         <th class="col-transcript">Transcript</th>
                     </tr>
                 </thead>
@@ -518,7 +518,7 @@ Path("templates/core/admin_part1_questions.html").write_text(r'''{% load static 
                         </td>
 
                         <td>
-                            <button class="lock-btn" type="button" onclick="toggleRowLock(this)">🔓 Mở</button>
+                            <button class="lock-btn" type="button" onclick="toggleRowLock(this)">🔓 Open</button>
                         </td>
 
                         <td>
@@ -527,7 +527,7 @@ Path("templates/core/admin_part1_questions.html").write_text(r'''{% load static 
                         </td>
 
                         <td>
-                            <textarea name="question_text_{{ q.id }}" rows="3" placeholder="Nhập nội dung câu hỏi...">{{ q.question_text }}</textarea>
+                            <textarea name="question_text_{{ q.id }}" rows="3" placeholder="Nhập nội dung questions...">{{ q.question_text }}</textarea>
                         </td>
 
                         <td>
@@ -538,9 +538,9 @@ Path("templates/core/admin_part1_questions.html").write_text(r'''{% load static 
                             <div class="answer-cell">
                                 <label class="answer-choice">
                                     <input class="answer-radio" type="radio" name="correct_answer_{{ q.id }}" value="A" {% if q.correct_answer == "A" %}checked{% endif %}>
-                                    Chọn A là đáp án đúng
+                                    Chọn A là answer đúng
                                 </label>
-                                <textarea name="option_a_{{ q.id }}" rows="2" placeholder="Đáp án A">{{ q.option_a }}</textarea>
+                                <textarea name="option_a_{{ q.id }}" rows="2" placeholder="Answer A">{{ q.option_a }}</textarea>
                             </div>
                         </td>
 
@@ -548,9 +548,9 @@ Path("templates/core/admin_part1_questions.html").write_text(r'''{% load static 
                             <div class="answer-cell">
                                 <label class="answer-choice">
                                     <input class="answer-radio" type="radio" name="correct_answer_{{ q.id }}" value="B" {% if q.correct_answer == "B" %}checked{% endif %}>
-                                    Chọn B là đáp án đúng
+                                    Chọn B là answer đúng
                                 </label>
-                                <textarea name="option_b_{{ q.id }}" rows="2" placeholder="Đáp án B">{{ q.option_b }}</textarea>
+                                <textarea name="option_b_{{ q.id }}" rows="2" placeholder="Answer B">{{ q.option_b }}</textarea>
                             </div>
                         </td>
 
@@ -558,14 +558,14 @@ Path("templates/core/admin_part1_questions.html").write_text(r'''{% load static 
                             <div class="answer-cell">
                                 <label class="answer-choice">
                                     <input class="answer-radio" type="radio" name="correct_answer_{{ q.id }}" value="C" {% if q.correct_answer == "C" %}checked{% endif %}>
-                                    Chọn C là đáp án đúng
+                                    Chọn C là answer đúng
                                 </label>
-                                <textarea name="option_c_{{ q.id }}" rows="2" placeholder="Đáp án C">{{ q.option_c }}</textarea>
+                                <textarea name="option_c_{{ q.id }}" rows="2" placeholder="Answer C">{{ q.option_c }}</textarea>
                             </div>
                         </td>
 
                         <td>
-                            <textarea name="listening_transcript_{{ q.id }}" rows="3" placeholder="Transcript/lời thoại...">{{ q.listening_transcript }}</textarea>
+                            <textarea name="listening_transcript_{{ q.id }}" rows="3" placeholder="Transcript/dialogue...">{{ q.listening_transcript }}</textarea>
                         </td>
                     </tr>
                 {% empty %}
@@ -581,9 +581,9 @@ Path("templates/core/admin_part1_questions.html").write_text(r'''{% load static 
 
         <div class="sticky-save">
             <button class="btn btn-ghost" type="button" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Lên đầu</button>
-            <button class="btn btn-ghost" type="button" onclick="toggleAllLocks()">🔒 Khóa/Mở tất cả</button>
-            <button class="btn btn-danger" type="submit" onclick="return deleteSelectedRows()">🗑️ Xóa dòng đã chọn</button>
-            <button class="btn btn-primary" type="submit" onclick="setSaveAction()">💾 Lưu toàn bộ Part 1</button>
+            <button class="btn btn-ghost" type="button" onclick="toggleAllLocks()">🔒 Lock/Unlock All</button>
+            <button class="btn btn-danger" type="submit" onclick="return deleteSelectedRows()">🗑️ Delete Selected Rows</button>
+            <button class="btn btn-primary" type="submit" onclick="setSaveAction()">💾 Save All Part 1</button>
         </div>
     </form>
 </div>
@@ -604,14 +604,14 @@ function deleteSelectedRows(){
     }
 
     if(action){ action.value = "delete_selected"; }
-    return confirm("Xóa " + checked + " dòng đã chọn?");
+    return confirm("Delete " + checked + " dòng đã chọn?");
 }
 
 function toggleRowLock(btn){
     const row = btn.closest("tr");
     row.classList.toggle("locked-row");
     const locked = row.classList.contains("locked-row");
-    btn.textContent = locked ? "🔒 Khóa" : "🔓 Mở";
+    btn.textContent = locked "🔒 Lock" : "🔓 Open";
 }
 
 function toggleAllLocks(){
@@ -622,11 +622,11 @@ function toggleAllLocks(){
         if(hasUnlocked){
             row.classList.add("locked-row");
             const btn = row.querySelector(".lock-btn");
-            if(btn) btn.textContent = "🔒 Khóa";
+            if(btn) btn.textContent = "🔒 Lock";
         }else{
             row.classList.remove("locked-row");
             const btn = row.querySelector(".lock-btn");
-            if(btn) btn.textContent = "🔓 Mở";
+            if(btn) btn.textContent = "🔓 Open";
         }
     });
 }
@@ -646,7 +646,7 @@ if(search && table){
         const key = this.value.toLowerCase().trim();
         table.querySelectorAll("tbody tr").forEach(function(row){
             const text = row.innerText.toLowerCase();
-            row.style.display = text.includes(key) ? "" : "none";
+            row.style.display = text.includes(key) "" : "none";
         });
     });
 }

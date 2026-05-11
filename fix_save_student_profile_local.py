@@ -4,11 +4,11 @@ import re
 p = Path("core/views.py")
 s = p.read_text(encoding="utf-8", errors="ignore")
 
-# Thêm import csrf_exempt nếu chưa có
+# Add import csrf_exempt nếu chưa có
 if "from django.views.decorators.csrf import csrf_exempt" not in s:
     s = "from django.views.decorators.csrf import csrf_exempt\n" + s
 
-# Xóa csrf_exempt lặp nếu có
+# Delete csrf_exempt lặp nếu có
 s = re.sub(r"(?m)^@csrf_exempt\s*\n(?=@csrf_exempt)", "", s)
 
 # Đảm bảo view admin_student_lookup có @csrf_exempt ngay phía trên

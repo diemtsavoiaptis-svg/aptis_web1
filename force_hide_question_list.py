@@ -7,11 +7,11 @@ s = p.read_text(encoding="utf-8", errors="ignore")
 # Backup trước khi sửa
 Path("templates/core/listening.html.bak_hide_question_list").write_text(s, encoding="utf-8")
 
-# 1) Xóa các block aside/section/div có chứa tiêu đề "Danh sách câu hỏi"
+# 1) Delete các block aside/section/div có chứa tiêu đề "Danh sách questions"
 patterns = [
-    r'<aside[^>]*>[\s\S]*?Danh sách câu hỏi[\s\S]*?</aside>',
-    r'<section[^>]*>[\s\S]*?Danh sách câu hỏi[\s\S]*?</section>',
-    r'<div[^>]*class="[^"]*(?:question-side|side-card|question-list|question-panel)[^"]*"[^>]*>[\s\S]*?Danh sách câu hỏi[\s\S]*?</div>\s*</div>',
+    r'<aside[^>]*>[\s\S]*?Danh sách questions[\s\S]*?</aside>',
+    r'<section[^>]*>[\s\S]*?Danh sách questions[\s\S]*?</section>',
+    r'<div[^>]*class="[^"]*(?:question-side|side-card|question-list|question-panel)[^"]*"[^>]*>[\s\S]*?Danh sách questions[\s\S]*?</div>\s*</div>',
 ]
 
 old = s

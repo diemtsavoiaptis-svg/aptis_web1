@@ -135,10 +135,10 @@ for item in rows:
         part=item["part"],
         question_number=item["question_number"],
         defaults={
-            "question_text": f"Câu hỏi Listening Part {item['part']} - Câu {item['question_number']}",
-            "option_a": "Đáp án A",
-            "option_b": "Đáp án B",
-            "option_c": "Đáp án C",
+            "question_text": f"Question Listening Part {item['part']} - Câu {item['question_number']}",
+            "option_a": "Answer A",
+            "option_b": "Answer B",
+            "option_c": "Answer C",
             "correct_answer": "A",
         }
     )
@@ -150,16 +150,16 @@ for item in rows:
         obj.audio_file_name = item["audio_file_name"]
 
     if not obj.question_text:
-        obj.question_text = f"Câu hỏi Listening Part {item['part']} - Câu {item['question_number']}"
+        obj.question_text = f"Question Listening Part {item['part']} - Câu {item['question_number']}"
 
     if not obj.option_a:
-        obj.option_a = "Đáp án A"
+        obj.option_a = "Answer A"
 
     if not obj.option_b:
-        obj.option_b = "Đáp án B"
+        obj.option_b = "Answer B"
 
     if not obj.option_c:
-        obj.option_c = "Đáp án C"
+        obj.option_c = "Answer C"
 
     if not obj.correct_answer:
         obj.correct_answer = "A"

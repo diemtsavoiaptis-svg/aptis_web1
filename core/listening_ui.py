@@ -59,10 +59,10 @@ def listening_page(request):
         else (request.user.email or request.user.username)
     )
 
-    question_text = pick_value(current, "question_text", "question", "title", default=f"Câu hỏi {current_index}")
-    option_a = pick_value(current, "option_a", "answer_a", "choice_a", default="Đáp án A")
-    option_b = pick_value(current, "option_b", "answer_b", "choice_b", default="Đáp án B")
-    option_c = pick_value(current, "option_c", "answer_c", "choice_c", default="Đáp án C")
+    question_text = pick_value(current, "question_text", "question", "title", default=f"Question {current_index}")
+    option_a = pick_value(current, "option_a", "answer_a", "choice_a", default="Answer A")
+    option_b = pick_value(current, "option_b", "answer_b", "choice_b", default="Answer B")
+    option_c = pick_value(current, "option_c", "answer_c", "choice_c", default="Answer C")
     correct_answer = pick_value(current, "correct_answer", "correct_option", "answer_key", default="A")
     transcript = pick_value(
         current,

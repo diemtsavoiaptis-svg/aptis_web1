@@ -414,7 +414,7 @@ article:hover {
 </head>
 
 <body>
-    <a class="back-exit-btn" href="/listening/">← Thoát bài</a>
+    <a class="back-exit-btn" href="/listening/">← Exit bài</a>
 
     <main class="part2-page">
         <section class="part2-topbar">
@@ -422,7 +422,7 @@ article:hover {
         </section>
 
         <div class="demo-note">
-            Đây là bản demo giao diện Part 2. Dữ liệu thật sẽ được admin nhập sau.
+            Đây là bản demo interface Part 2. Data thật sẽ được admin nhập sau.
         </div>
 
         <section class="topic-card">
@@ -432,8 +432,8 @@ article:hover {
 
         <section class="answer-pool">
             <div class="pool-head">
-                <div>☰ Pool đáp án</div>
-                <small>Mỗi đáp án đúng 1 lần</small>
+                <div>☰ Pool answer</div>
+                <small>Mỗi answer đúng 1 lần</small>
             </div>
 
             <div class="pool-grid">
@@ -466,7 +466,7 @@ article:hover {
 
                 <div class="voice-actions">
                     <select class="answer-select">
-                        <option>Chọn đáp án...</option>
+                        <option>Chọn answer...</option>
                         <option>A - To relax</option>
                         <option>B - While studying</option>
                         <option>C - While singing</option>
@@ -491,11 +491,11 @@ article:hover {
         function refreshOptions() {
             const chosen = selects
                 .map(s => s.value)
-                .filter(v => v && v !== "Chọn đáp án...");
+                .filter(v => v && v !== "Chọn answer...");
 
             selects.forEach(select => {
                 Array.from(select.options).forEach(opt => {
-                    if (!opt.value || opt.value === "Chọn đáp án...") return;
+                    if (!opt.value || opt.value === "Chọn answer...") return;
                     opt.disabled = chosen.includes(opt.value) && select.value !== opt.value;
                 });
             });

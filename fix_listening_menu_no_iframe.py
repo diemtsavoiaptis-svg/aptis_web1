@@ -19,20 +19,20 @@ elif 'admin_part1_questions' not in urls:
 urls_path.write_text(urls, encoding="utf-8")
 
 
-# 2) Sửa dashboard: bỏ iframe lỗi, menu Listening thành link thật
+# 2) Edit dashboard: bỏ iframe lỗi, menu Listening thành link thật
 dash_path = Path("templates/core/dashboard.html")
 dash = dash_path.read_text(encoding="utf-8", errors="ignore")
 
 dash = re.sub(
-    r'<button class="side-link active"[^>]*>\s*🎧\s*Tổng quan Admin\s*</button>',
-    '<a class="side-link active" href="{% url \'dashboard\' %}">🎧 Tổng quan Admin</a>',
+    r'<button class="side-link active"[^>]*>\s*🎧\s*Admin Overview\s*</button>',
+    '<a class="side-link active" href="{% url \'dashboard\' %}">🎧 Admin Overview</a>',
     dash,
     flags=re.S
 )
 
 dash = re.sub(
-    r'<button class="side-link"[^>]*>\s*🎧\s*Quản lý câu hỏi\s*Listening\s*</button>',
-    '<a class="side-link" href="{% url \'admin_listening_parts\' %}">🎧 Quản lý câu hỏi Listening</a>',
+    r'<button class="side-link"[^>]*>\s*🎧\s*Manage questions\s*Listening\s*</button>',
+    '<a class="side-link" href="{% url \'admin_listening_parts\' %}">🎧 Manage questions Listening</a>',
     dash,
     flags=re.S
 )
@@ -70,7 +70,7 @@ Path("templates/core/admin_listening_parts.html").write_text(r'''{% load static 
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Quản lý Listening | Điểm TSA Với Aptis</title>
+    <title>Manage Listening | Score TSA Với Aptis</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'core/css/admin_panel.css' %}">
     <link rel="stylesheet" href="{% static 'core/css/admin_listening_parts.css' %}">
@@ -81,25 +81,25 @@ Path("templates/core/admin_listening_parts.html").write_text(r'''{% load static 
         <div class="brand">
             <div class="brand-logo">A</div>
             <div>
-                <strong>Điểm TSA</strong>
+                <strong>Score TSA</strong>
                 <span>với Aptis</span>
             </div>
         </div>
 
-        <a class="side-link" href="{% url 'dashboard' %}">🎧 Tổng quan Admin</a>
-        <a class="side-link active" href="{% url 'admin_listening_parts' %}">🎧 Quản lý câu hỏi Listening</a>
-        <a class="side-link" href="/admin/core/studentprofile/">✅ Duyệt học viên</a>
-        <a class="side-link" href="/admin/core/lesson/">📚 Quản lý bài học</a>
-        <a class="side-link" href="/admin/core/securityalert/">🛡️ Cảnh báo bảo mật</a>
-        <a class="side-link" href="{% url 'listening' %}">👀 Xem giao diện học viên</a>
-        <a class="side-link logout" href="{% url 'logout' %}">🚪 Đăng xuất</a>
+        <a class="side-link" href="{% url 'dashboard' %}">🎧 Admin Overview</a>
+        <a class="side-link active" href="{% url 'admin_listening_parts' %}">🎧 Manage questions Listening</a>
+        <a class="side-link" href="/admin/core/studentprofile/">✅ Duyệt student</a>
+        <a class="side-link" href="/admin/core/lesson/">📚 Manage lesson</a>
+        <a class="side-link" href="/admin/core/securityalert/">🛡️ Security Alerts</a>
+        <a class="side-link" href="{% url 'listening' %}">👀 View Student Interface</a>
+        <a class="side-link logout" href="{% url 'logout' %}">🚪 Logout</a>
     </aside>
 
     <main class="admin-main">
         <header class="admin-header">
             <div>
                 <p class="eyebrow">Listening Bank</p>
-                <h1>Quản lý câu hỏi Listening</h1>
+                <h1>Manage questions Listening</h1>
                 <p class="muted">Chọn từng Part để khai thác sâu. Trước mắt hoàn thiện Part 1.</p>
             </div>
             <a class="primary-btn" href="{% url 'dashboard' %}">← Về tổng quan</a>
@@ -110,8 +110,8 @@ Path("templates/core/admin_listening_parts.html").write_text(r'''{% load static 
                 <div class="part-icon">1</div>
                 <div>
                     <h2>Part 1</h2>
-                    <p>Cập nhật hàng loạt câu hỏi, audio, đáp án và transcript.</p>
-                    <strong>{{ part_counts.1 }} câu hỏi</strong>
+                    <p>Update hàng loạt questions, audio, answer và transcript.</p>
+                    <strong>{{ part_counts.1 }} questions</strong>
                 </div>
             </a>
 
@@ -120,7 +120,7 @@ Path("templates/core/admin_listening_parts.html").write_text(r'''{% load static 
                 <div>
                     <h2>Part 2</h2>
                     <p>Sẽ thiết kế sau khi hoàn thiện Part 1.</p>
-                    <strong>{{ part_counts.2 }} câu hỏi</strong>
+                    <strong>{{ part_counts.2 }} questions</strong>
                 </div>
             </div>
 
@@ -129,7 +129,7 @@ Path("templates/core/admin_listening_parts.html").write_text(r'''{% load static 
                 <div>
                     <h2>Part 3</h2>
                     <p>Sẽ thiết kế sau khi hoàn thiện Part 1.</p>
-                    <strong>{{ part_counts.3 }} câu hỏi</strong>
+                    <strong>{{ part_counts.3 }} questions</strong>
                 </div>
             </div>
 
@@ -138,7 +138,7 @@ Path("templates/core/admin_listening_parts.html").write_text(r'''{% load static 
                 <div>
                     <h2>Part 4</h2>
                     <p>Sẽ thiết kế sau khi hoàn thiện Part 1.</p>
-                    <strong>{{ part_counts.4 }} câu hỏi</strong>
+                    <strong>{{ part_counts.4 }} questions</strong>
                 </div>
             </div>
         </section>

@@ -27,7 +27,7 @@ p.write_text(r'''{% load static %}
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Dashboard quản trị | Điểm TSA với Aptis</title>
+    <title>Admin Dashboard | Score TSA với Aptis</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
@@ -333,56 +333,56 @@ p.write_text(r'''{% load static %}
         <div class="brand">
             <div class="brand-logo">A</div>
             <div>
-                <div class="brand-title">Điểm TSA</div>
+                <div class="brand-title">Score TSA</div>
                 <div class="brand-sub">với Aptis</div>
             </div>
         </div>
 
         <nav class="side-menu">
             <button class="side-link active" type="button"
-                    data-title="Tổng quan Admin"
-                    data-desc="Quản lý học viên, bài nghe và dữ liệu luyện thi Aptis."
+                    data-title="Admin Overview"
+                    data-desc="Manage student, listening task và data luyện thi Aptis."
                     data-mode="home">
-                🎧 Tổng quan Admin
+                🎧 Admin Overview
             </button>
 
             <button class="side-link" type="button"
-                    data-title="Quản lý câu hỏi Listening"
-                    data-desc="Chọn Part và cập nhật dữ liệu câu hỏi, audio, đáp án, transcript."
+                    data-title="Manage questions Listening"
+                    data-desc="Choose Part và cập nhật data questions, audio, answer, transcript."
                     data-url="/dashboard/listening-parts/">
-                🎧 Quản lý câu hỏi Listening
+                🎧 Manage questions Listening
             </button>
 
             <button class="side-link" type="button"
-                    data-title="Duyệt học viên"
-                    data-desc="Duyệt tài khoản học viên mới đăng ký, quản lý trạng thái học viên."
+                    data-title="Duyệt student"
+                    data-desc="Duyệt account student mới đăng ký, manage status student."
                     data-url="/admin/core/studentprofile/">
-                ✅ Duyệt học viên
+                ✅ Duyệt student
             </button>
 
             <button class="side-link" type="button"
-                    data-title="Quản lý bài học"
-                    data-desc="Thêm, sửa và quản lý bài học hiển thị cho học viên."
+                    data-title="Manage lesson"
+                    data-desc="Add, sửa và manage lesson hiển thị cho student."
                     data-url="/admin/core/lesson/">
-                📚 Quản lý bài học
+                📚 Manage lesson
             </button>
 
             <button class="side-link" type="button"
-                    data-title="Cảnh báo bảo mật"
-                    data-desc="Theo dõi cảnh báo đăng nhập và các vấn đề bảo mật tài khoản."
+                    data-title="Security Alerts"
+                    data-desc="Theo dõi cảnh báo đăng nhập và các vấn đề bảo mật account."
                     data-url="/admin/core/securityalert/">
-                🛡️ Cảnh báo bảo mật
+                🛡️ Security Alerts
             </button>
 
             <button class="side-link" type="button"
-                    data-title="Giao diện học viên"
-                    data-desc="Xem nhanh giao diện luyện đề mà học viên đang sử dụng."
+                    data-title="Student View"
+                    data-desc="Xem nhanh interface luyện đề mà student đang sử dụng."
                     data-url="/listening/">
-                👀 Xem giao diện học viên
+                👀 View Student Interface
             </button>
 
             <button class="side-link logout" type="button" onclick="window.location.href='/dang-xuat/'">
-                🚪 Đăng xuất
+                🚪 Logout
             </button>
         </nav>
     </aside>
@@ -390,20 +390,20 @@ p.write_text(r'''{% load static %}
     <main class="admin-main">
         <section class="hero">
             <div>
-                <div class="eyebrow">Dashboard quản trị</div>
-                <h1 id="panelTitle">Tổng quan Admin</h1>
-                <p id="panelDesc">Quản lý học viên, bài nghe và dữ liệu luyện thi Aptis.</p>
+                <div class="eyebrow">Admin Dashboard</div>
+                <h1 id="panelTitle">Admin Overview</h1>
+                <p id="panelDesc">Manage student, listening task và data luyện thi Aptis.</p>
             </div>
 
             <button class="open-admin" type="button" onclick="openCurrentInNewTab()">
-                Mở trang riêng
+                Mở trang separate
             </button>
         </section>
 
         <section class="content-card">
             <div class="frame-toolbar">
                 <div>
-                    <div class="frame-label" id="frameLabel">Tổng quan nhanh</div>
+                    <div class="frame-label" id="frameLabel">Overview nhanh</div>
                     <div class="frame-note">Bấm menu bên trái, nội dung sẽ đổi ở khung bên phải mà không mất thanh điều hướng.</div>
                 </div>
 
@@ -415,27 +415,27 @@ p.write_text(r'''{% load static %}
 
             <div id="welcomePanel" class="welcome-panel">
                 <div class="quick-grid">
-                    <div class="quick-card" data-url="/dashboard/listening-parts/" data-title="Quản lý câu hỏi Listening" data-desc="Chọn Part và cập nhật dữ liệu câu hỏi, audio, đáp án, transcript.">
+                    <div class="quick-card" data-url="/dashboard/listening-parts/" data-title="Manage questions Listening" data-desc="Choose Part và cập nhật data questions, audio, answer, transcript.">
                         <div class="quick-icon">🎧</div>
                         <h3>Listening</h3>
-                        <p>Quản lý Part 1, Part 2, Part 3, Part 4 trong khung bên phải.</p>
+                        <p>Manage Part 1, Part 2, Part 3, Part 4 trong khung bên phải.</p>
                     </div>
 
-                    <div class="quick-card" data-url="/admin/core/studentprofile/" data-title="Duyệt học viên" data-desc="Duyệt tài khoản học viên mới đăng ký, quản lý trạng thái học viên.">
+                    <div class="quick-card" data-url="/admin/core/studentprofile/" data-title="Duyệt student" data-desc="Duyệt account student mới đăng ký, manage status student.">
                         <div class="quick-icon">✅</div>
-                        <h3>Học viên</h3>
-                        <p>Duyệt tài khoản, xem trạng thái và thông tin học viên.</p>
+                        <h3>Student</h3>
+                        <p>Review accounts, check status, and manage student information.</p>
                     </div>
 
-                    <div class="quick-card" data-url="/admin/core/lesson/" data-title="Quản lý bài học" data-desc="Thêm, sửa và quản lý bài học hiển thị cho học viên.">
+                    <div class="quick-card" data-url="/admin/core/lesson/" data-title="Manage lesson" data-desc="Add, sửa và manage lesson hiển thị cho student.">
                         <div class="quick-icon">📚</div>
-                        <h3>Bài học</h3>
-                        <p>Quản lý tiêu đề, mô tả, nội dung và video bài học.</p>
+                        <h3>Lesson</h3>
+                        <p>Manage tiêu đề, mô tả, nội dung và video lesson.</p>
                     </div>
                 </div>
             </div>
 
-            <iframe id="adminFrame" title="Khung quản trị" hidden></iframe>
+            <iframe id="adminFrame" title="Khung admin" hidden></iframe>
         </section>
     </main>
 </div>
@@ -449,16 +449,16 @@ function setActive(btn){
 }
 
 function setPanel(title, desc){
-    document.getElementById("panelTitle").textContent = title || "Dashboard quản trị";
+    document.getElementById("panelTitle").textContent = title || "Admin Dashboard";
     document.getElementById("panelDesc").textContent = desc || "";
-    document.getElementById("frameLabel").textContent = title || "Nội dung quản trị";
+    document.getElementById("frameLabel").textContent = title || "Nội dung admin";
 }
 
 function openHome(){
     currentUrl = "";
     document.getElementById("adminFrame").hidden = true;
     document.getElementById("welcomePanel").hidden = false;
-    setPanel("Tổng quan Admin", "Quản lý học viên, bài nghe và dữ liệu luyện thi Aptis.");
+    setPanel("Admin Overview", "Manage student, listening task và data luyện thi Aptis.");
 }
 
 function openFrame(url, title, desc){

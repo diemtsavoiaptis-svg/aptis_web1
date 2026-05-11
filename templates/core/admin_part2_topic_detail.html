@@ -195,12 +195,12 @@ article:hover {
         <div>
             <h1>{{ topic.title }}</h1>
             <div class="hint">
-                Bảng dữ liệu Part 2: mỗi chủ đề có 4 voice tương ứng 4 người. Mỗi voice có audio, A/B/C/D, transcript và dữ liệu đáp án.
+                Bảng data Part 2: mỗi topics có 4 voice tương ứng 4 người. Mỗi voice có audio, A/B/C/D, transcript và data answer.
             </div>
         </div>
         <div class="actions">
-            <a class="link-btn light" href="/dashboard/part-2/">← Danh sách chủ đề</a>
-            <a class="link-btn light" href="/listening/part-2/">Xem giao diện học viên</a>
+            <a class="link-btn light" href="/dashboard/part-2/">← Danh sách topics</a>
+            <a class="link-btn light" href="/listening/part-2/">View Student Interface</a>
         </div>
     </section>
 
@@ -219,7 +219,7 @@ article:hover {
         <section class="card">
             <div class="topic-grid">
                 <div>
-                    <label>Tên chủ đề</label>
+                    <label>Tên topics</label>
                     <input name="title" value="{{ topic.title }}">
                 </div>
                 <div>
@@ -229,26 +229,26 @@ article:hover {
             </div>
 
             <div class="note">
-                Cột “Dữ liệu đáp án” có thể nhập nhiều dòng, nhưng khi làm bài chỉ khai thác 4 dữ liệu tương ứng 4 người.
+                Cột “Data answer” có thể nhập nhiều dòng, nhưng khi làm bài chỉ khai thác 4 data tương ứng 4 người.
             </div>
         </section>
 
         <section class="card">
-            <h2 style="margin:0 0 8px;font-size:26px;color:#4a0010">Dữ liệu 4 voice</h2>
+            <h2 style="margin:0 0 8px;font-size:26px;color:#4a0010">Data 4 voice</h2>
 
             <div class="table-wrap">
                 <table>
                     <thead>
                         <tr>
-                            <th>STT</th>
-                            <th>File audio của chủ đề</th>
-                            <th>Đáp án A</th>
-                            <th>Đáp án B</th>
-                            <th>Đáp án C</th>
-                            <th>Đáp án D</th>
+                            <th>No.</th>
+                            <th>File audio của topics</th>
+                            <th>Answer A</th>
+                            <th>Answer B</th>
+                            <th>Answer C</th>
+                            <th>Answer D</th>
                             <th>Nội dung file ghi âm</th>
-                            <th>Dữ liệu của các đáp án</th>
-                            <th>Đáp án đúng</th>
+                            <th>Data của các answer</th>
+                            <th>Correct Answer</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -261,22 +261,22 @@ article:hover {
                                 <textarea name="voice_{{ voice.id }}_audio_url" placeholder="Dán link audio hoặc file audio">{{ voice.audio_url }}</textarea>
                             </td>
                             <td class="answer-cell">
-                                <textarea name="voice_{{ voice.id }}_answer_a" placeholder="Đáp án A">{{ voice.answer_a }}</textarea>
+                                <textarea name="voice_{{ voice.id }}_answer_a" placeholder="Answer A">{{ voice.answer_a }}</textarea>
                             </td>
                             <td class="answer-cell">
-                                <textarea name="voice_{{ voice.id }}_answer_b" placeholder="Đáp án B">{{ voice.answer_b }}</textarea>
+                                <textarea name="voice_{{ voice.id }}_answer_b" placeholder="Answer B">{{ voice.answer_b }}</textarea>
                             </td>
                             <td class="answer-cell">
-                                <textarea name="voice_{{ voice.id }}_answer_c" placeholder="Đáp án C">{{ voice.answer_c }}</textarea>
+                                <textarea name="voice_{{ voice.id }}_answer_c" placeholder="Answer C">{{ voice.answer_c }}</textarea>
                             </td>
                             <td class="answer-cell">
-                                <textarea name="voice_{{ voice.id }}_answer_d" placeholder="Đáp án D">{{ voice.answer_d }}</textarea>
+                                <textarea name="voice_{{ voice.id }}_answer_d" placeholder="Answer D">{{ voice.answer_d }}</textarea>
                             </td>
                             <td class="transcript-cell">
                                 <textarea name="voice_{{ voice.id }}_transcript" placeholder="Transcript / nội dung file ghi âm">{{ voice.transcript }}</textarea>
                             </td>
                             <td class="data-cell">
-                                <textarea name="voice_{{ voice.id }}_data_choices" placeholder="Mỗi dữ liệu một dòng. Có thể nhập nhiều dòng, nhưng bài làm chỉ chọn 4 dữ liệu.">{{ voice.data_choices }}</textarea>
+                                <textarea name="voice_{{ voice.id }}_data_choices" placeholder="Mỗi data một dòng. Có thể nhập nhiều dòng, nhưng bài làm chỉ chọn 4 data.">{{ voice.data_choices }}</textarea>
                             </td>
                             <td>
                                 <select name="voice_{{ voice.id }}_correct_answer">
@@ -294,16 +294,16 @@ article:hover {
             </div>
 
             <div class="actions" style="justify-content:flex-end;margin-top:16px">
-                <button class="btn" type="submit">Lưu dữ liệu chủ đề</button>
+                <button class="btn" type="submit">Save data topics</button>
             </div>
         </section>
     </form>
 
-    <form method="post" onsubmit="return confirm('Bạn chắc chắn muốn xóa toàn bộ chủ đề Part 2 này?');">
+    <form method="post" onsubmit="return confirm('Bạn chắc chắn muốn xóa toàn bộ topics Part 2 này?');">
         {% csrf_token %}
         <input type="hidden" name="action" value="delete_topic">
         <section class="card">
-            <button class="btn danger" type="submit">Xóa chủ đề này</button>
+            <button class="btn danger" type="submit">Delete topics này</button>
         </section>
     </form>
 </main>

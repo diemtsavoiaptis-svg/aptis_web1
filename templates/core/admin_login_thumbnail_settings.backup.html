@@ -271,11 +271,11 @@ button{
 
 <section class="hero">
     <div>
-        <div class="kicker">Dashboard quản trị</div>
+        <div class="kicker">Admin Dashboard</div>
         <h1>Thumbnail màn hình đăng nhập</h1>
-        <div class="desc">Thiết kế ảnh/video động và các thẻ nổi cho màn hình đăng nhập.</div>
+        <div class="desc">Design animated images/videos and floating cards for the login screen.</div>
     </div>
-    <a class="back" href="/dashboard/">← Quay lại Dashboard</a>
+    <a class="back" href="/dashboard/">← Back Dashboard</a>
 </section>
 
 {% for message in messages %}
@@ -295,11 +295,11 @@ button{
                 {% if current and current.display_video_url %}
                     <video src="{{ current.display_video_url }}" autoplay muted loop playsinline></video>
                 {% elif current and current.display_url %}
-                    <img src="{{ current.display_url }}" alt="Thumbnail đăng nhập">
+                    <img src="{{ current.display_url }}" alt="Login Thumbnail">
                 {% endif %}
             </div>
 
-            <div class="back-admin">▦ Quay lại Admin</div>
+            <div class="back-admin">▦ Back Admin</div>
 
             <div class="top-title">
                 <span>KHÓA HỌC ONLINE</span>
@@ -343,7 +343,7 @@ button{
         </div>
 
         <div class="note">
-            Preview này là giao diện màn hình đăng nhập. Nếu upload video, video sẽ chạy nền động.
+            Preview này là interface màn hình đăng nhập. Nếu upload video, video sẽ chạy nền động.
         </div>
     </div>
 
@@ -369,7 +369,7 @@ button{
         <input type="url" name="image_url" placeholder="https://example.com/image.jpg">
 
         <label>Tên thumbnail</label>
-        <input type="text" name="name" value="{{ current.name|default:'' }}" placeholder="Ví dụ: Thumbnail đăng nhập">
+        <input type="text" name="name" value="{{ current.name|default:'' }}" placeholder="Ví dụ: Login Thumbnail">
 
         <h2 style="margin-top:22px">5 chữ chạy ngang</h2>
         <div class="ticker-grid">
@@ -383,9 +383,9 @@ button{
 </div>
 
 <div class="actions">
-    <button class="save" name="action" value="save_thumbnail" type="submit">💾 Lưu video/ảnh</button>
-    <button class="light" name="action" value="delete_video" type="submit">🎬 Xóa video</button>
-    <button class="light" name="action" value="delete_image" type="submit">🖼 Xóa ảnh</button>
+    <button class="save" name="action" value="save_thumbnail" type="submit">💾 Save video/ảnh</button>
+    <button class="light" name="action" value="delete_video" type="submit">🎬 Delete video</button>
+    <button class="light" name="action" value="delete_image" type="submit">🖼 Delete ảnh</button>
     <button class="light" name="action" value="restore_default" type="submit">↻ Mặc định</button>
 </div>
 

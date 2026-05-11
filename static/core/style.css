@@ -1219,7 +1219,7 @@ body {
     display: block;
 }
 
-/* Sửa lại: không dùng cover.png làm ảnh bìa trang chủ nữa */
+/* Edit lại: không dùng cover.png làm ảnh bìa trang chủ nữa */
 .fb-cover {
     background:
         radial-gradient(circle at 11% 18%, #b8d8ea 0 0, transparent 140px),

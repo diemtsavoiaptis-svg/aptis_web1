@@ -4,14 +4,14 @@ import re
 p = Path("templates/admin/base_site.html")
 s = p.read_text(encoding="utf-8-sig", errors="ignore")
 
-# Xóa link font_theme.css bị đặt sai trên đầu file
+# Delete link font_theme.css bị đặt sai trên đầu file
 s = re.sub(
     r'\s*<link rel="stylesheet" href="\{% static \'core/css/font_theme\.css\' %\}">\s*',
     '\n',
     s
 )
 
-# Xóa các load static/i18n static lặp linh tinh ở đầu để dựng lại chuẩn
+# Delete các load static/i18n static lặp linh tinh ở đầu để dựng lại chuẩn
 s = re.sub(r'^\s*\{% load static %\}\s*', '', s)
 s = re.sub(r'^\s*\{% load i18n static %\}\s*', '', s)
 

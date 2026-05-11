@@ -271,7 +271,7 @@ class SecurityAlertAdmin(admin.ModelAdmin):
     list_per_page = 30
 
     fieldsets = (
-        ("Thông tin cảnh báo", {"fields": ("user", "severity", "reason", "is_resolved")}),
+        ("Information cảnh báo", {"fields": ("user", "severity", "reason", "is_resolved")}),
         ("Dấu hiệu đăng nhập", {"fields": ("ip_address", "user_agent")}),
         ("Thời gian", {"fields": ("created_at", "updated_at")}),
     )
@@ -292,7 +292,7 @@ class SecurityAlertAdmin(admin.ModelAdmin):
             return mark_safe('<span class="tsa-soft-badge green">Đã xử lý</span>')
         return mark_safe('<span class="tsa-red-alert">Chưa xử lý</span>')
 
-    resolved_badge.short_description = "Trạng thái"
+    resolved_badge.short_description = "Status"
 
     def short_user_agent(self, obj):
         text = obj.user_agent or ""

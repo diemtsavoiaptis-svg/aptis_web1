@@ -11,7 +11,7 @@ class RegisterForm(forms.Form):
         max_length=150,
         widget=forms.TextInput(attrs={
             "class": "auth-input",
-            "placeholder": "Họ và tên học viên",
+            "placeholder": "Full Name student",
             "autocomplete": "name",
         })
     )
@@ -29,7 +29,7 @@ class RegisterForm(forms.Form):
         max_length=150,
         widget=forms.TextInput(attrs={
             "class": "auth-input",
-            "placeholder": "Tài khoản hoặc email",
+            "placeholder": "Account hoặc email",
             "autocomplete": "username",
         })
     )
@@ -37,7 +37,7 @@ class RegisterForm(forms.Form):
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
             "class": "auth-input",
-            "placeholder": "Mật khẩu",
+            "placeholder": "Password",
             "autocomplete": "new-password",
         })
     )
@@ -48,7 +48,7 @@ class LoginForm(forms.Form):
         max_length=150,
         widget=forms.TextInput(attrs={
             "class": "auth-input",
-            "placeholder": "Tài khoản hoặc email",
+            "placeholder": "Account hoặc email",
             "autocomplete": "username",
         })
     )
@@ -56,7 +56,7 @@ class LoginForm(forms.Form):
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
             "class": "auth-input",
-            "placeholder": "Mật khẩu",
+            "placeholder": "Password",
             "autocomplete": "current-password",
         })
     )
@@ -64,7 +64,7 @@ class LoginForm(forms.Form):
 
 
 # =========================
-# 2) listening_ui.py: context sạch cho giao diện học viên
+# 2) listening_ui.py: context sạch cho interface student
 # =========================
 Path("core/listening_ui.py").write_text(r'''from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
@@ -115,10 +115,10 @@ def listening_page(request):
 
     current = questions[current_index - 1]
 
-    question_text = pick_value(current, "question_text", "question", "title", default=f"Câu hỏi {current_index}")
-    option_a = pick_value(current, "option_a", "answer_a", "choice_a", default="Đáp án A")
-    option_b = pick_value(current, "option_b", "answer_b", "choice_b", default="Đáp án B")
-    option_c = pick_value(current, "option_c", "answer_c", "choice_c", default="Đáp án C")
+    question_text = pick_value(current, "question_text", "question", "title", default=f"Question {current_index}")
+    option_a = pick_value(current, "option_a", "answer_a", "choice_a", default="Answer A")
+    option_b = pick_value(current, "option_b", "answer_b", "choice_b", default="Answer B")
+    option_c = pick_value(current, "option_c", "answer_c", "choice_c", default="Answer C")
     correct_answer = pick_value(current, "correct_answer", "correct_option", "answer_key", default="A")
     transcript = pick_value(
         current,
@@ -156,14 +156,14 @@ def listening_page(request):
 
 
 # =========================
-# 3) dashboard.html: giao diện admin đỏ
+# 3) dashboard.html: interface admin đỏ
 # =========================
 Path("templates/core/dashboard.html").write_text(r'''{% load static %}
 <!doctype html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Admin | Điểm TSA Với Aptis</title>
+    <title>Admin | Score TSA Với Aptis</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'core/css/app_red.css' %}">
 </head>
@@ -173,28 +173,28 @@ Path("templates/core/dashboard.html").write_text(r'''{% load static %}
         <div class="brand-block">
             <div class="brand-logo">A</div>
             <div>
-                <div class="brand-name">Điểm TSA</div>
+                <div class="brand-name">Score TSA</div>
                 <div class="brand-sub">với Aptis</div>
             </div>
         </div>
 
         <nav class="side-nav">
-            <a class="active" href="{% url 'dashboard' %}">🎧 Tổng quan Admin</a>
-            <a href="/admin/core/listeningquestion/">🎧 Quản lý câu hỏi Listening</a>
-            <a href="/admin/core/studentprofile/">✅ Duyệt học viên</a>
-            <a href="/admin/core/lesson/">📚 Quản lý bài học</a>
-            <a href="/admin/core/securityalert/">🛡️ Cảnh báo bảo mật</a>
-            <a href="{% url 'listening' %}">👀 Xem giao diện học viên</a>
-            <a href="{% url 'logout' %}">🚪 Đăng xuất</a>
+            <a class="active" href="{% url 'dashboard' %}">🎧 Admin Overview</a>
+            <a href="/admin/core/listeningquestion/">🎧 Manage questions Listening</a>
+            <a href="/admin/core/studentprofile/">✅ Duyệt student</a>
+            <a href="/admin/core/lesson/">📚 Manage lesson</a>
+            <a href="/admin/core/securityalert/">🛡️ Security Alerts</a>
+            <a href="{% url 'listening' %}">👀 View Student Interface</a>
+            <a href="{% url 'logout' %}">🚪 Logout</a>
         </nav>
     </aside>
 
     <main class="admin-main">
         <header class="admin-header">
             <div>
-                <p class="eyebrow">Dashboard quản trị</p>
+                <p class="eyebrow">Admin Dashboard</p>
                 <h1>Xin chào, {{ request.user.username }}</h1>
-                <p class="muted">Quản lý học viên, bài nghe và dữ liệu luyện thi Aptis.</p>
+                <p class="muted">Manage student, listening task và data luyện thi Aptis.</p>
             </div>
             <a class="primary-btn" href="/admin/">Mở Django Admin</a>
         </header>
@@ -203,30 +203,30 @@ Path("templates/core/dashboard.html").write_text(r'''{% load static %}
             <div class="stat-card">
                 <span>🎧</span>
                 <strong>Listening</strong>
-                <p>Thêm/sửa câu hỏi, audio, đáp án và transcript.</p>
-                <a href="/admin/core/listeningquestion/">Quản lý Listening →</a>
+                <p>Add/sửa questions, audio, answer và transcript.</p>
+                <a href="/admin/core/listeningquestion/">Manage Listening →</a>
             </div>
             <div class="stat-card">
                 <span>✅</span>
-                <strong>Học viên</strong>
-                <p>Duyệt tài khoản học viên mới đăng ký.</p>
-                <a href="/admin/core/studentprofile/">Duyệt học viên →</a>
+                <strong>Student</strong>
+                <p>Duyệt account student mới đăng ký.</p>
+                <a href="/admin/core/studentprofile/">Duyệt student →</a>
             </div>
             <div class="stat-card">
                 <span>📚</span>
-                <strong>Bài học</strong>
-                <p>Quản lý tài liệu, mô tả và video học tập.</p>
-                <a href="/admin/core/lesson/">Quản lý bài học →</a>
+                <strong>Lesson</strong>
+                <p>Manage tài liệu, mô tả và video học tập.</p>
+                <a href="/admin/core/lesson/">Manage lesson →</a>
             </div>
         </section>
 
         <section class="content-card">
             <div class="section-head">
                 <div>
-                    <h2>Danh sách bài học</h2>
-                    <p class="muted">Các bài học đang có trong hệ thống.</p>
+                    <h2>Danh sách lesson</h2>
+                    <p class="muted">Các lesson đang có trong hệ thống.</p>
                 </div>
-                <a class="ghost-btn" href="/admin/core/lesson/add/">+ Thêm bài học</a>
+                <a class="ghost-btn" href="/admin/core/lesson/add/">+ Add lesson</a>
             </div>
 
             <div class="lesson-list">
@@ -240,7 +240,7 @@ Path("templates/core/dashboard.html").write_text(r'''{% load static %}
                     </article>
                 {% empty %}
                     <div class="empty-box">
-                        Chưa có bài học nào. Bấm “Thêm bài học” để tạo nội dung đầu tiên.
+                        Chưa có lesson nào. Bấm “Add lesson” để tạo nội dung đầu tiên.
                     </div>
                 {% endfor %}
             </div>
@@ -253,14 +253,14 @@ Path("templates/core/dashboard.html").write_text(r'''{% load static %}
 
 
 # =========================
-# 4) listening.html: giao diện học viên đỏ
+# 4) listening.html: interface student đỏ
 # =========================
 Path("templates/core/listening.html").write_text(r'''{% load static %}
 <!doctype html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Listening Part {{ part_number }} | Điểm TSA Với Aptis</title>
+    <title>Listening Part {{ part_number }} | Score TSA Với Aptis</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'core/css/app_red.css' %}">
 </head>
@@ -270,13 +270,13 @@ Path("templates/core/listening.html").write_text(r'''{% load static %}
         <div class="brand-inline">
             <div class="brand-logo">A</div>
             <div>
-                <strong>Điểm TSA Với Aptis</strong>
+                <strong>Score TSA Với Aptis</strong>
                 <span>Listening Practice</span>
             </div>
         </div>
         <div class="student-actions">
             <a href="{% url 'dashboard' %}" class="ghost-btn">Trang chính</a>
-            <a href="{% url 'logout' %}" class="ghost-btn">Đăng xuất</a>
+            <a href="{% url 'logout' %}" class="ghost-btn">Logout</a>
         </div>
     </header>
 
@@ -289,7 +289,7 @@ Path("templates/core/listening.html").write_text(r'''{% load static %}
                 </div>
                 <div>
                     <h1>Listening Practice</h1>
-                    <p>Luyện nghe từng câu, rõ ràng và dễ thao tác.</p>
+                    <p>Listening Practice từng câu, rõ ràng và dễ thao tác.</p>
                 </div>
             </div>
 
@@ -301,8 +301,8 @@ Path("templates/core/listening.html").write_text(r'''{% load static %}
 
             {% if no_question %}
                 <div class="empty-box">
-                    <h2>Chưa có dữ liệu Listening cho Part {{ part_number }}</h2>
-                    <p>Admin cần nhập câu hỏi trong trang quản trị trước.</p>
+                    <h2>Chưa có data Listening cho Part {{ part_number }}</h2>
+                    <p>Admin cần nhập questions trong trang admin trước.</p>
                 </div>
             {% else %}
                 <div class="progress-wrap">
@@ -337,11 +337,11 @@ Path("templates/core/listening.html").write_text(r'''{% load static %}
                         </button>
                     </div>
 
-                    <button class="primary-btn full check-answer" type="button">Kiểm tra đáp án</button>
+                    <button class="primary-btn full check-answer" type="button">Kiểm tra answer</button>
 
                     <div class="answer-result" hidden>
-                        <h3>Kết quả</h3>
-                        <p>Đáp án đúng: <strong>{{ question.correct_answer }}</strong></p>
+                        <h3>Results</h3>
+                        <p>Answer đúng: <strong>{{ question.correct_answer }}</strong></p>
                         <div class="transcript">
                             <strong>Transcript:</strong>
                             <p>{{ question.transcript }}</p>
@@ -362,7 +362,7 @@ Path("templates/core/listening.html").write_text(r'''{% load static %}
 
         <aside class="question-side">
             <div class="side-card">
-                <h3>Danh sách câu hỏi</h3>
+                <h3>Danh sách questions</h3>
                 <div class="side-stats">
                     <div>
                         <strong>{{ current_index|default:0 }}</strong>

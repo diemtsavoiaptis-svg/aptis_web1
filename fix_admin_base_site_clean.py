@@ -7,12 +7,12 @@ p.write_text("""{% extends "admin/base.html" %}
 {% load i18n static %}
 
 {% block title %}
-{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | Quản trị TSA Aptis
+{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | Admin TSA Aptis
 {% endblock %}
 
 {% block branding %}
 <div id="site-name">
-    <a href="{% url 'admin:index' %}">Quản trị TSA Aptis</a>
+    <a href="{% url 'admin:index' %}">Admin TSA Aptis</a>
 </div>
 {% endblock %}
 

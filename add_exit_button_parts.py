@@ -12,7 +12,7 @@ for p in files:
     s = p.read_text(encoding="utf-8", errors="ignore")
     old = s
 
-    # Thêm CSS nút thoát nếu chưa có
+    # Add CSS nút thoát nếu chưa có
     if "back-exit-btn" not in s:
         css = """
 .back-exit-btn{
@@ -51,12 +51,12 @@ for p in files:
         if "</style>" in s:
             s = s.replace("</style>", css + "\n</style>", 1)
 
-    # Thêm nút ngay sau <body>
-    if "← Thoát" not in s and "<body" in s:
+    # Add nút ngay sau <body>
+    if "← Exit" not in s and "<body" in s:
         import re
         s = re.sub(
             r"(<body[^>]*>)",
-            r'\1\n<a class="back-exit-btn" href="/dashboard/listening-parts/">← Thoát</a>',
+            r'\1\n<a class="back-exit-btn" href="/dashboard/listening-parts/">← Exit</a>',
             s,
             count=1
         )

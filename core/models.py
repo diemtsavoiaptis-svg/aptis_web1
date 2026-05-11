@@ -7,7 +7,7 @@ def _vi(text):
 
 
 class StudentProfile(models.Model):
-    student_id = models.CharField('ID học viên', max_length=80, blank=True)
+    student_id = models.CharField('ID student', max_length=80, blank=True)
     STATUS_CHOICES = [
         ("pending", _vi(r"Ch\u1edd duy\u1ec7t")),
         ("approved", _vi(r"\u0110\u00e3 duy\u1ec7t")),
@@ -64,9 +64,9 @@ class ListeningQuestion(models.Model):
     listening_transcript = models.TextField(blank=True, verbose_name=_vi(r"\u0110\u1ec1 b\u00e0i nghe / transcript"))
 
     audio_url = models.URLField(blank=True, verbose_name=_vi(r"Link audio ngo\u00e0i"))
-    voice_info = models.TextField("Thông tin của voice", blank=True)
-    voice_info_locked = models.BooleanField("Khóa thông tin voice", default=False)
-    voice_info = models.TextField("Thông tin của voice", blank=True)
+    voice_info = models.TextField("Information của voice", blank=True)
+    voice_info_locked = models.BooleanField("Lock information voice", default=False)
+    voice_info = models.TextField("Information của voice", blank=True)
     audio_drive_link = models.URLField(blank=True, verbose_name=_vi(r"Link Google Drive MP3"))
     audio_drive_file_id = models.CharField(max_length=255, blank=True, default="", verbose_name=_vi(r"Google Drive File ID"))
     audio_file = models.FileField(upload_to="listening_audio/", blank=True, null=True, verbose_name=_vi(r"File audio local"))
@@ -160,24 +160,24 @@ class SecurityAlert(models.Model):
 # ===== Listening Part 2 data models =====
 class Part2Topic(models.Model):
     VERSION_CHOICES = [
-        ("gioi", "Mày giỏi"),
-        ("kem", "Mày kém"),
+        ("gioi", "Version A"),
+        ("kem", "Version B"),
     ]
 
-    version = models.CharField("Phiên bản", max_length=20, choices=VERSION_CHOICES, default="gioi")
-    title = models.CharField("Tên chủ đề", max_length=255)
+    version = models.CharField("Version", max_length=20, choices=VERSION_CHOICES, default="gioi")
+    title = models.CharField("Tên topics", max_length=255)
     description = models.TextField("Mô tả", blank=True)
     data_choices = models.TextField(
-        "Dữ liệu đáp án tổng",
+        "Data answer tổng",
         blank=True,
-        help_text="Nhập nhiều dòng dữ liệu đáp án. 4 voice sẽ chọn đáp án đúng từ danh sách này."
+        help_text="Nhập nhiều data rows answer. 4 voice sẽ chọn answer đúng từ danh sách này."
     )
     audio_url = models.URLField("Audio Drive chung", blank=True)
     created_at = models.DateTimeField("Ngày tạo", auto_now_add=True)
 
     class Meta:
-        verbose_name = "Chủ đề Part 2"
-        verbose_name_plural = "Chủ đề Part 2"
+        verbose_name = "Topic Part 2"
+        verbose_name_plural = "Topic Part 2"
         ordering = ["-id"]
 
     def __str__(self):
@@ -185,27 +185,27 @@ class Part2Topic(models.Model):
 
 
 class Part2Voice(models.Model):
-    correct_data = models.TextField("Đáp án đúng", blank=True)
-    is_locked = models.BooleanField("Khóa", default=False)
-    question_text = models.TextField("Câu hỏi", blank=True)
-    topic = models.ForeignKey(Part2Topic, on_delete=models.CASCADE, related_name="voices", verbose_name="Chủ đề")
+    correct_data = models.TextField("Answer đúng", blank=True)
+    is_locked = models.BooleanField("Lock", default=False)
+    question_text = models.TextField("Question", blank=True)
+    topic = models.ForeignKey(Part2Topic, on_delete=models.CASCADE, related_name="voices", verbose_name="Topic")
     order = models.PositiveIntegerField("Thứ tự người nói", default=1)
 
     audio_url = models.URLField("File audio / Link audio", blank=True)
-    answer_a = models.CharField("Đáp án A", max_length=255, blank=True)
-    answer_b = models.CharField("Đáp án B", max_length=255, blank=True)
-    answer_c = models.CharField("Đáp án C", max_length=255, blank=True)
-    answer_d = models.CharField("Đáp án D", max_length=255, blank=True)
+    answer_a = models.CharField("Answer A", max_length=255, blank=True)
+    answer_b = models.CharField("Answer B", max_length=255, blank=True)
+    answer_c = models.CharField("Answer C", max_length=255, blank=True)
+    answer_d = models.CharField("Answer D", max_length=255, blank=True)
 
-    transcript = models.TextField("Nội dung file ghi âm", blank=True)
+    transcript = models.TextField("Nội dung recording file", blank=True)
     data_choices = models.TextField(
-        "Dữ liệu đáp án",
+        "Data answer",
         blank=True,
-        help_text="Nhập nhiều ý dữ liệu, mỗi ý một dòng. Khi làm bài chỉ chọn 4 ý tương ứng 4 người."
+        help_text="Nhập nhiều ý data, mỗi ý một dòng. Khi làm bài chỉ chọn 4 ý tương ứng 4 người."
     )
 
     correct_answer = models.CharField(
-        "Đáp án đúng",
+        "Answer đúng",
         max_length=1,
         choices=[("A", "A"), ("B", "B"), ("C", "C"), ("D", "D")],
         blank=True
@@ -235,7 +235,7 @@ class ListeningPartMaterial(models.Model):
     audio_url = models.URLField("Link audio / Google Drive", blank=True)
     document_file = models.FileField("Tài liệu đính kèm", upload_to="listening_part34_documents/", blank=True, null=True)
     transcript = models.TextField("Transcript / nội dung nghe", blank=True)
-    is_active = models.BooleanField("Hiển thị cho học viên", default=True)
+    is_active = models.BooleanField("Hiển thị cho student", default=True)
     created_at = models.DateTimeField("Ngày tạo", auto_now_add=True)
 
     class Meta:
@@ -263,20 +263,20 @@ class ListeningPartQuestion(models.Model):
         related_name="questions",
         verbose_name="Tài liệu",
     )
-    order = models.PositiveIntegerField("STT", default=1)
-    question_text = models.TextField("Câu hỏi")
-    option_a = models.CharField("Đáp án A", max_length=500, blank=True)
-    option_b = models.CharField("Đáp án B", max_length=500, blank=True)
-    option_c = models.CharField("Đáp án C", max_length=500, blank=True)
-    option_d = models.CharField("Đáp án D", max_length=500, blank=True)
-    option_e = models.CharField("Đáp án E", max_length=500, blank=True)
-    option_f = models.CharField("Đáp án F", max_length=500, blank=True)
-    correct_answer = models.CharField("Đáp án đúng", max_length=1, choices=ANSWER_CHOICES, default="A")
+    order = models.PositiveIntegerField("No.", default=1)
+    question_text = models.TextField("Question")
+    option_a = models.CharField("Answer A", max_length=500, blank=True)
+    option_b = models.CharField("Answer B", max_length=500, blank=True)
+    option_c = models.CharField("Answer C", max_length=500, blank=True)
+    option_d = models.CharField("Answer D", max_length=500, blank=True)
+    option_e = models.CharField("Answer E", max_length=500, blank=True)
+    option_f = models.CharField("Answer F", max_length=500, blank=True)
+    correct_answer = models.CharField("Answer đúng", max_length=1, choices=ANSWER_CHOICES, default="A")
     explanation = models.TextField("Giải thích / ghi chú", blank=True)
 
     class Meta:
-        verbose_name = "Câu hỏi Listening Part 3/4"
-        verbose_name_plural = "Câu hỏi Listening Part 3/4"
+        verbose_name = "Question Listening Part 3/4"
+        verbose_name_plural = "Question Listening Part 3/4"
         ordering = ["material_id", "order", "id"]
 
     def __str__(self):
@@ -292,11 +292,11 @@ class SiteBackground(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = "Ảnh nền giao diện"
-        verbose_name_plural = "Ảnh nền giao diện"
+        verbose_name = "Ảnh nền interface"
+        verbose_name_plural = "Ảnh nền interface"
 
     def __str__(self):
-        return self.name or "Ảnh nền giao diện"
+        return self.name or "Ảnh nền interface"
 
     @property
     def display_url(self):
@@ -318,37 +318,37 @@ class SiteBackground(models.Model):
 class LoginThumbnail(models.Model):
     name = models.CharField("T?n thumbnail", max_length=255, blank=True)
     image = models.ImageField("?nh thumbnail upload", upload_to="login_thumbnails/", blank=True, null=True)
-    image_url = models.URLField("???ng d?n ?nh thumbnail", blank=True)
+    image_url = models.URLField("?ng d?n ?nh thumbnail", blank=True)
 
     video = models.FileField("Video thumbnail upload", upload_to="login_thumbnail_videos/", blank=True, null=True)
-    video_url = models.URLField("???ng d?n video thumbnail", blank=True)
+    video_url = models.URLField("?ng d?n video thumbnail", blank=True)
 
     overlay_left_image = models.ImageField("?nh n?i 1", upload_to="login_overlay_images/", blank=True, null=True)
     overlay_right_image = models.ImageField("?nh n?i 2", upload_to="login_overlay_images/", blank=True, null=True)
 
     overlay_left_x = models.PositiveIntegerField("X ?nh n?i 1 (%)", default=6)
     overlay_left_y = models.PositiveIntegerField("Y ?nh n?i 1 (%)", default=58)
-    overlay_left_w = models.PositiveIntegerField("K?ch th??c ?nh n?i 1 (%)", default=26)
+    overlay_left_w = models.PositiveIntegerField("K?ch thc ?nh n?i 1 (%)", default=26)
 
     overlay_right_x = models.PositiveIntegerField("X ?nh n?i 2 (%)", default=58)
     overlay_right_y = models.PositiveIntegerField("Y ?nh n?i 2 (%)", default=50)
-    overlay_right_w = models.PositiveIntegerField("K?ch th??c ?nh n?i 2 (%)", default=24)
+    overlay_right_w = models.PositiveIntegerField("K?ch thc ?nh n?i 2 (%)", default=24)
 
-    ticker_text_1 = models.CharField("Ch? ch?y 1", max_length=255, blank=True, default="")
-    ticker_text_2 = models.CharField("Ch? ch?y 2", max_length=255, blank=True, default="")
-    ticker_text_3 = models.CharField("Ch? ch?y 3", max_length=255, blank=True, default="")
-    ticker_text_4 = models.CharField("Ch? ch?y 4", max_length=255, blank=True, default="")
-    ticker_text_5 = models.CharField("Ch? ch?y 5", max_length=255, blank=True, default="")
+    ticker_text_1 = models.CharField("Chch?y 1", max_length=255, blank=True, default="")
+    ticker_text_2 = models.CharField("Chch?y 2", max_length=255, blank=True, default="")
+    ticker_text_3 = models.CharField("Chch?y 3", max_length=255, blank=True, default="")
+    ticker_text_4 = models.CharField("Chch?y 4", max_length=255, blank=True, default="")
+    ticker_text_5 = models.CharField("Chch?y 5", max_length=255, blank=True, default="")
 
-    is_active = models.BooleanField("?ang s? d?ng", default=True)
+    is_active = models.BooleanField("?ang sd?ng", default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = "Thumbnail ??ng nh?p"
-        verbose_name_plural = "Thumbnail ??ng nh?p"
+        verbose_name = "Thumbnail ng nh?p"
+        verbose_name_plural = "Thumbnail ng nh?p"
 
     def __str__(self):
-        return self.name or "Thumbnail ??ng nh?p"
+        return self.name or "Thumbnail ng nh?p"
 
     @property
     def display_video_url(self):
@@ -369,19 +369,19 @@ class LoginOverlayImage(models.Model):
         LoginThumbnail,
         on_delete=models.CASCADE,
         related_name="overlay_images",
-        verbose_name="Thumbnail ??ng nh?p",
+        verbose_name="Thumbnail ng nh?p",
     )
     image = models.ImageField("?nh n?i", upload_to="login_overlay_images/")
     x = models.PositiveIntegerField("X (%)", default=10)
     y = models.PositiveIntegerField("Y (%)", default=55)
-    w = models.PositiveIntegerField("K?ch th??c (%)", default=24)
-    order = models.PositiveIntegerField("Th? t?", default=0)
+    w = models.PositiveIntegerField("K?ch thc (%)", default=24)
+    order = models.PositiveIntegerField("Tht?", default=0)
     is_active = models.BooleanField("?ang d?ng", default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = "?nh n?i ??ng nh?p"
-        verbose_name_plural = "?nh n?i ??ng nh?p"
+        verbose_name = "?nh n?i ng nh?p"
+        verbose_name_plural = "?nh n?i ng nh?p"
         ordering = ["order", "id"]
 
     def __str__(self):

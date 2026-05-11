@@ -56,7 +56,7 @@ for p in Path("templates").rglob("*.html"):
     };
 
     const isStudentPage = location.pathname.startsWith("/listening");
-    const links = isStudentPage ? studentLinks : adminLinks;
+    const links = isStudentPage studentLinks : adminLinks;
 
     const candidates = Array.from(document.querySelectorAll("a, .card, .part-card, .part-item, article, section, div"));
 

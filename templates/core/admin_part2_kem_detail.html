@@ -5,7 +5,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
-<title>{{ topic.title }} | Mày kém</title>
+<title>{{ topic.title }} | Version B</title>
 <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
 <style>
 :root{
@@ -189,12 +189,12 @@ tr:nth-child(even) td{background:#fffafa}
     <div>
         <h1>{{ topic.title }}</h1>
         <div class="desc">
-            Phiên bản: <b>Mày kém</b>. Nhập dữ liệu đáp án tổng một lần, sau đó 4 voice chọn đáp án đúng từ danh sách đó.
+            Version: <b>Version B</b>. Nhập data answer tổng một lần, sau đó 4 voice chọn answer đúng từ danh sách đó.
         </div>
     </div>
     <div class="actions">
-        <a class="link" href="/dashboard/part-2/may-kem/">← Danh sách chủ đề</a>
-        <a class="link" href="/listening/part-2/">Xem giao diện học viên</a>
+        <a class="link" href="/dashboard/part-2/may-kem/">← Danh sách topics</a>
+        <a class="link" href="/listening/part-2/">View Student Interface</a>
     </div>
 </section>
 
@@ -209,7 +209,7 @@ tr:nth-child(even) td{background:#fffafa}
 <section class="card">
     <div class="topic-grid">
         <div>
-            <label>Tên chủ đề</label>
+            <label>Tên topics</label>
             <input name="title" value="{{ topic.title }}">
         </div>
         <div>
@@ -219,8 +219,8 @@ tr:nth-child(even) td{background:#fffafa}
     </div>
 
     <div class="data-total">
-        <label>Dữ liệu đáp án tổng</label>
-        <textarea name="data_choices" placeholder="Nhập toàn bộ dữ liệu đáp án ở đây, mỗi ý một dòng. Ví dụ:
+        <label>Data answer tổng</label>
+        <textarea name="data_choices" placeholder="Nhập toàn bộ data answer ở đây, mỗi ý một dòng. Ví dụ:
 To relax
 While studying
 While singing
@@ -228,19 +228,19 @@ After waking up">{{ topic.data_choices }}</textarea>
     </div>
 
     <div class="note">
-        Chỉ cần nhập danh sách dữ liệu đáp án ở đây một lần. Sau khi bấm lưu, 4 voice bên dưới sẽ dùng chung danh sách này để chọn đáp án đúng.
+        Chỉ cần nhập danh sách data answer ở đây một lần. Sau khi bấm lưu, 4 voice bên dưới sẽ dùng chung danh sách này để chọn answer đúng.
     </div>
 </section>
 
 <section class="card">
-    <h2 style="margin:0 0 8px;color:#4a0010">4 voice của chủ đề</h2>
+    <h2 style="margin:0 0 8px;color:#4a0010">4 voice của topics</h2>
 
     <div class="table-wrap">
         <table>
             <thead>
                 <tr>
                     <th>Voice</th>
-                    <th>Ô chọn đáp án đúng</th>
+                    <th>Ô chọn answer đúng</th>
                 </tr>
             </thead>
 
@@ -250,16 +250,16 @@ After waking up">{{ topic.data_choices }}</textarea>
                     <tr>
                         <td class="voice-col">
                             <input type="hidden" name="voice_{{ voice.id }}_order" value="{{ voice.order }}">
-                            Tên chủ đề<br>
+                            Tên topics<br>
                             <span style="color:#b8001c">{{ topic.title }}</span>
                             <br><br>
                             Voice {{ voice.order }}
                         </td>
 
                         <td class="correct-col">
-                            <label>Chọn 1 trong dữ liệu đáp án tổng</label>
+                            <label>Chọn 1 trong data answer tổng</label>
                             <select name="voice_{{ voice.id }}_correct_data">
-                                <option value="">-- Chọn đáp án đúng --</option>
+                                <option value="">-- Chọn answer đúng --</option>
                                 {% for option in row.options %}
                                     <option value="{{ option }}" {% if voice.correct_data == option %}selected{% endif %}>
                                         {{ option }}
@@ -268,7 +268,7 @@ After waking up">{{ topic.data_choices }}</textarea>
                             </select>
 
                             <div class="note">
-                                Nếu danh sách chưa hiện, hãy nhập “Dữ liệu đáp án tổng” ở trên rồi bấm lưu trước.
+                                Nếu danh sách chưa hiện, hãy nhập “Data answer tổng” ở trên rồi bấm lưu trước.
                             </div>
                         </td>
                     </tr>
@@ -279,17 +279,17 @@ After waking up">{{ topic.data_choices }}</textarea>
     </div>
 
     <div class="actions" style="justify-content:flex-end;margin-top:16px">
-        <button class="btn" type="submit">Lưu dữ liệu chủ đề</button>
+        <button class="btn" type="submit">Save data topics</button>
     </div>
 </section>
 
 </form>
 
-<form method="post" onsubmit="return confirm('Bạn chắc chắn muốn xóa chủ đề này?');">
+<form method="post" onsubmit="return confirm('Bạn chắc chắn muốn xóa topics này?');">
 {% csrf_token %}
 <input type="hidden" name="action" value="delete_topic">
 <section class="card">
-    <button class="btn danger" type="submit">Xóa chủ đề này</button>
+    <button class="btn danger" type="submit">Delete topics này</button>
 </section>
 </form>
 

@@ -65,7 +65,7 @@ safe_js = r'''
         "4": "/listening/part-4/"
     };
 
-    const links = isStudentListeningPage ? studentLinks : adminLinks;
+    const links = isStudentListeningPage studentLinks : adminLinks;
 
     document.querySelectorAll(".part-card, .part-item, .card, article").forEach(card => {
         const text = (card.innerText || "").replace(/\s+/g, " ");
@@ -102,7 +102,7 @@ safe_js = r'''
 # Chỉ chèn vào các template có khả năng là trang chọn Part
 target_keywords = [
     "dashboard/listening-parts",
-    "Chọn Part",
+    "Choose Part",
     "Listening Practice",
     "Part 1",
     "Part 2",

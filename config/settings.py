@@ -60,6 +60,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "core.lock_parts_middleware.LockPartOneTwoMiddleware",
     "core.part3_force_middleware.ForcePart3Middleware",
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',

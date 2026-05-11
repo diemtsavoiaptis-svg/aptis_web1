@@ -5,7 +5,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
-<title>Duyệt học viên</title>
+<title>Duyệt student</title>
 <style>
 *{box-sizing:border-box}
 body{
@@ -228,15 +228,15 @@ input:focus{
 <div class="wrap">
     <section class="card">
         <div class="head">
-            <h2>Tra học viên</h2>
-            <p>Nhập tên, Gmail, SĐT hoặc ID học viên.</p>
+            <h2>Tra student</h2>
+            <p>Nhập tên, Gmail, SĐT hoặc ID student.</p>
         </div>
         <div class="body">
             <form method="get">
-                <label>Thông tin cần tra</label>
-                <input name="q" value="{{ q }}" placeholder="Tên, Gmail, SĐT, ID học viên...">
+                <label>Information cần tra</label>
+                <input name="q" value="{{ q }}" placeholder="Tên, Gmail, SĐT, ID student...">
                 <div style="height:12px"></div>
-                <button class="btn" type="submit">Tra học viên</button>
+                <button class="btn" type="submit">Tra student</button>
             </form>
 
             <div class="result-list">
@@ -251,11 +251,11 @@ input:focus{
                         </div>
                         <div class="result-meta">
                             Gmail: {{ item.user.email|default:"Chưa có" }}<br>
-                            Tài khoản: {{ item.user.username }}
+                            Account: {{ item.user.username }}
                         </div>
                     </a>
                 {% empty %}
-                    {% if q %}<div class="empty">Không tìm thấy học viên phù hợp.</div>{% endif %}
+                    {% if q %}<div class="empty">Không tìm thấy student phù hợp.</div>{% endif %}
                 {% endfor %}
             </div>
         </div>
@@ -263,8 +263,8 @@ input:focus{
 
     <section class="card">
         <div class="head">
-            <h2>Hồ sơ học viên</h2>
-            <p>Cập nhật Gmail, SĐT, tên và ID học viên.</p>
+            <h2>Hồ sơ student</h2>
+            <p>Update Gmail, SĐT, tên và ID student.</p>
         </div>
         <div class="body">
             {% if messages %}
@@ -285,29 +285,29 @@ input:focus{
                     <div class="form-grid">
                         <div>
                             <label>Gmail</label>
-                            <input name="gmail" value="{{ profile_email_value }}" placeholder="Gmail học viên">
+                            <input name="gmail" value="{{ profile_email_value }}" placeholder="Gmail student">
                         </div>
                         <div>
                             <label>Số điện thoại</label>
                             <input name="phone" value="{{ phone_value }}" placeholder="Số điện thoại">
                         </div>
                         <div>
-                            <label>Tên học viên</label>
-                            <input name="full_name" value="{{ profile_name_value }}" placeholder="Tên học viên">
+                            <label>Tên student</label>
+                            <input name="full_name" value="{{ profile_name_value }}" placeholder="Tên student">
                         </div>
                         <div>
-                            <label>ID học viên</label>
-                            <input name="student_id" value="{{ student_id_value }}" placeholder="ID học viên tự thêm">
+                            <label>ID student</label>
+                            <input name="student_id" value="{{ student_id_value }}" placeholder="ID student tự thêm">
                         </div>
                     </div>
 
                     <div class="save-row">
-                        <button class="btn" type="submit">Lưu hồ sơ học viên</button>
+                        <button class="btn" type="submit">Save hồ sơ student</button>
                     </div>
                 </form>
             {% else %}
                 <div class="empty">
-                    Chưa chọn học viên. Hãy tra học viên bên trái trước.
+                    Chưa chọn student. Hãy tra student bên trái trước.
                 </div>
             {% endif %}
         </div>
@@ -317,7 +317,7 @@ input:focus{
 <section class="card saved-section">
     <div class="head">
         <h2>Hồ sơ đã lưu</h2>
-        <p>Danh sách học viên đã có hồ sơ trong hệ thống.</p>
+        <p>Danh sách student đã có hồ sơ trong hệ thống.</p>
     </div>
 
     <div class="body">
@@ -325,11 +325,11 @@ input:focus{
             <table class="saved-table">
                 <thead>
                     <tr>
-                        <th>ID học viên</th>
+                        <th>ID student</th>
                         <th>Tên</th>
                         <th>Gmail</th>
                         <th>Số điện thoại</th>
-                        <th>Tài khoản</th>
+                        <th>Account</th>
                         <th>Thao tác</th>
                     </tr>
                 </thead>
@@ -390,18 +390,18 @@ input:focus{
                                         Mở hồ sơ
                                     </a>
 
-                                    <form class="inline-delete-form" method="post" onsubmit="return confirm('Bạn chắc chắn muốn xóa thông tin hồ sơ học viên này? Tài khoản đăng nhập vẫn được giữ lại.');">
+                                    <form class="inline-delete-form" method="post" onsubmit="return confirm('Bạn chắc chắn muốn xóa information hồ sơ student này? Account đăng nhập vẫn được giữ lại.');">
                                         {% csrf_token %}
                                         <input type="hidden" name="action" value="delete_profile">
                                         <input type="hidden" name="profile_id" value="{{ item.id }}">
-                                        <button class="delete-action" type="submit">Xóa hồ sơ</button>
+                                        <button class="delete-action" type="submit">Delete hồ sơ</button>
                                     </form>
                                 </div>
                             </td>
                         </tr>
                     {% empty %}
                         <tr>
-                            <td colspan="6">Chưa có hồ sơ học viên nào.</td>
+                            <td colspan="6">Chưa có hồ sơ student nào.</td>
                         </tr>
                     {% endfor %}
                 </tbody>

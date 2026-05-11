@@ -2,7 +2,7 @@
 import re
 
 # ==================================================
-# 1) Thêm field khóa voice_info vào Part2Topic
+# 1) Add field khóa voice_info vào Part2Topic
 # ==================================================
 models = Path("core/models.py")
 s = models.read_text(encoding="utf-8", errors="ignore")
@@ -17,14 +17,14 @@ if "voice_info_locked" not in block:
     if "voice_info" in block:
         s = re.sub(
             r'(voice_info\s*=\s*models\.TextField\([^\n]+\)\n)',
-            r'\1    voice_info_locked = models.BooleanField("Khóa thông tin voice", default=False)\n',
+            r'\1    voice_info_locked = models.BooleanField("Lock information voice", default=False)\n',
             s,
             count=1
         )
     else:
         s = re.sub(
             r'(audio_url\s*=\s*models\.URLField\([^\n]+\)\n)',
-            r'\1    voice_info = models.TextField("Thông tin của voice", blank=True)\n    voice_info_locked = models.BooleanField("Khóa thông tin voice", default=False)\n',
+            r'\1    voice_info = models.TextField("Information của voice", blank=True)\n    voice_info_locked = models.BooleanField("Lock information voice", default=False)\n',
             s,
             count=1
         )
@@ -33,7 +33,7 @@ models.write_text(s, encoding="utf-8")
 
 
 # ==================================================
-# 2) Ghi đè view Mày giỏi: lưu/khoá/mở khóa voice_info
+# 2) Ghi đè view Version A: lưu/khoá/mở khóa voice_info
 # ==================================================
 views = Path("core/views.py")
 v = views.read_text(encoding="utf-8", errors="ignore")
@@ -109,7 +109,7 @@ def admin_part2_gioi_detail(request, topic_id):
                 voice.audio_url = topic.audio_url
                 voice.save()
 
-            messages.success(request, "Đã lưu đáp án tổng.")
+            messages.success(request, "Đã lưu answer tổng.")
             return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
         if action == "save_and_lock_voice_info":
@@ -117,15 +117,15 @@ def admin_part2_gioi_detail(request, topic_id):
                 topic.voice_info = request.POST.get("voice_info", "").strip()
                 topic.voice_info_locked = True
                 topic.save()
-                messages.success(request, "Đã lưu và khóa thông tin voice.")
+                messages.success(request, "Đã lưu và khóa information voice.")
             else:
-                messages.warning(request, "Thông tin voice đang bị khóa.")
+                messages.warning(request, "Information voice đang bị khóa.")
             return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
         if action == "unlock_voice_info":
             topic.voice_info_locked = False
             topic.save()
-            messages.success(request, "Đã mở khóa thông tin voice. Bây giờ có thể sửa lại.")
+            messages.success(request, "Đã mở khóa information voice. Bây giờ có thể sửa lại.")
             return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
         if action == "save_correct_answers":
@@ -138,7 +138,7 @@ def admin_part2_gioi_detail(request, topic_id):
                 voice.audio_url = topic.audio_url
                 voice.save()
 
-            messages.success(request, "Đã lưu đáp án đúng cho 4 Person.")
+            messages.success(request, "Đã lưu answer đúng cho 4 Person.")
             return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
     options = _gioi_options_voice_lock(topic)
@@ -174,12 +174,12 @@ views.write_text(v, encoding="utf-8")
 
 
 # ==================================================
-# 3) Sửa template admin: ô voice_info nhập được + nút lưu khóa
+# 3) Edit template admin: ô voice_info nhập được + nút lưu khóa
 # ==================================================
 tpl = Path("templates/core/admin_part2_gioi_detail.html")
 t = tpl.read_text(encoding="utf-8", errors="ignore")
 
-# Xóa block Thông tin voice cũ nếu có
+# Delete block Information voice cũ nếu có
 t = re.sub(
     r'\s*<section class="card voice-info-box">[\s\S]*?</section>\s*',
     '\n',
@@ -189,8 +189,8 @@ t = re.sub(
 
 voice_block = r'''
 <section class="card voice-info-box">
-    <h2 class="voice-info-title">Thông tin của voice</h2>
-    <label>Nhập nguyên đoạn thông tin Person A/B/C/D vào đây</label>
+    <h2 class="voice-info-title">Information của voice</h2>
+    <label>Nhập nguyên đoạn information Person A/B/C/D vào đây</label>
 
     <textarea
         name="voice_info"
@@ -203,16 +203,16 @@ Person D: ..."
     >{{ topic.voice_info|default_if_none:"" }}</textarea>
 
     {% if topic.voice_info_locked %}
-        <div class="note">🔒 Thông tin voice đã được khóa. Học viên sẽ xem phần này bằng nút Hiển thị / Ẩn thông tin voice.</div>
-        <button class="unlock-voice-btn" name="action" value="unlock_voice_info" type="submit">🔓 Mở khóa thông tin voice</button>
+        <div class="note">🔒 Information voice đã được khóa. Student sẽ xem phần này bằng nút Hiển thị / Ẩn information voice.</div>
+        <button class="unlock-voice-btn" name="action" value="unlock_voice_info" type="submit">🔓 Open khóa information voice</button>
     {% else %}
-        <button class="lock-voice-btn" name="action" value="save_and_lock_voice_info" type="submit">💾 Lưu & khóa thông tin voice</button>
+        <button class="lock-voice-btn" name="action" value="save_and_lock_voice_info" type="submit">💾 Save & khóa information voice</button>
     {% endif %}
 </section>
 '''
 
-# Chèn block vào trong form đầu tiên, sau nút lưu đáp án tổng
-if "Lưu & khóa thông tin voice" not in t:
+# Chèn block vào trong form đầu tiên, sau nút lưu answer tổng
+if "Save & khóa information voice" not in t:
     t = t.replace(
         '</section>\n</form>\n\n<form method="post">',
         '</section>\n' + voice_block + '\n</form>\n\n<form method="post">',

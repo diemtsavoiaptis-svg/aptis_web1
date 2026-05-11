@@ -10,18 +10,18 @@ s = tpl.read_text(encoding="utf-8", errors="ignore")
 # Đảm bảo textarea voice_info luôn lấy từ database
 s = re.sub(
     r'<textarea name="voice_info"[^>]*>[\s\S]*?</textarea>',
-    '<textarea name="voice_info" placeholder="Nhập thông tin của voice. Phần này học viên có thể bấm nút để hiển thị hoặc ẩn.">{{ topic.voice_info|default_if_none:"" }}</textarea>',
+    '<textarea name="voice_info" placeholder="Nhập information của voice. Phần này student có thể bấm nút để hiển thị hoặc ẩn.">{{ topic.voice_info|default_if_none:"" }}</textarea>',
     s,
     flags=re.S
 )
 
-# Nếu chưa có khung Thông tin voice thì thêm lại giữa Lưu đáp án tổng và Chọn đáp án đúng
+# Nếu chưa có khung Information voice thì thêm lại giữa Save answer tổng và Choose answer đúng
 if 'name="voice_info"' not in s:
     block = r'''
 <section class="card voice-info-box">
-    <h2 class="voice-info-title">Thông tin của voice</h2>
-    <label>Nhập thông tin/ghi chú/giải thích của voice</label>
-    <textarea name="voice_info" placeholder="Nhập thông tin của voice. Phần này học viên có thể bấm nút để hiển thị hoặc ẩn.">{{ topic.voice_info|default_if_none:"" }}</textarea>
+    <h2 class="voice-info-title">Information của voice</h2>
+    <label>Nhập information/ghi chú/giải thích của voice</label>
+    <textarea name="voice_info" placeholder="Nhập information của voice. Phần này student có thể bấm nút để hiển thị hoặc ẩn.">{{ topic.voice_info|default_if_none:"" }}</textarea>
 </section>
 '''
     s = s.replace('</section>\n</form>\n\n<form method="post">', '</section>\n' + block + '\n</form>\n\n<form method="post">', 1)
@@ -120,7 +120,7 @@ def admin_part2_gioi_detail(request, topic_id):
             voice.audio_url = topic.audio_url
             voice.save()
 
-        messages.success(request, "Đã lưu đáp án tổng và thông tin voice.")
+        messages.success(request, "Đã lưu answer tổng và information voice.")
         return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
     if request.method == "POST" and request.POST.get("action") == "save_correct_answers":
@@ -133,7 +133,7 @@ def admin_part2_gioi_detail(request, topic_id):
             voice.audio_url = topic.audio_url
             voice.save()
 
-        messages.success(request, "Đã lưu đáp án đúng cho 4 Person.")
+        messages.success(request, "Đã lưu answer đúng cho 4 Person.")
         return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
     options = _gioi_options_voice_info_final(topic)
@@ -217,7 +217,7 @@ if student.exists():
         block = r'''
 {% if topic.voice_info %}
 <section class="voice-toggle-card">
-    <button class="voice-toggle-btn" type="button" onclick="toggleVoiceInfo()">👁 Hiển thị / Ẩn thông tin voice</button>
+    <button class="voice-toggle-btn" type="button" onclick="toggleVoiceInfo()">👁 Hiển thị / Ẩn information voice</button>
     <div id="voiceInfoContent" class="voice-info-content">{{ topic.voice_info }}</div>
 </section>
 {% endif %}
@@ -255,7 +255,7 @@ click_js = r'''
     };
 
     const isStudent = location.pathname.startsWith("/listening");
-    const links = isStudent ? studentLinks : adminLinks;
+    const links = isStudent studentLinks : adminLinks;
 
     function detectPart(text){
         text = (text || "").replace(/\s+/g, " ");

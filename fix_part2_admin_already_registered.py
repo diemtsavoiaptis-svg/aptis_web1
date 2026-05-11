@@ -7,14 +7,14 @@ s = p.read_text(encoding="utf-8", errors="ignore")
 backup = Path("core/admin.py.bak_fix_part2_duplicate_admin")
 backup.write_text(s, encoding="utf-8")
 
-# Xóa toàn bộ các block Admin Part 2 cũ bị lặp
+# Delete toàn bộ các block Admin Part 2 cũ bị lặp
 s = re.sub(
     r"\n?# ===== Admin Part 2 =====[\s\S]*?# ===== End Admin Part 2 =====\n?",
     "\n",
     s
 )
 
-# Xóa các class Part2 admin cũ nếu còn sót
+# Delete các class Part2 admin cũ nếu còn sót
 s = re.sub(
     r"\n?class\s+Part2VoiceInline\(admin\.TabularInline\):[\s\S]*?(?=\nclass |\n@admin\.register|\n#|\Z)",
     "\n",
@@ -45,7 +45,7 @@ if "Part2Topic" not in s or "Part2Voice" not in s:
     else:
         s = "from .models import Part2Topic, Part2Voice\n" + s
 
-# Thêm lại duy nhất 1 block Admin Part 2, có unregister an toàn trước khi register
+# Add lại duy nhất 1 block Admin Part 2, có unregister an toàn trước khi register
 part2_admin_block = r'''
 
 # ===== Admin Part 2 =====

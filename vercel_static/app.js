@@ -123,7 +123,7 @@ async function fetchStudentLabel(user) {
     }
   } catch (error) {}
 
-  if (!fullName) fullName = email.split("@")[0] || "Học viên";
+  if (!fullName) fullName = email.split("@")[0] || "Student";
   return `ID ${studentId} - ${fullName} - ${email}`;
 }
 
@@ -146,7 +146,7 @@ async function setupAuthGate() {
       await signInWithEmailAndPassword(state.auth, els.emailInput.value.trim(), els.passwordInput.value);
       els.authMessage.textContent = "";
     } catch (error) {
-      els.authMessage.textContent = "Đăng nhập không thành công. Kiểm tra email/mật khẩu.";
+      els.authMessage.textContent = "Login không thành công. Kiểm tra email/mật khẩu.";
     }
   });
 
@@ -188,7 +188,7 @@ async function loadFromFirestore(part) {
     if (Array.isArray(data.questions)) questions.push(...data.questions);
   });
 
-  if (!questions.length) throw new Error("Firestore chưa có dữ liệu Part này");
+  if (!questions.length) throw new Error("Firestore chưa có data Part này");
   return questions.sort((a, b) => Number(a.number || 0) - Number(b.number || 0));
 }
 
@@ -198,7 +198,7 @@ async function loadFromLocalJson(part) {
   const response = await fetch(url, { cache: "no-store" });
   if (!response.ok) throw new Error("Không đọc được JSON tĩnh");
   const payload = await response.json();
-  return Array.isArray(payload.questions) ? payload.questions : [];
+  return Array.isArray(payload.questions) payload.questions : [];
 }
 
 async function loadPart(part) {
@@ -213,14 +213,14 @@ async function loadPart(part) {
 
   try {
     state.questions = await loadFromFirestore(state.part);
-    els.dataSource.textContent = "Dữ liệu Firestore";
+    els.dataSource.textContent = "Data Firestore";
   } catch (error) {
     state.questions = await loadFromLocalJson(state.part);
-    els.dataSource.textContent = state.questions.length ? "Dữ liệu JSON tĩnh" : "Chưa có dữ liệu";
+    els.dataSource.textContent = state.questions.length "Data JSON tĩnh" : "Chưa có data";
   }
 
   if (!state.questions.length) {
-    showLoading(`Part ${state.part} chưa có dữ liệu.`);
+    showLoading(`Part ${state.part} chưa có data.`);
     els.totalCount.textContent = "0";
     els.questionNumbers.innerHTML = "";
     els.currentMeta.textContent = "0/0";
@@ -256,8 +256,8 @@ function renderQuestion() {
   state.checked = false;
 
   els.questionBadge.textContent = `Câu ${question.number || state.currentIndex + 1}`;
-  els.questionText.textContent = question.question || "Câu hỏi chưa có nội dung.";
-  els.answerStatus.textContent = "Chưa chọn đáp án";
+  els.questionText.textContent = question.question || "Question chưa có nội dung.";
+  els.answerStatus.textContent = "Chưa chọn answer";
   els.answerStatus.className = "answer-status";
   els.correctAnswer.textContent = question.correctAnswer || "A";
   els.transcriptText.textContent = question.transcript || "Chưa có transcript.";
@@ -273,7 +273,7 @@ function renderQuestion() {
   els.answerButtons.forEach((button) => {
     const answer = button.dataset.answer;
     button.className = "answer-btn";
-    button.querySelector("span").textContent = options[answer] || `Đáp án ${answer}`;
+    button.querySelector("span").textContent = options[answer] || `Answer ${answer}`;
   });
 
   [...els.questionNumbers.children].forEach((button, index) => {
@@ -283,15 +283,15 @@ function renderQuestion() {
 
 function setupAudio(question) {
   const fileId = question.audioDriveFileId || extractDriveFileId(question.audioDriveLink);
-  const directUrl = fileId ? `https://drive.google.com/uc?export=download&id=${fileId}` : "";
-  const driveUrl = question.audioDriveLink || (fileId ? `https://drive.google.com/file/d/${fileId}/view` : "#");
+  const directUrl = fileId `https://drive.google.com/uc?export=download&id=${fileId}` : "";
+  const driveUrl = question.audioDriveLink || (fileId `https://drive.google.com/file/d/${fileId}/view` : "#");
 
   els.audioPlayer.src = directUrl;
   els.audioPlayer.load();
   els.audioHint.hidden = true;
   els.driveLink.href = driveUrl;
-  els.driveLink.style.pointerEvents = driveUrl === "#" ? "none" : "";
-  els.driveLink.style.opacity = driveUrl === "#" ? "0.55" : "";
+  els.driveLink.style.pointerEvents = driveUrl === "#" "none" : "";
+  els.driveLink.style.opacity = driveUrl === "#" "0.55" : "";
 }
 
 function extractDriveFileId(value) {
@@ -321,7 +321,7 @@ function renderQuestionNumbers() {
 function selectAnswer(answer) {
   if (state.checked) return;
   state.selectedAnswer = answer;
-  els.answerStatus.textContent = `Đã chọn đáp án ${answer}`;
+  els.answerStatus.textContent = `Đã chọn answer ${answer}`;
   els.answerStatus.className = "answer-status";
 
   els.answerButtons.forEach((button) => {
@@ -331,7 +331,7 @@ function selectAnswer(answer) {
 
 function checkAnswer() {
   if (!state.selectedAnswer) {
-    els.answerStatus.textContent = "Hãy chọn một đáp án trước";
+    els.answerStatus.textContent = "Hãy chọn một answer trước";
     els.answerStatus.className = "answer-status warning";
     return;
   }
@@ -349,8 +349,8 @@ function checkAnswer() {
   });
 
   const isCorrect = state.selectedAnswer === correct;
-  els.answerStatus.textContent = isCorrect ? "Chính xác" : "Chưa đúng";
-  els.answerStatus.className = `answer-status ${isCorrect ? "success" : "danger"}`;
+  els.answerStatus.textContent = isCorrect "Chính xác" : "Chưa đúng";
+  els.answerStatus.className = `answer-status ${isCorrect "success" : "danger"}`;
 }
 
 function moveQuestion(delta) {

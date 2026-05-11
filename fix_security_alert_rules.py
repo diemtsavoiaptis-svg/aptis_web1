@@ -33,10 +33,10 @@ js.write_text(r'''
         } catch (e) {}
     }
 
-    // Không cảnh báo khi học viên rời tab/quay lại tab nữa.
+    // Không cảnh báo khi student rời tab/quay lại tab nữa.
     // visibilitychange / blur / focus được bỏ để tránh báo sai.
 
-    // Cảnh báo nếu học viên bấm PrintScreen nhiều lần.
+    // Cảnh báo nếu student bấm PrintScreen nhiều lần.
     document.addEventListener("keyup", function (e) {
         if (e.key !== "PrintScreen") return;
 
@@ -45,7 +45,7 @@ js.write_text(r'''
         printScreenTimes.push(now);
 
         if (printScreenTimes.length >= PRINT_LIMIT) {
-            sendSecurityEvent("Học viên có dấu hiệu chụp màn hình liên tục");
+            sendSecurityEvent("Student có dấu hiệu chụp màn hình liên tục");
             printScreenTimes = [];
         }
     });
@@ -57,7 +57,7 @@ js.write_text(r'''
 
         if (!devtoolsWarned && (widthGap > 180 || heightGap > 180)) {
             devtoolsWarned = true;
-            sendSecurityEvent("Học viên có dấu hiệu mở công cụ kiểm tra trang");
+            sendSecurityEvent("Student có dấu hiệu mở công cụ kiểm tra trang");
         }
 
         if (widthGap <= 120 && heightGap <= 120) {
@@ -67,7 +67,7 @@ js.write_text(r'''
 })();
 ''', encoding="utf-8")
 
-# Xóa các cảnh báo cũ kiểu "rời khỏi tab" trong database local cho sạch danh sách
+# Delete các cảnh báo cũ kiểu "rời khỏi tab" trong database local cho sạch danh sách
 cleanup = Path("cleanup_tab_leave_alerts.py")
 cleanup.write_text(r'''
 import os

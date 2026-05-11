@@ -18,7 +18,7 @@ u.is_active = True
 u.set_password("hoangtong214")
 u.save()
 
-# Nếu có user admin@gmail.com riêng thì cũng set luôn
+# Nếu có user admin@gmail.com separate thì cũng set luôn
 for x in User.objects.filter(username="admin@gmail.com"):
     x.is_staff = True
     x.is_superuser = True
@@ -29,7 +29,7 @@ for x in User.objects.filter(username="admin@gmail.com"):
 print("ADMIN_READY:", u.username, u.email, u.is_staff, u.is_superuser, u.is_active)
 
 
-# 2) Sửa dashboard: admin/admin@gmail.com chắc chắn vào dashboard admin
+# 2) Edit dashboard: admin/admin@gmail.com chắc chắn vào dashboard admin
 p = Path("core/views.py")
 text = p.read_text(encoding="utf-8", errors="ignore")
 

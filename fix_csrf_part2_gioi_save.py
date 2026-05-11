@@ -2,7 +2,7 @@
 import re
 
 # ==================================================
-# 1) Thêm csrf_exempt import vào views.py
+# 1) Add csrf_exempt import vào views.py
 # ==================================================
 views = Path("core/views.py")
 s = views.read_text(encoding="utf-8", errors="ignore")
@@ -12,7 +12,7 @@ if "from django.views.decorators.csrf import csrf_exempt" not in s:
 
 # ==================================================
 # 2) Gắn csrf_exempt cho view admin_part2_gioi_detail
-#    để nút Lưu đáp án tổng / Lưu đáp án đúng không bị Origin null
+#    để nút Save answer tổng / Save answer đúng không bị Origin null
 # ==================================================
 s = re.sub(
     r'(@user_passes_test\([^)]+\)\s*\ndef admin_part2_gioi_detail\(request, topic_id\):)',
@@ -31,7 +31,7 @@ views.write_text(s, encoding="utf-8")
 
 
 # ==================================================
-# 3) Thêm trusted origins local/online vào settings.py cho chắc
+# 3) Add trusted origins local/online vào settings.py cho chắc
 # ==================================================
 settings = Path("config/settings.py")
 t = settings.read_text(encoding="utf-8", errors="ignore")

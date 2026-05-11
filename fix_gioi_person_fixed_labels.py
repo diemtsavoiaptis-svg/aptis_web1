@@ -2,7 +2,7 @@
 import re
 
 # ==================================================
-# 1) Sửa view: khi lưu Mày giỏi, tự cố định question_text = Person 1-4
+# 1) Edit view: khi lưu Version A, tự cố định question_text = Person 1-4
 # ==================================================
 views = Path("core/views.py")
 s = views.read_text(encoding="utf-8", errors="ignore")
@@ -31,15 +31,15 @@ views.write_text(s, encoding="utf-8")
 
 
 # ==================================================
-# 2) Sửa template admin Mày giỏi: bỏ ô nhập Câu hỏi / Person, hiện text cố định
+# 2) Edit template admin Version A: bỏ ô nhập Question / Person, hiện text cố định
 # ==================================================
 admin_tpl = Path("templates/core/admin_part2_gioi_detail.html")
 t = admin_tpl.read_text(encoding="utf-8", errors="ignore")
 
 # Đổi tiêu đề cột
-t = t.replace("Câu hỏi / Person", "Person")
+t = t.replace("Question / Person", "Person")
 
-# Thay toàn bộ ô textarea câu hỏi/person thành text cố định
+# Thay toàn bộ ô textarea questions/person thành text cố định
 t = re.sub(
     r'''<td class="question-col">\s*
                             <textarea name="voice_\{\{ voice\.id \}\}_question_text"[\s\S]*?</textarea>\s*
@@ -57,7 +57,7 @@ t = re.sub(
     t
 )
 
-# Thêm CSS cho fixed-person
+# Add CSS cho fixed-person
 if ".fixed-person" not in t:
     t = t.replace(
         "</style>",
@@ -81,7 +81,7 @@ admin_tpl.write_text(t, encoding="utf-8")
 
 
 # ==================================================
-# 3) Sửa template học viên Mày giỏi: luôn hiện Person 1-4 cố định
+# 3) Edit template student Version A: luôn hiện Person 1-4 cố định
 # ==================================================
 student_tpl = Path("templates/core/student_part2_gioi.html")
 h = student_tpl.read_text(encoding="utf-8", errors="ignore")
@@ -94,7 +94,7 @@ h = re.sub(
 )
 
 h = re.sub(
-    r'''\{\{ voice\.question_text\|default:"Câu hỏi chưa nhập" \}\}''',
+    r'''\{\{ voice\.question_text\|default:"Question chưa nhập" \}\}''',
     '''Person {{ voice.order }}''',
     h
 )
@@ -109,7 +109,7 @@ student_tpl.write_text(h, encoding="utf-8")
 
 
 # ==================================================
-# 4) Chuẩn hóa dữ liệu cũ trong database local: set lại Person 1-4
+# 4) Chuẩn hóa data cũ trong database local: set lại Person 1-4
 # ==================================================
 Path("fix_part2_gioi_person_labels.py").write_text(r'''
 import os

@@ -7,7 +7,7 @@ s = p.read_text(encoding="utf-8", errors="ignore")
 # Backup
 Path("templates/core/dashboard.html.bak_clean_iframe_admin").write_text(s, encoding="utf-8")
 
-# 1) Thêm CSS cho iframe rộng và sạch hơn
+# 1) Add CSS cho iframe rộng và sạch hơn
 css = r'''
 /* Làm khung bên phải rộng, sạch, không có admin mini sidebar */
 #adminFrame {
@@ -30,7 +30,7 @@ css = r'''
 if "không có admin mini sidebar" not in s:
     s = s.replace("</style>", css + "\n</style>", 1)
 
-# 2) Thêm JS tự chui vào iframe để ẩn sidebar/header của Django Admin
+# 2) Add JS tự chui vào iframe để ẩn sidebar/header của Django Admin
 inject_js = r'''
 function cleanAdminIframe(){
     const frame = document.getElementById("adminFrame");
@@ -189,8 +189,8 @@ function cleanAdminIframe(){
 
         // Đổi một số chữ cho gọn
         const h1 = doc.querySelector("#content h1");
-        if(h1 && h1.textContent.includes("Chọn Học viên")) {
-            h1.textContent = "Duyệt học viên";
+        if(h1 && h1.textContent.includes("Chọn Student")) {
+            h1.textContent = "Duyệt student";
         }
 
     } catch(e) {

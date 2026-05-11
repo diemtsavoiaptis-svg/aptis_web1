@@ -24,7 +24,7 @@ def admin_part3_questions(request):
     return render(request, "core/listening_part_placeholder.html", {
         "part_number": 3,
         "part_title": "Part 3",
-        "part_desc": "Part 3 đã được mở khung giao diện. Hiện chưa có dữ liệu, sẽ thiết kế chi tiết sau.",
+        "part_desc": "Part 3 đã được mở khung interface. No items yet data, sẽ thiết kế chi tiết sau.",
     })
 # ===== End Listening Part 3 placeholder =====
 '''
@@ -37,7 +37,7 @@ def admin_part4_questions(request):
     return render(request, "core/listening_part_placeholder.html", {
         "part_number": 4,
         "part_title": "Part 4",
-        "part_desc": "Part 4 đã được mở khung giao diện. Hiện chưa có dữ liệu, sẽ thiết kế chi tiết sau.",
+        "part_desc": "Part 4 đã được mở khung interface. No items yet data, sẽ thiết kế chi tiết sau.",
     })
 # ===== End Listening Part 4 placeholder =====
 '''
@@ -69,7 +69,7 @@ for key, route in routes.items():
             count=1
         )
 
-# Sửa format nếu path Part 1 và listening bị dính cùng dòng
+# Edit format nếu path Part 1 và listening bị dính cùng dòng
 u = u.replace('name="admin_part1_questions"),    path("listening/"', 'name="admin_part1_questions"),\n    path("listening/"')
 
 urls.write_text(u, encoding="utf-8")
@@ -229,11 +229,11 @@ placeholder.write_text(r'''{% load static %}
             <p>{{ part_desc }}</p>
 
             <div class="empty-card">
-                Dữ liệu của {{ part_title }} hiện chưa được nhập. Khi bạn bắt đầu làm phần này, mình sẽ tạo giao diện quản lý chi tiết giống Part 1/Part 2 nhưng không ảnh hưởng dữ liệu Part 1.
+                Data của {{ part_title }} hiện chưa được nhập. Khi bạn bắt đầu làm phần này, mình sẽ tạo interface manage chi tiết giống Part 1/Part 2 nhưng không ảnh hưởng data Part 1.
             </div>
 
             <div class="actions">
-                <a class="btn btn-primary" href="/dashboard/listening-parts/">Quay lại chọn Part</a>
+                <a class="btn btn-primary" href="/dashboard/listening-parts/">Back chọn Part</a>
                 <a class="btn btn-light" href="/dashboard/">Về Dashboard</a>
             </div>
         </section>
@@ -300,8 +300,8 @@ if not part2.exists():
 <body>
     <section class="card">
         <h1>Part 2</h1>
-        <div class="topic">Topic lớn + 4 voice thảo luận + pool đáp án A-B-C-D</div>
-        <div class="empty">Khung Part 2 đã mở. Dữ liệu thật sẽ được nhập sau.</div>
+        <div class="topic">Topic lớn + 4 voice thảo luận + pool answer A-B-C-D</div>
+        <div class="empty">Khung Part 2 đã mở. Data thật sẽ được nhập sau.</div>
     </section>
 </body>
 </html>
@@ -309,7 +309,7 @@ if not part2.exists():
 
 
 # ==================================================
-# 5) Ghi lại trang Chọn Part thành bản mở đủ 4 Part
+# 5) Ghi lại trang Choose Part thành bản mở đủ 4 Part
 # ==================================================
 parts_page = Path("templates/core/listening_parts.html")
 parts_page.parent.mkdir(parents=True, exist_ok=True)
@@ -319,7 +319,7 @@ parts_page.write_text(r'''{% load static %}
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Chọn Part cần quản lý | Aptis</title>
+    <title>Choose Part to Manage | Aptis</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
@@ -515,9 +515,9 @@ parts_page.write_text(r'''{% load static %}
 <body>
     <main class="wrap">
         <section class="title-box">
-            <h1>Chọn Part cần quản lý</h1>
+            <h1>Choose Part to Manage</h1>
             <div class="subtitle">
-                Hiển thị 4 part theo dạng thẻ bo tròn. Part nào chưa có dữ liệu thì vẫn mở khung để chuẩn bị nhập sau.
+                Hiển thị 4 part theo dạng thẻ bo tròn. Part nào chưa có data thì vẫn mở khung để chuẩn bị nhập sau.
             </div>
         </section>
 
@@ -525,68 +525,68 @@ parts_page.write_text(r'''{% load static %}
             <article class="part-card">
                 <div class="part-top">
                     <div class="part-number">1</div>
-                    <div class="count-pill">191 câu hỏi</div>
+                    <div class="count-pill">191 questions</div>
                 </div>
 
                 <h2 class="part-title">Part 1</h2>
                 <div class="part-desc">
-                    Cập nhật hàng loạt câu hỏi, audio, đáp án và transcript cho Part 1. Đây là phần đã chốt giao diện/logic.
+                    Update hàng loạt questions, audio, answer và transcript cho Part 1. Đây là phần đã chốt interface/logic.
                 </div>
 
                 <div class="part-actions">
-                    <span class="status-pill">Đã chốt giao diện</span>
-                    <a class="open-btn" href="/dashboard/part-1/">Mở Part 1</a>
+                    <span class="status-pill">Đã chốt interface</span>
+                    <a class="open-btn" href="/dashboard/part-1/">Open Part 1</a>
                 </div>
             </article>
 
             <article class="part-card">
                 <div class="part-top">
                     <div class="part-number">2</div>
-                    <div class="count-pill">0 câu hỏi</div>
+                    <div class="count-pill">0 questions</div>
                 </div>
 
                 <h2 class="part-title">Part 2</h2>
                 <div class="part-desc">
-                    Part 2 gồm 1 chủ đề lớn, 4 voice thảo luận và pool đáp án A-B-C-D. Hiện đã mở khung giao diện.
+                    Part 2 gồm 1 topics lớn, 4 voice thảo luận và pool answer A-B-C-D. Hiện đã mở khung interface.
                 </div>
 
                 <div class="part-actions">
                     <span class="status-pill">Đã mở khung</span>
-                    <a class="open-btn" href="/dashboard/part-2/">Mở Part 2</a>
+                    <a class="open-btn" href="/dashboard/part-2/">Open Part 2</a>
                 </div>
             </article>
 
             <article class="part-card">
                 <div class="part-top">
                     <div class="part-number">3</div>
-                    <div class="count-pill">0 câu hỏi</div>
+                    <div class="count-pill">0 questions</div>
                 </div>
 
                 <h2 class="part-title">Part 3</h2>
                 <div class="part-desc">
-                    Part 3 hiện chưa có dữ liệu. Đã mở trang khung để sau này thiết kế và nhập nội dung.
+                    Part 3 currently has no data. Đã mở trang khung để sau này thiết kế và nhập nội dung.
                 </div>
 
                 <div class="part-actions">
-                    <span class="status-pill">Chưa có dữ liệu</span>
-                    <a class="open-btn secondary" href="/dashboard/part-3/">Mở Part 3</a>
+                    <span class="status-pill">Chưa có data</span>
+                    <a class="open-btn secondary" href="/dashboard/part-3/">Open Part 3</a>
                 </div>
             </article>
 
             <article class="part-card">
                 <div class="part-top">
                     <div class="part-number">4</div>
-                    <div class="count-pill">0 câu hỏi</div>
+                    <div class="count-pill">0 questions</div>
                 </div>
 
                 <h2 class="part-title">Part 4</h2>
                 <div class="part-desc">
-                    Part 4 hiện chưa có dữ liệu. Đã mở trang khung để sau này thiết kế và nhập nội dung.
+                    Part 4 currently has no data. Đã mở trang khung để sau này thiết kế và nhập nội dung.
                 </div>
 
                 <div class="part-actions">
-                    <span class="status-pill">Chưa có dữ liệu</span>
-                    <a class="open-btn secondary" href="/dashboard/part-4/">Mở Part 4</a>
+                    <span class="status-pill">Chưa có data</span>
+                    <a class="open-btn secondary" href="/dashboard/part-4/">Open Part 4</a>
                 </div>
             </article>
         </section>

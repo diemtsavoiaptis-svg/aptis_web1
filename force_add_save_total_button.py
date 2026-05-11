@@ -7,7 +7,7 @@ s = tpl.read_text(encoding="utf-8", errors="ignore")
 # Backup trước khi sửa
 Path("templates/core/admin_part2_gioi_detail.backup_before_save_total_button.html").write_text(s, encoding="utf-8")
 
-# 1) Đảm bảo form đầu tiên là form lưu đáp án tổng
+# 1) Đảm bảo form đầu tiên là form lưu answer tổng
 s = re.sub(
     r'(<form method="post">\s*\{% csrf_token %\}\s*)<input type="hidden" name="action" value="[^"]+">',
     r'\1<input type="hidden" name="action" value="save_total_answers">',
@@ -16,19 +16,19 @@ s = re.sub(
     flags=re.S
 )
 
-# 2) Nếu chưa có nút Lưu đáp án tổng thì chèn ngay trước section chọn đáp án đúng
-if "Lưu đáp án tổng" not in s:
+# 2) Nếu chưa có nút Save answer tổng thì chèn ngay trước section chọn answer đúng
+if "Save answer tổng" not in s:
     button_block = '''
     <div class="actions save-total-actions" style="justify-content:flex-end;margin-top:16px">
-        <button class="btn" type="submit">Lưu đáp án tổng</button>
+        <button class="btn" type="submit">Save answer tổng</button>
     </div>
 '''
 
-    # Chèn trước card chọn đáp án đúng
+    # Chèn trước card chọn answer đúng
     patterns = [
-        r'(\s*</section>\s*)(\s*<section class="card">\s*<h2[^>]*>\s*Chọn đáp án đúng cho 4 person\s*</h2>)',
+        r'(\s*</section>\s*)(\s*<section class="card">\s*<h2[^>]*>\s*Choose answer đúng cho 4 person\s*</h2>)',
         r'(\s*</section>\s*)(\s*<section class="card">\s*<h2[^>]*>[\s\S]*?4 person[\s\S]*?</h2>)',
-        r'(\s*</section>\s*)(\s*<section class="card">\s*<h2[^>]*>[\s\S]*?Đáp án đúng[\s\S]*?</h2>)',
+        r'(\s*</section>\s*)(\s*<section class="card">\s*<h2[^>]*>[\s\S]*?Answer đúng[\s\S]*?</h2>)',
     ]
 
     changed = False
@@ -42,8 +42,8 @@ if "Lưu đáp án tổng" not in s:
     # Nếu không tìm được section, chèn ngay sau note đang hiện trong ảnh
     if not changed:
         s = s.replace(
-            "Sau khi nhập dữ liệu đáp án tổng, bấm lưu. Sau đó 4 ô “Đáp án đúng” bên dưới sẽ hiện các lựa chọn để chọn cho từng Person.",
-            "Sau khi nhập dữ liệu đáp án tổng, bấm <b>Lưu đáp án tổng</b>. Sau đó 4 ô “Đáp án đúng” bên dưới sẽ hiện các lựa chọn để chọn cho từng Person."
+            "Sau khi nhập data answer tổng, bấm lưu. Sau đó 4 ô “Answer đúng” bên dưới sẽ hiện các lựa chọn để chọn cho từng Person.",
+            "Sau khi nhập data answer tổng, bấm <b>Save answer tổng</b>. Sau đó 4 ô “Answer đúng” bên dưới sẽ hiện các lựa chọn để chọn cho từng Person."
         )
         s = s.replace(
             "</div>\n</section>",
@@ -51,10 +51,10 @@ if "Lưu đáp án tổng" not in s:
             1
         )
 
-# 3) Tách form: phần chọn đáp án đúng bên dưới phải là form save_topic riêng
+# 3) Tách form: phần chọn answer đúng bên dưới phải là form save_topic separate
 if s.count('<input type="hidden" name="action" value="save_topic">') == 0:
     s = re.sub(
-        r'(<section class="card">\s*<h2[^>]*>\s*Chọn đáp án đúng cho 4 person\s*</h2>)',
+        r'(<section class="card">\s*<h2[^>]*>\s*Choose answer đúng cho 4 person\s*</h2>)',
         r'''</form>
 
 <form method="post">
@@ -71,8 +71,8 @@ if s.count('<input type="hidden" name="action" value="save_topic">') == 0:
         flags=re.S | re.I
     )
 
-# 4) Sửa text nút cuối nếu đang ghi chung chung
-s = s.replace(">Lưu dữ liệu chủ đề</button>", ">Lưu đáp án đúng</button>")
+# 4) Edit text nút cuối nếu đang ghi chung chung
+s = s.replace(">Save data topics</button>", ">Save answer đúng</button>")
 
 tpl.write_text(s, encoding="utf-8")
 print("DA_EP_THEM_NUT_LUU_DAP_AN_TONG")

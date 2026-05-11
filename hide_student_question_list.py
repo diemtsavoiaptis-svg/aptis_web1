@@ -5,7 +5,7 @@ s = p.read_text(encoding="utf-8", errors="ignore") if p.exists() else ""
 
 extra = r'''
 
-/* Ẩn danh sách câu hỏi bên giao diện học viên */
+/* Ẩn danh sách questions bên interface student */
 .question-side,
 .side-card,
 .question-numbers,
@@ -23,7 +23,7 @@ extra = r'''
 }
 '''
 
-if "Ẩn danh sách câu hỏi bên giao diện học viên" not in s:
+if "Ẩn danh sách questions bên interface student" not in s:
     s += extra
 
 p.write_text(s, encoding="utf-8")

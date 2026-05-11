@@ -10,16 +10,16 @@ Path("templates/core/dashboard.html.bak_fix_admin_links").write_text(s, encoding
 # Ép các menu admin thành link thật, không dùng iframe/button nữa
 replacements = [
     (
-        r'<button class="side-link"[^>]*>\s*✅\s*Duyệt học viên\s*</button>',
-        '<a class="side-link" href="/admin/core/studentprofile/">✅ Duyệt học viên</a>'
+        r'<button class="side-link"[^>]*>\s*✅\s*Duyệt student\s*</button>',
+        '<a class="side-link" href="/admin/core/studentprofile/">✅ Duyệt student</a>'
     ),
     (
-        r'<button class="side-link"[^>]*>\s*📚\s*Quản lý bài học\s*</button>',
-        '<a class="side-link" href="/admin/core/lesson/">📚 Quản lý bài học</a>'
+        r'<button class="side-link"[^>]*>\s*📚\s*Manage lesson\s*</button>',
+        '<a class="side-link" href="/admin/core/lesson/">📚 Manage lesson</a>'
     ),
     (
-        r'<button class="side-link"[^>]*>\s*🛡️\s*Cảnh báo bảo mật\s*</button>',
-        '<a class="side-link" href="/admin/core/securityalert/">🛡️ Cảnh báo bảo mật</a>'
+        r'<button class="side-link"[^>]*>\s*🛡️\s*Security Alerts\s*</button>',
+        '<a class="side-link" href="/admin/core/securityalert/">🛡️ Security Alerts</a>'
     ),
 ]
 
@@ -28,22 +28,22 @@ for pattern, repl in replacements:
 
 # Nếu nó đã là thẻ a nhưng href sai thì sửa lại
 s = re.sub(
-    r'<a class="side-link"[^>]*>\s*✅\s*Duyệt học viên\s*</a>',
-    '<a class="side-link" href="/admin/core/studentprofile/">✅ Duyệt học viên</a>',
+    r'<a class="side-link"[^>]*>\s*✅\s*Duyệt student\s*</a>',
+    '<a class="side-link" href="/admin/core/studentprofile/">✅ Duyệt student</a>',
     s,
     flags=re.S
 )
 
 s = re.sub(
-    r'<a class="side-link"[^>]*>\s*📚\s*Quản lý bài học\s*</a>',
-    '<a class="side-link" href="/admin/core/lesson/">📚 Quản lý bài học</a>',
+    r'<a class="side-link"[^>]*>\s*📚\s*Manage lesson\s*</a>',
+    '<a class="side-link" href="/admin/core/lesson/">📚 Manage lesson</a>',
     s,
     flags=re.S
 )
 
 s = re.sub(
-    r'<a class="side-link"[^>]*>\s*🛡️\s*Cảnh báo bảo mật\s*</a>',
-    '<a class="side-link" href="/admin/core/securityalert/">🛡️ Cảnh báo bảo mật</a>',
+    r'<a class="side-link"[^>]*>\s*🛡️\s*Security Alerts\s*</a>',
+    '<a class="side-link" href="/admin/core/securityalert/">🛡️ Security Alerts</a>',
     s,
     flags=re.S
 )

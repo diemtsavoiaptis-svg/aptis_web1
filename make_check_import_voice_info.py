@@ -23,7 +23,7 @@ TOPIC_MAP = {
     9: "Topic The Art",
     10: "Topic Travel to work.",
     11: "Topic Studying.",
-    12: "Topic Studying phiên bản 2.",
+    12: "Topic Studying version 2.",
 }
 
 def extract_topic_blocks(raw):
@@ -87,7 +87,7 @@ for no, title in TOPIC_MAP.items():
     topic, _ = Part2Topic.objects.get_or_create(
         version="gioi",
         title=title,
-        defaults={"description": "Chủ đề Mày giỏi"}
+        defaults={"description": "Version A Topic"}
     )
 
     block = blocks.get(no, "").strip()

@@ -2,7 +2,7 @@
 import re
 
 # =========================
-# 1) Sửa view: thêm xử lý xóa hồ sơ học viên
+# 1) Edit view: thêm xử lý xóa hồ sơ student
 # =========================
 views = Path("core/views.py")
 s = views.read_text(encoding="utf-8", errors="ignore")
@@ -15,14 +15,14 @@ delete_block = r'''
             messages.error(request, "Không tìm thấy hồ sơ cần xóa.")
             return redirect("admin_student_lookup")
 
-        # Xóa thông tin tài khoản liên kết nhưng KHÔNG xóa user đăng nhập
+        # Delete information account liên kết nhưng KHÔNG xóa user đăng nhập
         if getattr(target, "user", None):
             target.user.email = ""
             target.user.first_name = ""
             target.user.last_name = ""
             target.user.save()
 
-        # Xóa các field thông tin thường dùng trong StudentProfile nếu có
+        # Delete các field information thường dùng trong StudentProfile nếu có
         fields_to_clear = [
             "student_id", "student_code", "code",
             "full_name", "name", "student_name", "ho_ten", "display_name",
@@ -35,7 +35,7 @@ delete_block = r'''
                 setattr(target, field, "")
 
         target.save()
-        messages.success(request, "Đã xóa thông tin hồ sơ học viên.")
+        messages.success(request, "Đã xóa information hồ sơ student.")
         return redirect("admin_student_lookup")
 '''
 
@@ -47,7 +47,7 @@ views.write_text(s, encoding="utf-8")
 
 
 # =========================
-# 2) Sửa template: thêm nút Xóa hồ sơ trong bảng đã lưu
+# 2) Edit template: thêm nút Delete hồ sơ trong bảng đã lưu
 # =========================
 tpl = Path("templates/core/admin_student_lookup.html")
 t = tpl.read_text(encoding="utf-8", errors="ignore")
@@ -99,11 +99,11 @@ new_action = r'''<td>
                                         Mở hồ sơ
                                     </a>
 
-                                    <form class="inline-delete-form" method="post" onsubmit="return confirm('Bạn chắc chắn muốn xóa thông tin hồ sơ học viên này? Tài khoản đăng nhập vẫn được giữ lại.');">
+                                    <form class="inline-delete-form" method="post" onsubmit="return confirm('Bạn chắc chắn muốn xóa information hồ sơ student nàyAccount đăng nhập vẫn được giữ lại.');">
                                         {% csrf_token %}
                                         <input type="hidden" name="action" value="delete_profile">
                                         <input type="hidden" name="profile_id" value="{{ item.id }}">
-                                        <button class="delete-action" type="submit">Xóa hồ sơ</button>
+                                        <button class="delete-action" type="submit">Delete hồ sơ</button>
                                     </form>
                                 </div>
                             </td>'''

@@ -1,194 +1,210 @@
-<!DOCTYPE html>
 {% load static %}
-<link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
-﻿<style>
-  .aptis-parts-wrap{
-    padding: 8px 6px 4px;
-  }
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Part to Manage | Score TSA Vì Aptis</title>
+    <style>
+        :root {
+            --red: #ef233c;
+            --red-dark: #9f001f;
+            --dark: #3b0010;
+            --soft: #fff1f4;
+            --white: #ffffff;
+            --muted: #667085;
+            --border: #ffd0d8;
+            --shadow: 0 18px 45px rgba(239, 35, 60, .12);
+        }
 
-  .aptis-parts-title{
-    font-size: 20px;
-    font-weight: 800;
-    color: #4a0012;
-    margin: 0 0 10px 0;
-  }
+        * { box-sizing: border-box; }
 
-  .aptis-parts-subtitle{
-    font-size: 15px;
-    color: #6b7280;
-    margin: 0 0 24px 0;
-  }
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: var(--dark);
+            background:
+                radial-gradient(circle at top left, rgba(239, 35, 60, .10), transparent 35%),
+                linear-gradient(180deg, #fff7f9 0%, #ffffff 100%);
+        }
 
-  .aptis-parts-grid{
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 18px;
-  }
+        .page {
+            min-height: 100vh;
+            padding: 32px;
+        }
 
-  .aptis-part-card{
-    background: linear-gradient(180deg, #ffffff 0%, #fff6f8 100%);
-    border: 2px solid #ffd6df;
-    border-radius: 26px;
-    padding: 22px 20px;
-    box-shadow: 0 14px 30px rgba(220, 38, 38, 0.08);
-    transition: all .2s ease;
-    min-height: 240px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
+        .wrap {
+            max-width: 1320px;
+            margin: 0 auto;
+        }
 
-  .aptis-part-card:hover{
-    transform: translateY(-3px);
-    box-shadow: 0 18px 36px rgba(220, 38, 38, 0.14);
-    border-color: #ffb8c8;
-  }
+        .hero {
+            padding: 32px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            background: var(--white);
+            box-shadow: var(--shadow);
+        }
 
-  .aptis-part-top{
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 16px;
-  }
+        h1 {
+            margin: 0 0 10px;
+            font-size: clamp(34px, 5vw, 56px);
+            line-height: 1.05;
+            font-weight: 950;
+        }
 
-  .aptis-part-number{
-    width: 52px;
-    height: 52px;
-    border-radius: 16px;
-    background: linear-gradient(135deg, #e60023 0%, #ff5f76 100%);
-    color: #fff;
-    font-size: 22px;
-    font-weight: 900;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 10px 20px rgba(230,0,35,.22);
-    flex-shrink: 0;
-  }
+        .desc {
+            margin: 0;
+            color: var(--muted);
+            font-size: 16px;
+            font-weight: 650;
+            line-height: 1.6;
+        }
 
-  .aptis-count-pill{
-    border-radius: 999px;
-    padding: 7px 12px;
-    background: #fff1f4;
-    border: 1px solid #ffc8d3;
-    color: #b10020;
-    font-weight: 800;
-    font-size: 13px;
-    white-space: nowrap;
-  }
+        .parts-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(260px, 1fr));
+            gap: 18px;
+        }
 
-  .aptis-part-name{
-    font-size: 32px;
-    line-height: 1.1;
-    font-weight: 900;
-    color: #3f0011;
-    margin: 0 0 12px 0;
-  }
+        .part-card {
+            min-height: 240px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 26px;
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            background: rgba(255, 255, 255, .96);
+            box-shadow: var(--shadow);
+        }
 
-  .aptis-part-desc{
-    font-size: 15px;
-    line-height: 1.7;
-    color: #5b6475;
-    margin: 0 0 18px 0;
-  }
+        .badge {
+            width: 46px;
+            height: 46px;
+            display: grid;
+            place-items: center;
+            border-radius: 14px;
+            background: var(--red);
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 950;
+            box-shadow: 0 14px 30px rgba(239, 35, 60, .25);
+        }
 
-  .aptis-part-footer{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-top: 8px;
-  }
+        .part-card h2 {
+            margin: 18px 0 10px;
+            font-size: 30px;
+            line-height: 1.05;
+            font-weight: 950;
+        }
 
-  .aptis-status{
-    font-size: 13px;
-    font-weight: 800;
-    color: #b10020;
-    background: #fff7f8;
-    border: 1px solid #ffd6df;
-    border-radius: 999px;
-    padding: 8px 12px;
-  }
+        .part-card p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 15px;
+            font-weight: 650;
+            line-height: 1.55;
+        }
 
-  .aptis-part-btn{
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    border: none;
-    border-radius: 999px;
-    padding: 12px 18px;
-    font-size: 14px;
-    font-weight: 900;
-    cursor: pointer;
-    background: linear-gradient(135deg, #e60023 0%, #ff5f76 100%);
-    color: #fff;
-    box-shadow: 0 10px 20px rgba(230,0,35,.18);
-  }
+        .card-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-top: 24px;
+        }
 
-  .aptis-part-btn.muted{
-    background: #fff;
-    color: #8a1730;
-    border: 1px solid #ffc8d3;
-    box-shadow: none;
-    cursor: default;
-  }
+        .pill,
+        .btn {
+            min-height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 16px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            background: var(--white);
+            color: var(--red-dark);
+            font-weight: 900;
+            text-decoration: none;
+            white-space: nowrap;
+        }
 
-  @media (max-width: 1200px){
-    .aptis-parts-grid{
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
+        .btn.primary {
+            min-height: 46px;
+            padding: 0 20px;
+            border-color: var(--red);
+            background: var(--red);
+            color: #ffffff;
+            transition: .22s ease;
+        }
 
-  @media (max-width: 700px){
-    .aptis-parts-grid{
-      grid-template-columns: 1fr;
-    }
+        .btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(239, 35, 60, .22);
+        }
 
-    .aptis-part-name{
-      font-size: 28px;
-    }
-  }
-</style>
+        @media (max-width: 1200px) {
+            .parts-grid {
+                grid-template-columns: repeat(2, minmax(260px, 1fr));
+            }
+        }
 
-<div class="aptis-parts-wrap">
-  <h3 class="aptis-parts-title">Chọn Part cần quản lý</h3>
-  <p class="aptis-parts-subtitle">Hiển thị 4 part theo dạng thẻ bo tròn. Hiện tại ưu tiên khai thác sâu Part 1.</p>
+        @media (max-width: 720px) {
+            .page { padding: 18px; }
+            .parts-grid { grid-template-columns: 1fr; }
+            .card-actions {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <div class="wrap">
+            <section class="hero">
+                <h1>Choose Part to Manage</h1>
+                <p class="desc">
+                    Hiển thị 4 part theo dạng thẻ bo tròn. Part 1 và Part 2 data locked;
+                    Part 3 và Part 4 đang để trống for upcoming design work.
+                </p>
+            </section>
 
-  <div class="aptis-parts-grid">
-    {% for part, count in part_counts.items %}
-      <div class="aptis-part-card">
-        <div>
-          <div class="aptis-part-top">
-            <div class="aptis-part-number">{{ part }}</div>
-          </div>
+            <section class="parts-grid">
+                {% for part, count in part_counts.items %}
+                    <article class="part-card">
+                        <div>
+                            <div class="badge">{{ part }}</div>
+                            <h2>Part {{ part }}</h2>
 
-          <h2 class="aptis-part-name">Part {{ part }}</h2>
+                            {% if part == 1 %}
+                                <p>Bulk update questions, audio, answers, and transcripts for Part 1. This section is locked to prevent accidental edits.</p>
+                            {% elif part == 2 %}
+                                <p>Data management area for Part 2. This section is locked to prevent accidental edits.</p>
+                            {% elif part == 3 %}
+                                <p>Part 3 has been cleared of old data. Use this area only to design separate Admin and Student interfaces for Part 3.</p>
+                            {% elif part == 4 %}
+                                <p>Part 4 has been cleared of old data. Real data has not been implemented yet.</p>
+                            {% endif %}
+                        </div>
 
-          {% if part == 1 %}
-            <p class="aptis-part-desc">
-              Cập nhật hàng loạt câu hỏi, audio, đáp án và transcript cho Part 1.
-              Đây là khu vực bạn sẽ khai thác sâu trước.
-            </p>
-          {% else %}
-            <p class="aptis-part-desc">
-              Khu vực quản lý dữ liệu cho Part {{ part }}.
-              Có thể tiếp tục mở rộng giao diện chi tiết sau khi hoàn thiện Part 1.
-            </p>
-          {% endif %}
+                        <div class="card-actions">
+                            {% if part == 1 or part == 2 %}
+                                <span class="pill">Data Locked</span>
+                            {% else %}
+                                <span class="pill">Data Cleared</span>
+                            {% endif %}
+
+                            <a class="btn primary" href="/dashboard/part-{{ part }}/">Mở Part {{ part }}</a>
+                        </div>
+                    </article>
+                {% endfor %}
+            </section>
         </div>
-
-        <div class="aptis-part-footer">
-          {% if part == 1 %}
-            <span class="aptis-status">Đang ưu tiên</span>
-            <a class="aptis-part-btn" href="{% url 'admin_part1_questions' %}">Mở Part 1</a>
-          {% else %}
-            <span class="aptis-status">Đã mở khung</span>
-            <button class="aptis-part-btn muted" type="button" onclick="window.location.href='/dashboard/part-2/'">Mở Part 2</button>
-          {% endif %}
-        </div>
-      </div>
-    {% endfor %}
-  </div>
-</div>
+    </main>
+</body>
+</html>

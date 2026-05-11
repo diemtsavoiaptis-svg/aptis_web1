@@ -22,25 +22,25 @@ CANONICAL_TOPICS = [
     "Topic The Art",
     "Topic Travel to work.",
     "Topic Studying.",
-    "Topic Studying phiên bản 2.",
+    "Topic Studying version 2.",
 ]
 
 def clean_topic_name(text):
     text = text.strip()
 
-    # Xóa link nếu có dính vào tên
+    # Delete link nếu có dính vào tên
     text = re.sub(r"https?://\S+", "", text).strip()
 
-    # Xóa đuôi file
+    # Delete đuôi file
     text = re.sub(r"\.(mp3|mp4|wav|m4a|aac|ogg)$", "", text, flags=re.I).strip()
 
-    # Xóa phần đầu kiểu: 1,2, hoặc 1,12,
+    # Delete phần đầu kiểu: 1,2, hoặc 1,12,
     text = re.sub(r"^\s*\d+\s*,\s*\d+\s*,\s*", "", text).strip()
 
-    # Xóa số thứ tự đầu file: 2.Topic..., 12.Topic...
+    # Delete số thứ tự đầu file: 2.Topic..., 12.Topic...
     text = re.sub(r"^\s*\d+\s*[\.\-_ ]+\s*", "", text).strip()
 
-    # Xóa dấu chấm thừa đầu/cuối
+    # Delete dấu chấm thừa đầu/cuối
     text = text.strip(" .\t\r\n")
 
     # Chuẩn hóa khoảng trắng
@@ -77,7 +77,7 @@ print("")
 print("======================================================")
 print("NHẬP AUDIO PART 2 - MÀY GIỎI")
 print("======================================================")
-print("Bạn dán dữ liệu đang có cũng được, hệ thống sẽ BỎ QUA part/question_number.")
+print("Bạn dán data đang có cũng được, hệ thống sẽ BỎ QUA part/question_number.")
 print("Chỉ lấy: TÊN TOPIC + LINK DRIVE.")
 print("Dán xong thì gõ END rồi Enter.")
 print("")
@@ -136,16 +136,16 @@ for title in CANONICAL_TOPICS:
     topic, _ = Part2Topic.objects.get_or_create(
         version="gioi",
         title=title,
-        defaults={"description": "Chủ đề Mày giỏi"}
+        defaults={"description": "Version A Topic"}
     )
 
     if title in matched:
         topic.audio_url = matched[title]
 
-    topic.description = topic.description or "Chủ đề Mày giỏi"
+    topic.description = topic.description or "Version A Topic"
     topic.save()
 
-    # Mày giỏi: 1 file nghe chung + 4 Person chọn đáp án
+    # Version A: 1 file nghe chung + 4 Person chọn answer
     existing_orders = set(topic.voices.values_list("order", flat=True))
 
     for i in range(1, 5):
@@ -181,5 +181,5 @@ print("XONG.")
 print("Admin kiểm tra:")
 print("http://127.0.0.1:8000/dashboard/part-2/may-gioi/")
 print("")
-print("Học viên kiểm tra:")
+print("Student kiểm tra:")
 print("http://127.0.0.1:8000/listening/part-2/may-gioi/")

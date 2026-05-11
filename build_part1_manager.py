@@ -2,7 +2,7 @@
 import re
 
 # =========================
-# 1) Thêm view quản lý Part 1 custom
+# 1) Add view manage Part 1 custom
 # =========================
 views_path = Path("core/views.py")
 views = views_path.read_text(encoding="utf-8", errors="ignore")
@@ -40,13 +40,13 @@ def admin_part1_questions(request):
         question.listening_transcript = request.POST.get("listening_transcript", "").strip()
         question.save()
 
-        messages.success(request, "Đã lưu câu hỏi Part 1 thành công.")
+        messages.success(request, "Đã lưu questions Part 1 thành công.")
         return redirect("admin_part1_questions")
 
     delete_id = request.GET.get("delete")
     if delete_id:
         ListeningQuestion.objects.filter(id=delete_id, part=1).delete()
-        messages.success(request, "Đã xóa câu hỏi Part 1.")
+        messages.success(request, "Đã xóa questions Part 1.")
         return redirect("admin_part1_questions")
 
     questions = ListeningQuestion.objects.filter(part=1).order_by("question_number", "id")
@@ -64,7 +64,7 @@ else:
 
 
 # =========================
-# 2) Thêm URL /dashboard/part-1/
+# 2) Add URL /dashboard/part-1/
 # =========================
 urls_path = Path("core/urls.py")
 urls = urls_path.read_text(encoding="utf-8", errors="ignore")
@@ -80,30 +80,30 @@ else:
 
 
 # =========================
-# 3) Sửa dashboard menu: Quản lý câu hỏi Listening đi tới trang custom
+# 3) Edit dashboard menu: Manage questions Listening đi tới trang custom
 # =========================
 dash_path = Path("templates/core/dashboard.html")
 dash = dash_path.read_text(encoding="utf-8", errors="ignore")
 
 dash = dash.replace('data-src="/admin/core/listeningquestion/"', 'data-src="" data-href="{% url \'admin_part1_questions\' %}"')
-dash = dash.replace('<button class="side-link" data-title="Quản lý câu hỏi Listening" data-src="">', '<a class="side-link" href="{% url \'admin_part1_questions\' %}">')
-dash = dash.replace('</button>\n\n        <button class="side-link" data-title="Duyệt học viên"', '</a>\n\n        <button class="side-link" data-title="Duyệt học viên"', 1)
+dash = dash.replace('<button class="side-link" data-title="Manage questions Listening" data-src="">', '<a class="side-link" href="{% url \'admin_part1_questions\' %}">')
+dash = dash.replace('</button>\n\n        <button class="side-link" data-title="Duyệt student"', '</a>\n\n        <button class="side-link" data-title="Duyệt student"', 1)
 
-dash = dash.replace('data-title="Quản lý câu hỏi Listening" data-src="/admin/core/listeningquestion/"', 'onclick="window.location.href=\'{% url \\'admin_part1_questions\\' %}\'"')
+dash = dash.replace('data-title="Manage questions Listening" data-src="/admin/core/listeningquestion/"', 'onclick="window.location.href=\'{% url \\'admin_part1_questions\\' %}\'"')
 
 dash_path.write_text(dash, encoding="utf-8")
 print("DA_SUA_MENU_DASHBOARD")
 
 
 # =========================
-# 4) Tạo template quản lý Part 1 đẹp
+# 4) Tạo template manage Part 1 đẹp
 # =========================
 Path("templates/core/admin_part1_questions.html").write_text(r'''{% load static %}
 <!doctype html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Quản lý Part 1 | Điểm TSA Với Aptis</title>
+    <title>Manage Part 1 | Score TSA Với Aptis</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'core/css/admin_panel.css' %}">
     <link rel="stylesheet" href="{% static 'core/css/admin_part1.css' %}">
@@ -114,26 +114,26 @@ Path("templates/core/admin_part1_questions.html").write_text(r'''{% load static 
         <div class="brand">
             <div class="brand-logo">A</div>
             <div>
-                <strong>Điểm TSA</strong>
+                <strong>Score TSA</strong>
                 <span>với Aptis</span>
             </div>
         </div>
 
-        <a class="side-link" href="{% url 'dashboard' %}">🎧 Tổng quan Admin</a>
-        <a class="side-link active" href="{% url 'admin_part1_questions' %}">🎧 Quản lý Part 1</a>
-        <a class="side-link" href="/admin/core/studentprofile/">✅ Duyệt học viên</a>
-        <a class="side-link" href="/admin/core/lesson/">📚 Quản lý bài học</a>
-        <a class="side-link" href="/admin/core/securityalert/">🛡️ Cảnh báo bảo mật</a>
-        <a class="side-link" href="{% url 'listening' %}">👀 Xem giao diện học viên</a>
-        <a class="side-link logout" href="{% url 'logout' %}">🚪 Đăng xuất</a>
+        <a class="side-link" href="{% url 'dashboard' %}">🎧 Admin Overview</a>
+        <a class="side-link active" href="{% url 'admin_part1_questions' %}">🎧 Manage Part 1</a>
+        <a class="side-link" href="/admin/core/studentprofile/">✅ Duyệt student</a>
+        <a class="side-link" href="/admin/core/lesson/">📚 Manage lesson</a>
+        <a class="side-link" href="/admin/core/securityalert/">🛡️ Security Alerts</a>
+        <a class="side-link" href="{% url 'listening' %}">👀 View Student Interface</a>
+        <a class="side-link logout" href="{% url 'logout' %}">🚪 Logout</a>
     </aside>
 
     <main class="admin-main">
         <header class="admin-header part1-header">
             <div>
                 <p class="eyebrow">Listening Question Bank</p>
-                <h1>Quản lý câu hỏi Part 1</h1>
-                <p class="muted">Thêm, sửa, xóa câu hỏi Part 1 ngay trong dashboard. Không cần nhảy sang giao diện Django Admin.</p>
+                <h1>Manage Part 1 Questions</h1>
+                <p class="muted">Add, sửa, xóa questions Part 1 ngay trong dashboard. Không cần nhảy sang interface Django Admin.</p>
             </div>
             <a class="primary-btn" href="{% url 'dashboard' %}">← Về tổng quan</a>
         </header>
@@ -153,11 +153,11 @@ Path("templates/core/admin_part1_questions.html").write_text(r'''{% load static 
 
                 <div class="form-head">
                     <div>
-                        <h2>{% if editing_question %}Sửa câu hỏi{% else %}Thêm câu hỏi mới{% endif %}</h2>
-                        <p>Điền câu hỏi, audio, 3 đáp án và đáp án đúng.</p>
+                        <h2>{% if editing_question %}Edit questions{% else %}Add questions mới{% endif %}</h2>
+                        <p>Điền questions, audio, 3 answer và answer đúng.</p>
                     </div>
                     {% if editing_question %}
-                        <a class="ghost-btn" href="{% url 'admin_part1_questions' %}">Hủy sửa</a>
+                        <a class="ghost-btn" href="{% url 'admin_part1_questions' %}">Cancel sửa</a>
                     {% endif %}
                 </div>
 
@@ -168,7 +168,7 @@ Path("templates/core/admin_part1_questions.html").write_text(r'''{% load static 
                     </label>
 
                     <label>
-                        <span>Đáp án đúng</span>
+                        <span>Answer đúng</span>
                         <select name="correct_answer">
                             <option value="A" {% if editing_question.correct_answer == "A" %}selected{% endif %}>A</option>
                             <option value="B" {% if editing_question.correct_answer == "B" %}selected{% endif %}>B</option>
@@ -178,7 +178,7 @@ Path("templates/core/admin_part1_questions.html").write_text(r'''{% load static 
                 </div>
 
                 <label>
-                    <span>Câu hỏi</span>
+                    <span>Question</span>
                     <textarea name="question_text" rows="3" required>{% if editing_question %}{{ editing_question.question_text }}{% endif %}</textarea>
                 </label>
 
@@ -194,15 +194,15 @@ Path("templates/core/admin_part1_questions.html").write_text(r'''{% load static 
 
                 <div class="field-row three">
                     <label>
-                        <span>Đáp án A</span>
+                        <span>Answer A</span>
                         <input type="text" name="option_a" value="{% if editing_question %}{{ editing_question.option_a }}{% endif %}" required>
                     </label>
                     <label>
-                        <span>Đáp án B</span>
+                        <span>Answer B</span>
                         <input type="text" name="option_b" value="{% if editing_question %}{{ editing_question.option_b }}{% endif %}" required>
                     </label>
                     <label>
-                        <span>Đáp án C</span>
+                        <span>Answer C</span>
                         <input type="text" name="option_c" value="{% if editing_question %}{{ editing_question.option_c }}{% endif %}" required>
                     </label>
                 </div>
@@ -213,7 +213,7 @@ Path("templates/core/admin_part1_questions.html").write_text(r'''{% load static 
                 </label>
 
                 <button class="primary-btn full" type="submit">
-                    {% if editing_question %}Lưu thay đổi{% else %}+ Thêm câu hỏi Part 1{% endif %}
+                    {% if editing_question %}Save thay đổi{% else %}+ Add questions Part 1{% endif %}
                 </button>
             </form>
 
@@ -221,11 +221,11 @@ Path("templates/core/admin_part1_questions.html").write_text(r'''{% load static 
                 <div class="summary-card">
                     <span>Tổng câu</span>
                     <strong>{{ questions.count }}</strong>
-                    <p>Part 1 hiện có {{ questions.count }} câu hỏi.</p>
+                    <p>Part 1 hiện có {{ questions.count }} questions.</p>
                 </div>
                 <div class="summary-card soft">
                     <span>Gợi ý</span>
-                    <p>Sắp xếp số câu theo thứ tự 1, 2, 3... để học viên làm bài đúng luồng.</p>
+                    <p>Sắp xếp số câu theo thứ tự 1, 2, 3... để student làm bài đúng luồng.</p>
                 </div>
             </aside>
         </section>
@@ -233,8 +233,8 @@ Path("templates/core/admin_part1_questions.html").write_text(r'''{% load static 
         <section class="question-list-card">
             <div class="section-head">
                 <div>
-                    <h2>Danh sách câu hỏi Part 1</h2>
-                    <p>Các câu sẽ hiển thị bên giao diện học viên theo thứ tự số câu.</p>
+                    <h2>Danh sách questions Part 1</h2>
+                    <p>Các câu sẽ hiển thị bên interface student theo thứ tự số câu.</p>
                 </div>
             </div>
 
@@ -273,14 +273,14 @@ Path("templates/core/admin_part1_questions.html").write_text(r'''{% load static 
                             <td>{{ q.option_c }}</td>
                             <td><span class="answer-pill">{{ q.correct_answer }}</span></td>
                             <td class="action-cell">
-                                <a class="mini-btn" href="?edit={{ q.id }}">Sửa</a>
-                                <a class="mini-btn danger" href="?delete={{ q.id }}" onclick="return confirm('Xóa câu hỏi này?')">Xóa</a>
+                                <a class="mini-btn" href="?edit={{ q.id }}">Edit</a>
+                                <a class="mini-btn danger" href="?delete={{ q.id }}" onclick="return confirm('Delete questions này?')">Delete</a>
                             </td>
                         </tr>
                     {% empty %}
                         <tr>
                             <td colspan="8">
-                                <div class="empty-box">Chưa có câu hỏi Part 1 nào. Thêm câu đầu tiên ở form phía trên.</div>
+                                <div class="empty-box">Missing Questions Part 1 nào. Add câu đầu tiên ở form phía trên.</div>
                             </td>
                         </tr>
                     {% endfor %}

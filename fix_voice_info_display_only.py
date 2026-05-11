@@ -4,7 +4,7 @@ import re
 tpl = Path("templates/core/admin_part2_gioi_detail.html")
 s = tpl.read_text(encoding="utf-8", errors="ignore")
 
-# Xóa toàn bộ block Thông tin voice cũ
+# Delete toàn bộ block Information voice cũ
 s = re.sub(
     r'\s*<section class="card voice-info-box">[\s\S]*?</section>\s*',
     '\n',
@@ -21,7 +21,7 @@ voice_block = r'''
         <div class="voice-info-display">{{ topic.voice_info }}</div>
     {% else %}
         <div class="voice-info-empty">
-            Chưa có transcript cho topic này. Nếu đã chạy lệnh nhập 12 topic mà vẫn trống, kiểm tra lại dữ liệu topic trong database.
+            Chưa có transcript cho topic này. Nếu đã chạy lệnh nhập 12 topic mà vẫn trống, kiểm tra lại data topic trong database.
         </div>
     {% endif %}
 
@@ -29,7 +29,7 @@ voice_block = r'''
 </section>
 '''
 
-# Chèn vào giữa nút Lưu đáp án tổng và Chọn đáp án đúng
+# Chèn vào giữa nút Save answer tổng và Choose answer đúng
 s = s.replace(
     '</section>\n</form>\n\n<form method="post">',
     '</section>\n' + voice_block + '\n</form>\n\n<form method="post">',

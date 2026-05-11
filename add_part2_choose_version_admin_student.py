@@ -2,7 +2,7 @@
 import re
 
 # ==================================================
-# 1) Sửa views: tạo màn chọn phiên bản cho admin + học viên
+# 1) Edit views: tạo màn chọn version cho admin + student
 # ==================================================
 views = Path("core/views.py")
 s = views.read_text(encoding="utf-8", errors="ignore")
@@ -56,7 +56,7 @@ def student_part2_page(request):
 # ===== End Part 2 choose version for admin and student =====
 '''
 
-# Thêm block mới ở cuối để override function cũ
+# Add block mới ở cuối để override function cũ
 if "Part 2 choose version for admin and student" not in s:
     s += block
 
@@ -64,7 +64,7 @@ views.write_text(s, encoding="utf-8")
 
 
 # ==================================================
-# 2) Sửa urls
+# 2) Edit urls
 # ==================================================
 urls = Path("core/urls.py")
 u = urls.read_text(encoding="utf-8", errors="ignore")
@@ -90,14 +90,14 @@ urls.write_text(u, encoding="utf-8")
 
 
 # ==================================================
-# 3) Template chọn phiên bản cho ADMIN
+# 3) Template chọn version cho ADMIN
 # ==================================================
 Path("templates/core/admin_part2_choose_version.html").write_text(r'''{% load static %}
 <!doctype html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Admin Part 2 - Chọn phiên bản</title>
+<title>Admin Part 2 - Chọn version</title>
 <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
 <style>
 :root{
@@ -230,24 +230,24 @@ h1{
     <div class="badge">2</div>
     <h1>Admin Part 2</h1>
     <div class="desc">
-        Chọn phiên bản cần quản lý dữ liệu. Mỗi phiên bản tách riêng, không ảnh hưởng dữ liệu của nhau.
+        Chọn version to Manage data. Mỗi version tách separate, không ảnh hưởng data của nhau.
     </div>
-    <a class="back" href="/dashboard/listening-parts/">← Quay lại chọn Part</a>
+    <a class="back" href="/dashboard/listening-parts/">← Back chọn Part</a>
 </section>
 
 <section class="grid">
     <a class="card" href="/dashboard/part-2/may-gioi/">
         <div class="num">1</div>
-        <h2>Mày giỏi</h2>
-        <p>Quản lý 12 chủ đề. Mỗi chủ đề có 1 file nghe tổng và 1 dữ liệu voice tổng.</p>
-        <span class="pill">{{ gioi_count }} chủ đề</span>
+        <h2>Version A</h2>
+        <p>Manage 12 topics. Each topic has one main listening file and one main voice data set.</p>
+        <span class="pill">{{ gioi_count }} topics</span>
     </a>
 
     <a class="card" href="/dashboard/part-2/may-kem/">
         <div class="num">2</div>
-        <h2>Mày kém</h2>
-        <p>Quản lý dạng 4 voice / 4 người thảo luận, dùng dữ liệu đáp án riêng theo bố cục Part 2.</p>
-        <span class="pill">{{ kem_count }} chủ đề</span>
+        <h2>Version B</h2>
+        <p>Manage dạng 4 voice / 4 người thảo luận, dùng data answer separate theo bố cục Part 2.</p>
+        <span class="pill">{{ kem_count }} topics</span>
     </a>
 </section>
 </main>
@@ -257,14 +257,14 @@ h1{
 
 
 # ==================================================
-# 4) Template chọn phiên bản cho HỌC VIÊN
+# 4) Template chọn version cho HỌC VIÊN
 # ==================================================
 Path("templates/core/student_part2_choose_version.html").write_text(r'''{% load static %}
 <!doctype html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Listening Part 2 - Chọn phiên bản</title>
+<title>Listening Part 2 - Chọn version</title>
 <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
 <style>
 :root{
@@ -397,24 +397,24 @@ h1{
     <div class="badge">2</div>
     <h1>Listening Part 2</h1>
     <div class="desc">
-        Chọn phiên bản bài làm trước khi vào danh sách chủ đề.
+        Chọn version bài làm trước khi vào danh sách topics.
     </div>
-    <a class="back" href="/listening/">← Quay lại Listening</a>
+    <a class="back" href="/listening/">← Back Listening</a>
 </section>
 
 <section class="grid">
     <a class="card" href="/listening/part-2/may-gioi/">
         <div class="num">1</div>
-        <h2>Mày giỏi</h2>
-        <p>Mỗi chủ đề có 1 file nghe tổng và 1 câu dữ liệu tổng.</p>
-        <span class="pill">{{ gioi_count }} chủ đề</span>
+        <h2>Version A</h2>
+        <p>Mỗi topics có 1 file nghe tổng và 1 câu data tổng.</p>
+        <span class="pill">{{ gioi_count }} topics</span>
     </a>
 
     <a class="card" href="/listening/part-2/may-kem/">
         <div class="num">2</div>
-        <h2>Mày kém</h2>
-        <p>Mỗi chủ đề có 4 voice tương ứng 4 người / 4 ý dữ liệu.</p>
-        <span class="pill">{{ kem_count }} chủ đề</span>
+        <h2>Version B</h2>
+        <p>Mỗi topics có 4 voice tương ứng 4 người / 4 ý data.</p>
+        <span class="pill">{{ kem_count }} topics</span>
     </a>
 </section>
 </main>

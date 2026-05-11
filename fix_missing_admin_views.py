@@ -4,7 +4,7 @@ import re
 views_path = Path("core/views.py")
 views = views_path.read_text(encoding="utf-8", errors="ignore")
 
-# Xóa bản lỗi/thiếu nếu có rồi thêm lại cuối file
+# Delete bản lỗi/thiếu nếu có rồi thêm lại cuối file
 views = re.sub(
     r'\n@login_required\s+def admin_listening_parts\(request\):.*?(?=\n@login_required\s+def|\Z)',
     "\n",
@@ -64,7 +64,7 @@ def admin_part1_questions(request):
                 ListeningQuestion.objects.create(
                     part=1,
                     question_number=current_max + i,
-                    question_text=f"Câu hỏi {current_max + i}",
+                    question_text=f"Question {current_max + i}",
                     option_a="",
                     option_b="",
                     option_c="",
@@ -103,13 +103,13 @@ def admin_part1_questions(request):
 
                 q.save()
 
-            messages.success(request, "Đã cập nhật hàng loạt câu hỏi Part 1.")
+            messages.success(request, "Đã cập nhật hàng loạt questions Part 1.")
             return redirect("admin_part1_questions")
 
         if action == "delete_one":
             delete_id = request.POST.get("delete_id")
             ListeningQuestion.objects.filter(id=delete_id, part=1).delete()
-            messages.success(request, "Đã xóa 1 câu hỏi Part 1.")
+            messages.success(request, "Đã xóa 1 questions Part 1.")
             return redirect("admin_part1_questions")
 
     questions = ListeningQuestion.objects.filter(part=1).order_by("question_number", "id")
@@ -124,7 +124,7 @@ views_path.write_text(views, encoding="utf-8")
 print("DA_THEM_LAI_ADMIN_LISTENING_PARTS_VA_PART1")
 
 
-# Sửa urls.py cho chắc, không để trùng quá nhiều
+# Edit urls.py cho chắc, không để trùng quá nhiều
 urls_path = Path("core/urls.py")
 urls = urls_path.read_text(encoding="utf-8", errors="ignore")
 

@@ -5,7 +5,7 @@ s = p.read_text(encoding="utf-8", errors="ignore") if p.exists() else ""
 
 extra = r'''
 
-/* Thu nhỏ khối danh sách câu hỏi bên học viên */
+/* Thu nhỏ khối danh sách questions bên student */
 .question-side,
 .side-card {
     max-width: 320px !important;
@@ -80,7 +80,7 @@ extra = r'''
 }
 '''
 
-if "Thu nhỏ khối danh sách câu hỏi bên học viên" not in s:
+if "Thu nhỏ khối danh sách questions bên student" not in s:
     s += extra
 
 p.write_text(s, encoding="utf-8")

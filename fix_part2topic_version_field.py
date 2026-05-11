@@ -14,11 +14,11 @@ if not m:
 topic_block = re.search(r"class\s+Part2Topic\(models\.Model\):[\s\S]*?(?=\nclass\s+Part2Voice|\Z)", s).group(0)
 
 insert = '''    VERSION_CHOICES = [
-        ("gioi", "Mày giỏi"),
-        ("kem", "Mày kém"),
+        ("gioi", "Version A"),
+        ("kem", "Version B"),
     ]
 
-    version = models.CharField("Phiên bản", max_length=20, choices=VERSION_CHOICES, default="gioi")
+    version = models.CharField("Version", max_length=20, choices=VERSION_CHOICES, default="gioi")
 '''
 
 if "version = models.CharField" not in topic_block:

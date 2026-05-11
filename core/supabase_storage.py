@@ -138,5 +138,5 @@ def delete_file_from_supabase(key):
 
     if response.status_code not in (200, 204):
         raise SupabaseStorageError(
-            f"Xóa file Supabase thất bại: {response.status_code} - {response.text[:300]}"
+            f"Delete file Supabase thất bại: {response.status_code} - {response.text[:300]}"
         )

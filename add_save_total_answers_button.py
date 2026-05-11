@@ -2,7 +2,7 @@
 import re
 
 # ==================================================
-# 1) Sửa views.py: thêm action lưu riêng "Dữ liệu đáp án tổng"
+# 1) Edit views.py: thêm action lưu separate "Data answer tổng"
 # ==================================================
 views = Path("core/views.py")
 s = views.read_text(encoding="utf-8", errors="ignore")
@@ -26,7 +26,7 @@ replacement = '''    voices = list(topic.voices.all().order_by("order", "id")[:4
             voice.question_text = f"Person {voice.order}"
             voice.save()
 
-        messages.success(request, "Đã lưu dữ liệu đáp án tổng. Bây giờ bạn có thể chọn đáp án đúng cho từng Person.")
+        messages.success(request, "Đã lưu data answer tổng. Bây giờ bạn có thể chọn answer đúng cho từng Person.")
         return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
     if request.method == "POST" and request.POST.get("action") == "save_topic":'''
@@ -40,9 +40,9 @@ views.write_text(s, encoding="utf-8")
 
 
 # ==================================================
-# 2) Sửa template admin Mày giỏi:
-#    - Thêm nút Lưu đáp án tổng ngay dưới ô dữ liệu tổng
-#    - Tách form lưu đáp án đúng bên dưới
+# 2) Edit template admin Version A:
+#    - Add nút Save answer tổng ngay dưới ô data tổng
+#    - Tách form lưu answer đúng bên dưới
 # ==================================================
 tpl = Path("templates/core/admin_part2_gioi_detail.html")
 t = tpl.read_text(encoding="utf-8", errors="ignore")
@@ -54,34 +54,34 @@ t = t.replace(
     1
 )
 
-# Thêm nút Lưu đáp án tổng sau note của dữ liệu tổng nếu chưa có
-if "Lưu đáp án tổng" not in t:
+# Add nút Save answer tổng sau note của data tổng nếu chưa có
+if "Save answer tổng" not in t:
     old_note = '''<div class="note">
-        Sau khi nhập dữ liệu đáp án tổng, bấm lưu. Sau đó 4 ô “Đáp án đúng” bên dưới sẽ hiện 4 lựa chọn để chọn cho từng Person.
+        Sau khi nhập data answer tổng, bấm lưu. Sau đó 4 ô “Answer đúng” bên dưới sẽ hiện 4 lựa chọn để chọn cho từng Person.
     </div>
 </section>'''
 
     new_note = '''<div class="note">
-        Sau khi nhập dữ liệu đáp án tổng, bấm <b>Lưu đáp án tổng</b>. Sau đó 4 ô “Đáp án đúng” bên dưới sẽ hiện các lựa chọn để chọn cho từng Person.
+        Sau khi nhập data answer tổng, bấm <b>Save answer tổng</b>. Sau đó 4 ô “Answer đúng” bên dưới sẽ hiện các lựa chọn để chọn cho từng Person.
     </div>
 
     <div class="actions" style="justify-content:flex-end;margin-top:16px">
-        <button class="btn" type="submit">Lưu đáp án tổng</button>
+        <button class="btn" type="submit">Save answer tổng</button>
     </div>
 </section>'''
 
     t = t.replace(old_note, new_note)
 
 # Nếu text note khác thì chèn theo textarea data_choices
-if "Lưu đáp án tổng" not in t:
+if "Save answer tổng" not in t:
     t = t.replace(
-        '</section>\n\n<section class="card">\n    <h2 style="margin:0 0 8px;color:#4a0010">Chọn đáp án đúng cho 4 person</h2>',
+        '</section>\n\n<section class="card">\n    <h2 style="margin:0 0 8px;color:#4a0010">Choose answer đúng cho 4 person</h2>',
         '''    <div class="note">
-        Sau khi nhập dữ liệu đáp án tổng, bấm <b>Lưu đáp án tổng</b>. Sau đó 4 ô “Đáp án đúng” bên dưới sẽ hiện các lựa chọn để chọn cho từng Person.
+        Sau khi nhập data answer tổng, bấm <b>Save answer tổng</b>. Sau đó 4 ô “Answer đúng” bên dưới sẽ hiện các lựa chọn để chọn cho từng Person.
     </div>
 
     <div class="actions" style="justify-content:flex-end;margin-top:16px">
-        <button class="btn" type="submit">Lưu đáp án tổng</button>
+        <button class="btn" type="submit">Save answer tổng</button>
     </div>
 </section>
 
@@ -90,14 +90,14 @@ if "Lưu đáp án tổng" not in t:
 <input type="hidden" name="action" value="save_topic">
 
 <section class="card">
-    <h2 style="margin:0 0 8px;color:#4a0010">Chọn đáp án đúng cho 4 person</h2>''',
+    <h2 style="margin:0 0 8px;color:#4a0010">Choose answer đúng cho 4 person</h2>''',
         1
     )
 
-# Nếu đã có form nhưng chưa tách phần dưới, tách trước section "Chọn đáp án đúng"
-if '<h2 style="margin:0 0 8px;color:#4a0010">Chọn đáp án đúng cho 4 person</h2>' in t and t.count('<form method="post">') < 2:
+# Nếu đã có form nhưng chưa tách phần dưới, tách trước section "Choose answer đúng"
+if '<h2 style="margin:0 0 8px;color:#4a0010">Choose answer đúng cho 4 person</h2>' in t and t.count('<form method="post">') < 2:
     t = t.replace(
-        '<section class="card">\n    <h2 style="margin:0 0 8px;color:#4a0010">Chọn đáp án đúng cho 4 person</h2>',
+        '<section class="card">\n    <h2 style="margin:0 0 8px;color:#4a0010">Choose answer đúng cho 4 person</h2>',
         '''</form>
 
 <form method="post">
@@ -105,11 +105,11 @@ if '<h2 style="margin:0 0 8px;color:#4a0010">Chọn đáp án đúng cho 4 perso
 <input type="hidden" name="action" value="save_topic">
 
 <section class="card">
-    <h2 style="margin:0 0 8px;color:#4a0010">Chọn đáp án đúng cho 4 person</h2>''',
+    <h2 style="margin:0 0 8px;color:#4a0010">Choose answer đúng cho 4 person</h2>''',
         1
     )
 
-# Cần gửi lại dữ liệu topic khi bấm lưu đáp án đúng để không mất dữ liệu
+# Cần gửi lại data topic khi bấm lưu answer đúng để không mất data
 hidden_fields = '''<input type="hidden" name="title" value="{{ topic.title }}">
 <input type="hidden" name="description" value="{{ topic.description }}">
 <input type="hidden" name="audio_url" value="{{ topic.audio_url }}">
@@ -123,14 +123,14 @@ if hidden_fields not in t:
         1
     )
 
-# Sửa note dưới dropdown
+# Edit note dưới dropdown
 t = t.replace(
-    "Nếu chưa thấy lựa chọn, nhập dữ liệu đáp án tổng ở phía trên, mỗi đáp án một dòng, rồi bấm Lưu.",
-    "Nếu chưa thấy lựa chọn, nhập dữ liệu đáp án tổng ở phía trên rồi bấm Lưu đáp án tổng."
+    "Nếu chưa thấy lựa chọn, nhập data answer tổng ở phía trên, mỗi answer một dòng, rồi bấm Save.",
+    "Nếu chưa thấy lựa chọn, nhập data answer tổng ở phía trên rồi bấm Save answer tổng."
 )
 
-# Đảm bảo nút cuối vẫn là lưu đáp án đúng
-t = t.replace("Lưu dữ liệu chủ đề</button>", "Lưu đáp án đúng</button>")
+# Đảm bảo nút cuối vẫn là lưu answer đúng
+t = t.replace("Save data topics</button>", "Save answer đúng</button>")
 
 tpl.write_text(t, encoding="utf-8")
 

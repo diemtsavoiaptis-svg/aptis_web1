@@ -2,7 +2,7 @@
 import re
 
 # ==================================================
-# 1) Đảm bảo model có đủ field cần cho Mày giỏi
+# 1) Đảm bảo model có đủ field cần cho Version A
 # ==================================================
 models = Path("core/models.py")
 s = models.read_text(encoding="utf-8", errors="ignore")
@@ -15,11 +15,11 @@ topic_block = re.search(r"class\s+Part2Topic\(models\.Model\):[\s\S]*?(?=\nclass
 
 if "version = models.CharField" not in topic_block:
     insert = '''    VERSION_CHOICES = [
-        ("gioi", "Mày giỏi"),
-        ("kem", "Mày kém"),
+        ("gioi", "Version A"),
+        ("kem", "Version B"),
     ]
 
-    version = models.CharField("Phiên bản", max_length=20, choices=VERSION_CHOICES, default="gioi")
+    version = models.CharField("Version", max_length=20, choices=VERSION_CHOICES, default="gioi")
 '''
     s = s[:topic_match.end()] + insert + s[topic_match.end():]
 
@@ -41,11 +41,11 @@ voice_block = re.search(r"class\s+Part2Voice\(models\.Model\):[\s\S]*?(?=\n#|\nc
 
 voice_insert = ""
 if "is_locked" not in voice_block:
-    voice_insert += '    is_locked = models.BooleanField("Khóa", default=False)\n'
+    voice_insert += '    is_locked = models.BooleanField("Lock", default=False)\n'
 if "question_text" not in voice_block:
-    voice_insert += '    question_text = models.TextField("Câu hỏi", blank=True)\n'
+    voice_insert += '    question_text = models.TextField("Question", blank=True)\n'
 if "correct_data" not in voice_block:
-    voice_insert += '    correct_data = models.TextField("Đáp án đúng", blank=True)\n'
+    voice_insert += '    correct_data = models.TextField("Answer đúng", blank=True)\n'
 
 if voice_insert:
     s = s[:voice_match.end()] + voice_insert + s[voice_match.end():]
@@ -54,7 +54,7 @@ models.write_text(s, encoding="utf-8")
 
 
 # ==================================================
-# 2) Ghi đè view Mày giỏi: chỉ dùng 1 voice tổng
+# 2) Ghi đè view Version A: chỉ dùng 1 voice tổng
 # ==================================================
 views = Path("core/views.py")
 v = views.read_text(encoding="utf-8", errors="ignore")
@@ -94,7 +94,7 @@ PART2_GIOI_TOPICS = [
     "Topic The Art",
     "Topic Travel to work.",
     "Topic Studying.",
-    "Topic Studying phiên bản 2.",
+    "Topic Studying version 2.",
 ]
 
 
@@ -107,20 +107,20 @@ def _seed_part2_gioi_topics_one_voice():
         topic, created = Part2Topic.objects.get_or_create(
             version="gioi",
             title=title,
-            defaults={"description": "Chủ đề Mày giỏi"}
+            defaults={"description": "Version A Topic"}
         )
 
-        # Mày giỏi chỉ giữ 1 voice tổng
+        # Version A chỉ giữ 1 voice tổng
         topic.voices.exclude(order=1).delete()
 
         voice, created_voice = Part2Voice.objects.get_or_create(
             topic=topic,
             order=1,
-            defaults={"question_text": "Câu hỏi tổng"}
+            defaults={"question_text": "Question tổng"}
         )
 
         if not voice.question_text:
-            voice.question_text = "Câu hỏi tổng"
+            voice.question_text = "Question tổng"
             voice.save()
 
 
@@ -129,7 +129,7 @@ def _get_gioi_total_voice(topic):
     voice, created = Part2Voice.objects.get_or_create(
         topic=topic,
         order=1,
-        defaults={"question_text": "Câu hỏi tổng"}
+        defaults={"question_text": "Question tổng"}
     )
     return voice
 
@@ -163,7 +163,7 @@ def admin_part2_gioi_detail(request, topic_id):
         voice.audio_url = topic.audio_url
         voice.save()
 
-        messages.success(request, "Đã lưu dữ liệu chủ đề Mày giỏi.")
+        messages.success(request, "Đã lưu data topics Version A.")
         return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
     options = [x.strip() for x in (voice.data_choices or "").splitlines() if x.strip()]
@@ -195,14 +195,14 @@ views.write_text(v, encoding="utf-8")
 
 
 # ==================================================
-# 3) Template admin chi tiết Mày giỏi: chỉ 1 dòng tổng
+# 3) Template admin chi tiết Version A: chỉ 1 dòng tổng
 # ==================================================
 Path("templates/core/admin_part2_gioi_detail.html").write_text(r'''{% load static %}
 <!doctype html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>{{ topic.title }} | Mày giỏi</title>
+<title>{{ topic.title }} | Version A</title>
 <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
 <style>
 :root{--red:#e60023;--red2:#ff5f76;--deep:#7a0010;--dark:#3f0011;--line:#ffd1dc;--muted:#667085}
@@ -247,12 +247,12 @@ td{padding:10px;border-bottom:1px solid #ffe1e7;vertical-align:top}
     <div>
         <h1>{{ topic.title }}</h1>
         <div class="desc">
-            Mày giỏi chỉ có <b>1 voice tổng</b>. Chủ đề này dùng 1 file nghe chung và 1 dòng dữ liệu tổng.
+            Version A chỉ có <b>1 voice tổng</b>. Topic này dùng 1 file nghe chung và 1 data rows tổng.
         </div>
     </div>
     <div class="actions">
-        <a class="link" href="/dashboard/part-2/may-gioi/">← Danh sách 12 chủ đề</a>
-        <a class="link" href="/listening/part-2/may-gioi/{{ topic.id }}/">Xem giao diện học viên</a>
+        <a class="link" href="/dashboard/part-2/may-gioi/">← Danh sách 12 topics</a>
+        <a class="link" href="/listening/part-2/may-gioi/{{ topic.id }}/">View Student Interface</a>
     </div>
 </section>
 
@@ -277,8 +277,8 @@ td{padding:10px;border-bottom:1px solid #ffe1e7;vertical-align:top}
     </div>
 
     <div class="audio-box">
-        <label>Audio Drive chung của chủ đề</label>
-        <textarea name="audio_url" placeholder="Dán link Google Drive/audio. Mày giỏi chỉ dùng 1 file nghe chung.">{{ topic.audio_url }}</textarea>
+        <label>Audio Drive chung của topics</label>
+        <textarea name="audio_url" placeholder="Dán link Google Drive/audio. Version A chỉ dùng 1 file nghe chung.">{{ topic.audio_url }}</textarea>
 
         {% if topic.audio_url %}
         <div class="note">
@@ -290,18 +290,18 @@ td{padding:10px;border-bottom:1px solid #ffe1e7;vertical-align:top}
 </section>
 
 <section class="card">
-    <h2 style="margin:0 0 8px;color:#4a0010">Dữ liệu voice tổng</h2>
+    <h2 style="margin:0 0 8px;color:#4a0010">Data voice tổng</h2>
 
     <div class="table-wrap">
         <table>
             <thead>
                 <tr>
-                    <th>Khóa</th>
-                    <th>STT</th>
-                    <th>Câu hỏi</th>
+                    <th>Lock</th>
+                    <th>No.</th>
+                    <th>Question</th>
                     <th>Audio Drive</th>
-                    <th>Đáp án đúng</th>
-                    <th>Nhập dữ liệu đáp án</th>
+                    <th>Answer đúng</th>
+                    <th>Nhập data answer</th>
                 </tr>
             </thead>
 
@@ -316,7 +316,7 @@ td{padding:10px;border-bottom:1px solid #ffe1e7;vertical-align:top}
                     </td>
 
                     <td class="question-col">
-                        <textarea name="question_text" placeholder="Nhập câu hỏi tổng">{{ voice.question_text }}</textarea>
+                        <textarea name="question_text" placeholder="Nhập questions tổng">{{ voice.question_text }}</textarea>
                     </td>
 
                     <td class="audio-col">
@@ -326,7 +326,7 @@ td{padding:10px;border-bottom:1px solid #ffe1e7;vertical-align:top}
 
                     <td class="correct-col">
                         <select name="correct_data">
-                            <option value="">-- Chọn đáp án đúng --</option>
+                            <option value="">-- Choose answer đúng --</option>
                             {% for option in options %}
                                 <option value="{{ option }}" {% if voice.correct_data == option %}selected{% endif %}>
                                     {{ option }}
@@ -335,12 +335,12 @@ td{padding:10px;border-bottom:1px solid #ffe1e7;vertical-align:top}
                         </select>
 
                         <div class="note">
-                            Nếu chưa thấy lựa chọn, nhập dữ liệu đáp án ở cột cuối rồi lưu trước.
+                            Nếu chưa thấy lựa chọn, nhập data answer ở cột cuối rồi lưu trước.
                         </div>
                     </td>
 
                     <td class="data-col">
-                        <textarea name="data_choices" placeholder="Mỗi dữ liệu đáp án một dòng">{{ voice.data_choices }}</textarea>
+                        <textarea name="data_choices" placeholder="Mỗi data answer một dòng">{{ voice.data_choices }}</textarea>
                     </td>
                 </tr>
             </tbody>
@@ -348,7 +348,7 @@ td{padding:10px;border-bottom:1px solid #ffe1e7;vertical-align:top}
     </div>
 
     <div class="actions" style="justify-content:flex-end;margin-top:16px">
-        <button class="btn" type="submit">Lưu dữ liệu chủ đề</button>
+        <button class="btn" type="submit">Save data topics</button>
     </div>
 </section>
 </form>
@@ -360,14 +360,14 @@ td{padding:10px;border-bottom:1px solid #ffe1e7;vertical-align:top}
 
 
 # ==================================================
-# 4) Template học viên Mày giỏi: 1 audio + 1 câu tổng
+# 4) Template student Version A: 1 audio + 1 câu tổng
 # ==================================================
 Path("templates/core/student_part2_gioi.html").write_text(r'''{% load static %}
 <!doctype html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>{{ topic.title }} | Part 2 Mày giỏi</title>
+<title>{{ topic.title }} | Part 2 Version A</title>
 <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
 <style>
 :root{--red:#e60023;--red2:#ff5f76;--deep:#7a0010;--dark:#3f0011;--line:#ffd1dc;--muted:#667085}
@@ -389,29 +389,29 @@ select{width:100%;height:52px;border-radius:14px;border:1px dashed #f0aeb8;backg
 </style>
 </head>
 <body>
-<a class="exit" href="/listening/">← Thoát bài</a>
+<a class="exit" href="/listening/">← Exit bài</a>
 
 <main class="wrap">
-<section class="topbar">Part 2 - Mày giỏi</section>
+<section class="topbar">Part 2 - Version A</section>
 
 <section class="card">
     <h1>{{ topic.title }}</h1>
 
     <div class="audio-box">
-        <div class="audio-title">File nghe của chủ đề</div>
+        <div class="audio-title">File nghe của topics</div>
         {% if topic.audio_url %}
             <a class="audio-link" href="{{ topic.audio_url }}" target="_blank">▶ Mở file nghe</a>
         {% else %}
-            <div style="color:#8a0015;font-weight:800">Chưa có file nghe cho chủ đề này.</div>
+            <div style="color:#8a0015;font-weight:800">Chưa có file nghe cho topics này.</div>
         {% endif %}
     </div>
 </section>
 
 <section class="card">
-    <div class="q-title">{{ voice.question_text|default:"Câu hỏi tổng" }}</div>
+    <div class="q-title">{{ voice.question_text|default:"Question tổng" }}</div>
 
     <select>
-        <option>Chọn đáp án...</option>
+        <option>Choose answer...</option>
         {% for option in options %}
             <option>{{ option }}</option>
         {% endfor %}

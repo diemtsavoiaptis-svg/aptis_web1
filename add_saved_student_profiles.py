@@ -2,7 +2,7 @@
 import re
 
 # =========================
-# 1) Sửa view: gửi danh sách hồ sơ đã lưu xuống template
+# 1) Edit view: gửi danh sách hồ sơ đã lưu xuống template
 # =========================
 views = Path("core/views.py")
 s = views.read_text(encoding="utf-8", errors="ignore")
@@ -43,12 +43,12 @@ views.write_text(s, encoding="utf-8")
 
 
 # =========================
-# 2) Sửa template: thêm bảng Hồ sơ đã lưu bên dưới
+# 2) Edit template: thêm bảng Hồ sơ đã lưu bên dưới
 # =========================
 tpl = Path("templates/core/admin_student_lookup.html")
 t = tpl.read_text(encoding="utf-8", errors="ignore")
 
-# Thêm CSS bảng đẹp
+# Add CSS bảng đẹp
 css = r'''
 .saved-section{
     margin-top:24px;
@@ -113,7 +113,7 @@ saved_block = r'''
 <section class="card saved-section">
     <div class="head">
         <h2>Hồ sơ đã lưu</h2>
-        <p>Danh sách học viên đã có hồ sơ trong hệ thống.</p>
+        <p>Danh sách student đã có hồ sơ trong hệ thống.</p>
     </div>
 
     <div class="body">
@@ -121,11 +121,11 @@ saved_block = r'''
             <table class="saved-table">
                 <thead>
                     <tr>
-                        <th>ID học viên</th>
+                        <th>ID student</th>
                         <th>Tên</th>
                         <th>Gmail</th>
                         <th>Số điện thoại</th>
-                        <th>Tài khoản</th>
+                        <th>Account</th>
                         <th>Thao tác</th>
                     </tr>
                 </thead>
@@ -188,7 +188,7 @@ saved_block = r'''
                         </tr>
                     {% empty %}
                         <tr>
-                            <td colspan="6">Chưa có hồ sơ học viên nào.</td>
+                            <td colspan="6">Chưa có hồ sơ student nào.</td>
                         </tr>
                     {% endfor %}
                 </tbody>

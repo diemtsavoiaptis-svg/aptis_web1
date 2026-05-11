@@ -1,19 +1,19 @@
 ﻿from pathlib import Path
 import re
 
-# 1) Sửa template: xóa cột Đúng và cột Xóa trong bảng Part 1
+# 1) Edit template: xóa cột Đúng và cột Delete trong bảng Part 1
 p = Path("templates/core/admin_part1_questions.html")
 s = p.read_text(encoding="utf-8", errors="ignore")
 
-# Xóa CSS width của 2 cột
+# Delete CSS width của 2 cột
 s = s.replace(".col-correct{width:90px}", "")
 s = s.replace(".col-delete{width:90px}", "")
 
-# Xóa tiêu đề cột Đúng và Xóa
+# Delete tiêu đề cột Đúng và Delete
 s = re.sub(r'\s*<th class="col-correct">Đúng</th>', "", s)
-s = re.sub(r'\s*<th class="col-delete">Xóa</th>', "", s)
+s = re.sub(r'\s*<th class="col-delete">Delete</th>', "", s)
 
-# Xóa ô select đáp án đúng
+# Delete ô select answer đúng
 s = re.sub(
     r'\s*<td>\s*<select name="correct_answer_\{\{ q\.id \}\}">.*?</select>\s*</td>',
     "",
@@ -21,7 +21,7 @@ s = re.sub(
     flags=re.S
 )
 
-# Xóa ô nút Xóa từng dòng
+# Delete ô nút Delete từng dòng
 s = re.sub(
     r'\s*<td>\s*<button class="delete-btn".*?</button>\s*</td>',
     "",
@@ -29,14 +29,14 @@ s = re.sub(
     flags=re.S
 )
 
-# Sửa colspan dòng rỗng từ 12 xuống 10
+# Edit colspan dòng rỗng từ 12 xuống 10
 s = s.replace('colspan="12"', 'colspan="10"')
 
 p.write_text(s, encoding="utf-8")
 print("DA_XOA_COT_DUNG_VA_XOA")
 
 
-# 2) Sửa views.py: nếu không còn cột Đúng thì không tự ghi đè đáp án đúng thành A
+# 2) Edit views.py: nếu không còn cột Đúng thì không tự ghi đè answer đúng thành A
 vp = Path("core/views.py")
 v = vp.read_text(encoding="utf-8", errors="ignore")
 

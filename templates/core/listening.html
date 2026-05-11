@@ -4,7 +4,7 @@
 <html lang="vi" lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Listening Part {{ part_number }} | Điểm TSA Với Aptis</title>
+    <title>Listening Part {{ part_number }} | Score TSA Với Aptis</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="student-id" content="{{ student_id }}">
     <meta name="student-name" content="{{ student_name }}">
@@ -84,14 +84,14 @@
         <div class="brand-inline">
             <div class="brand-logo">A</div>
             <div>
-                <strong>Điểm TSA Với Aptis</strong>
+                <strong>Score TSA Với Aptis</strong>
                 <span>Listening Practice</span>
             </div>
         </div>
         <div class="student-actions">
             <span class="student-identity">ID {{ student_id }} · {{ student_name }}</span>
             <a href="{% url 'dashboard' %}" class="ghost-btn">Trang chính</a>
-            <a href="{% url 'logout' %}" class="ghost-btn">Đăng xuất</a>
+            <a href="{% url 'logout' %}" class="ghost-btn">Logout</a>
         </div>
     </header>
 
@@ -104,7 +104,7 @@
                 </div>
                 <div>
                     <h1>Listening Practice</h1>
-                    <p>Luyện nghe từng câu, rõ ràng và dễ thao tác.</p>
+                    <p>Listening Practice từng câu, rõ ràng và dễ thao tác.</p>
                 </div>
             </div>
 
@@ -116,8 +116,8 @@
 
             {% if no_question %}
                 <div class="empty-box">
-                    <h2>Chưa có dữ liệu Listening cho Part {{ part_number }}</h2>
-                    <p>Dữ liệu thật sẽ được admin nhập sau. Hiện có thể xem trước bố cục demo.</p>
+                    <h2>Chưa có data Listening cho Part {{ part_number }}</h2>
+                    <p>Data thật sẽ được admin nhập sau. Hiện có thể xem trước bố cục demo.</p>
                 </div>
             {% else %}
                 <div class="progress-wrap">
@@ -152,11 +152,11 @@
                         </button>
                     </div>
 
-                    <button class="primary-btn full check-answer" type="button">Kiểm tra đáp án</button>
+                    <button class="primary-btn full check-answer" type="button">Kiểm tra answer</button>
 
                     <div class="answer-result" hidden>
-                        <h3>Kết quả</h3>
-                        <p>Đáp án đúng: <strong>{{ question.correct_answer }}</strong></p>
+                        <h3>Results</h3>
+                        <p>Correct Answer: <strong>{{ question.correct_answer }}</strong></p>
                         <div class="transcript">
                             <strong>Transcript:</strong>
                             <p>{{ question.transcript }}</p>

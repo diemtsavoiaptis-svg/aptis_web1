@@ -19,7 +19,7 @@ for folder in folders:
                 s = p.read_text(encoding="utf-8-sig", errors="ignore")
                 ns = unicodedata.normalize("NFC", s)
 
-                # Sửa một số chữ hay bị tách dấu do copy/paste
+                # Edit một số chữ hay bị tách dấu do copy/paste
                 fixes = {
                     "Hồ sơ": "Hồ sơ",
                     "hồ sơ": "hồ sơ",
@@ -28,16 +28,16 @@ for folder in folders:
                     "cần tra": "cần tra",
                     "đã lưu": "đã lưu",
                     "Đã lưu": "Đã lưu",
-                    "quản lý": "quản lý",
-                    "Quản lý": "Quản lý",
+                    "quản lý": "manage",
+                    "Quản lý": "Manage",
                     "chọn": "chọn",
                     "Chọn": "Chọn",
-                    "học viên": "học viên",
-                    "Học viên": "Học viên",
+                    "học viên": "student",
+                    "Học viên": "Student",
                     "đăng nhập": "đăng nhập",
-                    "Đăng nhập": "Đăng nhập",
+                    "Đăng nhập": "Login",
                     "mật khẩu": "mật khẩu",
-                    "Mật khẩu": "Mật khẩu",
+                    "Mật khẩu": "Password",
                 }
 
                 for a, b in fixes.items():
@@ -70,7 +70,7 @@ button, input, textarea, select,
     -webkit-font-smoothing: antialiased;
 }
 
-/* Tiêu đề vẫn đậm, mượt nhưng không vỡ dấu */
+/* Title vẫn đậm, mượt nhưng không vỡ dấu */
 h1, h2, h3, h4,
 .profile-title,
 #panelTitle,

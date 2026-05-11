@@ -13,14 +13,14 @@ if "from django.urls import path" not in u:
 if "from . import views" not in u:
     u = u.replace("from django.urls import path\n", "from django.urls import path\nfrom . import views\n", 1)
 
-# Xóa route cũ nếu bị lỗi/lặp
+# Delete route cũ nếu bị lỗi/lặp
 u = re.sub(
     r'\s*path\(["\']dashboard/students/["\'],\s*.*?\),\s*',
     "\n",
     u
 )
 
-# Thêm route mới ngay đầu urlpatterns
+# Add route mới ngay đầu urlpatterns
 u = re.sub(
     r"urlpatterns\s*=\s*\[",
     'urlpatterns = [\n    path("dashboard/students/", views.admin_student_lookup, name="admin_student_lookup"),',

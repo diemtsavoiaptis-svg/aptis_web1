@@ -8,7 +8,7 @@ s = p.read_text(encoding="utf-8", errors="ignore")
 if "from . import views" not in s:
     s = "from . import views\n" + s
 
-# Thêm URL dashboard/students nếu chưa có
+# Add URL dashboard/students nếu chưa có
 if 'dashboard/students/' not in s:
     s = re.sub(
         r"urlpatterns\s*=\s*\[",

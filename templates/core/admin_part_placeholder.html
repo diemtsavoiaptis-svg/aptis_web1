@@ -4,7 +4,7 @@
 <html lang="vi" lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Quản lý {{ part_title }}</title>
+    <title>Manage {{ part_title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
     <style>
@@ -89,16 +89,16 @@
 <body>
     <section class="card">
         <div class="badge">{{ part_number }}</div>
-        <h1>Quản lý {{ part_title }}</h1>
+        <h1>Manage {{ part_title }}</h1>
         <p>{{ part_desc }}</p>
 
         <div class="note">
-            Đây là khu vực quản lý dữ liệu cho admin. Giao diện học viên của {{ part_title }} sẽ nằm riêng ở đường dẫn làm bài, không đặt trong trang quản lý dữ liệu.
+            Đây là khu vực manage data cho admin. Student Interface của {{ part_title }} sẽ nằm riêng ở đường dẫn làm bài, không đặt trong trang manage data.
         </div>
 
         <div class="actions">
-            <a class="primary" href="/dashboard/listening-parts/">← Quay lại chọn Part</a>
-            <a class="light" href="/listening/part-{{ part_number }}/">Xem giao diện học viên</a>
+            <a class="primary" href="/dashboard/listening-parts/">← Back to Part Selection</a>
+            <a class="light" href="/listening/part-{{ part_number }}/">View Student Interface</a>
         </div>
     </section>
 </body>

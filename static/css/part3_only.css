@@ -1,14 +1,16 @@
 
 :root {
-    --green: #064E3B;
-    --green-2: #047857;
-    --green-3: #10B981;
-    --bg: #F9FAFB;
-    --text: #0F172A;
-    --muted: #64748B;
-    --border: #D1FAE5;
-    --white: #FFFFFF;
-    --shadow: 0 18px 45px rgba(6, 78, 59, .10);
+    --red: #ef233c;
+    --red-dark: #9f001f;
+    --dark: #3b0010;
+    --soft: #fff1f4;
+    --soft-2: #fff7f9;
+    --bg: #fff7f9;
+    --white: #ffffff;
+    --text: #3b0010;
+    --muted: #667085;
+    --border: #ffd0d8;
+    --shadow: 0 18px 45px rgba(239, 35, 60, .12);
 }
 
 * {
@@ -26,8 +28,8 @@ body {
     min-height: 100vh;
     padding: 28px;
     background:
-        radial-gradient(circle at top left, rgba(16, 185, 129, .16), transparent 34%),
-        linear-gradient(180deg, #F9FAFB 0%, #FFFFFF 100%);
+        radial-gradient(circle at top left, rgba(239, 35, 60, .10), transparent 34%),
+        linear-gradient(180deg, #fff7f9 0%, #FFFFFF 100%);
 }
 
 .part3-wrap {
@@ -50,7 +52,7 @@ body {
 
 .kicker {
     margin: 0 0 10px;
-    color: var(--green-2);
+    color: var(--red-2);
     font-size: 13px;
     font-weight: 950;
     letter-spacing: .08em;
@@ -59,7 +61,7 @@ body {
 
 h1 {
     margin: 0;
-    color: var(--green);
+    color: var(--red);
     font-size: clamp(38px, 5vw, 60px);
     line-height: 1.05;
     font-weight: 950;
@@ -90,7 +92,7 @@ h1 {
     border: 1px solid var(--border);
     border-radius: 999px;
     background: var(--white);
-    color: var(--green);
+    color: var(--red);
     font-weight: 900;
     text-decoration: none;
     cursor: pointer;
@@ -99,12 +101,12 @@ h1 {
 
 .btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 14px 30px rgba(6, 78, 59, .16);
+    box-shadow: 0 14px 30px rgba(239, 35, 60, .18);
 }
 
 .btn.primary {
-    border-color: var(--green);
-    background: var(--green);
+    border-color: var(--red);
+    background: var(--red);
     color: #FFFFFF;
 }
 
@@ -126,7 +128,7 @@ h1 {
 
 .card h2 {
     margin: 0 0 16px;
-    color: var(--green);
+    color: var(--red);
     font-size: 24px;
     font-weight: 950;
 }
@@ -164,8 +166,8 @@ h1 {
 .field input:focus,
 .field textarea:focus,
 .field select:focus {
-    border-color: var(--green-3);
-    box-shadow: 0 0 0 4px rgba(16, 185, 129, .14);
+    border-color: var(--red-3);
+    box-shadow: 0 0 0 4px rgba(239, 35, 60, .12);
 }
 
 .dropzone {
@@ -173,10 +175,10 @@ h1 {
     display: grid;
     place-items: center;
     padding: 22px;
-    border: 2px dashed #A7F3D0;
+    border: 2px dashed #ff9aac;
     border-radius: 22px;
-    background: #ECFDF5;
-    color: var(--green);
+    background: #fff1f4;
+    color: var(--red);
     text-align: center;
     font-weight: 850;
 }
@@ -191,8 +193,8 @@ h1 {
     padding: 14px;
     border: 1px solid var(--border);
     border-radius: 18px;
-    background: #ECFDF5;
-    color: var(--green);
+    background: #fff1f4;
+    color: var(--red);
     text-align: center;
     font-weight: 950;
 }
@@ -215,7 +217,7 @@ h1 {
     display: grid;
     place-items: center;
     border-radius: 999px;
-    background: var(--green);
+    background: var(--red);
     color: #FFFFFF;
     font-weight: 950;
 }
@@ -231,7 +233,7 @@ h1 {
     gap: 14px;
     padding: 18px;
     border-radius: 22px;
-    background: var(--green);
+    background: var(--red);
     color: white;
 }
 
@@ -278,7 +280,7 @@ h1 {
     display: grid;
     place-items: center;
     border-radius: 999px;
-    background: var(--green-2);
+    background: var(--red-2);
     color: white;
     font-weight: 950;
 }
@@ -286,10 +288,10 @@ h1 {
 .empty-box {
     margin-top: 14px;
     padding: 18px;
-    border: 1px dashed #A7F3D0;
+    border: 1px dashed #ff9aac;
     border-radius: 20px;
-    background: #ECFDF5;
-    color: var(--green);
+    background: #fff1f4;
+    color: var(--red);
     font-weight: 850;
 }
 

@@ -2,7 +2,7 @@
 import re
 
 # ==================================================
-# 1) Tạo template quản lý admin cho Part 2/3/4: chỉ là khung chờ dữ liệu
+# 1) Tạo template manage admin cho Part 2/3/4: chỉ là khung chờ data
 # ==================================================
 admin_tpl = Path("templates/core/admin_part_placeholder.html")
 admin_tpl.parent.mkdir(parents=True, exist_ok=True)
@@ -12,7 +12,7 @@ admin_tpl.write_text(r'''{% load static %}
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Quản lý {{ part_title }}</title>
+    <title>Manage {{ part_title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
     <style>
@@ -95,16 +95,16 @@ admin_tpl.write_text(r'''{% load static %}
 <body>
     <section class="card">
         <div class="badge">{{ part_number }}</div>
-        <h1>Quản lý {{ part_title }}</h1>
+        <h1>Manage {{ part_title }}</h1>
         <p>{{ part_desc }}</p>
 
         <div class="note">
-            Đây là khu vực quản lý dữ liệu cho admin. Giao diện học viên của {{ part_title }} sẽ nằm riêng ở đường dẫn làm bài, không đặt trong trang quản lý dữ liệu.
+            Đây là khu vực manage data cho admin. Student View của {{ part_title }} sẽ nằm separate ở đường dẫn làm bài, không đặt trong trang manage data.
         </div>
 
         <div class="actions">
-            <a class="primary" href="/dashboard/listening-parts/">← Quay lại chọn Part</a>
-            <a class="light" href="/listening/part-{{ part_number }}/">Xem giao diện học viên</a>
+            <a class="primary" href="/dashboard/listening-parts/">← Back chọn Part</a>
+            <a class="light" href="/listening/part-{{ part_number }}/">View Student Interface</a>
         </div>
     </section>
 </body>
@@ -113,12 +113,12 @@ admin_tpl.write_text(r'''{% load static %}
 
 
 # ==================================================
-# 2) Sửa views: dashboard/part-* là admin, listening/part-* là học viên
+# 2) Edit views: dashboard/part-* là admin, listening/part-* là student
 # ==================================================
 views = Path("core/views.py")
 s = views.read_text(encoding="utf-8", errors="ignore")
 
-# Xóa các block view Part 2/3/4 cũ nếu có dạng đơn giản
+# Delete các block view Part 2/3/4 cũ nếu có dạng đơn giản
 s = re.sub(
     r"\n?# ===== Listening Part 2 preview/interface =====[\s\S]*?# ===== End Listening Part 2 preview/interface =====\n?",
     "\n",
@@ -140,7 +140,7 @@ s = re.sub(
     s
 )
 
-# Xóa def cũ nếu script trước đã thêm
+# Delete def cũ nếu script trước đã thêm
 s = re.sub(
     r"(?ms)^def admin_part2_questions\(request\):\s*\n    return render\(request, .*?\)\s*\n",
     "",
@@ -164,21 +164,21 @@ def admin_part2_questions(request):
     return render(request, "core/admin_part_placeholder.html", {
         "part_number": 2,
         "part_title": "Part 2",
-        "part_desc": "Part 2 sẽ là khu vực quản lý topic, 4 voice, pool đáp án A-B-C-D, đáp án đúng và transcript. Hiện chưa nhập dữ liệu thật.",
+        "part_desc": "Part 2 sẽ là khu vực manage topic, 4 voice, pool answer A-B-C-D, answer đúng và transcript. Hiện chưa nhập data thật.",
     })
 
 def admin_part3_questions(request):
     return render(request, "core/admin_part_placeholder.html", {
         "part_number": 3,
         "part_title": "Part 3",
-        "part_desc": "Part 3 đã mở khu vực quản lý dữ liệu. Hiện chưa có dữ liệu thật, sẽ thiết kế chi tiết sau.",
+        "part_desc": "Part 3 đã mở khu vực manage data. No items yet data thật, sẽ thiết kế chi tiết sau.",
     })
 
 def admin_part4_questions(request):
     return render(request, "core/admin_part_placeholder.html", {
         "part_number": 4,
         "part_title": "Part 4",
-        "part_desc": "Part 4 đã mở khu vực quản lý dữ liệu. Hiện chưa có dữ liệu thật, sẽ thiết kế chi tiết sau.",
+        "part_desc": "Part 4 đã mở khu vực manage data. No items yet data thật, sẽ thiết kế chi tiết sau.",
     })
 # ===== End admin management placeholders =====
 
@@ -191,14 +191,14 @@ def student_part3_page(request):
     return render(request, "core/listening_part_placeholder.html", {
         "part_number": 3,
         "part_title": "Part 3",
-        "part_desc": "Giao diện học viên Part 3 hiện chưa có dữ liệu.",
+        "part_desc": "Student View Part 3 currently has no data.",
     })
 
 def student_part4_page(request):
     return render(request, "core/listening_part_placeholder.html", {
         "part_number": 4,
         "part_title": "Part 4",
-        "part_desc": "Giao diện học viên Part 4 hiện chưa có dữ liệu.",
+        "part_desc": "Student View Part 4 currently has no data.",
     })
 # ===== End student listening interfaces =====
 '''
@@ -210,7 +210,7 @@ views.write_text(s, encoding="utf-8")
 
 
 # ==================================================
-# 3) Sửa urls: thêm route học viên riêng
+# 3) Edit urls: thêm route student separate
 # ==================================================
 urls = Path("core/urls.py")
 u = urls.read_text(encoding="utf-8", errors="ignore")
@@ -241,22 +241,22 @@ urls.write_text(u, encoding="utf-8")
 
 
 # ==================================================
-# 4) Sửa nút thoát của giao diện học viên Part 2 về trang listening
+# 4) Edit nút thoát của interface student Part 2 về trang listening
 # ==================================================
 part2 = Path("templates/core/listening_part2.html")
 if part2.exists():
     p2 = part2.read_text(encoding="utf-8", errors="ignore")
     p2 = p2.replace('href="/dashboard/listening-parts/"', 'href="/listening/"')
-    p2 = p2.replace("← Thoát", "← Thoát bài")
+    p2 = p2.replace("← Exit", "← Exit bài")
     part2.write_text(p2, encoding="utf-8")
 
 
 # ==================================================
-# 5) Sửa trang chọn Part admin: nút Part 2/3/4 mở trang quản lý admin, không phải giao diện học viên
+# 5) Edit trang chọn Part admin: nút Part 2/3/4 mở trang manage admin, không phải interface student
 # ==================================================
 for p in Path("templates").rglob("*.html"):
     text = p.read_text(encoding="utf-8", errors="ignore")
-    if "Chọn Part cần quản lý" not in text and "Khu vực quản lý dữ liệu cho Part 2" not in text:
+    if "Choose Part to Manage" not in text and "Khu vực manage data cho Part 2" not in text:
         continue
 
     old = text
@@ -264,9 +264,9 @@ for p in Path("templates").rglob("*.html"):
     text = text.replace('href="/listening/part-3/"', 'href="/dashboard/part-3/"')
     text = text.replace('href="/listening/part-4/"', 'href="/dashboard/part-4/"')
 
-    text = text.replace("Part 2 gồm 1 chủ đề lớn, 4 voice thảo luận và pool đáp án A-B-C-D.", "Khu vực quản lý dữ liệu cho Part 2. Chưa có dữ liệu thật.")
-    text = text.replace("Part 3 hiện chưa có dữ liệu. Đã mở khung để thiết kế sau.", "Khu vực quản lý dữ liệu cho Part 3. Chưa có dữ liệu thật.")
-    text = text.replace("Part 4 hiện chưa có dữ liệu. Đã mở khung để thiết kế sau.", "Khu vực quản lý dữ liệu cho Part 4. Chưa có dữ liệu thật.")
+    text = text.replace("Part 2 gồm 1 topics lớn, 4 voice thảo luận và pool answer A-B-C-D.", "Khu vực manage data cho Part 2. Chưa có data thật.")
+    text = text.replace("Part 3 currently has no data. Đã mở khung để thiết kế sau.", "Khu vực manage data cho Part 3. Chưa có data thật.")
+    text = text.replace("Part 4 currently has no data. Đã mở khung để thiết kế sau.", "Khu vực manage data cho Part 4. Chưa có data thật.")
 
     if text != old:
         p.write_text(text, encoding="utf-8")

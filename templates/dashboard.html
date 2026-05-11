@@ -12,29 +12,29 @@
 
 <div class="dashboard">
     <aside class="sidebar">
-        <h2>Điểm TSA<br>Với Aptis</h2>
+        <h2>Score TSA<br>Với Aptis</h2>
 
-        <a class="active">🏠 Trang chủ</a>
-        <a>📚 Bài học</a>
+        <a class="active">🏠 Home</a>
+        <a>📚 Lesson</a>
         <a>📝 Luyện đề</a>
         <a>📂 Tài liệu</a>
         <a>📊 Tiến độ</a>
 
-        <a href="{% url 'logout' %}" class="logout">Đăng xuất</a>
+        <a href="{% url 'logout' %}" class="logout">Logout</a>
     </aside>
 
     <main class="learning-main">
         <div class="learning-header">
             <div>
                 <h1>Xin chào, {{ request.user.first_name }}</h1>
-                <p>Chọn bài học để bắt đầu luyện tập hôm nay.</p>
+                <p>Chọn lesson để bắt đầu luyện tập hôm nay.</p>
             </div>
         </div>
 
         <div class="learning-cards">
             <div class="learn-card">
-                <h3>Bài học hôm nay</h3>
-                <p>Luyện nghe, đọc, viết, nói theo lộ trình.</p>
+                <h3>Lesson hôm nay</h3>
+                <p>Listening Practice, đọc, viết, nói theo lộ trình.</p>
             </div>
 
             <div class="learn-card">
@@ -48,7 +48,7 @@
             </div>
         </div>
 
-        <h2 class="section-title">Danh sách bài học</h2>
+        <h2 class="section-title">Danh sách lesson</h2>
 
         <div class="lesson-list">
             {% for lesson in lessons %}
@@ -62,7 +62,7 @@
                 </div>
             {% empty %}
                 <div class="empty-box">
-                    Chưa có bài học nào. Admin có thể thêm bài học trong trang quản trị.
+                    Chưa có lesson nào. Admin có thể thêm lesson trong trang admin.
                 </div>
             {% endfor %}
         </div>

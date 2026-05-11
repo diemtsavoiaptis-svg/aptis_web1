@@ -101,7 +101,7 @@ html,body{
 
 
 
-/* Hover zoom ?nh n?i ? m?n h?nh ??ng nh?p - ch? xem, kh?ng ch?nh s?a */
+/* Hover zoom ?nh n?i ? m?n h?nh login - ch? xem, kh?ng ch?nh s?a */
 .overlay-hover-backdrop{
     position:fixed;
     inset:0;
@@ -217,12 +217,12 @@ body.overlay-zooming .bg-image{
     {% if active_login_thumbnail and active_login_thumbnail.display_video_url %}
         <video class="bg-video" autoplay muted loop playsinline preload="auto" src="{{ active_login_thumbnail.display_video_url }}"></video>
     {% elif active_login_thumbnail and active_login_thumbnail.display_url %}
-        <img class="bg-image" src="{{ active_login_thumbnail.display_url }}" alt="N?n ??ng nh?p">
+        <img class="bg-image" src="{{ active_login_thumbnail.display_url }}" alt="N?n login">
     {% endif %}
     <div class="bg-layer"></div>
 
     <div class="top-actions">
-        <button class="primary" type="button" onclick="openAuth('login')">??ng nh?p</button>
+        <button class="primary" type="button" onclick="openAuth('login')">login</button>
         <button class="plain" type="button" onclick="openAuth('register')">??ng k?</button>
     </div>
 
@@ -245,7 +245,7 @@ body.overlay-zooming .bg-image{
             <p id="modeDesc" class="brand-desc">Nh?p th?ng tin ?? v?o h?c.</p>
 
             <div class="tabs">
-                <button id="loginTab" class="tab-btn active" type="button" onclick="switchTab('login')">??ng nh?p</button>
+                <button id="loginTab" class="tab-btn active" type="button" onclick="switchTab('login')">login</button>
                 <button id="registerTab" class="tab-btn" type="button" onclick="switchTab('register')">??ng k?</button>
             </div>
 
@@ -254,21 +254,21 @@ body.overlay-zooming .bg-image{
                     {% csrf_token %}
                     <input type="text" name="email" placeholder="Email" autocomplete="username" required>
                     <input type="password" name="password" placeholder="M?t kh?u" autocomplete="current-password" required>
-                    <button class="submit-btn" type="submit">??ng nh?p</button>
+                    <button class="submit-btn" type="submit">login</button>
                 </form>
-                <div class="note-box">T?i kho?n m?i ??ng k? c?n ???c admin duy?t tr??c khi ??ng nh?p.</div>
+                <div class="note-box">T?i kho?n m?i ??ng k? c?n ???c admin duy?t tr??c khi login.</div>
             </section>
 
             <section id="registerPanel" class="form-panel">
                 <form method="post" action="{% url 'register' %}">
                     {% csrf_token %}
-                    <input type="text" name="full_name" placeholder="H? t?n h?c vi?n" required>
+                    <input type="text" name="full_name" placeholder="H? t?n student" required>
                     <input type="text" name="phone" placeholder="S? ?i?n tho?i" required>
                     <input type="email" name="email" placeholder="Email" required>
                     <input type="password" name="password" placeholder="M?t kh?u" required>
                     <button class="submit-btn" type="submit">T?o t?i kho?n</button>
                 </form>
-                <div class="note-box">T?i kho?n m?i ??ng k? c?n ???c admin duy?t tr??c khi ??ng nh?p.</div>
+                <div class="note-box">T?i kho?n m?i ??ng k? c?n ???c admin duy?t tr??c khi login.</div>
             </section>
         </main>
     </div>
@@ -316,7 +316,7 @@ function switchTab(type){
     }else{
         registerTab.classList.add("active");
         registerPanel.classList.add("active");
-        modeDesc.textContent="?i?n th?ng tin h?c vi?n ?? ch? duy?t.";
+        modeDesc.textContent="?i?n th?ng tin student ?? ch? duy?t.";
     }
 }
 </script>

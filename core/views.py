@@ -49,7 +49,7 @@ def register_view(request):
     form = RegisterForm(request.POST)
 
     if not form.is_valid():
-        messages.error(request, "Thông tin đăng ký chưa hợp lệ.")
+        messages.error(request, "Information đăng ký chưa hợp lệ.")
         return redirect("home")
 
     full_name = form.cleaned_data["full_name"]
@@ -77,7 +77,7 @@ def register_view(request):
         status="pending"
     )
 
-    messages.success(request, "Đăng ký thành công. Vui lòng chờ admin duyệt tài khoản.")
+    messages.success(request, "Register thành công. Vui lòng chờ admin duyệt account.")
     return redirect("home")
 
 
@@ -97,7 +97,7 @@ def login_view(request):
 
     if not form.is_valid():
         cache.set(throttle_key, fail_count + 1, 60 * 15)
-        messages.error(request, "Thông tin đăng nhập chưa hợp lệ.")
+        messages.error(request, "Information đăng nhập chưa hợp lệ.")
         return redirect("home")
 
     account = form.cleaned_data["email"].strip()
@@ -110,7 +110,7 @@ def login_view(request):
     user_check = User.objects.filter(username__in=candidates).first()
 
     if user_check and not user_check.is_active:
-        messages.error(request, "Tài khoản của bạn đang chờ admin duyệt.")
+        messages.error(request, "Account của bạn đang chờ admin duyệt.")
         return redirect("home")
 
     user = None
@@ -133,7 +133,7 @@ def login_view(request):
                 }
             )
 
-        messages.error(request, "Tài khoản hoặc mật khẩu không đúng.")
+        messages.error(request, "Account hoặc mật khẩu không đúng.")
         return redirect("home")
 
     cache.delete(throttle_key)
@@ -278,12 +278,12 @@ def security_event_view(request):
         severity = "medium"
 
     reason_map = {
-        "print_attempt": "Học viên cố gắng in hoặc lưu PDF",
-        "save_attempt": "Học viên cố gắng lưu trang",
-        "source_attempt": "Học viên cố gắng xem mã nguồn trang",
-        "devtools_attempt": "Học viên có dấu hiệu mở công cụ kiểm tra trang",
-        "tab_blur": "Học viên rời khỏi tab làm bài",
-        "screenshot_key": "Học viên bấm phím Print Screen",
+        "print_attempt": "Student cố gắng in hoặc lưu PDF",
+        "save_attempt": "Student cố gắng lưu trang",
+        "source_attempt": "Student cố gắng xem mã nguồn trang",
+        "devtools_attempt": "Student có dấu hiệu mở công cụ kiểm tra trang",
+        "tab_blur": "Student rời khỏi tab làm bài",
+        "screenshot_key": "Student bấm phím Print Screen",
     }
 
     reason = reason_map.get(event_type, f"Sự kiện bảo mật: {event_type}")
@@ -348,7 +348,7 @@ def admin_part1_questions(request):
                 ListeningQuestion.objects.create(
                     part=1,
                     question_number=current_max + i,
-                    question_text=f"Câu hỏi {current_max + i}",
+                    question_text=f"Question {current_max + i}",
                     option_a="",
                     option_b="",
                     option_c="",
@@ -390,19 +390,19 @@ def admin_part1_questions(request):
 
                 q.save()
 
-            messages.success(request, "Đã cập nhật hàng loạt câu hỏi Part 1.")
+            messages.success(request, "Đã cập nhật hàng loạt questions Part 1.")
             return redirect("admin_part1_questions")
 
         if action == "delete_selected":
             selected_ids = request.POST.getlist("selected_id")
             deleted_count, _ = ListeningQuestion.objects.filter(id__in=selected_ids, part=1).delete()
-            messages.success(request, f"Đã xóa {deleted_count} câu hỏi Part 1 đã chọn.")
+            messages.success(request, f"Đã xóa {deleted_count} questions Part 1 đã chọn.")
             return redirect("admin_part1_questions")
 
         if action == "delete_one":
             delete_id = request.POST.get("delete_id")
             ListeningQuestion.objects.filter(id=delete_id, part=1).delete()
-            messages.success(request, "Đã xóa 1 câu hỏi Part 1.")
+            messages.success(request, "Đã xóa 1 questions Part 1.")
             return redirect("admin_part1_questions")
 
     questions = ListeningQuestion.objects.filter(part=1).order_by("question_number", "id")
@@ -454,7 +454,7 @@ def admin_student_lookup(request):
         selected = StudentProfile.objects.filter(id=request.POST.get("profile_id")).select_related("user").first()
 
         if not selected:
-            messages.error(request, "Chưa chọn học viên để lưu.")
+            messages.error(request, "Chưa chọn student để lưu.")
             return redirect("admin_student_lookup")
 
         gmail = request.POST.get("gmail", "").strip()
@@ -473,7 +473,7 @@ def admin_student_lookup(request):
             selected.user.first_name = full_name
             selected.user.save()
 
-        messages.success(request, "Đã lưu hồ sơ học viên.")
+        messages.success(request, "Đã lưu hồ sơ student.")
         return redirect(f"{request.path}?profile_id={selected.id}&q={gmail or phone or full_name or student_id or q}")
 
     if request.method == "POST" and request.POST.get("action") == "delete_profile":
@@ -492,7 +492,7 @@ def admin_student_lookup(request):
                 target.user.last_name = ""
                 target.user.save()
 
-            messages.success(request, "Đã xóa thông tin hồ sơ học viên.")
+            messages.success(request, "Đã xóa information hồ sơ student.")
 
         return redirect("admin_student_lookup")
 
@@ -522,21 +522,21 @@ def admin_part2_questions(request):
     return render(request, "core/admin_part_placeholder.html", {
         "part_number": 2,
         "part_title": "Part 2",
-        "part_desc": "Part 2 sẽ là khu vực quản lý topic, 4 voice, pool đáp án A-B-C-D, đáp án đúng và transcript. Hiện chưa nhập dữ liệu thật.",
+        "part_desc": "Part 2 sẽ là khu vực manage topic, 4 voice, pool answer A-B-C-D, answer đúng và transcript. Hiện chưa nhập data thật.",
     })
 
 def _legacy_admin_part3_questions_placeholder(request):
     return render(request, "core/admin_part_placeholder.html", {
         "part_number": 3,
         "part_title": "Part 3",
-        "part_desc": "Part 3 đã mở khu vực quản lý dữ liệu. Hiện chưa có dữ liệu thật, sẽ thiết kế chi tiết sau.",
+        "part_desc": "Part 3 đã mở khu vực manage data. No items yet data thật, sẽ thiết kế chi tiết sau.",
     })
 
 def _legacy_admin_part4_questions_placeholder(request):
     return render(request, "core/admin_part_placeholder.html", {
         "part_number": 4,
         "part_title": "Part 4",
-        "part_desc": "Part 4 đã mở khu vực quản lý dữ liệu. Hiện chưa có dữ liệu thật, sẽ thiết kế chi tiết sau.",
+        "part_desc": "Part 4 đã mở khu vực manage data. No items yet data thật, sẽ thiết kế chi tiết sau.",
     })
 # ===== End admin management placeholder for Listening Part 2 =====
 
@@ -549,14 +549,14 @@ def _legacy_student_part3_page_placeholder(request):
     return render(request, "core/listening_part_placeholder.html", {
         "part_number": 3,
         "part_title": "Part 3",
-        "part_desc": "Giao diện học viên Part 3 hiện chưa có dữ liệu.",
+        "part_desc": "Student View Part 3 currently has no data.",
     })
 
 def _legacy_student_part4_page_placeholder(request):
     return render(request, "core/listening_part_placeholder.html", {
         "part_number": 4,
         "part_title": "Part 4",
-        "part_desc": "Giao diện học viên Part 4 hiện chưa có dữ liệu.",
+        "part_desc": "Student View Part 4 currently has no data.",
     })
 # ===== End student listening interfaces =====
 
@@ -575,7 +575,7 @@ def admin_part2_questions(request):
         description = request.POST.get("description", "").strip()
 
         if not title:
-            messages.error(request, "Bạn cần nhập tên chủ đề.")
+            messages.error(request, "Bạn cần nhập tên topics.")
             return redirect("admin_part2_questions")
 
         topic = Part2Topic.objects.create(title=title, description=description)
@@ -584,7 +584,7 @@ def admin_part2_questions(request):
         for i in range(1, 5):
             Part2Voice.objects.create(topic=topic, order=i)
 
-        messages.success(request, "Đã tạo chủ đề Part 2.")
+        messages.success(request, "Đã tạo topics Part 2.")
         return redirect("admin_part2_topic_detail", topic_id=topic.id)
 
     return render(request, "core/admin_part2_topics.html", {
@@ -623,12 +623,12 @@ def admin_part2_topic_detail(request, topic_id):
             voice.correct_answer = request.POST.get(prefix + "correct_answer", "").strip()
             voice.save()
 
-        messages.success(request, "Đã lưu dữ liệu chủ đề Part 2.")
+        messages.success(request, "Đã lưu data topics Part 2.")
         return redirect("admin_part2_topic_detail", topic_id=topic.id)
 
     if request.method == "POST" and request.POST.get("action") == "delete_topic":
         topic.delete()
-        messages.success(request, "Đã xóa chủ đề Part 2.")
+        messages.success(request, "Đã xóa topics Part 2.")
         return redirect("admin_part2_questions")
 
     return render(request, "core/admin_part2_topic_detail.html", {
@@ -651,7 +651,7 @@ PART2_GIOI_TOPICS = [
     "Topic The Art",
     "Topic Travel to work.",
     "Topic Studying.",
-    "Topic Studying phiên bản 2.",
+    "Topic Studying version 2.",
 ]
 
 
@@ -664,7 +664,7 @@ def _seed_part2_gioi_topics():
         topic, created = Part2Topic.objects.get_or_create(
             version="gioi",
             title=title,
-            defaults={"description": "Chủ đề Mày giỏi"}
+            defaults={"description": "Version A Topic"}
         )
 
         existing_orders = set(topic.voices.values_list("order", flat=True))
@@ -673,7 +673,7 @@ def _seed_part2_gioi_topics():
                 Part2Voice.objects.create(
                     topic=topic,
                     order=i,
-                    question_text=f"Câu hỏi {i}"
+                    question_text=f"Question {i}"
                 )
 
 
@@ -684,7 +684,7 @@ def _ensure_four_gioi_rows(topic):
             Part2Voice.objects.create(
                 topic=topic,
                 order=i,
-                question_text=f"Câu hỏi {i}"
+                question_text=f"Question {i}"
             )
 
 
@@ -721,16 +721,16 @@ def admin_part2_gioi_detail(request, topic_id):
             voice.data_choices = request.POST.get(prefix + "data_choices", "").strip()
             voice.correct_data = request.POST.get(prefix + "correct_data", "").strip()
 
-            # Mày giỏi dùng 1 audio chung theo topic
+            # Version A dùng 1 audio chung theo topic
             voice.audio_url = topic.audio_url
             voice.save()
 
-        messages.success(request, "Đã lưu dữ liệu chủ đề Mày giỏi.")
+        messages.success(request, "Đã lưu data topics Version A.")
         return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
     if request.method == "POST" and request.POST.get("action") == "delete_topic":
         topic.delete()
-        messages.success(request, "Đã xóa chủ đề Mày giỏi.")
+        messages.success(request, "Đã xóa topics Version A.")
         return redirect("admin_part2_gioi_topics")
 
     rows = []
@@ -779,7 +779,7 @@ PART2_GIOI_TOPICS = [
     "Topic The Art",
     "Topic Travel to work.",
     "Topic Studying.",
-    "Topic Studying phiên bản 2.",
+    "Topic Studying version 2.",
 ]
 
 
@@ -792,20 +792,20 @@ def _seed_part2_gioi_topics_one_voice():
         topic, created = Part2Topic.objects.get_or_create(
             version="gioi",
             title=title,
-            defaults={"description": "Chủ đề Mày giỏi"}
+            defaults={"description": "Version A Topic"}
         )
 
-        # Mày giỏi chỉ giữ 1 voice tổng
+        # Version A chỉ giữ 1 voice tổng
         topic.voices.exclude(order=1).delete()
 
         voice, created_voice = Part2Voice.objects.get_or_create(
             topic=topic,
             order=1,
-            defaults={"question_text": "Câu hỏi tổng"}
+            defaults={"question_text": "Question tổng"}
         )
 
         if not voice.question_text:
-            voice.question_text = "Câu hỏi tổng"
+            voice.question_text = "Question tổng"
             voice.save()
 
 
@@ -814,7 +814,7 @@ def _get_gioi_total_voice(topic):
     voice, created = Part2Voice.objects.get_or_create(
         topic=topic,
         order=1,
-        defaults={"question_text": "Câu hỏi tổng"}
+        defaults={"question_text": "Question tổng"}
     )
     return voice
 
@@ -849,7 +849,7 @@ def admin_part2_gioi_detail(request, topic_id):
         voice.audio_url = topic.audio_url
         voice.save()
 
-        messages.success(request, "Đã lưu dữ liệu chủ đề Mày giỏi.")
+        messages.success(request, "Đã lưu data topics Version A.")
         return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
     options = [x.strip() for x in (voice.data_choices or "").splitlines() if x.strip()]
@@ -887,7 +887,7 @@ PART2_GIOI_TOPICS = [
     "Topic The Art",
     "Topic Travel to work.",
     "Topic Studying.",
-    "Topic Studying phiên bản 2.",
+    "Topic Studying version 2.",
 ]
 
 
@@ -900,20 +900,20 @@ def _seed_part2_gioi_topics_final():
         topic, _ = Part2Topic.objects.get_or_create(
             version="gioi",
             title=title,
-            defaults={"description": "Chủ đề Mày giỏi"}
+            defaults={"description": "Version A Topic"}
         )
 
-        # Mày giỏi chỉ được có 1 voice tổng
+        # Version A chỉ được có 1 voice tổng
         topic.voices.exclude(order=1).delete()
 
         voice, _ = Part2Voice.objects.get_or_create(
             topic=topic,
             order=1,
-            defaults={"question_text": "Câu hỏi tổng"}
+            defaults={"question_text": "Question tổng"}
         )
 
         if not voice.question_text:
-            voice.question_text = "Câu hỏi tổng"
+            voice.question_text = "Question tổng"
             voice.save()
 
 
@@ -922,7 +922,7 @@ def _get_part2_gioi_total_voice(topic):
     voice, _ = Part2Voice.objects.get_or_create(
         topic=topic,
         order=1,
-        defaults={"question_text": "Câu hỏi tổng"}
+        defaults={"question_text": "Question tổng"}
     )
     return voice
 
@@ -954,7 +954,7 @@ def admin_part2_gioi_detail(request, topic_id):
         voice.audio_url = topic.audio_url
         voice.save()
 
-        messages.success(request, "Đã lưu dữ liệu Mày giỏi.")
+        messages.success(request, "Đã lưu data Version A.")
         return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
     options = [x.strip() for x in (voice.data_choices or "").splitlines() if x.strip()]
@@ -974,7 +974,7 @@ def student_part2_gioi_topics(request):
     _seed_part2_gioi_topics_final()
     topics = Part2Topic.objects.filter(version="gioi").order_by("id")
     return render(request, "core/student_part2_topic_list.html", {
-        "version_title": "Mày giỏi",
+        "version_title": "Version A",
         "topics": topics,
         "back_url": "/listening/part-2/",
         "topic_url_prefix": "/listening/part-2/may-gioi/",
@@ -1052,7 +1052,7 @@ PART2_GIOI_TOPICS = [
     "Topic The Art",
     "Topic Travel to work.",
     "Topic Studying.",
-    "Topic Studying phiên bản 2.",
+    "Topic Studying version 2.",
 ]
 
 
@@ -1065,7 +1065,7 @@ def _seed_part2_gioi_topics_4p():
         topic, _ = Part2Topic.objects.get_or_create(
             version="gioi",
             title=title,
-            defaults={"description": "Chủ đề Mày giỏi"}
+            defaults={"description": "Version A Topic"}
         )
 
         existing_orders = set(topic.voices.values_list("order", flat=True))
@@ -1077,7 +1077,7 @@ def _seed_part2_gioi_topics_4p():
                     question_text=f"Person {i}"
                 )
 
-        # Mày giỏi chỉ giữ đúng 4 person
+        # Version A chỉ giữ đúng 4 person
         topic.voices.exclude(order__in=[1, 2, 3, 4]).delete()
 
 
@@ -1129,7 +1129,7 @@ def admin_part2_gioi_detail(request, topic_id):
             voice.audio_url = topic.audio_url
             voice.save()
 
-        messages.success(request, "Đã lưu dữ liệu Mày giỏi.")
+        messages.success(request, "Đã lưu data Version A.")
         return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
     options = [x.strip() for x in (topic.data_choices or "").splitlines() if x.strip()]
@@ -1174,7 +1174,7 @@ def student_part2_gioi_page(request, topic_id):
 def student_part2_gioi_topics(request):
     topics = Part2Topic.objects.filter(version="gioi").order_by("id")
     return render(request, "core/student_part2_topic_list.html", {
-        "version_title": "Mày giỏi",
+        "version_title": "Version A",
         "topics": topics,
         "back_url": "/listening/part-2/",
         "topic_url_prefix": "/listening/part-2/may-gioi/",
@@ -1184,7 +1184,7 @@ def student_part2_gioi_topics(request):
 def student_part2_kem_topics(request):
     topics = Part2Topic.objects.filter(version="kem").order_by("id")
     return render(request, "core/student_part2_topic_list.html", {
-        "version_title": "Mày kém",
+        "version_title": "Version B",
         "topics": topics,
         "back_url": "/listening/part-2/",
         "topic_url_prefix": "/listening/part-2/may-kem/",
@@ -1249,7 +1249,7 @@ def admin_part2_gioi_detail(request, topic_id):
             voice.question_text = f"Person {voice.order}"
             voice.save()
 
-        messages.success(request, "Đã lưu dữ liệu đáp án tổng. Bây giờ bạn có thể chọn đáp án đúng cho từng Person.")
+        messages.success(request, "Đã lưu data answer tổng. Bây giờ bạn có thể chọn answer đúng cho từng Person.")
         return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
     if request.method == "POST" and request.POST.get("action") == "save_topic":
@@ -1260,7 +1260,7 @@ def admin_part2_gioi_detail(request, topic_id):
         topic.voice_info = request.POST.get("voice_info", "").strip()
         topic.save()
 
-        # Lưu đáp án đúng từng person
+        # Save answer đúng từng person
         for voice in voices:
             prefix = f"voice_{voice.id}_"
             voice.is_locked = request.POST.get(prefix + "is_locked") == "on"
@@ -1270,7 +1270,7 @@ def admin_part2_gioi_detail(request, topic_id):
             voice.audio_url = topic.audio_url
             voice.save()
 
-        messages.success(request, "Đã lưu. Các lựa chọn đáp án đã được cập nhật từ dữ liệu đáp án tổng.")
+        messages.success(request, "Đã lưu. Các lựa chọn answer đã được cập nhật từ data answer tổng.")
         return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
     options = _split_total_answer_options(topic)
@@ -1363,7 +1363,7 @@ def admin_part2_gioi_detail(request, topic_id):
             voice.audio_url = topic.audio_url
             voice.save()
 
-        messages.success(request, "Đã lưu đáp án tổng. Bây giờ có thể chọn đáp án đúng cho Person 1-4.")
+        messages.success(request, "Đã lưu answer tổng. Bây giờ có thể chọn answer đúng cho Person 1-4.")
         return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
     if request.method == "POST" and request.POST.get("action") == "save_correct_answers":
@@ -1376,7 +1376,7 @@ def admin_part2_gioi_detail(request, topic_id):
             voice.audio_url = topic.audio_url
             voice.save()
 
-        messages.success(request, "Đã lưu đáp án đúng cho 4 Person.")
+        messages.success(request, "Đã lưu answer đúng cho 4 Person.")
         return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
     options = _gioi_total_options_save_total(topic)
@@ -1460,7 +1460,7 @@ def admin_part2_gioi_detail(request, topic_id):
             voice.audio_url = topic.audio_url
             voice.save()
 
-        messages.success(request, "Đã lưu đáp án tổng và thông tin voice.")
+        messages.success(request, "Đã lưu answer tổng và information voice.")
         return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
     if request.method == "POST" and request.POST.get("action") == "save_correct_answers":
@@ -1473,7 +1473,7 @@ def admin_part2_gioi_detail(request, topic_id):
             voice.audio_url = topic.audio_url
             voice.save()
 
-        messages.success(request, "Đã lưu đáp án đúng cho 4 Person.")
+        messages.success(request, "Đã lưu answer đúng cho 4 Person.")
         return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
     options = _gioi_options_voice_info_final(topic)
@@ -1552,7 +1552,7 @@ def admin_part2_gioi_detail(request, topic_id):
                 voice.audio_url = topic.audio_url
                 voice.save()
 
-            messages.success(request, "Đã lưu đáp án tổng.")
+            messages.success(request, "Đã lưu answer tổng.")
             return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
         if action == "save_and_lock_voice_info":
@@ -1560,15 +1560,15 @@ def admin_part2_gioi_detail(request, topic_id):
                 topic.voice_info = request.POST.get("voice_info", "").strip()
                 topic.voice_info_locked = True
                 topic.save()
-                messages.success(request, "Đã lưu và khóa thông tin voice.")
+                messages.success(request, "Đã lưu và khóa information voice.")
             else:
-                messages.warning(request, "Thông tin voice đang bị khóa.")
+                messages.warning(request, "Information voice đang bị khóa.")
             return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
         if action == "unlock_voice_info":
             topic.voice_info_locked = False
             topic.save()
-            messages.success(request, "Đã mở khóa thông tin voice. Bây giờ có thể sửa lại.")
+            messages.success(request, "Đã mở khóa information voice. Bây giờ có thể sửa lại.")
             return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
         if action == "save_correct_answers":
@@ -1581,7 +1581,7 @@ def admin_part2_gioi_detail(request, topic_id):
                 voice.audio_url = topic.audio_url
                 voice.save()
 
-            messages.success(request, "Đã lưu đáp án đúng cho 4 Person.")
+            messages.success(request, "Đã lưu answer đúng cho 4 Person.")
             return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
     options = _gioi_options_voice_lock(topic)
@@ -1707,14 +1707,14 @@ def _admin_part34_page(request, part_number):
                 order=next_order,
                 question_text=f"Câu {next_order}",
             )
-            messages.success(request, "Đã thêm câu hỏi mới.")
+            messages.success(request, "Đã thêm questions mới.")
             return _part34_redirect(request, material.id)
 
         if action == "save_questions":
             delete_question_id = request.POST.get("delete_question")
             if delete_question_id:
                 ListeningPartQuestion.objects.filter(id=delete_question_id, material=material).delete()
-                messages.success(request, "Đã xóa câu hỏi.")
+                messages.success(request, "Đã xóa questions.")
                 return _part34_redirect(request, material.id)
 
             valid_answers = {"A", "B", "C", "D", "E", "F"}
@@ -1741,7 +1741,7 @@ def _admin_part34_page(request, part_number):
                 question.explanation = request.POST.get(prefix + "explanation", "").strip()
                 question.save()
 
-            messages.success(request, "Đã lưu câu hỏi và đáp án.")
+            messages.success(request, "Đã lưu questions và answer.")
             return _part34_redirect(request, material.id)
 
     selected = None
@@ -1865,7 +1865,7 @@ def admin_background_settings(request):
                 is_active=True,
             )
 
-            messages.success(request, "Đã lưu ảnh nền giao diện.")
+            messages.success(request, "Đã lưu ảnh nền interface.")
             return redirect("admin_background_settings")
 
         if action == "delete_background":
@@ -2014,7 +2014,7 @@ def admin_login_thumbnail_settings(request):
             ticker_text_5 = request.POST.get("ticker_text_5", "").strip()
 
             if current:
-                current.name = name or current.name or "Thumbnail m?n h?nh ??ng nh?p"
+                current.name = name or current.name or "Thumbnail m?n h?nh ng nh?p"
 
                 if image_file:
                     current.image = image_file
@@ -2037,7 +2037,7 @@ def admin_login_thumbnail_settings(request):
                 current.save()
             else:
                 current = LoginThumbnail.objects.create(
-                    name=name or "Thumbnail m?n h?nh ??ng nh?p",
+                    name=name or "Thumbnail m?n h?nh ng nh?p",
                     image=image_file if image_file else None,
                     image_url=image_url,
                     video=video_file if video_file else None,
@@ -2050,7 +2050,7 @@ def admin_login_thumbnail_settings(request):
                     is_active=True,
                 )
 
-            messages.success(request, "?? l?u thumbnail/video ??ng nh?p.")
+            messages.success(request, " l?u thumbnail/video ng nh?p.")
             return redirect("admin_login_thumbnail_settings")
 
         if action == "delete_video":
@@ -2060,7 +2060,7 @@ def admin_login_thumbnail_settings(request):
                 current.video = None
                 current.video_url = ""
                 current.save()
-            messages.success(request, "?? x?a video thumbnail.")
+            messages.success(request, " x?a video thumbnail.")
             return redirect("admin_login_thumbnail_settings")
 
         if action == "delete_thumbnail":
@@ -2070,13 +2070,13 @@ def admin_login_thumbnail_settings(request):
                 current.image = None
                 current.image_url = ""
                 current.save()
-            messages.success(request, "?? x?a ?nh thumbnail.")
+            messages.success(request, " x?a ?nh thumbnail.")
             return redirect("admin_login_thumbnail_settings")
 
         if action == "restore_default":
             LoginThumbnail.objects.update(is_active=False)
             LoginThumbnail.objects.create(
-                name="Thumbnail m?c ??nh",
+                name="Thumbnail m?c nh",
                 ticker_text_1="",
                 ticker_text_2="",
                 ticker_text_3="",
@@ -2084,7 +2084,7 @@ def admin_login_thumbnail_settings(request):
                 ticker_text_5="",
                 is_active=True,
             )
-            messages.success(request, "?? kh?i ph?c thumbnail m?c ??nh.")
+            messages.success(request, " kh?i ph?c thumbnail m?c nh.")
             return redirect("admin_login_thumbnail_settings")
 
     return render(request, "core/admin_login_thumbnail_settings.html", {
@@ -2158,7 +2158,7 @@ def admin_login_thumbnail_settings(request):
 
             current.is_active = True
             current.save()
-            messages.success(request, "?? l?u thumbnail/video v? v? tr? 2 ?nh n?i.")
+            messages.success(request, " l?u thumbnail/video vvtr2 ?nh n?i.")
             return redirect("admin_login_thumbnail_settings")
 
         if action == "delete_video" and current:
@@ -2167,7 +2167,7 @@ def admin_login_thumbnail_settings(request):
             current.video = None
             current.video_url = ""
             current.save()
-            messages.success(request, "?? x?a video.")
+            messages.success(request, " x?a video.")
             return redirect("admin_login_thumbnail_settings")
 
         if action == "delete_thumbnail" and current:
@@ -2176,7 +2176,7 @@ def admin_login_thumbnail_settings(request):
             current.image = None
             current.image_url = ""
             current.save()
-            messages.success(request, "?? x?a ?nh n?n.")
+            messages.success(request, " x?a ?nh n?n.")
             return redirect("admin_login_thumbnail_settings")
 
         if action == "delete_overlay_left" and current:
@@ -2184,7 +2184,7 @@ def admin_login_thumbnail_settings(request):
                 current.overlay_left_image.delete(save=False)
             current.overlay_left_image = None
             current.save()
-            messages.success(request, "?? x?a ?nh n?i 1.")
+            messages.success(request, " x?a ?nh n?i 1.")
             return redirect("admin_login_thumbnail_settings")
 
         if action == "delete_overlay_right" and current:
@@ -2192,7 +2192,7 @@ def admin_login_thumbnail_settings(request):
                 current.overlay_right_image.delete(save=False)
             current.overlay_right_image = None
             current.save()
-            messages.success(request, "?? x?a ?nh n?i 2.")
+            messages.success(request, " x?a ?nh n?i 2.")
             return redirect("admin_login_thumbnail_settings")
 
     return render(request, "core/admin_login_thumbnail_settings.html", {
@@ -2217,7 +2217,7 @@ def admin_login_thumbnail_settings(request):
                     is_active=True,
                 )
 
-            # Gi? nguy?n video/?nh n?n c? n?u kh?ng upload m?i
+            # Ginguy?n video/?nh n?n cn?u kh?ng upload m?i
             video_file = request.FILES.get("video")
             image_file = request.FILES.get("image")
 
@@ -2249,7 +2249,7 @@ def admin_login_thumbnail_settings(request):
             current.name = request.POST.get("name", "").strip() or current.name or "KH?A H?C ONLINE"
             current.save()
 
-            # L?u v? tr? ?nh n?i ?? c?
+            # Save vtr?nh n?i  c?
             for overlay_id in request.POST.getlist("overlay_id"):
                 overlay = LoginOverlayImage.objects.filter(id=overlay_id, thumbnail=current).first()
                 if not overlay:
@@ -2261,7 +2261,7 @@ def admin_login_thumbnail_settings(request):
                 overlay.w = max(5, min(90, _safe_int(request.POST.get(prefix + "w"), overlay.w)))
                 overlay.save()
 
-            # Th?m bao nhi?u ?nh c?ng ???c
+            # Th?m bao nhi?u ?nh c?ng ?c
             existing_count = LoginOverlayImage.objects.filter(thumbnail=current).count()
             files = request.FILES.getlist("overlay_images")
 
@@ -2276,7 +2276,7 @@ def admin_login_thumbnail_settings(request):
                     is_active=True,
                 )
 
-            messages.success(request, "?? l?u ?nh n?i v? v? tr?.")
+            messages.success(request, " l?u ?nh n?i vvtr?.")
             return redirect("admin_login_thumbnail_settings")
 
         if action == "delete_overlay":
@@ -2285,7 +2285,7 @@ def admin_login_thumbnail_settings(request):
             if overlay:
                 overlay.image.delete(save=False)
                 overlay.delete()
-                messages.success(request, "?? x?a ?nh n?i.")
+                messages.success(request, " x?a ?nh n?i.")
             return redirect("admin_login_thumbnail_settings")
 
     overlay_images = []
@@ -2317,3 +2317,21 @@ def part3_admin_only(request):
 
 def part3_student_only(request):
     return render(request, "part3_student_only.html")
+
+
+# ===== FINAL FIX PART 3 ADMIN - DO NOT USE PART 2/PART34 INPUT =====
+@login_required
+def admin_part3_questions(request):
+    return render(request, "part3_fixed_admin.html")
+# ===== END FINAL FIX PART 3 ADMIN =====
+
+
+# ===== PART 3 RED LISTENING UI OVERRIDE =====
+@login_required
+def admin_part3_questions(request):
+    return render(request, "part3_red_admin.html")
+
+
+def student_part3_red(request):
+    return render(request, "part3_red_student.html")
+# ===== END PART 3 RED LISTENING UI OVERRIDE =====

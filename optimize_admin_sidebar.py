@@ -4,7 +4,7 @@ p = Path("templates/admin/base_site.html")
 s = p.read_text(encoding="utf-8", errors="ignore")
 
 extra_css = r'''
-/* Tối ưu sidebar Django Admin: ẩn cột "+ Thêm vào", gọn dễ thao tác */
+/* Tối ưu sidebar Django Admin: ẩn cột "+ Add vào", gọn dễ thao tác */
 #nav-sidebar .addlink,
 #nav-sidebar td.addlink,
 #nav-sidebar th.addlink,
@@ -15,7 +15,7 @@ extra_css = r'''
     display: none !important;
 }
 
-/* Làm sidebar chỉ còn danh sách mục quản lý */
+/* Làm sidebar chỉ còn danh sách mục manage */
 #nav-sidebar table {
     width: 100% !important;
 }

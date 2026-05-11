@@ -23,12 +23,12 @@ TOPIC_MAP = {
     9: "Topic The Art",
     10: "Topic Travel to work.",
     11: "Topic Studying.",
-    12: "Topic Studying phiên bản 2.",
+    12: "Topic Studying version 2.",
 }
 
 RAW_DATA = r"""
 topic 1
-Person A: I find the act of giving away old or secondhand items a bit hypocritical. Why do people give away their old things, only to go out and buy the same item but brand new? Not only does this fail to protect the environment, but it also causes double the harm. Personally, I have a way of protecting the environment by not releasing harmful chemicals into it. I do this by not purchasing chemical cleaning solutions. Instead, I make use of natural products like lemons to create my own floor-cleaning solutions.
+Person A: I find the act of giving away old or secondhand items a bit hypocritical. Why do people give away their old things, only to go out and buy the same item but brand newNot only does this fail to protect the environment, but it also causes double the harm. Personally, I have a way of protecting the environment by not releasing harmful chemicals into it. I do this by not purchasing chemical cleaning solutions. Instead, I make use of natural products like lemons to create my own floor-cleaning solutions.
 
 Person B: I often don't have time to think about how to reuse my belongings or clothes, but I don't want to throw them away because that would be wasteful. So, I think a better way is to donate them to charity organizations or give them to others. Many people are in need of these things, and giving away my old items also makes me feel happier because I'm helping others.
 
@@ -113,7 +113,7 @@ A: "I'm concerned about the Earth and the environment, so I always look for ways
 
 B: "I had to take driving lessons to be able to drive to work. My mother works along the same route, so we often drive to work together. Occasionally, she takes over the driving, and I'm happy because driving together gives us more time to chat."
 
-C: "I used to use my car a lot to get to work. But since I moved closer to the company, I always go there on foot. I have a friend who cycles for 20 minutes every day to work—can you imagine? She must be super fit!"
+C: "I used to use my car a lot to get to work. But since I moved closer to the company, I always go there on foot. I have a friend who cycles for 20 minutes every day to work—can you imagineShe must be super fit!"
 
 D: "I often choose to walk to work to save on gas money and to keep in shape. I usually walk to the company with a close friend. Sometimes we feel really tired but still push ourselves to walk all the way. There are times when we see a bus stop and have to resist the urge to hop on the bus."
 
@@ -175,7 +175,7 @@ for topic_no, title in TOPIC_MAP.items():
     topic, _ = Part2Topic.objects.get_or_create(
         version="gioi",
         title=title,
-        defaults={"description": "Chủ đề Mày giỏi"}
+        defaults={"description": "Version A Topic"}
     )
 
     persons = extract_persons(blocks.get(topic_no, ""))

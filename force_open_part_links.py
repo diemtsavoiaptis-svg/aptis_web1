@@ -40,7 +40,7 @@ def admin_part3_questions(request):
     return render(request, "core/listening_part_placeholder.html", {
         "part_number": 3,
         "part_title": "Part 3",
-        "part_desc": "Part 3 hiện chưa có dữ liệu. Đã mở khung để thiết kế sau.",
+        "part_desc": "Part 3 currently has no data. Đã mở khung để thiết kế sau.",
     })
 '''
 
@@ -51,7 +51,7 @@ def admin_part4_questions(request):
     return render(request, "core/listening_part_placeholder.html", {
         "part_number": 4,
         "part_title": "Part 4",
-        "part_desc": "Part 4 hiện chưa có dữ liệu. Đã mở khung để thiết kế sau.",
+        "part_desc": "Part 4 currently has no data. Đã mở khung để thiết kế sau.",
     })
 '''
 
@@ -89,7 +89,7 @@ select{height:48px;border-radius:14px;border:1px dashed #ff9cac;padding:0 12px}
 <div class="top">Part 2</div>
 <div class="topic">🏷 TOPIC: When they like listening to music</div>
 <section class="pool">
-<b>☰ Pool đáp án</b>
+<b>☰ Pool answer</b>
 <div class="pool-grid">
 <div class="opt">A. To relax</div>
 <div class="opt">B. While studying</div>
@@ -101,10 +101,10 @@ select{height:48px;border-radius:14px;border:1px dashed #ff9cac;padding:0 12px}
 <section class="voice">
 <div>
 <div><span class="badge">{{ forloop.counter }}</span><b>Câu {{ forloop.counter }}</b></div>
-<div class="audio">▶ Audio voice {{ forloop.counter }} — dữ liệu thật sẽ nhập sau</div>
+<div class="audio">▶ Audio voice {{ forloop.counter }} — data thật sẽ nhập sau</div>
 </div>
 <select>
-<option>Chọn đáp án...</option>
+<option>Choose answer...</option>
 <option>A</option><option>B</option><option>C</option><option>D</option>
 </select>
 </section>
@@ -139,8 +139,8 @@ a{display:inline-flex;margin-top:20px;background:linear-gradient(135deg,#e60023,
 <div class="badge">{{ part_number }}</div>
 <h1>{{ part_title }}</h1>
 <p>{{ part_desc }}</p>
-<p>Phần này chưa có dữ liệu. Khi bắt đầu làm, mình sẽ thiết kế chi tiết sau và không ảnh hưởng Part 1.</p>
-<a href="/dashboard/listening-parts/">Quay lại chọn Part</a>
+<p>Phần này chưa có data. Khi bắt đầu làm, mình sẽ thiết kế chi tiết sau và không ảnh hưởng Part 1.</p>
+<a href="/dashboard/listening-parts/">Back chọn Part</a>
 </section>
 </body>
 </html>
@@ -151,7 +151,7 @@ a{display:inline-flex;margin-top:20px;background:linear-gradient(135deg,#e60023,
 matched = []
 for p in Path("templates").rglob("*.html"):
     s = p.read_text(encoding="utf-8", errors="ignore")
-    if "Khu vực quản lý dữ liệu cho Part 2" in s or "Chọn Part cần quản lý" in s:
+    if "Khu vực manage data cho Part 2" in s or "Choose Part to Manage" in s:
         matched.append(p)
 
 for p in matched:
@@ -159,23 +159,23 @@ for p in matched:
     old = s
 
     s = s.replace(
-        "Khu vực quản lý dữ liệu cho Part 2. Có thể tiếp tục mở rộng giao diện chi tiết sau khi hoàn thiện Part 1.",
-        "Part 2 gồm 1 chủ đề lớn, 4 voice thảo luận và pool đáp án A-B-C-D."
+        "Khu vực manage data cho Part 2. Có thể tiếp tục mở rộng interface chi tiết sau khi hoàn thiện Part 1.",
+        "Part 2 gồm 1 topics lớn, 4 voice thảo luận và pool answer A-B-C-D."
     )
     s = s.replace(
-        "Khu vực quản lý dữ liệu cho Part 3. Có thể tiếp tục mở rộng giao diện chi tiết sau khi hoàn thiện Part 1.",
-        "Part 3 hiện chưa có dữ liệu. Đã mở khung để thiết kế sau."
+        "Khu vực manage data cho Part 3. Có thể tiếp tục mở rộng interface chi tiết sau khi hoàn thiện Part 1.",
+        "Part 3 currently has no data. Đã mở khung để thiết kế sau."
     )
     s = s.replace(
-        "Khu vực quản lý dữ liệu cho Part 4. Có thể tiếp tục mở rộng giao diện chi tiết sau khi hoàn thiện Part 1.",
-        "Part 4 hiện chưa có dữ liệu. Đã mở khung để thiết kế sau."
+        "Khu vực manage data cho Part 4. Có thể tiếp tục mở rộng interface chi tiết sau khi hoàn thiện Part 1.",
+        "Part 4 currently has no data. Đã mở khung để thiết kế sau."
     )
 
     # Đổi nhãn
     s = s.replace("Sẵn sàng thiết kế", "Đã mở khung")
     s = s.replace("Sắp mở", "Mở Part")
 
-    # Sửa riêng các nút theo Part bằng cách tìm card chứa Part n
+    # Edit separate các nút theo Part bằng cách tìm card chứa Part n
     def fix_card_link(text, part):
         url = f"/dashboard/part-{part}/"
         # Card dạng article/div chứa Part n: thêm onclick vào toàn card nếu chưa có
@@ -208,9 +208,9 @@ for p in matched:
         s = fix_card_link(s, part)
 
     # Nếu chữ bị thành "Mở Part" chung thì sửa theo thứ tự xuất hiện Part 2/3/4
-    s = re.sub(r'(Part 2[\s\S]{0,900}?)Mở Part(?!\s*2)', r'\1Mở Part 2', s, count=1)
-    s = re.sub(r'(Part 3[\s\S]{0,900}?)Mở Part(?!\s*3)', r'\1Mở Part 3', s, count=1)
-    s = re.sub(r'(Part 4[\s\S]{0,900}?)Mở Part(?!\s*4)', r'\1Mở Part 4', s, count=1)
+    s = re.sub(r'(Part 2[\s\S]{0,900}?)Mở Part(?!\s*2)', r'\1Open Part 2', s, count=1)
+    s = re.sub(r'(Part 3[\s\S]{0,900}?)Mở Part(?!\s*3)', r'\1Open Part 3', s, count=1)
+    s = re.sub(r'(Part 4[\s\S]{0,900}?)Mở Part(?!\s*4)', r'\1Open Part 4', s, count=1)
 
     if s != old:
         p.write_text(s, encoding="utf-8")

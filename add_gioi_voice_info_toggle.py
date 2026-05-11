@@ -2,7 +2,7 @@
 import re
 
 # ==================================================
-# 1) Thêm field voice_info vào Part2Topic
+# 1) Add field voice_info vào Part2Topic
 # ==================================================
 models = Path("core/models.py")
 s = models.read_text(encoding="utf-8", errors="ignore")
@@ -17,14 +17,14 @@ if "voice_info" not in topic_block:
     if "audio_url" in topic_block:
         s = re.sub(
             r'(audio_url\s*=\s*models\.URLField\([^\n]+\)\n)',
-            r'\1    voice_info = models.TextField("Thông tin của voice", blank=True)\n',
+            r'\1    voice_info = models.TextField("Information của voice", blank=True)\n',
             s,
             count=1
         )
     else:
         s = re.sub(
             r'(description\s*=\s*models\.TextField\([^\n]+\)\n)',
-            r'\1    voice_info = models.TextField("Thông tin của voice", blank=True)\n',
+            r'\1    voice_info = models.TextField("Information của voice", blank=True)\n',
             s,
             count=1
         )
@@ -33,12 +33,12 @@ models.write_text(s, encoding="utf-8")
 
 
 # ==================================================
-# 2) Sửa view Mày giỏi: lưu voice_info
+# 2) Edit view Version A: lưu voice_info
 # ==================================================
 views = Path("core/views.py")
 v = views.read_text(encoding="utf-8", errors="ignore")
 
-# Lưu trong action save_total_answers
+# Save trong action save_total_answers
 v = v.replace(
     'topic.data_choices = request.POST.get("data_choices", "").strip()\n        topic.save()',
     'topic.data_choices = request.POST.get("data_choices", "").strip()\n        topic.voice_info = request.POST.get("voice_info", "").strip()\n        topic.save()',
@@ -63,12 +63,12 @@ views.write_text(v, encoding="utf-8")
 
 
 # ==================================================
-# 3) Sửa template admin: thêm bảng trắng "Thông tin của voice"
+# 3) Edit template admin: thêm bảng trắng "Information của voice"
 # ==================================================
 tpl = Path("templates/core/admin_part2_gioi_detail.html")
 t = tpl.read_text(encoding="utf-8", errors="ignore")
 
-# Thêm CSS cho bảng thông tin voice
+# Add CSS cho bảng information voice
 if ".voice-info-box" not in t:
     t = t.replace(
         "</style>",
@@ -94,15 +94,15 @@ if ".voice-info-box" not in t:
 </style>"""
     )
 
-# Chèn input voice_info vào form save_total_answers ngay sau nút Lưu đáp án tổng
+# Chèn input voice_info vào form save_total_answers ngay sau nút Save answer tổng
 if 'name="voice_info"' not in t:
     insert_block = r'''
 </section>
 
 <section class="card voice-info-box">
-    <h2 class="voice-info-title">Thông tin của voice</h2>
-    <label>Nhập thông tin/ghi chú/giải thích của voice</label>
-    <textarea name="voice_info" placeholder="Nhập thông tin của voice. Phần này học viên có thể bấm nút để hiển thị hoặc ẩn.">{{ topic.voice_info }}</textarea>
+    <h2 class="voice-info-title">Information của voice</h2>
+    <label>Nhập information/ghi chú/giải thích của voice</label>
+    <textarea name="voice_info" placeholder="Nhập information của voice. Phần này student có thể bấm nút để hiển thị hoặc ẩn.">{{ topic.voice_info }}</textarea>
 </section>
 '''
     t = t.replace(
@@ -111,7 +111,7 @@ if 'name="voice_info"' not in t:
         1
     )
 
-# Form lưu đáp án đúng cần giữ hidden voice_info để không mất khi submit nếu view có nhận
+# Form lưu answer đúng cần giữ hidden voice_info để không mất khi submit nếu view có nhận
 if '<textarea name="voice_info" style="display:none">' not in t:
     t = t.replace(
         '<input type="hidden" name="action" value="save_correct_answers">',
@@ -123,7 +123,7 @@ tpl.write_text(t, encoding="utf-8")
 
 
 # ==================================================
-# 4) Sửa template học viên: thêm nút hiển thị/ẩn thông tin voice
+# 4) Edit template student: thêm nút hiển thị/ẩn information voice
 # ==================================================
 student = Path("templates/core/student_part2_gioi.html")
 h = student.read_text(encoding="utf-8", errors="ignore")
@@ -176,7 +176,7 @@ if "toggleVoiceInfo" not in h:
 {% if topic.voice_info %}
 <section class="voice-toggle-card">
     <button class="voice-toggle-btn" type="button" onclick="toggleVoiceInfo()">
-        👁 Hiển thị / Ẩn thông tin voice
+        👁 Hiển thị / Ẩn information voice
     </button>
     <div id="voiceInfoContent" class="voice-info-content">{{ topic.voice_info }}</div>
 </section>

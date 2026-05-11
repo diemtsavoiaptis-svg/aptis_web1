@@ -5,7 +5,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
-<title>Listening Part 2 - Chọn phiên bản</title>
+<title>Listening Part 2 - Chọn version</title>
 <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
 <style>
 :root{
@@ -151,24 +151,24 @@ article:hover {
     <div class="badge">2</div>
     <h1>Listening Part 2</h1>
     <div class="desc">
-        Chọn phiên bản bài làm trước khi vào danh sách chủ đề.
+        Chọn version bài làm trước khi vào danh sách topics.
     </div>
-    <a class="back" href="/listening/">← Quay lại Listening</a>
+    <a class="back" href="/listening/">← Back Listening</a>
 </section>
 
 <section class="grid">
     <a class="card" href="/listening/part-2/may-gioi/">
         <div class="num">1</div>
-        <h2>Mày giỏi</h2>
-        <p>Mỗi chủ đề có 1 file nghe tổng và 1 câu dữ liệu tổng.</p>
-        <span class="pill">{{ gioi_count }} chủ đề</span>
+        <h2>Version A</h2>
+        <p>Mỗi topics có 1 file nghe tổng và 1 câu data tổng.</p>
+        <span class="pill">{{ gioi_count }} topics</span>
     </a>
 
     <a class="card" href="/listening/part-2/may-kem/">
         <div class="num">2</div>
-        <h2>Mày kém</h2>
-        <p>Mỗi chủ đề có 4 voice tương ứng 4 người / 4 ý dữ liệu.</p>
-        <span class="pill">{{ kem_count }} chủ đề</span>
+        <h2>Version B</h2>
+        <p>Mỗi topics có 4 voice tương ứng 4 người / 4 ý data.</p>
+        <span class="pill">{{ kem_count }} topics</span>
     </a>
 </section>
 </main>

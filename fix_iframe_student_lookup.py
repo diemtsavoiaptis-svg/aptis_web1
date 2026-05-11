@@ -5,7 +5,7 @@ import re
 settings = Path("config/settings.py")
 s = settings.read_text(encoding="utf-8", errors="ignore")
 
-# Xóa mọi dòng X_FRAME_OPTIONS cũ rồi thêm lại cuối file để thắng tất cả
+# Delete mọi dòng X_FRAME_OPTIONS cũ rồi thêm lại cuối file để thắng tất cả
 s = re.sub(r"(?m)^X_FRAME_OPTIONS\s*=.*\n?", "", s)
 s += '''
 
@@ -15,7 +15,7 @@ X_FRAME_OPTIONS = "SAMEORIGIN"
 settings.write_text(s, encoding="utf-8")
 
 
-# 2) Sửa middleware bảo mật nếu nó đang tự set DENY
+# 2) Edit middleware bảo mật nếu nó đang tự set DENY
 mw = Path("core/middleware.py")
 if mw.exists():
     m = mw.read_text(encoding="utf-8", errors="ignore")
@@ -34,7 +34,7 @@ if mw.exists():
     mw.write_text(m, encoding="utf-8")
 
 
-# 3) Đảm bảo nút Duyệt học viên mở đúng trang mới
+# 3) Đảm bảo nút Duyệt student mở đúng trang mới
 dash = Path("templates/core/dashboard.html")
 d = dash.read_text(encoding="utf-8", errors="ignore")
 

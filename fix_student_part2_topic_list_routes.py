@@ -2,7 +2,7 @@
 import re
 
 # ==================================================
-# 1) Sửa views.py: thêm view danh sách chủ đề học viên
+# 1) Edit views.py: thêm view danh sách topics student
 # ==================================================
 views = Path("core/views.py")
 s = views.read_text(encoding="utf-8", errors="ignore")
@@ -31,7 +31,7 @@ block = r'''
 def student_part2_gioi_topics(request):
     topics = Part2Topic.objects.filter(version="gioi").order_by("id")
     return render(request, "core/student_part2_topic_list.html", {
-        "version_title": "Mày giỏi",
+        "version_title": "Version A",
         "topics": topics,
         "back_url": "/listening/part-2/",
         "topic_url_prefix": "/listening/part-2/may-gioi/",
@@ -41,7 +41,7 @@ def student_part2_gioi_topics(request):
 def student_part2_kem_topics(request):
     topics = Part2Topic.objects.filter(version="kem").order_by("id")
     return render(request, "core/student_part2_topic_list.html", {
-        "version_title": "Mày kém",
+        "version_title": "Version B",
         "topics": topics,
         "back_url": "/listening/part-2/",
         "topic_url_prefix": "/listening/part-2/may-kem/",
@@ -61,7 +61,7 @@ views.write_text(s, encoding="utf-8")
 
 
 # ==================================================
-# 2) Sửa urls.py: thêm route danh sách TRƯỚC route có <int:topic_id>
+# 2) Edit urls.py: thêm route danh sách TRƯỚC route có <int:topic_id>
 # ==================================================
 urls = Path("core/urls.py")
 u = urls.read_text(encoding="utf-8", errors="ignore")
@@ -69,7 +69,7 @@ u = urls.read_text(encoding="utf-8", errors="ignore")
 if "from . import views" not in u:
     u = u.replace("from django.urls import path", "from django.urls import path\nfrom . import views", 1)
 
-# Xóa các route trùng may-gioi/may-kem list nếu có để thêm lại đúng vị trí
+# Delete các route trùng may-gioi/may-kem list nếu có để thêm lại đúng vị trí
 u = re.sub(r'\s*path\("listening/part-2/may-gioi/",\s*views\.[^,]+,\s*name="[^"]+"\),\n?', "\n", u)
 u = re.sub(r'\s*path\("listening/part-2/may-kem/",\s*views\.[^,]+,\s*name="[^"]+"\),\n?', "\n", u)
 u = re.sub(r'\s*path\("listening/part-2/may-dot/",\s*views\.[^,]+,\s*name="[^"]+"\),\n?', "\n", u)
@@ -87,12 +87,12 @@ u = re.sub(
     count=1
 )
 
-# Sửa link may-dot cũ thành may-kem trong templates sau
+# Edit link may-dot cũ thành may-kem trong templates sau
 urls.write_text(u, encoding="utf-8")
 
 
 # ==================================================
-# 3) Đảm bảo template danh sách chủ đề học viên tồn tại
+# 3) Đảm bảo template danh sách topics student tồn tại
 # ==================================================
 tpl = Path("templates/core/student_part2_topic_list.html")
 tpl.parent.mkdir(parents=True, exist_ok=True)
@@ -149,20 +149,20 @@ h1{margin:0;font-size:44px;letter-spacing:-.05em}
 <main class="wrap">
 <section class="hero">
     <h1>Part 2 - {{ version_title }}</h1>
-    <div class="desc">Chọn chủ đề để bắt đầu làm bài.</div>
-    <a class="back" href="{{ back_url }}">← Quay lại chọn phiên bản</a>
+    <div class="desc">Chọn topics để bắt đầu làm bài.</div>
+    <a class="back" href="{{ back_url }}">← Back to Version Selection</a>
 </section>
 
 <section class="grid">
 {% for topic in topics %}
 <a class="topic" href="{{ topic_url_prefix }}{{ topic.id }}/">
     <h2>{{ topic.title }}</h2>
-    <p>{{ topic.description|default:"Chủ đề luyện nghe" }}</p>
+    <p>{{ topic.description|default:"Topic luyện nghe" }}</p>
 </a>
 {% empty %}
 <div class="topic">
-    <h2>Chưa có chủ đề</h2>
-    <p>Admin chưa nhập dữ liệu cho phiên bản này.</p>
+    <h2>Chưa có topics</h2>
+    <p>Admin chưa nhập data cho version này.</p>
 </div>
 {% endfor %}
 </section>
@@ -173,7 +173,7 @@ h1{margin:0;font-size:44px;letter-spacing:-.05em}
 
 
 # ==================================================
-# 4) Sửa link trong template chọn phiên bản nếu bị may-dot
+# 4) Edit link trong template chọn version nếu bị may-dot
 # ==================================================
 for p in Path("templates").rglob("*.html"):
     text = p.read_text(encoding="utf-8", errors="ignore")

@@ -22,7 +22,7 @@ TOPIC_MAP = {
     9: "Topic The Art",
     10: "Topic Travel to work.",
     11: "Topic Studying.",
-    12: "Topic Studying phiên bản 2.",
+    12: "Topic Studying version 2.",
 }
 
 
@@ -33,7 +33,7 @@ def clean_text(text):
 
 
 def extract_topic_blocks(raw):
-    # Sửa trường hợp topic 5A: thành topic 5 A:
+    # Edit trường hợp topic 5A: thành topic 5 A:
     raw = re.sub(r"(?i)\btopic\s*(\d+)([A-D])\s*:", r"topic \1 \2:", raw)
 
     # Nhận cả:
@@ -87,7 +87,7 @@ print("")
 print("====================================================")
 print("NHẬP THÔNG TIN VOICE PART 2 - MÀY GIỎI")
 print("====================================================")
-print("Dán nguyên khối dữ liệu 12 topic vào đây.")
+print("Dán nguyên khối data 12 topic vào đây.")
 print("Hệ thống sẽ tự khớp theo số topic 1-12 để đúng với file nghe.")
 print("Dán xong thì gõ END rồi Enter.")
 print("")
@@ -118,7 +118,7 @@ for topic_no in range(1, 13):
     topic, _ = Part2Topic.objects.get_or_create(
         version="gioi",
         title=title,
-        defaults={"description": "Chủ đề Mày giỏi"}
+        defaults={"description": "Version A Topic"}
     )
 
     if not block:
@@ -182,5 +182,5 @@ print("XONG.")
 print("Admin kiểm tra:")
 print("http://127.0.0.1:8000/dashboard/part-2/may-gioi/")
 print("")
-print("Học viên kiểm tra:")
+print("Student kiểm tra:")
 print("http://127.0.0.1:8000/listening/part-2/may-gioi/")

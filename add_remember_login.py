@@ -1,7 +1,7 @@
 ﻿from pathlib import Path
 import re
 
-# Tìm file giao diện đăng nhập
+# Tìm file interface đăng nhập
 candidates = [
     Path("templates/core/home.html"),
     Path("templates/core/login.html"),
@@ -12,14 +12,14 @@ target = None
 for p in candidates:
     if p.exists():
         text = p.read_text(encoding="utf-8", errors="ignore")
-        if "Đăng nhập" in text or "dang-nhap" in text or "login" in text.lower():
+        if "Login" in text or "dang-nhap" in text or "login" in text.lower():
             target = p
             break
 
 if target is None:
     for p in Path("templates").rglob("*.html"):
         text = p.read_text(encoding="utf-8", errors="ignore")
-        if "Đăng nhập" in text and "<form" in text:
+        if "Login" in text and "<form" in text:
             target = p
             break
 
@@ -29,7 +29,7 @@ if target is None:
 s = target.read_text(encoding="utf-8", errors="ignore")
 Path(str(target) + ".bak_remember_login").write_text(s, encoding="utf-8")
 
-# Thêm autocomplete cho input tài khoản và mật khẩu
+# Add autocomplete cho input account và mật khẩu
 s = re.sub(
     r'(<input[^>]*(?:name=["\'](?:username|email|login)["\']|type=["\']email["\'])[^>]*)(>)',
     lambda m: m.group(1) + (' autocomplete="username"' if "autocomplete=" not in m.group(1) else "") + m.group(2),
@@ -48,17 +48,17 @@ remember_html = r'''
 <div class="remember-login-row">
     <label class="remember-login-label">
         <input type="checkbox" id="rememberLoginInfo">
-        <span>Lưu thông tin đăng nhập</span>
+        <span>Save information đăng nhập</span>
     </label>
     <small>Trình duyệt sẽ hỗ trợ lưu mật khẩu an toàn.</small>
 </div>
 '''
 
-# Chèn checkbox trước nút Đăng nhập đầu tiên nếu chưa có
+# Chèn checkbox trước nút Login đầu tiên nếu chưa có
 if "rememberLoginInfo" not in s:
     # Ưu tiên chèn trước button submit
     s = re.sub(
-        r'(<button[^>]*type=["\']submit["\'][^>]*>[\s\S]*?Đăng nhập[\s\S]*?</button>)',
+        r'(<button[^>]*type=["\']submit["\'][^>]*>[\s\S]*?Login[\s\S]*?</button>)',
         remember_html + r"\n\1",
         s,
         count=1,
@@ -123,7 +123,7 @@ script_block = r'''
     function initRememberLogin(){
         const checkbox = document.getElementById("rememberLoginInfo");
         const loginInput = findLoginInput();
-        const form = checkbox ? checkbox.closest("form") : null;
+        const form = checkbox checkbox.closest("form") : null;
 
         if(!checkbox || !loginInput || !form) return;
 

@@ -2,7 +2,7 @@
 import re
 
 # ==================================================
-# 1) Thêm model riêng cho Part 2 nếu chưa có
+# 1) Add model separate cho Part 2 nếu chưa có
 # ==================================================
 models = Path("core/models.py")
 s = models.read_text(encoding="utf-8", errors="ignore")
@@ -12,13 +12,13 @@ if "class Part2Topic" not in s:
 
 # ===== Listening Part 2 data models =====
 class Part2Topic(models.Model):
-    title = models.CharField("Tên chủ đề", max_length=255)
+    title = models.CharField("Tên topics", max_length=255)
     description = models.TextField("Mô tả", blank=True)
     created_at = models.DateTimeField("Ngày tạo", auto_now_add=True)
 
     class Meta:
-        verbose_name = "Chủ đề Part 2"
-        verbose_name_plural = "Chủ đề Part 2"
+        verbose_name = "Topic Part 2"
+        verbose_name_plural = "Topic Part 2"
         ordering = ["-id"]
 
     def __str__(self):
@@ -26,24 +26,24 @@ class Part2Topic(models.Model):
 
 
 class Part2Voice(models.Model):
-    topic = models.ForeignKey(Part2Topic, on_delete=models.CASCADE, related_name="voices", verbose_name="Chủ đề")
+    topic = models.ForeignKey(Part2Topic, on_delete=models.CASCADE, related_name="voices", verbose_name="Topic")
     order = models.PositiveIntegerField("Thứ tự người nói", default=1)
 
     audio_url = models.URLField("File audio / Link audio", blank=True)
-    answer_a = models.CharField("Đáp án A", max_length=255, blank=True)
-    answer_b = models.CharField("Đáp án B", max_length=255, blank=True)
-    answer_c = models.CharField("Đáp án C", max_length=255, blank=True)
-    answer_d = models.CharField("Đáp án D", max_length=255, blank=True)
+    answer_a = models.CharField("Answer A", max_length=255, blank=True)
+    answer_b = models.CharField("Answer B", max_length=255, blank=True)
+    answer_c = models.CharField("Answer C", max_length=255, blank=True)
+    answer_d = models.CharField("Answer D", max_length=255, blank=True)
 
-    transcript = models.TextField("Nội dung file ghi âm", blank=True)
+    transcript = models.TextField("Nội dung recording file", blank=True)
     data_choices = models.TextField(
-        "Dữ liệu đáp án",
+        "Data answer",
         blank=True,
-        help_text="Nhập nhiều ý dữ liệu, mỗi ý một dòng. Khi làm bài chỉ chọn 4 ý tương ứng 4 người."
+        help_text="Nhập nhiều ý data, mỗi ý một dòng. Khi làm bài chỉ chọn 4 ý tương ứng 4 người."
     )
 
     correct_answer = models.CharField(
-        "Đáp án đúng",
+        "Answer đúng",
         max_length=1,
         choices=[("A", "A"), ("B", "B"), ("C", "C"), ("D", "D")],
         blank=True
@@ -65,7 +65,7 @@ else:
 
 
 # ==================================================
-# 2) Thêm admin model vào core/admin.py
+# 2) Add admin model vào core/admin.py
 # ==================================================
 admin = Path("core/admin.py")
 a = admin.read_text(encoding="utf-8", errors="ignore")
@@ -121,7 +121,7 @@ else:
 
 
 # ==================================================
-# 3) Thêm forms/view Part 2 admin riêng, đẹp hơn Django Admin
+# 3) Add forms/view Part 2 admin separate, đẹp hơn Django Admin
 # ==================================================
 views = Path("core/views.py")
 v = views.read_text(encoding="utf-8", errors="ignore")
@@ -163,7 +163,7 @@ def admin_part2_questions(request):
         description = request.POST.get("description", "").strip()
 
         if not title:
-            messages.error(request, "Bạn cần nhập tên chủ đề.")
+            messages.error(request, "Bạn cần nhập tên topics.")
             return redirect("admin_part2_questions")
 
         topic = Part2Topic.objects.create(title=title, description=description)
@@ -172,7 +172,7 @@ def admin_part2_questions(request):
         for i in range(1, 5):
             Part2Voice.objects.create(topic=topic, order=i)
 
-        messages.success(request, "Đã tạo chủ đề Part 2.")
+        messages.success(request, "Đã tạo topics Part 2.")
         return redirect("admin_part2_topic_detail", topic_id=topic.id)
 
     return render(request, "core/admin_part2_topics.html", {
@@ -210,12 +210,12 @@ def admin_part2_topic_detail(request, topic_id):
             voice.correct_answer = request.POST.get(prefix + "correct_answer", "").strip()
             voice.save()
 
-        messages.success(request, "Đã lưu dữ liệu chủ đề Part 2.")
+        messages.success(request, "Đã lưu data topics Part 2.")
         return redirect("admin_part2_topic_detail", topic_id=topic.id)
 
     if request.method == "POST" and request.POST.get("action") == "delete_topic":
         topic.delete()
-        messages.success(request, "Đã xóa chủ đề Part 2.")
+        messages.success(request, "Đã xóa topics Part 2.")
         return redirect("admin_part2_questions")
 
     return render(request, "core/admin_part2_topic_detail.html", {
@@ -225,7 +225,7 @@ def admin_part2_topic_detail(request, topic_id):
 # ===== End Custom Admin Part 2 management =====
 '''
 
-# Xóa block cũ Part2 admin nếu có để tránh trùng function
+# Delete block cũ Part2 admin nếu có để tránh trùng function
 v = re.sub(
     r"\n?# ===== Custom Admin Part 2 management =====[\s\S]*?# ===== End Custom Admin Part 2 management =====\n?",
     "\n",
@@ -258,7 +258,7 @@ urls.write_text(u, encoding="utf-8")
 
 
 # ==================================================
-# 5) Template danh sách chủ đề Part 2
+# 5) Template danh sách topics Part 2
 # ==================================================
 tpl_list = Path("templates/core/admin_part2_topics.html")
 tpl_list.parent.mkdir(parents=True, exist_ok=True)
@@ -268,7 +268,7 @@ tpl_list.write_text(r'''{% load static %}
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Quản lý Part 2</title>
+    <title>Manage Part 2</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
     <style>
@@ -466,12 +466,12 @@ tpl_list.write_text(r'''{% load static %}
     <section class="top">
         <div>
             <div class="badge">2</div>
-            <h1>Quản lý Part 2</h1>
+            <h1>Manage Part 2</h1>
             <div class="desc">
-                Hiển thị hàng loạt tên chủ đề. Bấm vào từng chủ đề để nhập audio, đáp án A/B/C/D, transcript và dữ liệu đáp án cho 4 người.
+                Hiển thị hàng loạt tên topics. Click từng topics to enter audio, answer A/B/C/D, transcript và data answer cho 4 người.
             </div>
         </div>
-        <a class="back" href="/dashboard/listening-parts/">← Quay lại chọn Part</a>
+        <a class="back" href="/dashboard/listening-parts/">← Back chọn Part</a>
     </section>
 
     {% if messages %}
@@ -488,20 +488,20 @@ tpl_list.write_text(r'''{% load static %}
             <input type="hidden" name="action" value="create_topic">
             <div class="form-grid">
                 <div>
-                    <label>Tên chủ đề mới</label>
+                    <label>Tên topics mới</label>
                     <input name="title" placeholder="Ví dụ: When they like listening to music">
                 </div>
                 <div>
                     <label>Mô tả</label>
-                    <textarea name="description" placeholder="Ghi chú ngắn cho chủ đề này..."></textarea>
+                    <textarea name="description" placeholder="Ghi chú ngắn cho topics này..."></textarea>
                 </div>
-                <button class="btn" type="submit">Tạo chủ đề</button>
+                <button class="btn" type="submit">Tạo topics</button>
             </div>
         </form>
     </section>
 
     <section class="card">
-        <h2 style="margin:0 0 16px;font-size:28px;color:#4a0010">Danh sách chủ đề</h2>
+        <h2 style="margin:0 0 16px;font-size:28px;color:#4a0010">Danh sách topics</h2>
 
         {% if topics %}
             <div class="topic-grid">
@@ -517,7 +517,7 @@ tpl_list.write_text(r'''{% load static %}
             </div>
         {% else %}
             <div class="empty">
-                Chưa có chủ đề Part 2 nào. Hãy tạo chủ đề đầu tiên ở ô bên trên.
+                Chưa có topics Part 2 nào. Hãy tạo topics đầu tiên ở ô bên trên.
             </div>
         {% endif %}
     </section>
@@ -528,7 +528,7 @@ tpl_list.write_text(r'''{% load static %}
 
 
 # ==================================================
-# 6) Template chi tiết chủ đề Part 2
+# 6) Template chi tiết topics Part 2
 # ==================================================
 tpl_detail = Path("templates/core/admin_part2_topic_detail.html")
 tpl_detail.write_text(r'''{% load static %}
@@ -715,12 +715,12 @@ tpl_detail.write_text(r'''{% load static %}
         <div>
             <h1>{{ topic.title }}</h1>
             <div class="hint">
-                Bảng dữ liệu Part 2: mỗi chủ đề có 4 voice tương ứng 4 người. Mỗi voice có audio, A/B/C/D, transcript và dữ liệu đáp án.
+                Bảng data Part 2: mỗi topics có 4 voice tương ứng 4 người. Mỗi voice có audio, A/B/C/D, transcript và data answer.
             </div>
         </div>
         <div class="actions">
-            <a class="link-btn light" href="/dashboard/part-2/">← Danh sách chủ đề</a>
-            <a class="link-btn light" href="/listening/part-2/">Xem giao diện học viên</a>
+            <a class="link-btn light" href="/dashboard/part-2/">← Danh sách topics</a>
+            <a class="link-btn light" href="/listening/part-2/">View Student Interface</a>
         </div>
     </section>
 
@@ -739,7 +739,7 @@ tpl_detail.write_text(r'''{% load static %}
         <section class="card">
             <div class="topic-grid">
                 <div>
-                    <label>Tên chủ đề</label>
+                    <label>Tên topics</label>
                     <input name="title" value="{{ topic.title }}">
                 </div>
                 <div>
@@ -749,26 +749,26 @@ tpl_detail.write_text(r'''{% load static %}
             </div>
 
             <div class="note">
-                Cột “Dữ liệu đáp án” có thể nhập nhiều dòng, nhưng khi làm bài chỉ khai thác 4 dữ liệu tương ứng 4 người.
+                Cột “Data answer” có thể nhập nhiều dòng, nhưng khi làm bài chỉ khai thác 4 data tương ứng 4 người.
             </div>
         </section>
 
         <section class="card">
-            <h2 style="margin:0 0 8px;font-size:26px;color:#4a0010">Dữ liệu 4 voice</h2>
+            <h2 style="margin:0 0 8px;font-size:26px;color:#4a0010">Data 4 voice</h2>
 
             <div class="table-wrap">
                 <table>
                     <thead>
                         <tr>
-                            <th>STT</th>
-                            <th>File audio của chủ đề</th>
-                            <th>Đáp án A</th>
-                            <th>Đáp án B</th>
-                            <th>Đáp án C</th>
-                            <th>Đáp án D</th>
-                            <th>Nội dung file ghi âm</th>
-                            <th>Dữ liệu của các đáp án</th>
-                            <th>Đáp án đúng</th>
+                            <th>No.</th>
+                            <th>File audio của topics</th>
+                            <th>Answer A</th>
+                            <th>Answer B</th>
+                            <th>Answer C</th>
+                            <th>Answer D</th>
+                            <th>Nội dung recording file</th>
+                            <th>Data của các answer</th>
+                            <th>Answer đúng</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -781,22 +781,22 @@ tpl_detail.write_text(r'''{% load static %}
                                 <textarea name="voice_{{ voice.id }}_audio_url" placeholder="Dán link audio hoặc file audio">{{ voice.audio_url }}</textarea>
                             </td>
                             <td class="answer-cell">
-                                <textarea name="voice_{{ voice.id }}_answer_a" placeholder="Đáp án A">{{ voice.answer_a }}</textarea>
+                                <textarea name="voice_{{ voice.id }}_answer_a" placeholder="Answer A">{{ voice.answer_a }}</textarea>
                             </td>
                             <td class="answer-cell">
-                                <textarea name="voice_{{ voice.id }}_answer_b" placeholder="Đáp án B">{{ voice.answer_b }}</textarea>
+                                <textarea name="voice_{{ voice.id }}_answer_b" placeholder="Answer B">{{ voice.answer_b }}</textarea>
                             </td>
                             <td class="answer-cell">
-                                <textarea name="voice_{{ voice.id }}_answer_c" placeholder="Đáp án C">{{ voice.answer_c }}</textarea>
+                                <textarea name="voice_{{ voice.id }}_answer_c" placeholder="Answer C">{{ voice.answer_c }}</textarea>
                             </td>
                             <td class="answer-cell">
-                                <textarea name="voice_{{ voice.id }}_answer_d" placeholder="Đáp án D">{{ voice.answer_d }}</textarea>
+                                <textarea name="voice_{{ voice.id }}_answer_d" placeholder="Answer D">{{ voice.answer_d }}</textarea>
                             </td>
                             <td class="transcript-cell">
-                                <textarea name="voice_{{ voice.id }}_transcript" placeholder="Transcript / nội dung file ghi âm">{{ voice.transcript }}</textarea>
+                                <textarea name="voice_{{ voice.id }}_transcript" placeholder="Transcript / nội dung recording file">{{ voice.transcript }}</textarea>
                             </td>
                             <td class="data-cell">
-                                <textarea name="voice_{{ voice.id }}_data_choices" placeholder="Mỗi dữ liệu một dòng. Có thể nhập nhiều dòng, nhưng bài làm chỉ chọn 4 dữ liệu.">{{ voice.data_choices }}</textarea>
+                                <textarea name="voice_{{ voice.id }}_data_choices" placeholder="Mỗi data một dòng. Có thể nhập nhiều dòng, nhưng bài làm chỉ chọn 4 data.">{{ voice.data_choices }}</textarea>
                             </td>
                             <td>
                                 <select name="voice_{{ voice.id }}_correct_answer">
@@ -814,16 +814,16 @@ tpl_detail.write_text(r'''{% load static %}
             </div>
 
             <div class="actions" style="justify-content:flex-end;margin-top:16px">
-                <button class="btn" type="submit">Lưu dữ liệu chủ đề</button>
+                <button class="btn" type="submit">Save data topics</button>
             </div>
         </section>
     </form>
 
-    <form method="post" onsubmit="return confirm('Bạn chắc chắn muốn xóa toàn bộ chủ đề Part 2 này?');">
+    <form method="post" onsubmit="return confirm('Bạn chắc chắn muốn xóa toàn bộ topics Part 2 này?');">
         {% csrf_token %}
         <input type="hidden" name="action" value="delete_topic">
         <section class="card">
-            <button class="btn danger" type="submit">Xóa chủ đề này</button>
+            <button class="btn danger" type="submit">Delete topics này</button>
         </section>
     </form>
 </main>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Điểm TSA Với Aptis - Listening</title>
+  <title>Score TSA Với Aptis - Listening</title>
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
@@ -11,31 +11,31 @@
 
   <section id="authPanel" class="auth-panel" hidden>
     <form id="authForm" class="auth-card">
-      <p class="eyebrow">Tài khoản học viên</p>
-      <h1>Đăng nhập để làm bài</h1>
-      <p>Watermark sẽ hiển thị theo ID, họ tên và email của học viên.</p>
+      <p class="eyebrow">Account student</p>
+      <h1>Login để làm bài</h1>
+      <p>Watermark sẽ hiển thị theo ID, họ tên và email của student.</p>
       <input id="emailInput" type="email" autocomplete="username" placeholder="Email" required>
-      <input id="passwordInput" type="password" autocomplete="current-password" placeholder="Mật khẩu" required>
-      <button class="primary-btn" type="submit">Đăng nhập</button>
+      <input id="passwordInput" type="password" autocomplete="current-password" placeholder="Password" required>
+      <button class="primary-btn" type="submit">Login</button>
       <div id="authMessage" class="auth-message"></div>
     </form>
   </section>
 
   <div class="app-shell">
     <header class="topbar">
-      <a class="brand" href="./" aria-label="Điểm TSA Với Aptis">
+      <a class="brand" href="./" aria-label="Score TSA Với Aptis">
         <span class="brand-mark">A</span>
         <span>
-          <strong>Điểm TSA Với Aptis</strong>
-          <small>Luyện nghe tự học</small>
+          <strong>Score TSA Với Aptis</strong>
+          <small>Listening Practice tự học</small>
         </span>
       </a>
 
       <div class="top-actions">
         <span id="studentBadge" class="status-pill">Chưa đăng nhập</span>
-        <button id="logoutBtn" class="ghost-btn" type="button" hidden>Đăng xuất</button>
-        <span id="dataSource" class="status-pill">Đang tải dữ liệu</span>
-        <button id="resetBtn" class="ghost-btn" type="button">Làm lại</button>
+        <button id="logoutBtn" class="ghost-btn" type="button" hidden>Logout</button>
+        <span id="dataSource" class="status-pill">Đang tải data</span>
+        <button id="resetBtn" class="ghost-btn" type="button">Try again</button>
       </div>
     </header>
 
@@ -45,15 +45,15 @@
           <div>
             <p class="eyebrow">Listening Practice</p>
             <h1 id="pageTitle">Luyện đề Aptis theo từng câu</h1>
-            <p>Nghe audio, chọn đáp án, tự kiểm tra và xem transcript. Không lưu bài làm của học sinh.</p>
+            <p>Nghe audio, chọn answer, tự kiểm tra và xem transcript. Không lưu bài làm của học sinh.</p>
           </div>
           <div class="hero-stat" aria-label="Tổng số câu">
             <strong id="totalCount">0</strong>
-            <span>câu hỏi</span>
+            <span>questions</span>
           </div>
         </div>
 
-        <nav id="partTabs" class="part-tabs" aria-label="Chọn Part">
+        <nav id="partTabs" class="part-tabs" aria-label="Choose Part">
           <button class="active" type="button" data-part="1">Part 1</button>
           <button type="button" data-part="2">Part 2</button>
           <button type="button" data-part="3">Part 3</button>
@@ -65,10 +65,10 @@
         <article id="questionCard" class="question-card" hidden>
           <div class="question-head">
             <span id="questionBadge" class="q-badge">Câu 1</span>
-            <span id="answerStatus" class="answer-status">Chưa chọn đáp án</span>
+            <span id="answerStatus" class="answer-status">Chưa chọn answer</span>
           </div>
 
-          <h2 id="questionText">Câu hỏi</h2>
+          <h2 id="questionText">Question</h2>
 
           <div class="audio-box">
             <div class="audio-title">
@@ -79,21 +79,21 @@
             <p id="audioHint" class="audio-hint" hidden>Nếu audio không phát trực tiếp, bấm “Mở file Drive”.</p>
           </div>
 
-          <div id="answerGrid" class="answer-grid" role="group" aria-label="Chọn đáp án">
+          <div id="answerGrid" class="answer-grid" role="group" aria-label="Choose answer">
             <button type="button" class="answer-btn" data-answer="A"><b>A</b><span></span></button>
             <button type="button" class="answer-btn" data-answer="B"><b>B</b><span></span></button>
             <button type="button" class="answer-btn" data-answer="C"><b>C</b><span></span></button>
           </div>
 
           <div class="question-actions">
-            <button id="checkBtn" class="primary-btn" type="button">Kiểm tra đáp án</button>
+            <button id="checkBtn" class="primary-btn" type="button">Kiểm tra answer</button>
             <button id="prevBtn" class="ghost-btn" type="button">Câu trước</button>
             <button id="nextBtn" class="ghost-btn" type="button">Câu tiếp theo</button>
           </div>
 
           <section id="resultBox" class="result-box" hidden>
-            <h3>Kết quả</h3>
-            <p>Đáp án đúng: <strong id="correctAnswer">A</strong></p>
+            <h3>Results</h3>
+            <p>Answer đúng: <strong id="correctAnswer">A</strong></p>
             <div class="transcript-box">
               <strong>Transcript</strong>
               <p id="transcriptText">Chưa có transcript.</p>
@@ -102,7 +102,7 @@
         </article>
       </section>
 
-      <aside class="side-panel" aria-label="Danh sách câu hỏi">
+      <aside class="side-panel" aria-label="Danh sách questions">
         <div class="side-card">
           <div class="side-title">
             <h2>Danh sách câu</h2>

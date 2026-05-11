@@ -15,7 +15,7 @@ button, input, textarea, select,
     -webkit-font-smoothing: antialiased;
 }
 
-/* Tiêu đề vẫn đậm, mượt nhưng không vỡ dấu */
+/* Title vẫn đậm, mượt nhưng không vỡ dấu */
 h1, h2, h3, h4,
 .profile-title,
 #panelTitle,

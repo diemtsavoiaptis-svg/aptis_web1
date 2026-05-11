@@ -10,7 +10,7 @@ class RegisterForm(forms.Form):
         max_length=150,
         widget=forms.TextInput(attrs={
             "class": "auth-input",
-            "placeholder": "Họ và tên học viên",
+            "placeholder": "Full Name student",
             "autocomplete": "name",
         })
     )
@@ -28,7 +28,7 @@ class RegisterForm(forms.Form):
         max_length=150,
         widget=forms.TextInput(attrs={
             "class": "auth-input",
-            "placeholder": "Tài khoản hoặc email",
+            "placeholder": "Account hoặc email",
             "autocomplete": "username",
         })
     )
@@ -36,7 +36,7 @@ class RegisterForm(forms.Form):
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
             "class": "auth-input",
-            "placeholder": "Mật khẩu",
+            "placeholder": "Password",
             "autocomplete": "new-password",
         })
     )
@@ -47,7 +47,7 @@ class LoginForm(forms.Form):
         max_length=150,
         widget=forms.TextInput(attrs={
             "class": "auth-input",
-            "placeholder": "Tài khoản hoặc email",
+            "placeholder": "Account hoặc email",
             "autocomplete": "username",
         })
     )
@@ -55,7 +55,7 @@ class LoginForm(forms.Form):
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
             "class": "auth-input",
-            "placeholder": "Mật khẩu",
+            "placeholder": "Password",
             "autocomplete": "current-password",
         })
     )
@@ -64,7 +64,7 @@ class LoginForm(forms.Form):
 class ListeningQuestionAdminForm(forms.ModelForm):
     upload_audio_mp3 = forms.FileField(
         required=False,
-        label="Tải file MP3 lên Supabase",
+        label="Upload file MP3 lên Supabase",
         help_text="Chọn file .mp3 để lưu trên Supabase Storage. Nếu không chọn file mới, audio cũ sẽ được giữ nguyên."
     )
 

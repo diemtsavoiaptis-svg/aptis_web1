@@ -5,7 +5,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
-<title>Cài đặt ảnh nền giao diện</title>
+<title>Cài đặt ảnh nền interface</title>
 <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
 <style>
 :root{
@@ -284,11 +284,11 @@ button{
 
 <section class="hero">
     <div>
-        <div class="kicker">Dashboard quản trị</div>
-        <h1>Cài đặt ảnh nền giao diện</h1>
+        <div class="kicker">Admin Dashboard</div>
+        <h1>Cài đặt ảnh nền interface</h1>
         <div class="desc">Tải ảnh nền mới cho trang chủ hoặc thay đổi ảnh hiện tại.</div>
     </div>
-    <a class="back" href="/dashboard/">← Quay lại Dashboard</a>
+    <a class="back" href="/dashboard/">← Back Dashboard</a>
 </section>
 
 {% for message in messages %}
@@ -310,14 +310,14 @@ button{
             {% else %}
                 <div class="empty-preview">
                     Chưa có ảnh nền tùy chỉnh.<br>
-                    Trang chủ đang dùng nền mặc định.
+                    Home đang dùng nền mặc định.
                 </div>
             {% endif %}
         </div>
 
         <div class="file-info">
             {% if current %}
-                {{ current.name|default:"Ảnh nền giao diện" }}
+                {{ current.name|default:"Ảnh nền interface" }}
                 <small>
                     {% if current.image %}
                         Ảnh upload từ máy
@@ -364,8 +364,8 @@ button{
 </div>
 
 <div class="actions">
-    <button class="save" name="action" value="save_background" type="submit">💾 Lưu ảnh nền</button>
-    <button class="danger" name="action" value="delete_background" type="submit">🗑 Xóa ảnh hiện tại</button>
+    <button class="save" name="action" value="save_background" type="submit">💾 Save ảnh nền</button>
+    <button class="danger" name="action" value="delete_background" type="submit">🗑 Delete ảnh hiện tại</button>
     <button class="reset" name="action" value="restore_default" type="submit">↻ Khôi phục mặc định</button>
 </div>
 

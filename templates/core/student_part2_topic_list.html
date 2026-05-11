@@ -64,20 +64,20 @@ article:hover {
 <main class="wrap">
 <section class="hero">
     <h1>Part 2 - {{ version_title }}</h1>
-    <div class="desc">Chọn chủ đề để bắt đầu làm bài.</div>
-    <a class="back" href="{{ back_url }}">← Quay lại chọn phiên bản</a>
+    <div class="desc">Chọn topics để bắt đầu làm bài.</div>
+    <a class="back" href="{{ back_url }}">← Back to Version Selection</a>
 </section>
 
 <section class="grid">
 {% for topic in topics %}
 <a class="topic" href="{{ topic_url_prefix }}{{ topic.id }}/">
     <h2>{{ topic.title }}</h2>
-    <p>{{ topic.description|default:"Chủ đề luyện nghe" }}</p>
+    <p>{{ topic.description|default:"Topic luyện nghe" }}</p>
 </a>
 {% empty %}
 <div class="topic">
-    <h2>Chưa có chủ đề</h2>
-    <p>Admin chưa nhập dữ liệu cho phiên bản này.</p>
+    <h2>Chưa có topics</h2>
+    <p>Admin chưa nhập data cho version này.</p>
 </div>
 {% endfor %}
 </section>

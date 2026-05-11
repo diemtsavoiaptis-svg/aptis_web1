@@ -8,8 +8,8 @@ models = Path("core/models.py")
 s = models.read_text(encoding="utf-8", errors="ignore")
 
 needed_fields = {
-    "student_id": "    student_id = models.CharField('ID học viên', max_length=80, blank=True)\n",
-    "full_name": "    full_name = models.CharField('Tên học viên', max_length=150, blank=True)\n",
+    "student_id": "    student_id = models.CharField('ID student', max_length=80, blank=True)\n",
+    "full_name": "    full_name = models.CharField('Tên student', max_length=150, blank=True)\n",
     "phone": "    phone = models.CharField('Số điện thoại', max_length=30, blank=True)\n",
     "email": "    email = models.EmailField('Gmail', blank=True)\n",
 }
@@ -31,7 +31,7 @@ models.write_text(s, encoding="utf-8")
 
 
 # =========================
-# 2) Ghi đè view lưu hồ sơ học viên cho chắc
+# 2) Ghi đè view lưu hồ sơ student cho chắc
 # =========================
 views = Path("core/views.py")
 v = views.read_text(encoding="utf-8", errors="ignore")
@@ -49,7 +49,7 @@ for imp in imports:
     if imp not in v:
         v = imp + "\n" + v
 
-# Xóa các bản admin_student_lookup cũ nếu có
+# Delete các bản admin_student_lookup cũ nếu có
 v = re.sub(
     r"\n?# ===== Custom admin student lookup/profile page =====[\s\S]*?# ===== End custom admin student lookup/profile page =====\n?",
     "\n",
@@ -109,7 +109,7 @@ def admin_student_lookup(request):
         selected = StudentProfile.objects.filter(id=request.POST.get("profile_id")).select_related("user").first()
 
         if not selected:
-            messages.error(request, "Chưa chọn học viên để lưu.")
+            messages.error(request, "Chưa chọn student để lưu.")
             return redirect("admin_student_lookup")
 
         gmail = request.POST.get("gmail", "").strip()
@@ -128,7 +128,7 @@ def admin_student_lookup(request):
             selected.user.first_name = full_name
             selected.user.save()
 
-        messages.success(request, "Đã lưu hồ sơ học viên.")
+        messages.success(request, "Đã lưu hồ sơ student.")
         return redirect(f"{request.path}?profile_id={selected.id}&q={gmail or phone or full_name or student_id or q}")
 
     if request.method == "POST" and request.POST.get("action") == "delete_profile":
@@ -147,7 +147,7 @@ def admin_student_lookup(request):
                 target.user.last_name = ""
                 target.user.save()
 
-            messages.success(request, "Đã xóa thông tin hồ sơ học viên.")
+            messages.success(request, "Đã xóa information hồ sơ student.")
 
         return redirect("admin_student_lookup")
 
@@ -170,14 +170,14 @@ views.write_text(v, encoding="utf-8")
 
 
 # =========================
-# 3) Sửa template để value lấy đúng field đã lưu
+# 3) Edit template để value lấy đúng field đã lưu
 # =========================
 tpl = Path("templates/core/admin_student_lookup.html")
 t = tpl.read_text(encoding="utf-8", errors="ignore")
 
 t = re.sub(
     r'<input name="gmail"[^>]*>',
-    '<input name="gmail" value="{{ profile_email_value }}" placeholder="Gmail học viên">',
+    '<input name="gmail" value="{{ profile_email_value }}" placeholder="Gmail student">',
     t
 )
 
@@ -189,13 +189,13 @@ t = re.sub(
 
 t = re.sub(
     r'<input name="full_name"[^>]*>',
-    '<input name="full_name" value="{{ profile_name_value }}" placeholder="Tên học viên">',
+    '<input name="full_name" value="{{ profile_name_value }}" placeholder="Tên student">',
     t
 )
 
 t = re.sub(
     r'<input name="student_id"[^>]*>',
-    '<input name="student_id" value="{{ student_id_value }}" placeholder="ID học viên tự thêm">',
+    '<input name="student_id" value="{{ student_id_value }}" placeholder="ID student tự thêm">',
     t
 )
 

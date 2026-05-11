@@ -1,15 +1,16 @@
 
 :root {
-    --emerald: #064E3B;
-    --emerald-2: #047857;
-    --emerald-3: #10B981;
-    --bg: #F9FAFB;
-    --card: #FFFFFF;
-    --text: #0F172A;
-    --muted: #64748B;
-    --border: #D1FAE5;
-    --shadow: 0 18px 45px rgba(6, 78, 59, 0.10);
-    --radius: 24px;
+    --red: #ef233c;
+    --red-dark: #9f001f;
+    --dark: #3b0010;
+    --soft: #fff1f4;
+    --soft-2: #fff7f9;
+    --bg: #fff7f9;
+    --white: #ffffff;
+    --text: #3b0010;
+    --muted: #667085;
+    --border: #ffd0d8;
+    --shadow: 0 18px 45px rgba(239, 35, 60, .12);
 }
 
 * {
@@ -34,8 +35,8 @@ a {
     min-height: 100vh;
     padding: 28px;
     background:
-        radial-gradient(circle at top left, rgba(16, 185, 129, .15), transparent 34%),
-        linear-gradient(180deg, #F9FAFB 0%, #FFFFFF 100%);
+        radial-gradient(circle at top left, rgba(239, 35, 60, .10), transparent 34%),
+        linear-gradient(180deg, #fff7f9 0%, #FFFFFF 100%);
 }
 
 .part3-wrap {
@@ -53,7 +54,7 @@ a {
 
 .part3-kicker {
     margin: 0 0 10px;
-    color: var(--emerald-2);
+    color: var(--red-dark-2);
     font-size: 13px;
     font-weight: 950;
     letter-spacing: .08em;
@@ -62,7 +63,7 @@ a {
 
 .part3-title {
     margin: 0;
-    color: var(--emerald);
+    color: var(--red-dark);
     font-size: clamp(36px, 5vw, 58px);
     line-height: 1.05;
     font-weight: 950;
@@ -86,7 +87,7 @@ a {
     border: 1px solid var(--border);
     border-radius: 999px;
     background: #FFFFFF;
-    color: var(--emerald);
+    color: var(--red-dark);
     font-weight: 900;
     cursor: pointer;
     transition: .22s ease;
@@ -94,12 +95,12 @@ a {
 
 .part3-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 14px 30px rgba(6, 78, 59, .15);
+    box-shadow: 0 14px 30px rgba(239, 35, 60, .18);
 }
 
 .part3-btn.primary {
-    border-color: var(--emerald);
-    background: var(--emerald);
+    border-color: var(--red-dark);
+    background: var(--red-dark);
     color: #FFFFFF;
 }
 
@@ -127,7 +128,7 @@ a {
 .sidebar-card h2,
 .student-card h2 {
     margin: 0 0 16px;
-    color: var(--emerald);
+    color: var(--red-dark);
     font-size: 24px;
     font-weight: 950;
 }
@@ -167,8 +168,8 @@ a {
 .field input:focus,
 .field textarea:focus,
 .field select:focus {
-    border-color: var(--emerald-3);
-    box-shadow: 0 0 0 4px rgba(16, 185, 129, .14);
+    border-color: var(--red-dark-3);
+    box-shadow: 0 0 0 4px rgba(239, 35, 60, .12);
 }
 
 .dropzone {
@@ -176,10 +177,10 @@ a {
     place-items: center;
     min-height: 150px;
     padding: 22px;
-    border: 2px dashed #A7F3D0;
+    border: 2px dashed #ff9aac;
     border-radius: 22px;
-    background: #ECFDF5;
-    color: var(--emerald);
+    background: #fff1f4;
+    color: var(--red-dark);
     text-align: center;
     font-weight: 850;
 }
@@ -194,8 +195,8 @@ a {
     padding: 14px;
     border: 1px solid var(--border);
     border-radius: 18px;
-    background: #ECFDF5;
-    color: var(--emerald);
+    background: #fff1f4;
+    color: var(--red-dark);
     text-align: center;
     font-weight: 950;
 }
@@ -217,7 +218,7 @@ a {
     display: grid;
     place-items: center;
     border-radius: 999px;
-    background: var(--emerald);
+    background: var(--red-dark);
     color: #FFFFFF;
     font-weight: 950;
 }
@@ -231,7 +232,7 @@ a {
 .preview-frame {
     min-height: 520px;
     border-radius: 20px;
-    background: #F9FAFB;
+    background: #fff7f9;
     border: 1px solid var(--border);
     padding: 18px;
 }
@@ -250,7 +251,7 @@ a {
     gap: 14px;
     padding: 18px;
     border-radius: 22px;
-    background: var(--emerald);
+    background: var(--red-dark);
     color: #FFFFFF;
     box-shadow: var(--shadow);
 }
@@ -308,7 +309,7 @@ a {
     display: grid;
     place-items: center;
     border-radius: 999px;
-    background: var(--emerald-2);
+    background: var(--red-dark-2);
     color: #FFFFFF;
     font-weight: 950;
 }
@@ -333,8 +334,8 @@ a {
 
 .answer-select:hover,
 .answer-select:focus {
-    border-color: var(--emerald-3);
-    box-shadow: 0 0 0 4px rgba(16, 185, 129, .12);
+    border-color: var(--red-dark-3);
+    box-shadow: 0 0 0 4px rgba(239, 35, 60, .12);
 }
 
 .sidebar-card {
@@ -357,14 +358,14 @@ a {
     border: 1px solid var(--border);
     border-radius: 12px;
     background: #FFFFFF;
-    color: var(--emerald);
+    color: var(--red-dark);
     font-weight: 950;
     transition: .2s ease;
 }
 
 .grid-dot:hover,
 .grid-dot.active {
-    background: var(--emerald);
+    background: var(--red-dark);
     color: #FFFFFF;
 }
 
@@ -388,7 +389,7 @@ a {
     padding: 18px;
     border-radius: 18px;
     background: #0F172A;
-    color: #D1FAE5;
+    color: #ffd0d8;
     font-size: 13px;
     line-height: 1.55;
 }

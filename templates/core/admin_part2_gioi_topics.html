@@ -5,7 +5,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="UTF-8">
-<title>Part 2 - Mày giỏi</title>
+<title>Part 2 - Version A</title>
 <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
 <style>
 :root{
@@ -149,11 +149,11 @@ article:hover {
 <main class="wrap">
 <section class="hero">
     <div class="badge">2</div>
-    <h1>Part 2 - Mày giỏi</h1>
+    <h1>Part 2 - Version A</h1>
     <div class="desc">
-        Có sẵn 12 chủ đề. Bấm vào một chủ đề để nhập dữ liệu admin: Khóa, STT, Câu hỏi, Audio Drive, Đáp án đúng và Dữ liệu đáp án.
+        There are 12 available topics. Click a topic to enter admin data: Lock, No., Question, Audio Drive, Correct Answer, and Answer Data.
     </div>
-    <a class="back" href="/dashboard/part-2/">← Quay lại chọn phiên bản</a>
+    <a class="back" href="/dashboard/part-2/">← Back to Version Selection</a>
 </section>
 
 <section class="grid">
@@ -161,8 +161,8 @@ article:hover {
 <a class="topic" href="/dashboard/part-2/may-gioi/{{ topic.id }}/">
     <div class="num">{{ forloop.counter }}</div>
     <h2>{{ topic.title }}</h2>
-    <p>{{ topic.description|default:"Chủ đề Mày giỏi" }}</p>
-    <span class="pill">{{ topic.voices.count }} dòng dữ liệu</span>
+    <p>{{ topic.description|default:"Version A Topic" }}</p>
+    <span class="pill">{{ topic.voices.count }} data rows</span>
 </a>
 {% endfor %}
 </section>

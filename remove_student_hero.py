@@ -6,7 +6,7 @@ s = p.read_text(encoding="utf-8", errors="ignore")
 
 old = s
 
-# Xóa block section/header chứa tiêu đề hero
+# Delete block section/header chứa tiêu đề hero
 patterns = [
     r'<section[^>]*>[\s\S]*?Luyện đề Aptis theo từng\s*câu[\s\S]*?</section>',
     r'<header[^>]*>[\s\S]*?Luyện đề Aptis theo từng\s*câu[\s\S]*?</header>',

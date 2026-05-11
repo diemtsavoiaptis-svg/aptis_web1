@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Part 3 Listening | ?i?m TSA VAptis</title>
-    <link rel="stylesheet" href="/static/css/part3_only.css">
+    <link rel="stylesheet" href="/static/css/part3_red_system.css">
 </head>
 <body>
     <main class="part3-page">
@@ -13,31 +13,28 @@
                 <p class="kicker">Listening Practice</p>
                 <h1>Part 3 Listening</h1>
                 <p class="desc">
-                    Student Interface Part 3 d?ng bc?c 75/25, audio t?i gi?n vdropdown M/W/B.
+                    Nghe audio vch?n answer b?ng dropdown. Bc?c student chia 75/25  tr?nh xao nh?ng khi l?m b?i.
                 </p>
-                <div class="actions">
-                    <a class="btn" href="/">Trang ch?</a>
-                </div>
             </section>
 
-            <section style="display:grid;grid-template-columns:75fr 25fr;gap:22px;margin-top:22px;">
+            <section class="student-layout">
                 <div>
-                    <div class="audio-preview">
+                    <div class="audio-player">
                         <div class="play">?</div>
                         <div>
                             <strong>Audio Part 3</strong>
                             <div style="font-size:13px;opacity:.82;">00:00 / 00:00</div>
                         </div>
-                        <div class="bar"><span></span></div>
+                        <div class="audio-bar"><span></span></div>
                     </div>
 
                     <article class="card" style="margin-top:16px;">
                         <h2>Questions</h2>
 
-                        <div class="preview-question">
-                            <div class="preview-no">1</div>
-                            <div><strong>Statement c?a c?u h?i Part 3 shi?n thy.</strong></div>
-                            <select>
+                        <div class="student-question">
+                            <div class="question-number">1</div>
+                            <div><strong>Statement c?a c?u h?i Part 3 shi?n tht?i y.</strong></div>
+                            <select class="answer-select">
                                 <option>Ch?n answer</option>
                                 <option>M - Man</option>
                                 <option>W - Woman</option>
@@ -47,11 +44,13 @@
                     </article>
                 </div>
 
-                <aside class="card" style="position:sticky;top:18px;">
+                <aside class="sidebar">
                     <h2>Tr?ng th?i</h2>
-                    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:16px 0;">
-                        <div class="preview-no">1</div>
+
+                    <div class="question-grid">
+                        <div class="grid-dot active">1</div>
                     </div>
+
                     <button class="btn" type="button" style="width:100%;margin-bottom:10px;">?i t?i c?u ch?a l?m</button>
                     <button class="btn primary" type="button" style="width:100%;">N?p b?i</button>
                 </aside>

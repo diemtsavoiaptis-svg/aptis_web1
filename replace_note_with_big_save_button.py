@@ -2,7 +2,7 @@
 import re
 
 # ==================================================
-# 1) Ghi đè view Mày giỏi: hỗ trợ nút "Lưu đáp án tổng"
+# 1) Ghi đè view Version A: hỗ trợ nút "Save answer tổng"
 # ==================================================
 views = Path("core/views.py")
 s = views.read_text(encoding="utf-8", errors="ignore")
@@ -79,7 +79,7 @@ def admin_part2_gioi_detail(request, topic_id):
             voice.audio_url = topic.audio_url
             voice.save()
 
-        messages.success(request, "Đã lưu đáp án tổng. Bây giờ có thể chọn đáp án đúng cho Person 1-4.")
+        messages.success(request, "Đã lưu answer tổng. Bây giờ có thể chọn answer đúng cho Person 1-4.")
         return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
     if request.method == "POST" and request.POST.get("action") == "save_correct_answers":
@@ -92,7 +92,7 @@ def admin_part2_gioi_detail(request, topic_id):
             voice.audio_url = topic.audio_url
             voice.save()
 
-        messages.success(request, "Đã lưu đáp án đúng cho 4 Person.")
+        messages.success(request, "Đã lưu answer đúng cho 4 Person.")
         return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
     options = _gioi_total_options_save_total(topic)
@@ -140,7 +140,7 @@ views.write_text(s, encoding="utf-8")
 
 
 # ==================================================
-# 2) Ghi đè template admin Mày giỏi: có nút Lưu đáp án tổng to rõ
+# 2) Ghi đè template admin Version A: có nút Save answer tổng to rõ
 # ==================================================
 tpl = Path("templates/core/admin_part2_gioi_detail.html")
 tpl.write_text(r'''{% load static %}
@@ -148,7 +148,7 @@ tpl.write_text(r'''{% load static %}
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>{{ topic.title }} | Mày giỏi</title>
+<title>{{ topic.title }} | Version A</title>
 <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
 <style>
 :root{--red:#e60023;--red2:#ff5f76;--deep:#7a0010;--dark:#3f0011;--line:#ffd1dc;--muted:#667085}
@@ -207,12 +207,12 @@ tr:nth-child(even) td{background:#fffafa}
     <div>
         <h1>{{ topic.title }}</h1>
         <div class="desc">
-            Mày giỏi: <b>1 file nghe chung</b> + <b>4 Person</b>. Nhập dữ liệu đáp án tổng trước, sau đó chọn đáp án đúng bên dưới.
+            Version A: <b>1 file nghe chung</b> + <b>4 Person</b>. Nhập data answer tổng trước, sau đó chọn answer đúng bên dưới.
         </div>
     </div>
     <div class="actions">
-        <a class="link" href="/dashboard/part-2/may-gioi/">← Danh sách 12 chủ đề</a>
-        <a class="link" href="/listening/part-2/may-gioi/{{ topic.id }}/">Xem giao diện học viên</a>
+        <a class="link" href="/dashboard/part-2/may-gioi/">← Danh sách 12 topics</a>
+        <a class="link" href="/listening/part-2/may-gioi/{{ topic.id }}/">View Student Interface</a>
     </div>
 </section>
 
@@ -237,8 +237,8 @@ tr:nth-child(even) td{background:#fffafa}
     </div>
 
     <div class="audio-box">
-        <label>Audio Drive chung của chủ đề</label>
-        <textarea name="audio_url" placeholder="Dán 1 link audio Google Drive duy nhất cho chủ đề này">{{ topic.audio_url }}</textarea>
+        <label>Audio Drive chung của topics</label>
+        <textarea name="audio_url" placeholder="Dán 1 link audio Google Drive duy nhất cho topics này">{{ topic.audio_url }}</textarea>
 
         {% if topic.audio_url %}
         <div class="note">
@@ -249,15 +249,15 @@ tr:nth-child(even) td{background:#fffafa}
     </div>
 
     <div class="data-box">
-        <label>Dữ liệu đáp án tổng</label>
-        <textarea name="data_choices" placeholder="Nhập dữ liệu đáp án, mỗi đáp án một dòng. Ví dụ:
+        <label>Data answer tổng</label>
+        <textarea name="data_choices" placeholder="Nhập data answer, mỗi answer một dòng. Ví dụ:
 A
 D
 F
 G">{{ topic.data_choices }}</textarea>
     </div>
 
-    <button class="save-total-btn" type="submit">💾 Lưu đáp án tổng</button>
+    <button class="save-total-btn" type="submit">💾 Save answer tổng</button>
 </section>
 </form>
 
@@ -266,16 +266,16 @@ G">{{ topic.data_choices }}</textarea>
 <input type="hidden" name="action" value="save_correct_answers">
 
 <section class="card">
-    <h2 style="margin:0 0 8px;color:#4a0010">Chọn đáp án đúng cho 4 Person</h2>
+    <h2 style="margin:0 0 8px;color:#4a0010">Choose answer đúng cho 4 Person</h2>
 
     <div class="table-wrap">
         <table>
             <thead>
                 <tr>
-                    <th>Khóa</th>
-                    <th>STT</th>
+                    <th>Lock</th>
+                    <th>No.</th>
                     <th>Person</th>
-                    <th>Đáp án đúng</th>
+                    <th>Answer đúng</th>
                 </tr>
             </thead>
 
@@ -297,7 +297,7 @@ G">{{ topic.data_choices }}</textarea>
 
                         <td class="correct-col">
                             <select name="voice_{{ voice.id }}_correct_data">
-                                <option value="">-- Chọn đáp án đúng --</option>
+                                <option value="">-- Choose answer đúng --</option>
                                 {% for option in row.options %}
                                     <option value="{{ option }}" {% if voice.correct_data == option %}selected{% endif %}>
                                         {{ option }}
@@ -307,7 +307,7 @@ G">{{ topic.data_choices }}</textarea>
 
                             {% if not row.options %}
                             <div class="note">
-                                Chưa có lựa chọn. Hãy nhập dữ liệu đáp án tổng ở phía trên rồi bấm <b>Lưu đáp án tổng</b>.
+                                Chưa có lựa chọn. Hãy nhập data answer tổng ở phía trên rồi bấm <b>Save answer tổng</b>.
                             </div>
                             {% endif %}
                         </td>
@@ -319,7 +319,7 @@ G">{{ topic.data_choices }}</textarea>
     </div>
 
     <div class="actions" style="justify-content:flex-end;margin-top:16px">
-        <button class="btn" type="submit">Lưu đáp án đúng</button>
+        <button class="btn" type="submit">Save answer đúng</button>
     </div>
 </section>
 </form>

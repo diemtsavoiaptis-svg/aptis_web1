@@ -2,7 +2,7 @@
 import re
 
 # ==================================================
-# 1) Tạo template giao diện Part 2
+# 1) Tạo template interface Part 2
 # ==================================================
 tpl = Path("templates/core/listening_part2.html")
 tpl.parent.mkdir(parents=True, exist_ok=True)
@@ -404,8 +404,8 @@ tpl.write_text(r'''{% load static %}
 
         <section class="answer-pool">
             <div class="pool-head">
-                <div>☰ Pool đáp án</div>
-                <small>Mỗi đáp án đúng 1 lần</small>
+                <div>☰ Pool answer</div>
+                <small>Mỗi answer đúng 1 lần</small>
             </div>
 
             <div class="pool-grid">
@@ -437,7 +437,7 @@ tpl.write_text(r'''{% load static %}
 
                 <div class="voice-actions">
                     <select class="answer-select">
-                        <option>Chọn đáp án...</option>
+                        <option>Choose answer...</option>
                         <option>A - To relax</option>
                         <option>B - While studying</option>
                         <option>C - While singing</option>
@@ -467,7 +467,7 @@ tpl.write_text(r'''{% load static %}
 
                 <div class="voice-actions">
                     <select class="answer-select">
-                        <option>Chọn đáp án...</option>
+                        <option>Choose answer...</option>
                         <option>A - To relax</option>
                         <option>B - While studying</option>
                         <option>C - While singing</option>
@@ -497,7 +497,7 @@ tpl.write_text(r'''{% load static %}
 
                 <div class="voice-actions">
                     <select class="answer-select">
-                        <option>Chọn đáp án...</option>
+                        <option>Choose answer...</option>
                         <option>A - To relax</option>
                         <option>B - While studying</option>
                         <option>C - While singing</option>
@@ -527,7 +527,7 @@ tpl.write_text(r'''{% load static %}
 
                 <div class="voice-actions">
                     <select class="answer-select">
-                        <option>Chọn đáp án...</option>
+                        <option>Choose answer...</option>
                         <option>A - To relax</option>
                         <option>B - While studying</option>
                         <option>C - While singing</option>
@@ -539,7 +539,7 @@ tpl.write_text(r'''{% load static %}
         </section>
 
         <div class="note-card">
-            Đây là bản bố cục giao diện Part 2. Dữ liệu thật như topic, audio, đáp án và transcript sẽ được nối sau khi mình tạo phần quản lý dữ liệu Part 2.
+            Đây là bản bố cục interface Part 2. Data thật như topic, audio, answer và transcript sẽ được nối sau khi mình tạo phần manage data Part 2.
         </div>
 
         <section class="bottom-actions">
@@ -550,17 +550,17 @@ tpl.write_text(r'''{% load static %}
     </main>
 
     <script>
-        // Mỗi đáp án chỉ được chọn 1 lần trên 4 câu.
+        // Mỗi answer chỉ được chọn 1 lần trên 4 câu.
         const selects = Array.from(document.querySelectorAll(".answer-select"));
 
         function refreshOptions() {
             const chosen = selects
                 .map(s => s.value)
-                .filter(v => v && v !== "Chọn đáp án...");
+                .filter(v => v && v !== "Choose answer...");
 
             selects.forEach(select => {
                 Array.from(select.options).forEach(opt => {
-                    if (!opt.value || opt.value === "Chọn đáp án...") return;
+                    if (!opt.value || opt.value === "Choose answer...") return;
                     opt.disabled = chosen.includes(opt.value) && select.value !== opt.value;
                 });
             });
@@ -574,7 +574,7 @@ tpl.write_text(r'''{% load static %}
 
 
 # ==================================================
-# 2) Thêm view Part 2 nếu chưa có
+# 2) Add view Part 2 nếu chưa có
 # ==================================================
 views = Path("core/views.py")
 s = views.read_text(encoding="utf-8", errors="ignore")
@@ -591,7 +591,7 @@ def admin_part2_questions(request):
 
 
 # ==================================================
-# 3) Thêm URL /dashboard/part-2/
+# 3) Add URL /dashboard/part-2/
 # ==================================================
 urls = Path("core/urls.py")
 u = urls.read_text(encoding="utf-8", errors="ignore")
@@ -608,7 +608,7 @@ urls.write_text(u, encoding="utf-8")
 
 
 # ==================================================
-# 4) Cập nhật dashboard/listening-parts để nút Part 2 mở được nếu có
+# 4) Update dashboard/listening-parts để nút Part 2 mở được nếu có
 # ==================================================
 for p in [Path("templates/core/dashboard.html"), Path("templates/core/listening_parts.html")]:
     if not p.exists():
@@ -621,8 +621,8 @@ for p in [Path("templates/core/dashboard.html"), Path("templates/core/listening_
     d = d.replace('href="/dashboard/part-2/"', 'href="/dashboard/part-2/"')
 
     # Nếu template có chữ Sắp mở gần Part 2 thì đổi thành mở Part 2 theo cách nhẹ, không phá Part 1.
-    d = d.replace("Sẽ thiết kế sau khi hoàn thiện Part 1.", "Bố cục Part 2: 1 topic lớn, 4 voice thảo luận, chọn đáp án từ pool A-D.")
-    d = d.replace("Sắp mở", "Mở Part 2")
+    d = d.replace("Sẽ thiết kế sau khi hoàn thiện Part 1.", "Bố cục Part 2: 1 topic lớn, 4 voice thảo luận, chọn answer từ pool A-D.")
+    d = d.replace("Sắp mở", "Open Part 2")
     d = d.replace("Sẵn sàng thiết kế", "Đã có bố cục")
 
     if old != d:

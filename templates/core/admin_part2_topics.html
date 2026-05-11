@@ -4,7 +4,7 @@
 <html lang="vi" lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Quản lý Part 2</title>
+    <title>Manage Part 2</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
     <style>
@@ -214,12 +214,12 @@ article:hover {
     <section class="top">
         <div>
             <div class="badge">2</div>
-            <h1>Quản lý Part 2</h1>
+            <h1>Manage Part 2</h1>
             <div class="desc">
-                Hiển thị hàng loạt tên chủ đề. Bấm vào từng chủ đề để nhập audio, đáp án A/B/C/D, transcript và dữ liệu đáp án cho 4 người.
+                Hiển thị hàng loạt tên topics. Click từng topics to enter audio, answer A/B/C/D, transcript và data answer cho 4 người.
             </div>
         </div>
-        <a class="back" href="/dashboard/listening-parts/">← Quay lại chọn Part</a>
+        <a class="back" href="/dashboard/listening-parts/">← Back to Part Selection</a>
     </section>
 
     {% if messages %}
@@ -236,20 +236,20 @@ article:hover {
             <input type="hidden" name="action" value="create_topic">
             <div class="form-grid">
                 <div>
-                    <label>Tên chủ đề mới</label>
+                    <label>Tên topics mới</label>
                     <input name="title" placeholder="Ví dụ: When they like listening to music">
                 </div>
                 <div>
                     <label>Mô tả</label>
-                    <textarea name="description" placeholder="Ghi chú ngắn cho chủ đề này..."></textarea>
+                    <textarea name="description" placeholder="Ghi chú ngắn cho topics này..."></textarea>
                 </div>
-                <button class="btn" type="submit">Tạo chủ đề</button>
+                <button class="btn" type="submit">Tạo topics</button>
             </div>
         </form>
     </section>
 
     <section class="card">
-        <h2 style="margin:0 0 16px;font-size:28px;color:#4a0010">Danh sách chủ đề</h2>
+        <h2 style="margin:0 0 16px;font-size:28px;color:#4a0010">Danh sách topics</h2>
 
         {% if topics %}
             <div class="topic-grid">
@@ -265,7 +265,7 @@ article:hover {
             </div>
         {% else %}
             <div class="empty">
-                Chưa có chủ đề Part 2 nào. Hãy tạo chủ đề đầu tiên ở ô bên trên.
+                Chưa có topics Part 2 nào. Hãy tạo topics đầu tiên ở ô bên trên.
             </div>
         {% endif %}
     </section>

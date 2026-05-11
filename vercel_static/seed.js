@@ -39,7 +39,7 @@ seedBtn.addEventListener("click", async () => {
   const auth = authApi.getAuth(app);
   const db = firestoreApi.getFirestore(app);
 
-  log("Đăng nhập Firebase...");
+  log("Login Firebase...");
   await authApi.signInWithEmailAndPassword(auth, email, password);
 
   log("Đọc JSON Part 1...");
@@ -78,5 +78,5 @@ seedBtn.addEventListener("click", async () => {
     }
   );
 
-  log("Xong. Firestore đã có dữ liệu Part 1.");
+  log("Xong. Firestore đã có data Part 1.");
 });

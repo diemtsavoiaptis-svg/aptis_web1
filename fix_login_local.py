@@ -1,28 +1,28 @@
 ﻿from pathlib import Path
 import re
 
-# 1) Sửa form: không bắt email, sửa placeholder tiếng Việt
+# 1) Edit form: không bắt email, sửa placeholder tiếng Việt
 forms_path = Path("core/forms.py")
 forms = forms_path.read_text(encoding="utf-8", errors="ignore")
 
 forms = forms.replace("forms.EmailField", "forms.CharField")
 forms = forms.replace("forms.EmailInput", "forms.TextInput")
 
-forms = forms.replace('"placeholder": "Email"', '"placeholder": "Tài khoản hoặc email"')
-forms = forms.replace('"placeholder": "H? v? t?n h?c vi?n"', '"placeholder": "Họ và tên học viên"')
-forms = forms.replace('"placeholder": "S? ?i?n tho?i"', '"placeholder": "Số điện thoại"')
-forms = forms.replace('"placeholder": "M?t kh?u"', '"placeholder": "Mật khẩu"')
+forms = forms.replace('"placeholder": "Email"', '"placeholder": "Account hoặc email"')
+forms = forms.replace('"placeholder": "Hvt?n student"', '"placeholder": "Full Name student"')
+forms = forms.replace('"placeholder": "S?i?n tho?i"', '"placeholder": "Số điện thoại"')
+forms = forms.replace('"placeholder": "M?t kh?u"', '"placeholder": "Password"')
 
-# Thêm autocomplete username cho ô tài khoản nếu chưa có
+# Add autocomplete username cho ô account nếu chưa có
 forms = forms.replace(
-    '"placeholder": "Tài khoản hoặc email"\n        })',
-    '"placeholder": "Tài khoản hoặc email",\n            "autocomplete": "username"\n        })'
+    '"placeholder": "Account hoặc email"\n        })',
+    '"placeholder": "Account hoặc email",\n            "autocomplete": "username"\n        })'
 )
 
 forms_path.write_text(forms, encoding="utf-8")
 
 
-# 2) Sửa template: nếu còn input type=email thì đổi sang text
+# 2) Edit template: nếu còn input type=email thì đổi sang text
 for p in Path("templates").rglob("*.html"):
     html = p.read_text(encoding="utf-8", errors="ignore")
     html = html.replace('type="email"', 'type="text"')
@@ -30,7 +30,7 @@ for p in Path("templates").rglob("*.html"):
     p.write_text(html, encoding="utf-8")
 
 
-# 3) Sửa login_view: admin/admin@gmail.com đều đăng nhập được, sửa thông báo tiếng Việt
+# 3) Edit login_view: admin/admin@gmail.com đều đăng nhập được, sửa thông báo tiếng Việt
 views_path = Path("core/views.py")
 views = views_path.read_text(encoding="utf-8", errors="ignore")
 
@@ -50,7 +50,7 @@ new_login_view = '''def login_view(request):
 
     if not form.is_valid():
         cache.set(throttle_key, fail_count + 1, 60 * 15)
-        messages.error(request, "Thông tin đăng nhập chưa hợp lệ.")
+        messages.error(request, "Information đăng nhập chưa hợp lệ.")
         return redirect("home")
 
     account = form.cleaned_data["email"].strip()
@@ -63,7 +63,7 @@ new_login_view = '''def login_view(request):
     user_check = User.objects.filter(username__in=candidates).first()
 
     if user_check and not user_check.is_active:
-        messages.error(request, "Tài khoản của bạn đang chờ admin duyệt.")
+        messages.error(request, "Account của bạn đang chờ admin duyệt.")
         return redirect("home")
 
     user = None
@@ -86,7 +86,7 @@ new_login_view = '''def login_view(request):
                 }
             )
 
-        messages.error(request, "Tài khoản hoặc mật khẩu không đúng.")
+        messages.error(request, "Account hoặc mật khẩu không đúng.")
         return redirect("home")
 
     cache.delete(throttle_key)

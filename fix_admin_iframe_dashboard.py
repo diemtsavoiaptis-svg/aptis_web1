@@ -5,7 +5,7 @@ Path("templates/core/dashboard.html").write_text(r'''{% load static %}
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Admin | Điểm TSA Với Aptis</title>
+    <title>Admin | Score TSA Với Aptis</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="{% static 'core/css/admin_panel.css' %}">
 </head>
@@ -15,44 +15,44 @@ Path("templates/core/dashboard.html").write_text(r'''{% load static %}
         <div class="brand">
             <div class="brand-logo">A</div>
             <div>
-                <strong>Điểm TSA</strong>
+                <strong>Score TSA</strong>
                 <span>với Aptis</span>
             </div>
         </div>
 
-        <button class="side-link active" data-title="Tổng quan Admin" data-src="">
-            🎧 Tổng quan Admin
+        <button class="side-link active" data-title="Admin Overview" data-src="">
+            🎧 Admin Overview
         </button>
 
-        <button class="side-link" data-title="Quản lý câu hỏi Listening" data-src="/admin/core/listeningquestion/">
-            🎧 Quản lý câu hỏi Listening
+        <button class="side-link" data-title="Manage questions Listening" data-src="/admin/core/listeningquestion/">
+            🎧 Manage questions Listening
         </button>
 
-        <button class="side-link" data-title="Duyệt học viên" data-src="/admin/core/studentprofile/">
-            ✅ Duyệt học viên
+        <button class="side-link" data-title="Duyệt student" data-src="/admin/core/studentprofile/">
+            ✅ Duyệt student
         </button>
 
-        <button class="side-link" data-title="Quản lý bài học" data-src="/admin/core/lesson/">
-            📚 Quản lý bài học
+        <button class="side-link" data-title="Manage lesson" data-src="/admin/core/lesson/">
+            📚 Manage lesson
         </button>
 
-        <button class="side-link" data-title="Cảnh báo bảo mật" data-src="/admin/core/securityalert/">
-            🛡️ Cảnh báo bảo mật
+        <button class="side-link" data-title="Security Alerts" data-src="/admin/core/securityalert/">
+            🛡️ Security Alerts
         </button>
 
         <a class="side-link" href="{% url 'listening' %}">
-            👀 Xem giao diện học viên
+            👀 View Student Interface
         </a>
 
         <a class="side-link logout" href="{% url 'logout' %}">
-            🚪 Đăng xuất
+            🚪 Logout
         </a>
     </aside>
 
     <main class="admin-main">
         <header class="admin-header">
             <div>
-                <p class="eyebrow">Dashboard quản trị</p>
+                <p class="eyebrow">Admin Dashboard</p>
                 <h1 id="panelTitle">Xin chào, {{ request.user.username }}</h1>
                 <p class="muted">Bấm menu bên trái, nội dung sẽ hiện ở khung bên phải mà không đổi trang.</p>
             </div>
@@ -61,33 +61,33 @@ Path("templates/core/dashboard.html").write_text(r'''{% load static %}
 
         <section id="overviewPanel" class="overview-panel">
             <div class="quick-grid">
-                <button class="quick-card" data-title="Quản lý câu hỏi Listening" data-src="/admin/core/listeningquestion/">
+                <button class="quick-card" data-title="Manage questions Listening" data-src="/admin/core/listeningquestion/">
                     <span>🎧</span>
                     <strong>Listening</strong>
-                    <small>Thêm/sửa câu hỏi, audio, đáp án và transcript.</small>
+                    <small>Add/sửa questions, audio, answer và transcript.</small>
                 </button>
 
-                <button class="quick-card" data-title="Duyệt học viên" data-src="/admin/core/studentprofile/">
+                <button class="quick-card" data-title="Duyệt student" data-src="/admin/core/studentprofile/">
                     <span>✅</span>
-                    <strong>Học viên</strong>
-                    <small>Duyệt tài khoản học viên mới đăng ký.</small>
+                    <strong>Student</strong>
+                    <small>Duyệt account student mới đăng ký.</small>
                 </button>
 
-                <button class="quick-card" data-title="Quản lý bài học" data-src="/admin/core/lesson/">
+                <button class="quick-card" data-title="Manage lesson" data-src="/admin/core/lesson/">
                     <span>📚</span>
-                    <strong>Bài học</strong>
-                    <small>Quản lý tài liệu, mô tả và video học tập.</small>
+                    <strong>Lesson</strong>
+                    <small>Manage tài liệu, mô tả và video học tập.</small>
                 </button>
             </div>
 
             <div class="lesson-card">
                 <div class="section-head">
                     <div>
-                        <h2>Danh sách bài học</h2>
-                        <p>Các bài học đang có trong hệ thống.</p>
+                        <h2>Danh sách lesson</h2>
+                        <p>Các lesson đang có trong hệ thống.</p>
                     </div>
-                    <button class="ghost-btn" data-title="Thêm bài học" data-src="/admin/core/lesson/add/">
-                        + Thêm bài học
+                    <button class="ghost-btn" data-title="Add lesson" data-src="/admin/core/lesson/add/">
+                        + Add lesson
                     </button>
                 </div>
 
@@ -102,7 +102,7 @@ Path("templates/core/dashboard.html").write_text(r'''{% load static %}
                         </article>
                     {% empty %}
                         <div class="empty-box">
-                            Chưa có bài học nào. Bấm “Thêm bài học” để tạo nội dung đầu tiên.
+                            Chưa có lesson nào. Bấm “Add lesson” để tạo nội dung đầu tiên.
                         </div>
                     {% endfor %}
                 </div>
@@ -112,7 +112,7 @@ Path("templates/core/dashboard.html").write_text(r'''{% load static %}
         <section id="framePanel" class="frame-panel" hidden>
             <div class="frame-toolbar">
                 <div>
-                    <strong id="frameTitle">Quản lý</strong>
+                    <strong id="frameTitle">Manage</strong>
                     <span>Đang hiển thị trong dashboard, không rời khỏi trang.</span>
                 </div>
                 <button class="ghost-btn" id="backOverview">← Về tổng quan</button>
@@ -153,8 +153,8 @@ Path("templates/core/dashboard.html").write_text(r'''{% load static %}
         overviewPanel.hidden = true;
         framePanel.hidden = false;
         adminFrame.src = src;
-        frameTitle.textContent = title || "Quản lý";
-        panelTitle.textContent = title || "Quản lý";
+        frameTitle.textContent = title || "Manage";
+        panelTitle.textContent = title || "Manage";
         setActive(button);
     }
 

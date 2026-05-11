@@ -74,7 +74,7 @@ def admin_part2_gioi_detail(request, topic_id):
         topic.data_choices = request.POST.get("data_choices", "").strip()
         topic.save()
 
-        # Lưu đáp án đúng từng person
+        # Save answer đúng từng person
         for voice in voices:
             prefix = f"voice_{voice.id}_"
             voice.is_locked = request.POST.get(prefix + "is_locked") == "on"
@@ -84,7 +84,7 @@ def admin_part2_gioi_detail(request, topic_id):
             voice.audio_url = topic.audio_url
             voice.save()
 
-        messages.success(request, "Đã lưu. Các lựa chọn đáp án đã được cập nhật từ dữ liệu đáp án tổng.")
+        messages.success(request, "Đã lưu. Các lựa chọn answer đã được cập nhật từ data answer tổng.")
         return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
     options = _split_total_answer_options(topic)
@@ -125,7 +125,7 @@ def student_part2_gioi_page(request, topic_id):
 # ===== END FINAL FIX: Part 2 May Gioi dropdown options from total data =====
 '''
 
-# Thêm block cuối để override các function cũ
+# Add block cuối để override các function cũ
 if "FINAL FIX: Part 2 May Gioi dropdown options from total data" not in s:
     s += block
 
@@ -138,11 +138,11 @@ views.write_text(s, encoding="utf-8")
 tpl = Path("templates/core/admin_part2_gioi_detail.html")
 t = tpl.read_text(encoding="utf-8", errors="ignore")
 
-# Sửa lại vùng select đáp án đúng cho từng Person
+# Edit lại vùng select answer đúng cho từng Person
 t = re.sub(
     r'''<select name="voice_\{\{ voice\.id \}\}_correct_data">[\s\S]*?</select>''',
     '''<select name="voice_{{ voice.id }}_correct_data">
-                                <option value="">-- Chọn đáp án đúng --</option>
+                                <option value="">-- Choose answer đúng --</option>
                                 {% for option in row.options %}
                                     <option value="{{ option }}" {% if voice.correct_data == option %}selected{% endif %}>
                                         {{ option }}
@@ -152,15 +152,15 @@ t = re.sub(
     t
 )
 
-# Sửa note cho rõ
+# Edit note cho rõ
 t = t.replace(
-    "Nếu chưa thấy lựa chọn, nhập dữ liệu đáp án ở cột cuối rồi lưu trước.",
-    "Nếu chưa thấy lựa chọn, nhập dữ liệu đáp án tổng ở phía trên, mỗi đáp án một dòng, rồi bấm Lưu."
+    "Nếu chưa thấy lựa chọn, nhập data answer ở cột cuối rồi lưu trước.",
+    "Nếu chưa thấy lựa chọn, nhập data answer tổng ở phía trên, mỗi answer một dòng, rồi bấm Save."
 )
 
 t = t.replace(
     "Person {{ voice.order }} chọn 1 trong 4 lựa chọn.",
-    "Person {{ voice.order }} chọn 1 trong các dữ liệu đáp án tổng."
+    "Person {{ voice.order }} chọn 1 trong các data answer tổng."
 )
 
 tpl.write_text(t, encoding="utf-8")
