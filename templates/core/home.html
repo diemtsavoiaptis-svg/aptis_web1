@@ -373,6 +373,61 @@ body{
 }
 </style>
 
+
+<style id="dynamic-home-background">
+{% if active_background_url %}
+html,body{
+    min-height:100vh;
+}
+body{
+    background-image:url("{{ active_background_url }}") !important;
+    background-size:cover !important;
+    background-position:center center !important;
+    background-repeat:no-repeat !important;
+    background-attachment:fixed !important;
+}
+{% endif %}
+</style>
+
+
+<style id="login-ticker-style">
+.login-floating-ticker{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:28px;
+    z-index:50;
+    pointer-events:none;
+    overflow:hidden;
+}
+.login-floating-ticker-inner{
+    display:flex;
+    width:max-content;
+    animation:loginTickerMove 28s linear infinite;
+}
+.login-floating-ticker-item{
+    margin-right:38px;
+    padding:12px 22px;
+    border-radius:999px;
+    background:rgba(255,255,255,.82);
+    border:1px solid rgba(255,209,220,.9);
+    color:#8a0015;
+    font-weight:950;
+    font-size:17px;
+    box-shadow:0 12px 26px rgba(180,0,30,.12);
+    backdrop-filter:blur(10px);
+    white-space:nowrap;
+}
+@keyframes loginTickerMove{
+    from{transform:translateX(0)}
+    to{transform:translateX(-50%)}
+}
+@media(max-width:700px){
+    .login-floating-ticker{bottom:16px}
+    .login-floating-ticker-item{font-size:14px;padding:10px 16px}
+}
+</style>
+
 </head>
 <body>
 
@@ -526,6 +581,18 @@ body{
     }
 })();
 </script>
+
+
+<div class="login-floating-ticker">
+    <div class="login-floating-ticker-inner">
+        {% for text in login_ticker_texts %}
+            <span class="login-floating-ticker-item">{{ text }}</span>
+        {% endfor %}
+        {% for text in login_ticker_texts %}
+            <span class="login-floating-ticker-item">{{ text }}</span>
+        {% endfor %}
+    </div>
+</div>
 
 </body>
 </html>

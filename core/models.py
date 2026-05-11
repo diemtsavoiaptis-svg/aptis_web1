@@ -96,6 +96,11 @@ class ListeningQuestion(models.Model):
 class HomeBackground(models.Model):
     title = models.CharField(max_length=150, default=_vi(r"\u1ea2nh n\u1ec1n trang ch\u1ee7"), verbose_name=_vi(r"T\u00ean \u1ea3nh"))
     image = models.FileField(upload_to="home_backgrounds/", verbose_name=_vi(r"\u1ea2nh n\u1ec1n"))
+    ticker_text_1 = models.CharField("Chữ chạy 1", max_length=255, blank=True, default="18 HỌC VIÊN ĐÃ ĐĂNG KÝ")
+    ticker_text_2 = models.CharField("Chữ chạy 2", max_length=255, blank=True, default="CAM KẾT B1+ APTIS")
+    ticker_text_3 = models.CharField("Chữ chạy 3", max_length=255, blank=True, default="30 NGÀY TĂNG TỐC")
+    ticker_text_4 = models.CharField("Chữ chạy 4", max_length=255, blank=True, default="KÈM 1:1 LINH HOẠT")
+    ticker_text_5 = models.CharField("Chữ chạy 5", max_length=255, blank=True, default="LUYỆN NGHE 4 PART")
     is_active = models.BooleanField(default=True, verbose_name=_vi(r"\u0110ang s\u1eed d\u1ee5ng"))
     created_at = models.DateTimeField(auto_now_add=True, verbose_name=_vi(r"Ng\u00e0y t\u1ea3i l\u00ean"))
 
@@ -277,3 +282,56 @@ class ListeningPartQuestion(models.Model):
     def __str__(self):
         return f"{self.material} - Câu {self.order}"
 # ===== End Listening Part 3/4 data models =====
+
+
+class SiteBackground(models.Model):
+    name = models.CharField("Tên ảnh", max_length=255, blank=True)
+    image = models.ImageField("Ảnh nền upload", upload_to="backgrounds/", blank=True, null=True)
+    image_url = models.URLField("Đường dẫn ảnh", blank=True)
+    is_active = models.BooleanField("Đang sử dụng", default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Ảnh nền giao diện"
+        verbose_name_plural = "Ảnh nền giao diện"
+
+    def __str__(self):
+        return self.name or "Ảnh nền giao diện"
+
+    @property
+    def display_url(self):
+        if self.image:
+            return self.image.url
+        return self.image_url
+
+    @property
+    def ticker_texts(self):
+        return [
+            self.ticker_text_1,
+            self.ticker_text_2,
+            self.ticker_text_3,
+            self.ticker_text_4,
+            self.ticker_text_5,
+        ]
+
+
+
+class LoginThumbnail(models.Model):
+    name = models.CharField("Tên thumbnail", max_length=255, blank=True)
+    image = models.ImageField("Ảnh thumbnail upload", upload_to="login_thumbnails/", blank=True, null=True)
+    image_url = models.URLField("Đường dẫn ảnh thumbnail", blank=True)
+    is_active = models.BooleanField("Đang sử dụng", default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Thumbnail đăng nhập"
+        verbose_name_plural = "Thumbnail đăng nhập"
+
+    def __str__(self):
+        return self.name or "Thumbnail đăng nhập"
+
+    @property
+    def display_url(self):
+        if self.image:
+            return self.image.url
+        return self.image_url

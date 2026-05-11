@@ -4,7 +4,7 @@ from django.utils.safestring import mark_safe
 from .drive_audio import extract_drive_file_id
 
 from .forms import ListeningQuestionAdminForm
-from .models import StudentProfile, Lesson, ListeningQuestion, HomeBackground, UserDeviceSession, SecurityAlert, Part2Topic, Part2Voice
+from .models import StudentProfile, Lesson, ListeningQuestion, HomeBackground, UserDeviceSession, SecurityAlert, Part2Topic, Part2Voice, SiteBackground, LoginThumbnail
 from .supabase_storage import build_audio_key, upload_file_to_supabase
 
 
@@ -369,3 +369,53 @@ class Part2VoiceAdmin(admin.ModelAdmin):
     search_fields = ("topic__title", "transcript", "data_choices")
 # ===== End Admin Part 2 =====
 
+
+
+
+
+
+
+# ===== Safe admin register for interface images =====
+from django.contrib.admin.sites import NotRegistered
+
+for _model in [SiteBackground, LoginThumbnail]:
+    try:
+        admin.site.unregister(_model)
+    except NotRegistered:
+        pass
+
+
+@admin.register(SiteBackground)
+class SiteBackgroundAdmin(admin.ModelAdmin):
+    list_display = ("name", "is_active", "created_at")
+    list_filter = ("is_active",)
+    search_fields = ("name", "image_url")
+
+
+
+# ===== End safe admin register for interface images =====
+
+
+# ===== Safe LoginThumbnail admin register =====
+from django.contrib.admin.sites import NotRegistered
+
+try:
+    admin.site.unregister(LoginThumbnail)
+except NotRegistered:
+    pass
+
+
+@admin.register(LoginThumbnail)
+class LoginThumbnailAdmin(admin.ModelAdmin):
+    list_display = ("name", "is_active", "created_at")
+    list_filter = ("is_active",)
+    search_fields = (
+        "name",
+        "image_url",
+        "ticker_text_1",
+        "ticker_text_2",
+        "ticker_text_3",
+        "ticker_text_4",
+        "ticker_text_5",
+    )
+# ===== End Safe LoginThumbnail admin register =====

@@ -1,0 +1,373 @@
+{% load static %}
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Cài đặt ảnh nền giao diện</title>
+<link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
+<style>
+:root{
+    --red:#e60023;
+    --red2:#ff5f76;
+    --deep:#7a0010;
+    --dark:#3f0011;
+    --line:#ffd1dc;
+    --muted:#667085;
+}
+*{box-sizing:border-box}
+body{
+    margin:0;
+    min-height:100vh;
+    background:
+        radial-gradient(circle at top right,rgba(255,95,118,.18),transparent 34%),
+        linear-gradient(135deg,#fffafa,#fff0f4 48%,#fff7f9);
+    font-family:"Segoe UI",Tahoma,Arial,sans-serif;
+    color:var(--dark);
+}
+.wrap{
+    max-width:1420px;
+    margin:0 auto;
+    padding:28px 20px 46px;
+}
+.hero{
+    background:white;
+    border:1px solid var(--line);
+    border-radius:30px;
+    padding:30px;
+    box-shadow:0 18px 44px rgba(180,0,30,.07);
+    display:flex;
+    justify-content:space-between;
+    gap:20px;
+    align-items:flex-start;
+}
+.kicker{
+    color:var(--red);
+    font-size:15px;
+    font-weight:950;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+h1{
+    margin:12px 0 8px;
+    font-size:48px;
+    line-height:1.02;
+    letter-spacing:-.055em;
+    color:#4a0010;
+}
+.desc{
+    color:var(--muted);
+    font-size:18px;
+    line-height:1.6;
+    font-weight:650;
+}
+.back{
+    min-height:48px;
+    padding:0 20px;
+    border-radius:16px;
+    background:linear-gradient(135deg,var(--red),var(--red2));
+    color:white;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:950;
+    box-shadow:0 14px 28px rgba(230,0,35,.16);
+}
+.panel{
+    margin-top:22px;
+    background:rgba(255,255,255,.82);
+    border:1px solid var(--line);
+    border-radius:28px;
+    padding:22px;
+    box-shadow:0 18px 44px rgba(180,0,30,.07);
+}
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1.08fr;
+    gap:22px;
+}
+.card{
+    background:white;
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:22px;
+}
+h2{
+    margin:0 0 16px;
+    font-size:22px;
+    color:#4a0010;
+}
+.preview{
+    position:relative;
+    width:100%;
+    aspect-ratio:16/9;
+    border-radius:16px;
+    overflow:hidden;
+    background:#fff1f4;
+    border:1px solid #ffd1dc;
+}
+.preview img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+.empty-preview{
+    height:100%;
+    display:grid;
+    place-items:center;
+    color:#9f0018;
+    font-weight:950;
+    text-align:center;
+    padding:20px;
+}
+.badge{
+    position:absolute;
+    top:14px;
+    left:14px;
+    min-height:36px;
+    padding:0 14px;
+    border-radius:12px;
+    background:linear-gradient(135deg,var(--red),var(--red2));
+    color:white;
+    display:flex;
+    align-items:center;
+    font-weight:950;
+    box-shadow:0 10px 20px rgba(0,0,0,.12);
+}
+.file-info{
+    margin-top:14px;
+    background:#fff1f4;
+    border:1px solid #ffe1e7;
+    border-radius:16px;
+    padding:16px;
+    font-weight:850;
+}
+.file-info small{
+    display:block;
+    margin-top:5px;
+    color:var(--muted);
+    font-weight:650;
+}
+label{
+    display:block;
+    margin:0 0 9px;
+    color:#5a0012;
+    font-weight:950;
+}
+.upload-box{
+    border:2px dashed #ffb6c2;
+    border-radius:18px;
+    min-height:190px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    background:linear-gradient(135deg,#fffafa,#fff5f7);
+    cursor:pointer;
+    padding:20px;
+}
+.upload-icon{
+    width:68px;
+    height:68px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    background:#fff1f4;
+    color:var(--red);
+    font-size:32px;
+    margin-bottom:12px;
+}
+.upload-box strong{
+    font-size:18px;
+}
+.upload-box span{
+    margin-top:5px;
+    color:var(--muted);
+    font-weight:650;
+}
+input[type=file]{
+    display:none;
+}
+.hint{
+    margin-top:12px;
+    color:var(--muted);
+    line-height:1.5;
+    font-weight:650;
+}
+.or{
+    margin:22px 0;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    color:#ff6f86;
+    font-weight:950;
+}
+.or:before,.or:after{
+    content:"";
+    height:1px;
+    flex:1;
+    background:#ffd1dc;
+}
+input[type=text],
+input[type=url]{
+    width:100%;
+    height:52px;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:0 14px;
+    font:inherit;
+    outline:none;
+    background:white;
+}
+input:focus{
+    border-color:var(--red);
+    box-shadow:0 0 0 4px rgba(230,0,35,.09);
+}
+.note{
+    margin-top:16px;
+    padding:15px 16px;
+    border-radius:16px;
+    border:1px solid #ffb6c2;
+    background:#fff1f4;
+    color:#9f0018;
+    font-weight:750;
+    line-height:1.6;
+}
+.actions{
+    margin-top:24px;
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:18px;
+}
+button{
+    min-height:58px;
+    border-radius:16px;
+    border:1px solid var(--line);
+    font:inherit;
+    font-size:18px;
+    font-weight:950;
+    cursor:pointer;
+}
+.save{
+    background:linear-gradient(135deg,var(--red),var(--red2));
+    color:white;
+    border:0;
+    box-shadow:0 16px 30px rgba(230,0,35,.18);
+}
+.danger,.reset{
+    background:white;
+    color:var(--red);
+}
+.message{
+    margin-top:14px;
+    padding:13px 16px;
+    border-radius:16px;
+    background:#ecfdf3;
+    color:#027a48;
+    font-weight:850;
+}
+@media(max-width:900px){
+    .hero{flex-direction:column}
+    .grid{grid-template-columns:1fr}
+    .actions{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+<section class="hero">
+    <div>
+        <div class="kicker">Dashboard quản trị</div>
+        <h1>Cài đặt ảnh nền giao diện</h1>
+        <div class="desc">Tải ảnh nền mới cho trang chủ hoặc thay đổi ảnh hiện tại.</div>
+    </div>
+    <a class="back" href="/dashboard/">← Quay lại Dashboard</a>
+</section>
+
+{% for message in messages %}
+    <div class="message">{{ message }}</div>
+{% endfor %}
+
+<section class="panel">
+<form method="post" enctype="multipart/form-data">
+{% csrf_token %}
+
+<div class="grid">
+    <div class="card">
+        <h2>Ảnh nền hiện tại</h2>
+
+        <div class="preview">
+            {% if current and current.display_url %}
+                <div class="badge">✅ Đang sử dụng</div>
+                <img src="{{ current.display_url }}" alt="Ảnh nền hiện tại">
+            {% else %}
+                <div class="empty-preview">
+                    Chưa có ảnh nền tùy chỉnh.<br>
+                    Trang chủ đang dùng nền mặc định.
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="file-info">
+            {% if current %}
+                {{ current.name|default:"Ảnh nền giao diện" }}
+                <small>
+                    {% if current.image %}
+                        Ảnh upload từ máy
+                    {% else %}
+                        Ảnh từ đường dẫn
+                    {% endif %}
+                </small>
+            {% else %}
+                Ảnh nền mặc định
+                <small>Chưa có ảnh tùy chỉnh</small>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Tải ảnh nền mới</h2>
+
+        <label>Chọn ảnh từ máy</label>
+        <label class="upload-box">
+            <input type="file" name="image" accept="image/png,image/jpeg,image/webp">
+            <div class="upload-icon">☁️</div>
+            <strong>Kéo & thả ảnh vào đây</strong>
+            <span>hoặc nhấp để chọn tệp</span>
+        </label>
+
+        <div class="hint">
+            Định dạng: JPG, PNG, WebP • Khuyến nghị: 1920×1080 hoặc lớn hơn.
+        </div>
+
+        <div class="or">HOẶC</div>
+
+        <label>Hoặc dán đường dẫn ảnh</label>
+        <input type="url" name="image_url" placeholder="https://example.com/background.jpg">
+
+        <div style="height:16px"></div>
+
+        <label>Tên ảnh</label>
+        <input type="text" name="name" placeholder="Ví dụ: Ảnh nền trang chủ">
+
+        <div class="note">
+            Ảnh nền sẽ hiển thị ở trang chủ. Nên chọn ảnh có độ phân giải cao để hiển thị đẹp trên mọi thiết bị.
+        </div>
+    </div>
+</div>
+
+<div class="actions">
+    <button class="save" name="action" value="save_background" type="submit">💾 Lưu ảnh nền</button>
+    <button class="danger" name="action" value="delete_background" type="submit">🗑 Xóa ảnh hiện tại</button>
+    <button class="reset" name="action" value="restore_default" type="submit">↻ Khôi phục mặc định</button>
+</div>
+
+</form>
+</section>
+
+</main>
+</body>
+</html>

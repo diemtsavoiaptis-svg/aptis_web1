@@ -14,7 +14,7 @@ from django.views.decorators.http import require_POST
 
 from .forms import RegisterForm, LoginForm
 from .drive_audio import build_drive_audio_url, extract_drive_file_id
-from .models import StudentProfile, Lesson, ListeningQuestion, HomeBackground, SecurityAlert, Part2Topic, Part2Voice, ListeningPartMaterial, ListeningPartQuestion
+from .models import StudentProfile, Lesson, ListeningQuestion, HomeBackground, SecurityAlert, Part2Topic, Part2Voice, ListeningPartMaterial, ListeningPartQuestion, SiteBackground, LoginThumbnail
 from .supabase_storage import create_signed_url
 
 
@@ -1830,3 +1830,148 @@ def student_part3_page(request):
 def student_part4_page(request):
     return _student_part34_page(request, 4)
 # ===== End Listening Part 3/4 material upload + student practice =====
+
+
+# ===== Admin background image setting =====
+def _is_admin_background_user(user):
+    return user.is_authenticated and (user.is_staff or user.is_superuser)
+
+
+@user_passes_test(_is_admin_background_user)
+def admin_background_settings(request):
+    current = SiteBackground.objects.filter(is_active=True).order_by("-id").first()
+
+    if request.method == "POST":
+        action = request.POST.get("action")
+
+        if action == "save_background":
+            name = request.POST.get("name", "").strip()
+            image_url = request.POST.get("image_url", "").strip()
+            image_file = request.FILES.get("image")
+
+            if not image_file and not image_url:
+                messages.error(request, "Bạn cần chọn ảnh từ máy hoặc dán đường dẫn ảnh.")
+                return redirect("admin_background_settings")
+
+            SiteBackground.objects.update(is_active=False)
+
+            bg = SiteBackground.objects.create(
+                name=name or "Ảnh nền trang chủ",
+                image=image_file if image_file else None,
+                image_url=image_url,
+                is_active=True,
+            )
+
+            messages.success(request, "Đã lưu ảnh nền giao diện.")
+            return redirect("admin_background_settings")
+
+        if action == "delete_background":
+            if current:
+                current.is_active = False
+                current.save()
+                messages.success(request, "Đã xóa ảnh nền hiện tại.")
+            return redirect("admin_background_settings")
+
+        if action == "restore_default":
+            SiteBackground.objects.update(is_active=False)
+            messages.success(request, "Đã khôi phục ảnh nền mặc định.")
+            return redirect("admin_background_settings")
+
+    return render(request, "core/admin_background_settings.html", {
+        "current": current,
+    })
+# ===== End admin background image setting =====
+
+
+# ===== Admin login thumbnail setting =====
+def _is_admin_login_thumbnail_user(user):
+    return user.is_authenticated and (user.is_staff or user.is_superuser)
+
+
+@user_passes_test(_is_admin_login_thumbnail_user)
+def admin_login_thumbnail_settings(request):
+    current = LoginThumbnail.objects.filter(is_active=True).order_by("-id").first()
+
+    if request.method == "POST":
+        action = request.POST.get("action")
+
+        if action == "save_thumbnail":
+            name = request.POST.get("name", "").strip()
+            image_url = request.POST.get("image_url", "").strip()
+            image_file = request.FILES.get("image")
+
+            ticker_text_1 = request.POST.get("ticker_text_1", "").strip() or "18 HỌC VIÊN ĐÃ ĐĂNG KÝ"
+            ticker_text_2 = request.POST.get("ticker_text_2", "").strip() or "CAM KẾT B1+ APTIS"
+            ticker_text_3 = request.POST.get("ticker_text_3", "").strip() or "30 NGÀY TĂNG TỐC"
+            ticker_text_4 = request.POST.get("ticker_text_4", "").strip() or "KÈM 1:1 LINH HOẠT"
+            ticker_text_5 = request.POST.get("ticker_text_5", "").strip() or "LUYỆN NGHE 4 PART"
+
+            # Nếu không chọn ảnh mới, vẫn cho phép chỉ lưu chữ chạy vào thumbnail hiện tại
+            if not image_file and not image_url and current:
+                current.name = name or current.name or "Thumbnail màn hình đăng nhập"
+                current.ticker_text_1 = ticker_text_1
+                current.ticker_text_2 = ticker_text_2
+                current.ticker_text_3 = ticker_text_3
+                current.ticker_text_4 = ticker_text_4
+                current.ticker_text_5 = ticker_text_5
+                current.is_active = True
+                current.save()
+                messages.success(request, "Đã lưu 5 chữ chạy ngang.")
+                return redirect("admin_login_thumbnail_settings")
+
+            if not image_file and not image_url and not current:
+                LoginThumbnail.objects.create(
+                    name=name or "Thumbnail màn hình đăng nhập",
+                    ticker_text_1=ticker_text_1,
+                    ticker_text_2=ticker_text_2,
+                    ticker_text_3=ticker_text_3,
+                    ticker_text_4=ticker_text_4,
+                    ticker_text_5=ticker_text_5,
+                    is_active=True,
+                )
+                messages.success(request, "Đã tạo cấu hình chữ chạy ngang.")
+                return redirect("admin_login_thumbnail_settings")
+
+            LoginThumbnail.objects.update(is_active=False)
+
+            LoginThumbnail.objects.create(
+                name=name or "Thumbnail màn hình đăng nhập",
+                image=image_file if image_file else None,
+                image_url=image_url,
+                ticker_text_1=ticker_text_1,
+                ticker_text_2=ticker_text_2,
+                ticker_text_3=ticker_text_3,
+                ticker_text_4=ticker_text_4,
+                ticker_text_5=ticker_text_5,
+                is_active=True,
+            )
+
+            messages.success(request, "Đã lưu thumbnail và 5 chữ chạy ngang.")
+            return redirect("admin_login_thumbnail_settings")
+
+        if action == "delete_thumbnail":
+            if current:
+                current.image = None
+                current.image_url = ""
+                current.save()
+                messages.success(request, "Đã xóa ảnh thumbnail hiện tại, giữ lại chữ chạy ngang.")
+            return redirect("admin_login_thumbnail_settings")
+
+        if action == "restore_default":
+            LoginThumbnail.objects.update(is_active=False)
+            LoginThumbnail.objects.create(
+                name="Thumbnail mặc định",
+                ticker_text_1="18 HỌC VIÊN ĐÃ ĐĂNG KÝ",
+                ticker_text_2="CAM KẾT B1+ APTIS",
+                ticker_text_3="30 NGÀY TĂNG TỐC",
+                ticker_text_4="KÈM 1:1 LINH HOẠT",
+                ticker_text_5="LUYỆN NGHE 4 PART",
+                is_active=True,
+            )
+            messages.success(request, "Đã khôi phục thumbnail/chữ chạy mặc định.")
+            return redirect("admin_login_thumbnail_settings")
+
+    return render(request, "core/admin_login_thumbnail_settings.html", {
+        "current": current,
+    })
+# ===== End admin login thumbnail setting =====
