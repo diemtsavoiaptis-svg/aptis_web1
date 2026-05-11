@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qu?n l? Part 3 | ?i?m TSA V? Aptis</title>
+
+    <style>
+        :root {
+            --red: #ef233c;
+            --red-dark: #9f001f;
+            --dark: #3b0010;
+            --soft: #fff1f4;
+            --soft-2: #fff7f9;
+            --border: #ffd0d8;
+            --muted: #667085;
+            --white: #ffffff;
+            --shadow: 0 20px 48px rgba(239, 35, 60, 0.10);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: var(--dark);
+            background:
+                radial-gradient(circle at top left, rgba(239, 35, 60, .10), transparent 34%),
+                linear-gradient(180deg, #fff7f9 0%, #ffffff 100%);
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .page {
+            min-height: 100vh;
+            padding: 32px;
+        }
+
+        .wrap {
+            max-width: 1240px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            padding: 34px;
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            background: rgba(255, 255, 255, .96);
+            box-shadow: var(--shadow);
+        }
+
+        .kicker {
+            margin: 0 0 10px;
+            color: var(--red);
+            font-size: 14px;
+            font-weight: 950;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(38px, 5vw, 64px);
+            line-height: 1;
+            font-weight: 950;
+        }
+
+        .desc {
+            max-width: 820px;
+            margin: 14px 0 0;
+            color: var(--muted);
+            font-size: 17px;
+            font-weight: 650;
+            line-height: 1.6;
+        }
+
+        .actions {
+            margin-top: 22px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 48px;
+            padding: 0 22px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            background: var(--white);
+            color: var(--red-dark);
+            font-weight: 900;
+            text-decoration: none;
+            transition: .22s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 32px rgba(239, 35, 60, .18);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+            margin-top: 22px;
+        }
+
+        .stat {
+            padding: 22px;
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            background: var(--white);
+        }
+
+        .stat span {
+            display: block;
+            color: var(--muted);
+            font-weight: 800;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .stat strong {
+            display: block;
+            color: var(--red);
+            font-size: 34px;
+            font-weight: 950;
+        }
+
+        .levels {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+            margin-top: 24px;
+        }
+
+        .level-card {
+            min-height: 370px;
+            padding: 30px;
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            background: var(--white);
+            box-shadow: var(--shadow);
+            transition: .22s ease;
+        }
+
+        .level-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 22px 52px rgba(239, 35, 60, .14);
+        }
+
+        .level-head {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .level-no {
+            width: 58px;
+            height: 58px;
+            display: grid;
+            place-items: center;
+            border-radius: 20px;
+            background: var(--red);
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 950;
+        }
+
+        .level-card h2 {
+            margin: 0;
+            font-size: 32px;
+            font-weight: 950;
+            line-height: 1.1;
+        }
+
+        .level-card p {
+            margin: 8px 0 0;
+            color: var(--muted);
+            font-size: 15px;
+            font-weight: 650;
+            line-height: 1.55;
+        }
+
+        .empty {
+            min-height: 210px;
+            display: grid;
+            place-items: center;
+            padding: 24px;
+            border: 1px dashed #ff9aac;
+            border-radius: 24px;
+            background: var(--soft-2);
+            text-align: center;
+        }
+
+        .empty strong {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-size: 23px;
+            font-weight: 950;
+        }
+
+        .empty span {
+            color: var(--muted);
+            font-size: 15px;
+            font-weight: 650;
+            line-height: 1.55;
+        }
+
+        .answer-box {
+            margin-top: 24px;
+            padding: 22px;
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            background: var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        .answer-box h2 {
+            margin: 0 0 14px;
+            font-size: 26px;
+            font-weight: 950;
+        }
+
+        .answer-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .answer-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: var(--soft-2);
+        }
+
+        .answer-code {
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            border-radius: 16px;
+            background: var(--red);
+            color: #ffffff;
+            font-size: 22px;
+            font-weight: 950;
+        }
+
+        .answer-text strong {
+            display: block;
+            font-size: 18px;
+            font-weight: 950;
+        }
+
+        .answer-text span {
+            display: block;
+            margin-top: 3px;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        @media (max-width: 900px) {
+            .page {
+                padding: 18px;
+            }
+
+            .hero,
+            .level-card,
+            .answer-box {
+                padding: 24px;
+                border-radius: 22px;
+            }
+
+            .stats,
+            .levels,
+            .answer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="page">
+        <div class="wrap">
+            <section class="hero">
+                <p class="kicker">Dashboard qu?n tr?</p>
+                <h1>Qu?n l? Part 3</h1>
+                <p class="desc">
+                    ??y l? khu v?c ri?ng c?a Part 3. Trang n?y ch? gi? b? c?c
+                    <strong>M?y gi?i</strong> v? <strong>M?y k?m</strong>.
+                    Kh?ng l?y b?t k? topic, c?u h?i, audio hay file ghi ?m n?o t? Part 2.
+                </p>
+
+                <div class="actions">
+                    <a class="btn" href="/dashboard/">? Quay l?i Dashboard</a>
+                </div>
+            </section>
+
+            <section class="stats">
+                <div class="stat">
+                    <span>T?ng topic Part 3</span>
+                    <strong>0</strong>
+                </div>
+                <div class="stat">
+                    <span>M?y gi?i</span>
+                    <strong>0</strong>
+                </div>
+                <div class="stat">
+                    <span>M?y k?m</span>
+                    <strong>0</strong>
+                </div>
+                <div class="stat">
+                    <span>Audio Part 3</span>
+                    <strong>0</strong>
+                </div>
+            </section>
+
+            <section class="levels">
+                <article class="level-card">
+                    <div class="level-head">
+                        <div class="level-no">3</div>
+                        <div>
+                            <h2>M?y gi?i</h2>
+                            <p>Nh?m ch? ?? m?c gi?i c?a Part 3.</p>
+                        </div>
+                    </div>
+
+                    <div class="empty">
+                        <div>
+                            <strong>Ch?a c? ch? ??</strong>
+                            <span>Ph?n M?y gi?i c?a Part 3 hi?n ch?a c? topic n?o.</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="level-card">
+                    <div class="level-head">
+                        <div class="level-no">3</div>
+                        <div>
+                            <h2>M?y k?m</h2>
+                            <p>Nh?m ch? ?? m?c k?m c?a Part 3.</p>
+                        </div>
+                    </div>
+
+                    <div class="empty">
+                        <div>
+                            <strong>Ch?a c? ch? ??</strong>
+                            <span>Ph?n M?y k?m c?a Part 3 hi?n ch?a c? topic n?o.</span>
+                        </div>
+                    </div>
+                </article>
+            </section>
+
+            <section class="answer-box">
+                <h2>??p ?n c? ??nh Part 3</h2>
+
+                <div class="answer-grid">
+                    <div class="answer-item">
+                        <div class="answer-code">M</div>
+                        <div class="answer-text">
+                            <strong>Man</strong>
+                            <span>Ng??i nam</span>
+                        </div>
+                    </div>
+
+                    <div class="answer-item">
+                        <div class="answer-code">W</div>
+                        <div class="answer-text">
+                            <strong>Woman</strong>
+                            <span>Ng??i n?</span>
+                        </div>
+                    </div>
+
+                    <div class="answer-item">
+                        <div class="answer-code">B</div>
+                        <div class="answer-text">
+                            <strong>Both</strong>
+                            <span>C? hai</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

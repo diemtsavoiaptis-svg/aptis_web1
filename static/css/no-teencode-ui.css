@@ -1,0 +1,61 @@
+
+:root {
+    --main-red: #ef233c;
+    --dark-red: #3b0010;
+    --soft-red: #fff1f4;
+    --border-red: #ffd0d8;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-family: "Segoe UI", Arial, sans-serif;
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    color: var(--dark-red);
+    background: linear-gradient(180deg, #fff7f9, #ffffff);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+button,
+.btn,
+[class*="btn"] {
+    cursor: pointer;
+    border-radius: 999px;
+    transition: 0.22s ease;
+}
+
+button:hover,
+.btn:hover,
+[class*="btn"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(239, 35, 60, 0.22);
+}
+
+input,
+textarea,
+select {
+    border: 1px solid var(--border-red);
+    border-radius: 14px;
+    outline: none;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--main-red);
+    box-shadow: 0 0 0 4px rgba(239, 35, 60, 0.12);
+}

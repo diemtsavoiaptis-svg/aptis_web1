@@ -1,0 +1,48 @@
+
+/* Part 3 - M/W/B answer style */
+.part3-answer-note {
+    animation: part3FadeUp .28s ease both;
+}
+
+@keyframes part3FadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.answer-mwb,
+.mwb-options {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.answer-mwb label,
+.mwb-options label {
+    min-width: 110px;
+    padding: 12px 16px;
+    border: 1px solid #ffd0d8;
+    border-radius: 999px;
+    background: #fff7f9;
+    color: #7a0017;
+    font-weight: 800;
+    text-align: center;
+    cursor: pointer;
+    transition: .2s ease;
+}
+
+.answer-mwb label:hover,
+.mwb-options label:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(239, 35, 60, .16);
+}
+
+.answer-mwb input:checked + span,
+.mwb-options input:checked + span {
+    color: #ef233c;
+}

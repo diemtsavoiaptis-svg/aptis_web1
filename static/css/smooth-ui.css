@@ -1,0 +1,115 @@
+
+/* Smooth UI - gi? tone ?? TSA */
+:root{
+  --smooth-red:#ef233c;
+  --smooth-dark:#3b0010;
+  --smooth-soft:#fff3f5;
+  --smooth-border:#ffd0d8;
+  --smooth-shadow:0 18px 45px rgba(239,35,60,.12);
+}
+
+*{
+  scroll-behavior:smooth;
+}
+
+html,body{
+  animation: pageFadeIn .45s ease both;
+}
+
+@keyframes pageFadeIn{
+  from{opacity:0; transform:translateY(8px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+a,button,input,select,textarea,.btn,[class*="btn"],.button{
+  transition:
+    transform .22s ease,
+    box-shadow .22s ease,
+    background .22s ease,
+    border-color .22s ease,
+    color .22s ease,
+    opacity .22s ease;
+}
+
+button:hover,
+.btn:hover,
+[class*="btn"]:hover,
+a.button:hover{
+  transform:translateY(-2px);
+  box-shadow:0 12px 28px rgba(239,35,60,.22);
+}
+
+button:active,
+.btn:active,
+[class*="btn"]:active{
+  transform:translateY(0) scale(.98);
+}
+
+input,textarea,select{
+  outline:none;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:var(--smooth-red) !important;
+  box-shadow:0 0 0 4px rgba(239,35,60,.10) !important;
+}
+
+.card,
+.panel,
+.box,
+section,
+.dashboard-card,
+.stat-card,
+.form-card,
+.table-card,
+[class*="card"]{
+  transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+
+.card:hover,
+.panel:hover,
+.box:hover,
+.dashboard-card:hover,
+.stat-card:hover,
+.form-card:hover,
+.table-card:hover,
+[class*="card"]:hover{
+  transform:translateY(-3px);
+  box-shadow:var(--smooth-shadow);
+  border-color:var(--smooth-border);
+}
+
+table tbody tr{
+  transition:background .18s ease, transform .18s ease;
+}
+
+table tbody tr:hover{
+  background:rgba(239,35,60,.045);
+}
+
+img,video{
+  transition:transform .35s ease, filter .35s ease, opacity .35s ease;
+}
+
+img:hover,video:hover{
+  filter:saturate(1.04) contrast(1.02);
+}
+
+.fade-in-up{
+  animation: fadeInUp .45s ease both;
+}
+
+@keyframes fadeInUp{
+  from{opacity:0; transform:translateY(14px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation:none !important;
+    transition:none !important;
+    scroll-behavior:auto !important;
+  }
+}

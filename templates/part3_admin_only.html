@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Part 3 Listening | ?i?m TSA V? Aptis</title>
+    <link rel="stylesheet" href="/static/css/part3_only.css">
+</head>
+<body>
+    <main class="part3-page">
+        <div class="part3-wrap">
+            <section class="hero">
+                <p class="kicker">Dashboard qu?n tr?</p>
+                <h1>Qu?n l? Part 3 Listening</h1>
+                <p class="desc">
+                    ??y l? giao di?n Admin ri?ng c?a Part 3. Kh?ng d?ng input, topic, audio hay file ghi ?m c?a Part 2.
+                    Part 3 ch? d?ng pool ??p ?n c? ??nh: M = Man, W = Woman, B = Both.
+                </p>
+
+                <div class="actions">
+                    <a class="btn" href="/dashboard/">? Quay l?i Dashboard</a>
+                    <a class="btn primary" href="/part-3/">Xem giao di?n h?c vi?n</a>
+                </div>
+            </section>
+
+            <section class="admin-grid">
+                <div class="left-stack">
+                    <article class="card">
+                        <h2>1. C?u h?nh b?i h?c</h2>
+
+                        <div class="field">
+                            <label>Title</label>
+                            <input value="Part 3 Listening Practice">
+                        </div>
+
+                        <div class="field">
+                            <label>Ch? d?n b?i l?m</label>
+                            <textarea>Listen to the audio and choose who each statement refers to.</textarea>
+                        </div>
+
+                        <div class="field">
+                            <label>Upload file Audio Part 3</label>
+                            <div class="dropzone">
+                                K?o th? audio Part 3 v?o ??y ho?c b?m ?? ch?n file MP3/WAV.
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="card">
+                        <h2>2. Pool ??p ?n m?u</h2>
+                        <div class="pool">
+                            <div class="pool-item">M = Man</div>
+                            <div class="pool-item">W = Woman</div>
+                            <div class="pool-item">B = Both</div>
+                        </div>
+                    </article>
+
+                    <article class="card">
+                        <h2>3. Question Builder</h2>
+
+                        <div class="empty-box">
+                            Part 3 hi?n ch?a c? ch? ??/c?u h?i th?t. ??y l? khung nh?p ri?ng, kh?ng l?y d? li?u t? Part 2.
+                        </div>
+
+                        <div style="margin-top:16px;">
+                            <div class="question-row">
+                                <div class="q-number">1</div>
+
+                                <div class="field">
+                                    <label>Statement</label>
+                                    <input placeholder="Nh?p statement cho c?u 1">
+                                </div>
+
+                                <div class="field">
+                                    <label>Correct Answer</label>
+                                    <select>
+                                        <option value="M">M - Man</option>
+                                        <option value="W">W - Woman</option>
+                                        <option value="B">B - Both</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="question-row">
+                                <div class="q-number">2</div>
+
+                                <div class="field">
+                                    <label>Statement</label>
+                                    <input placeholder="Nh?p statement cho c?u 2">
+                                </div>
+
+                                <div class="field">
+                                    <label>Correct Answer</label>
+                                    <select>
+                                        <option value="M">M - Man</option>
+                                        <option value="W">W - Woman</option>
+                                        <option value="B">B - Both</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <button class="btn primary" type="button">+ Th?m c?u h?i</button>
+                            <button class="btn" type="button">L?u Part 3</button>
+                        </div>
+                    </article>
+                </div>
+
+                <aside class="card preview">
+                    <h2>Live Preview h?c vi?n</h2>
+
+                    <div class="audio-preview">
+                        <div class="play">?</div>
+                        <div>
+                            <strong>Audio Part 3</strong>
+                            <div style="font-size:13px;opacity:.82;">Minimal audio player</div>
+                        </div>
+                        <div class="bar"><span></span></div>
+                    </div>
+
+                    <div class="preview-question">
+                        <div class="preview-no">1</div>
+                        <div>
+                            <strong>Statement preview</strong>
+                            <div style="color:#64748B;font-weight:650;margin-top:4px;">
+                                H?c vi?n ch?n ??p ?n b?ng dropdown.
+                            </div>
+                        </div>
+                        <select>
+                            <option>Ch?n ??p ?n</option>
+                            <option>M - Man</option>
+                            <option>W - Woman</option>
+                            <option>B - Both</option>
+                        </select>
+                    </div>
+                </aside>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

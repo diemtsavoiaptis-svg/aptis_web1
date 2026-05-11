@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+{% load static %}
+<!doctype html>
+<html lang="vi" lang="vi">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Dashboard quản trị | Điểm TSA Với Aptis</title>
+<style>
+:root{
+    --red:#e60023;
+    --red2:#ff5f76;
+    --deep:#4a0010;
+    --line:#ffd1dc;
+    --muted:#667085;
+}
+*{box-sizing:border-box}
+body{
+    margin:0;
+    min-height:100vh;
+    background:
+        radial-gradient(circle at top right, rgba(255,95,118,.18), transparent 34%),
+        linear-gradient(135deg,#fffafa,#fff0f4 48%,#fff7f9);
+    font-family:"Segoe UI",Arial,sans-serif;
+    color:var(--deep);
+}
+.wrap{
+    max-width:1480px;
+    margin:0 auto;
+    padding:26px 22px 48px;
+}
+.hero{
+    background:rgba(255,255,255,.92);
+    border:1px solid var(--line);
+    border-radius:28px;
+    padding:32px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:24px;
+    box-shadow:0 18px 44px rgba(180,0,30,.07);
+}
+.kicker{
+    color:var(--red);
+    font-size:15px;
+    font-weight:950;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+}
+h1{
+    margin:12px 0 10px;
+    font-size:52px;
+    line-height:1.02;
+    letter-spacing:-.055em;
+    color:var(--deep);
+}
+.desc{
+    margin:0;
+    color:var(--muted);
+    font-size:18px;
+    font-weight:650;
+    line-height:1.6;
+}
+.open-btn{
+    flex:0 0 auto;
+    min-height:56px;
+    padding:0 28px;
+    border-radius:18px;
+    background:linear-gradient(135deg,var(--red),var(--red2));
+    color:white;
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:950;
+    box-shadow:0 16px 34px rgba(230,0,35,.18);
+}
+.panel{
+    margin-top:24px;
+    background:rgba(255,255,255,.78);
+    border:1px solid var(--line);
+    border-radius:28px;
+    padding:30px;
+    box-shadow:0 18px 44px rgba(180,0,30,.055);
+}
+.grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:20px;
+}
+.grid-bottom{
+    margin-top:20px;
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:20px;
+}
+.card{
+    min-height:205px;
+    background:rgba(255,255,255,.9);
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:26px 24px;
+    text-decoration:none;
+    color:inherit;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    transition:.18s ease;
+}
+.card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 18px 36px rgba(180,0,30,.09);
+    border-color:#ff9cac;
+}
+.icon{
+    font-size:32px;
+    margin-bottom:18px;
+}
+.card h2{
+    margin:0 0 12px;
+    font-size:30px;
+    color:var(--deep);
+    letter-spacing:-.025em;
+}
+.card p{
+    margin:0;
+    color:#5f6f89;
+    font-size:17px;
+    line-height:1.55;
+    font-weight:600;
+}
+.logout-row{
+    margin-top:20px;
+    display:flex;
+    justify-content:flex-end;
+}
+.logout{
+    min-height:54px;
+    padding:0 28px;
+    border-radius:16px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#9f0018,#e60023);
+    color:white;
+    text-decoration:none;
+    font-weight:950;
+    box-shadow:0 16px 32px rgba(159,0,24,.16);
+}
+@media(max-width:980px){
+    .hero{flex-direction:column;align-items:flex-start}
+    .grid,.grid-bottom{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+    h1{font-size:40px}
+}
+</style>
+    <link rel="stylesheet" href="/static/css/smooth-ui.css">
+    <link rel="stylesheet" href="/static/css/no-teencode-ui.css">
+</head>
+<body>
+<main class="wrap">
+
+<section class="hero">
+    <div>
+        <div class="kicker">Dashboard quản trị</div>
+        <h1>Tổng quan Admin</h1>
+        <p class="desc">Quản lý học viên, bài học và dữ liệu luyện thi Aptis.</p>
+    </div>
+    <a class="open-btn" href="/listening/" target="_blank">Mở trang riêng</a>
+</section>
+
+<section class="panel">
+    <div class="grid">
+        <a class="card" href="/dashboard/listening-parts/">
+            <div class="icon">🎧</div>
+            <h2>Bài học</h2>
+            <p>Quản lý Part 1, Part 2, Part 3, Part 4 và dữ liệu bài nghe.</p>
+        </a>
+
+        <a class="card" href="/dashboard/students/">
+            <div class="icon">✅</div>
+            <h2>Học viên</h2>
+            <p>Duyệt tài khoản, xem trạng thái và thông tin học viên.</p>
+        </a>
+    </div>
+
+    <div class="grid-bottom">
+
+        <a class="card" href="/dashboard/login-thumbnail/">
+            <div class="icon">🎬</div>
+            <h2>Thumbnail đăng nhập</h2>
+            <p>Thiết kế ảnh/video động và các thẻ nổi cho màn hình đăng nhập.</p>
+        </a>
+
+<a class="card" href="/security/event/">
+            <div class="icon">🛡</div>
+            <h2>Cảnh báo bảo mật</h2>
+            <p>Theo dõi các sự kiện bảo mật, thiết bị đăng nhập và hoạt động bất thường.</p>
+        </a>
+
+        <a class="card" href="/listening/" target="_blank">
+            <div class="icon">👀</div>
+            <h2>Giao diện học viên</h2>
+            <p>Mở nhanh giao diện học viên để kiểm tra trải nghiệm học thật.</p>
+        </a>
+</div>
+
+    <div class="logout-row">
+        <a class="logout" href="/dang-xuat/">Đăng xuất</a>
+    </div>
+</section>
+
+</main>
+</body>
+</html>

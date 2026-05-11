@@ -2297,3 +2297,23 @@ def admin_login_thumbnail_settings(request):
         "overlay_images": overlay_images,
     })
 # ===== END FINAL OVERRIDE =====
+
+
+def dashboard_part3_clean(request):
+    return render(request, "dashboard_part3_clean.html")
+
+
+def dashboard_part3_listening(request):
+    return render(request, "dashboard_part3_listening.html")
+
+
+def student_part3_listening(request):
+    return render(request, "student_part3_listening.html")
+
+
+def part3_admin_only(request):
+    return render(request, "part3_admin_only.html")
+
+
+def part3_student_only(request):
+    return render(request, "part3_student_only.html")

@@ -2,7 +2,9 @@ from django.urls import path
 from . import views
 from . import listening_ui
 
-urlpatterns = [    path("dashboard/lessons/", views.admin_lessons_placeholder, name="admin_lessons_placeholder"),
+urlpatterns = [
+    path("dashboard/part-3/", views.dashboard_part3_listening, name="dashboard_part3_listening"),
+    path("part-3/", views.student_part3_listening, name="student_part3_listening"),    path("dashboard/lessons/", views.admin_lessons_placeholder, name="admin_lessons_placeholder"),
     path("dashboard/login-thumbnail/", views.admin_login_thumbnail_settings, name="admin_login_thumbnail_settings"),
     path("dashboard/background/", views.admin_background_settings, name="admin_background_settings"),
     path("listening/part-2/may-gioi/", views.student_part2_gioi_topics, name="student_part2_gioi_topics"),
@@ -18,7 +20,6 @@ urlpatterns = [    path("dashboard/lessons/", views.admin_lessons_placeholder, n
     path("listening/part-3/", views.student_part3_page, name="student_part3"),
     path("listening/part-2/", views.student_part2_page, name="student_part2"),
     path("dashboard/part-4/", views.admin_part4_questions, name="admin_part4_questions"),
-    path("dashboard/part-3/", views.admin_part3_questions, name="admin_part3_questions"),
     path("dashboard/part-2/", views.admin_part2_questions, name="admin_part2_questions"),
     path("dashboard/students/", views.admin_student_lookup, name="admin_student_lookup"),
 path("", views.home, name="home"),

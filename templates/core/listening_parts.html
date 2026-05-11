@@ -1,348 +1,270 @@
-{% load static %}
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Chọn Part cần quản lý | Aptis</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qu?n l? Part 3 | ?i?m TSA V? Aptis</title>
+</head>
+<body>
 
-    <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
+<style>
+    .part3-clean-page {
+        min-height: 100vh;
+        padding: 32px;
+        background:
+            radial-gradient(circle at top left, rgba(239, 35, 60, 0.10), transparent 34%),
+            linear-gradient(180deg, #fff7f9 0%, #ffffff 100%);
+        color: #3b0010;
+        font-family: "Segoe UI", Arial, sans-serif;
+    }
 
-    <style>
-        :root {
-            --red: #e60023;
-            --red2: #ff5f76;
-            --deep: #7a0010;
-            --dark: #3f0011;
-            --soft: #fff1f4;
-            --line: #ffd1dc;
-            --muted: #667085;
+    .part3-hero {
+        max-width: 1240px;
+        margin: 0 auto 24px;
+        padding: 32px;
+        border: 1px solid #ffd0d8;
+        border-radius: 28px;
+        background: rgba(255, 255, 255, 0.92);
+        box-shadow: 0 20px 48px rgba(239, 35, 60, 0.10);
+    }
+
+    .part3-kicker {
+        margin: 0 0 8px;
+        color: #ef233c;
+        font-size: 14px;
+        font-weight: 900;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+    }
+
+    .part3-title {
+        margin: 0;
+        font-size: clamp(34px, 5vw, 58px);
+        line-height: 1.05;
+        font-weight: 950;
+        color: #3b0010;
+    }
+
+    .part3-desc {
+        margin: 14px 0 0;
+        max-width: 760px;
+        color: #667085;
+        font-size: 17px;
+        font-weight: 650;
+        line-height: 1.6;
+    }
+
+    .part3-layout {
+        max-width: 1240px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1.1fr .9fr;
+        gap: 24px;
+    }
+
+    .part3-card {
+        padding: 30px;
+        border: 1px solid #ffd0d8;
+        border-radius: 28px;
+        background: #ffffff;
+        box-shadow: 0 18px 45px rgba(239, 35, 60, 0.10);
+    }
+
+    .part3-empty {
+        min-height: 360px;
+        display: grid;
+        place-items: center;
+        text-align: center;
+    }
+
+    .part3-empty-icon {
+        width: 78px;
+        height: 78px;
+        margin: 0 auto 18px;
+        display: grid;
+        place-items: center;
+        border-radius: 24px;
+        background: #fff1f4;
+        color: #ef233c;
+        font-size: 34px;
+        font-weight: 950;
+    }
+
+    .part3-empty h2,
+    .part3-answer-card h2 {
+        margin: 0 0 10px;
+        color: #3b0010;
+        font-size: 28px;
+        font-weight: 950;
+    }
+
+    .part3-empty p,
+    .part3-answer-card p {
+        margin: 0;
+        color: #667085;
+        font-size: 16px;
+        font-weight: 650;
+        line-height: 1.55;
+    }
+
+    .mwb-list {
+        display: grid;
+        gap: 14px;
+        margin-top: 24px;
+    }
+
+    .mwb-item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 18px;
+        border: 1px solid #ffd0d8;
+        border-radius: 22px;
+        background: #fff7f9;
+        transition: .22s ease;
+    }
+
+    .mwb-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 14px 30px rgba(239, 35, 60, .14);
+    }
+
+    .mwb-code {
+        width: 52px;
+        height: 52px;
+        display: grid;
+        place-items: center;
+        flex: 0 0 auto;
+        border-radius: 18px;
+        background: #ef233c;
+        color: #ffffff;
+        font-size: 22px;
+        font-weight: 950;
+    }
+
+    .mwb-text strong {
+        display: block;
+        color: #3b0010;
+        font-size: 18px;
+        font-weight: 950;
+    }
+
+    .mwb-text span {
+        color: #667085;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .part3-actions {
+        max-width: 1240px;
+        margin: 24px auto 0;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .part3-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: 0 22px;
+        border: 1px solid #ffd0d8;
+        border-radius: 999px;
+        background: #ffffff;
+        color: #9f001f;
+        font-weight: 900;
+        text-decoration: none;
+        transition: .22s ease;
+    }
+
+    .part3-btn.primary {
+        border-color: #ef233c;
+        background: #ef233c;
+        color: #ffffff;
+    }
+
+    .part3-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 28px rgba(239, 35, 60, .20);
+    }
+
+    @media (max-width: 900px) {
+        .part3-clean-page {
+            padding: 18px;
         }
 
-        * {
-            box-sizing: border-box;
+        .part3-layout {
+            grid-template-columns: 1fr;
         }
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            background:
-                radial-gradient(circle at top right, rgba(255, 95, 118, .18), transparent 34%),
-                linear-gradient(135deg, #fffafa 0%, #fff0f4 48%, #fff7f9 100%);
-            color: var(--dark);
-            font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+        .part3-hero,
+        .part3-card {
+            padding: 22px;
+            border-radius: 22px;
         }
-
-        .wrap {
-            max-width: 1440px;
-            margin: 0 auto;
-            padding: 28px 20px 40px;
-        }
-
-        .title-box {
-            margin-bottom: 24px;
-        }
-
-        h1 {
-            margin: 0;
-            color: var(--dark);
-            font-size: 30px;
-            line-height: 1.2;
-            font-weight: 950;
-            letter-spacing: -.03em;
-        }
-
-        .subtitle {
-            margin-top: 8px;
-            color: var(--muted);
-            font-size: 16px;
-            line-height: 1.6;
-            font-weight: 650;
-        }
-
-        .part-grid {
-            display: grid;
-            grid-template-columns: repeat(4, minmax(250px, 1fr));
-            gap: 18px;
-        }
-
-        .part-card {
-            min-height: 300px;
-            border: 1px solid var(--line);
-            border-radius: 28px;
-            background: rgba(255,255,255,.90);
-            box-shadow: 0 20px 46px rgba(180,0,30,.07);
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            transition: .18s ease;
-        }
-
-        .part-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 24px 54px rgba(180,0,30,.11);
-        }
-
-        .part-top {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 16px;
-        }
-
-        .part-number {
-            width: 58px;
-            height: 58px;
-            border-radius: 18px;
-            display: grid;
-            place-items: center;
-            color: white;
-            background: linear-gradient(135deg, var(--red), var(--red2));
-            font-size: 24px;
-            font-weight: 950;
-            box-shadow: 0 18px 34px rgba(230,0,35,.18);
-        }
-
-        .count-pill {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 32px;
-            padding: 0 14px;
-            border-radius: 999px;
-            border: 1px solid #ffb6c2;
-            background: #fff1f4;
-            color: #b8001c;
-            font-weight: 950;
-            font-size: 14px;
-            white-space: nowrap;
-        }
-
-        .part-title {
-            margin: 26px 0 12px;
-            font-size: 38px;
-            line-height: 1;
-            color: var(--dark);
-            font-weight: 950;
-            letter-spacing: -.045em;
-        }
-
-        .part-desc {
-            color: var(--muted);
-            font-size: 16px;
-            line-height: 1.7;
-            font-weight: 650;
-        }
-
-        .part-actions {
-            margin-top: auto;
-            padding-top: 28px;
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            align-items: center;
-        }
-
-        .status-pill {
-            min-height: 42px;
-            padding: 0 16px;
-            border-radius: 999px;
-            border: 1px solid #ffd1dc;
-            background: #fffafa;
-            color: #b8001c;
-            display: inline-flex;
-            align-items: center;
-            font-weight: 950;
-            font-size: 14px;
-        }
-
-        .open-btn {
-            min-height: 48px;
-            padding: 0 20px;
-            border-radius: 999px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            background: linear-gradient(135deg, var(--red), var(--red2));
-            text-decoration: none;
-            font-weight: 950;
-            box-shadow: 0 16px 30px rgba(230,0,35,.16);
-            white-space: nowrap;
-        }
-
-        .open-btn.secondary {
-            background: #fff1f4;
-            color: #b8001c;
-            border: 1px solid #ffb6c2;
-            box-shadow: none;
-        }
-
-        @media (max-width: 1180px) {
-            .part-grid {
-                grid-template-columns: repeat(2, minmax(250px, 1fr));
-            }
-        }
-
-        @media (max-width: 640px) {
-            .part-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .part-card {
-                min-height: auto;
-            }
-        }
-    </style>
-
-<style class="part-card-clickable-hover-fix">
-.card:hover,
-.part-card:hover,
-.part-item:hover,
-article:hover {
-    cursor: pointer;
-}
+    }
 </style>
 
+<main class="part3-clean-page">
+    <section class="part3-hero">
+        <p class="part3-kicker">Dashboard qu?n tr?</p>
+        <h1 class="part3-title">Qu?n l? Part 3</h1>
+        <p class="part3-desc">
+            Giao di?n Part 3 ?? ???c l?m s?ch. Ph?n topic c?a Part 2 kh?ng c?n hi?n th? ? ??y.
+            Khi c? d? li?u/topic ri?ng cho Part 3, m?nh s? thi?t k? ti?p ??ng c?u tr?c m?i.
+        </p>
+    </section>
 
-</head>
-
-<body>
-    <main class="wrap">
-        <section class="title-box">
-            <h1>Chọn Part cần quản lý</h1>
-            <div class="subtitle">
-                Hiển thị 4 part theo dạng thẻ bo tròn. Part nào chưa có dữ liệu thì vẫn mở khung để chuẩn bị nhập sau.
+    <section class="part3-layout">
+        <div class="part3-card part3-empty">
+            <div>
+                <div class="part3-empty-icon">3</div>
+                <h2>Part 3 ch?a c? topic</h2>
+                <p>
+                    Hi?n ch?a t?o danh s?ch ch? ?? cho Part 3.
+                    Khu v?c n?y ???c ?? tr?ng ?? tr?nh d?ng nh?m 12 topic c?a Part 2.
+                </p>
             </div>
-        </section>
+        </div>
 
-        <section class="part-grid">
-            <article class="part-card" onclick="window.location.href='/dashboard/part-2/'" style="cursor:pointer">
-                <div class="part-top">
-                    <div class="part-number">1</div>
+        <aside class="part3-card part3-answer-card">
+            <h2>??p ?n c? ??nh</h2>
+            <p>Part 3 ch? d?ng 3 l?a ch?n tr? l?i c? ??nh:</p>
+
+            <div class="mwb-list">
+                <div class="mwb-item">
+                    <div class="mwb-code">M</div>
+                    <div class="mwb-text">
+                        <strong>Man</strong>
+                        <span>Ng??i nam n?i / ch?n ??p ?n nam.</span>
+                    </div>
                 </div>
 
-                <h2 class="part-title">Part 1</h2>
-                <div class="part-desc">
-                    Cập nhật hàng loạt câu hỏi, audio, đáp án và transcript cho Part 1. Đây là phần đã chốt giao diện/logic.
+                <div class="mwb-item">
+                    <div class="mwb-code">W</div>
+                    <div class="mwb-text">
+                        <strong>Woman</strong>
+                        <span>Ng??i n? n?i / ch?n ??p ?n n?.</span>
+                    </div>
                 </div>
 
-                <div class="part-actions">
-                    <span class="status-pill">Đã chốt giao diện</span>
-                    <a class="open-btn" href="/dashboard/part-1/">Mở Part 1</a>
+                <div class="mwb-item">
+                    <div class="mwb-code">B</div>
+                    <div class="mwb-text">
+                        <strong>Both</strong>
+                        <span>C? hai ng??i ??u ??ng / ??u ???c nh?c ??n.</span>
+                    </div>
                 </div>
-            </article>
+            </div>
+        </aside>
+    </section>
 
-            <article class="part-card" onclick="window.location.href='/dashboard/part-3/'" style="cursor:pointer">
-                <div class="part-top">
-                    <div class="part-number">2</div>
-                </div>
-
-                <h2 class="part-title">Part 2</h2>
-                <div class="part-desc">
-                    Khu vực quản lý dữ liệu cho Part 2. Chưa có dữ liệu thật. Hiện đã mở khung giao diện.
-                </div>
-
-                <div class="part-actions">
-                    <span class="status-pill">Đã mở khung</span>
-                    <a class="open-btn" href="/dashboard/part-2/" href="/dashboard/part-2/">Mở Part 2</a>
-                </div>
-            </article>
-
-            <article class="part-card" onclick="window.location.href='/dashboard/part-4/'" style="cursor:pointer">
-                <div class="part-top">
-                    <div class="part-number">3</div>
-                </div>
-
-                <h2 class="part-title">Part 3</h2>
-                <div class="part-desc">
-                    Part 3 hiện chưa có dữ liệu. Đã mở trang khung để sau này thiết kế và nhập nội dung.
-                </div>
-
-                <div class="part-actions">
-                    <span class="status-pill">Chưa có dữ liệu</span>
-                    <a class="open-btn secondary" href="/dashboard/part-3/" href="/dashboard/part-3/">Mở Part 3 2 3</a>
-                </div>
-            </article>
-
-            <article class="part-card">
-                <div class="part-top">
-                    <div class="part-number">4</div>
-                </div>
-
-                <h2 class="part-title">Part 4</h2>
-                <div class="part-desc">
-                    Part 4 hiện chưa có dữ liệu. Đã mở trang khung để sau này thiết kế và nhập nội dung.
-                </div>
-
-                <div class="part-actions">
-                    <span class="status-pill">Chưa có dữ liệu</span>
-                    <a class="open-btn secondary" href="/dashboard/part-4/" href="/dashboard/part-4/">Mở Part 4</a>
-                </div>
-            </article>
-        </section>
-    </main>
-
-<script>
-(function safePartCardClickOnly(){
-    const path = window.location.pathname;
-
-    const isAdminPartPage =
-        path === "/dashboard/listening-parts/" ||
-        path === "/dashboard/listening-parts";
-
-    const isStudentListeningPage =
-        path === "/listening/" ||
-        path === "/listening";
-
-    if(!isAdminPartPage && !isStudentListeningPage) return;
-
-    const adminLinks = {
-        "1": "/dashboard/part-1/",
-        "2": "/dashboard/part-2/",
-        "3": "/dashboard/part-3/",
-        "4": "/dashboard/part-4/"
-    };
-
-    const studentLinks = {
-        "1": "/listening/",
-        "2": "/listening/part-2/",
-        "3": "/listening/part-3/",
-        "4": "/listening/part-4/"
-    };
-
-    const links = isStudentListeningPage ? studentLinks : adminLinks;
-
-    document.querySelectorAll(".part-card, .part-item, .card, article").forEach(card => {
-        const text = (card.innerText || "").replace(/\s+/g, " ");
-        const match = text.match(/\bPart\s*([1-4])\b/i);
-        if(!match) return;
-
-        const partNo = match[1];
-        const url = links[partNo];
-        if(!url) return;
-
-        const rect = card.getBoundingClientRect();
-        if(rect.width < 120 || rect.height < 80) return;
-
-        card.style.cursor = "pointer";
-        card.setAttribute("role", "button");
-        card.setAttribute("tabindex", "0");
-
-        card.addEventListener("click", function(e){
-            if(e.target.closest("a, button, input, textarea, select, label")) return;
-            window.location.href = url;
-        });
-
-        card.addEventListener("keydown", function(e){
-            if(e.key === "Enter" || e.key === " "){
-                e.preventDefault();
-                window.location.href = url;
-            }
-        });
-    });
-})();
-</script>
+    <div class="part3-actions">
+        <a class="part3-btn" href="/dashboard/">? Quay l?i Dashboard</a>
+        <a class="part3-btn primary" href="/dashboard/part-2/">Xem Part 2</a>
+    </div>
+</main>
 
 </body>
 </html>

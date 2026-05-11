@@ -1,0 +1,57 @@
+{
+  "part": 3,
+  "type": "listening_dropdown",
+  "title": "Part 3 Listening Practice",
+  "instruction": "Listen to the audio and choose who each statement refers to.",
+  "theme": {
+    "primary": "#064E3B",
+    "background": "#F9FAFB",
+    "layout": "75/25"
+  },
+  "audio": {
+    "source": "",
+    "filename": "",
+    "duration": ""
+  },
+  "answer_pool": [
+    {
+      "value": "M",
+      "label": "Man"
+    },
+    {
+      "value": "W",
+      "label": "Woman"
+    },
+    {
+      "value": "B",
+      "label": "Both"
+    }
+  ],
+  "questions": [
+    {
+      "order": 1,
+      "statement": "The speaker wants to change the plan.",
+      "correct_answer": "M"
+    },
+    {
+      "order": 2,
+      "statement": "The speaker agrees with the suggestion.",
+      "correct_answer": "W"
+    },
+    {
+      "order": 3,
+      "statement": "They both mention the same problem.",
+      "correct_answer": "B"
+    }
+  ],
+  "student_ui": {
+    "audio_player": "minimal",
+    "answer_component": "dropdown",
+    "question_card": true,
+    "sidebar": {
+      "question_grid": true,
+      "go_to_unanswered": true,
+      "submit_button": true
+    }
+  }
+}
