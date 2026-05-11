@@ -1,0 +1,30 @@
+﻿=== FINAL PART 1 AUDIO CHECK ===
+Generated at: 05/12/2026 02:37:34
+
+21 objects imported automatically (use -v 2 for details).
+
+Part 1 total: 191
+With audio_url: 191
+With drive: 191
+1 1. Lis 1 p1.mp3 https://drive.google.com/uc?export=download&id=1tvS3HZYIx4xsVUjpj6bPMe0hrURlaZ5u
+2 2. Lis 2 p1.mp3 https://drive.google.com/uc?export=download&id=190iMVfigwwaLhiHWObcivWC8hTlb952O
+3 3. Lis 3 p1.mp3 https://drive.google.com/uc?export=download&id=1gE_WY6Qx52nZCikLo-CfheF7AVGyizjG
+4 4. Lis 4 p1.mp3 https://drive.google.com/uc?export=download&id=1uGrX1etZCNTR9HRvIE30IwBkvUztkq-z
+5 5. Lis 5 p1.mp3 https://drive.google.com/uc?export=download&id=11_ibm_W-Tn-uA3poMI6G7vbzjcASOWJV
+6 6. Lis 6 p1.mp3 https://drive.google.com/uc?export=download&id=1_nak-IlY-Im9VCMc2PLJzbW_JEXL5wV5
+7 7. Lis 7 p1.mp3 https://drive.google.com/uc?export=download&id=1XXB-ErZtGXwHhKiNtp7KYoTcoX3I0sNm
+8 8. Lis 8 p1.mp3 https://drive.google.com/uc?export=download&id=1TdrkyNiCutelNgiL3LtP7YMVM4c2nY8X
+9 9. Lis 9 p1.mp3 https://drive.google.com/uc?export=download&id=1kmOuJHSR1FIYJwZQ6iBKdtdBfrUzNcmo
+10 10. Lis 10 p1.mp3 https://drive.google.com/uc?export=download&id=1onP-nH6KpNIau2woKJ8WEgdWhIhJcfn8
+11 11. Lis 11 p1.mp3 https://drive.google.com/uc?export=download&id=1t_0r3g8kIJWgERvNT5pBVmnT1ljMp5El
+12 12. Lis 12 p1.mp3 https://drive.google.com/uc?export=download&id=1SrHJ9MpzPAXTkn2gYGZR-1lX5oWOfih4
+13 13. Lis 13 p1.mp3 https://drive.google.com/uc?export=download&id=1I4VCYq3F9YniJoDQCdr1qrLQ8LdUPeS3
+14 14. Lis 14 p1.mp3 https://drive.google.com/uc?export=download&id=1tiwZs2ol7X9EK6NZ5O-JuttPGbAISoCP
+15 15. Lis 15 p1.mp3 https://drive.google.com/uc?export=download&id=1oy0Srb9KOOWGTA7mh4ch7dIbZhHBPjry
+16 16. Lis 16 p1.mp3 https://drive.google.com/uc?export=download&id=13fUumJoSPAQcgvdUv07XWm6t_Mac3kwX
+17 17. Lis 17 p1.mp3 https://drive.google.com/uc?export=download&id=1BaSgQhmyoLCbyj9-QDxp2ddUEx_wY8ZD
+18 18. Lis 18 p1.mp3 https://drive.google.com/uc?export=download&id=1WKwhxCCtLzgN7mRRj0M3Nq88BR1WiAfx
+19 19. Lis 19 p1.mp3 https://drive.google.com/uc?export=download&id=1gdGOJ0c8zjmxgfx5oRFup3kzPHWORSW5
+20 20. Lis 20 p1.mp3 https://drive.google.com/uc?export=download&id=1Ui0X8GpBPNS5P3rlH1OUP-P9GEch3vse
+
+
