@@ -3,8 +3,12 @@ from . import views
 from . import listening_ui
 
 urlpatterns = [
+    path("secure/part3-topic-audio/<int:topic_id>/", views.secure_part3_topic_audio_view, name="secure_part3_topic_audio"),
+    path("listening/part-3/<int:topic_id>/", views.student_part3_topic_view, name="student_part3_topic"),
+    path("dashboard/part-3/upload/", views.admin_part3_upload_data_view, name="admin_part3_upload_data"),
     path("dashboard/part-3/", views.dashboard_part3_listening, name="dashboard_part3_listening"),
-    path("part-3/", views.student_part3_listening, name="student_part3_listening"),    path("dashboard/lessons/", views.admin_lessons_placeholder, name="admin_lessons_placeholder"),
+    path("part-3/", views.student_part3_listening, name="student_part3_listening"),
+    path("dashboard/lessons/", views.admin_lessons_placeholder, name="admin_lessons_placeholder"),
     path("dashboard/login-thumbnail/", views.admin_login_thumbnail_settings, name="admin_login_thumbnail_settings"),
     path("dashboard/background/", views.admin_background_settings, name="admin_background_settings"),
     path("listening/part-2/may-gioi/", views.student_part2_gioi_topics, name="student_part2_gioi_topics"),
@@ -22,7 +26,7 @@ urlpatterns = [
     path("dashboard/part-4/", views.admin_part4_questions, name="admin_part4_questions"),
     path("dashboard/part-2/", views.admin_part2_questions, name="admin_part2_questions"),
     path("dashboard/students/", views.admin_student_lookup, name="admin_student_lookup"),
-path("", views.home, name="home"),
+    path("", views.home, name="home"),
     path("dang-ky/", views.register_view, name="register"),
     path("dang-nhap/", views.login_view, name="login"),
     path("dashboard/", views.dashboard, name="dashboard"),
@@ -30,6 +34,6 @@ path("", views.home, name="home"),
     path("dashboard/part-1/", views.admin_part1_questions, name="admin_part1_questions"),
     path("listening/", listening_ui.listening_page, name="listening"),
     path("secure/audio/<int:question_id>/", views.secure_audio_view, name="secure_audio"),
-    path("security/event/", views.security_event_view, name="security_event"),
+    path("secure/part2-topic-audio/<int:topic_id>/", views.secure_part2_topic_audio_view, name="secure_part2_topic_audio"), path("security/event/", views.security_event_view, name="security_event"),
     path("dang-xuat/", views.logout_view, name="logout"),
 ]

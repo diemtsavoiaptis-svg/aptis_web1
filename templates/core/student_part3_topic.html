@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ topic.title }} | Part 3</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(180deg, #fff7f8, #ffffff);
+            color: #350015;
+        }
+
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30px 16px 70px;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #fecdd3;
+            border-radius: 26px;
+            padding: 26px;
+            box-shadow: 0 20px 60px rgba(244, 63, 94, 0.08);
+        }
+
+        h1 {
+            font-size: 42px;
+            margin: 0 0 20px;
+        }
+
+        .audio-box {
+            padding: 18px;
+            border-radius: 18px;
+            border: 1px solid #fecdd3;
+            background: #fff7f8;
+            margin-bottom: 24px;
+        }
+
+        audio {
+            width: 100%;
+        }
+
+        .question {
+            padding: 16px;
+            border: 1px solid #fecdd3;
+            border-radius: 18px;
+            margin-bottom: 14px;
+            background: #fff;
+        }
+
+        select {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #bfdbfe;
+            border-radius: 14px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            border: 0;
+            border-radius: 999px;
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #f20a3a, #ff5a73);
+            color: #fff;
+            font-weight: 900;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <div class="card">
+        <h1>{{ topic.title }}</h1>
+
+        <div class="audio-box">
+            <strong>Listening Audio</strong>
+            {% if topic.audio_url %}
+                <audio controls preload="metadata" controlsList="nodownload">
+                    <source src="{% url 'secure_part3_topic_audio' topic.id %}" type="audio/mpeg">
+                </audio>
+            {% else %}
+                <p>No audio available.</p>
+            {% endif %}
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            {% for row in rows %}
+                <div class="question">
+                    <strong>Statement {{ row.question.order }}</strong>
+                    <p>{{ row.question.statement }}</p>
+
+                    <select name="question_{{ row.question.id }}">
+                        <option value="">-- Select an answer --</option>
+                        {% for option in row.options %}
+                            <option value="{{ option }}">{{ option }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% endfor %}
+
+            <button class="btn" type="submit">Submit Answers</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

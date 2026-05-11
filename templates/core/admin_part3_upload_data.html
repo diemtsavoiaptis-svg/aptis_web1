@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Part 3 Upload Data</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(180deg, #fff7f8, #ffffff);
+            color: #350015;
+        }
+
+        .page {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 30px 16px 70px;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #fecdd3;
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 22px;
+            box-shadow: 0 20px 60px rgba(244, 63, 94, 0.08);
+        }
+
+        h1 {
+            font-size: 42px;
+            margin: 0 0 12px;
+            color: #3b0014;
+        }
+
+        h2 {
+            margin: 0 0 18px;
+            color: #8a001c;
+        }
+
+        label {
+            display: block;
+            font-weight: 900;
+            margin: 14px 0 8px;
+            color: #8a001c;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #fecdd3;
+            border-radius: 14px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            border: 0;
+            border-radius: 999px;
+            padding: 13px 24px;
+            background: linear-gradient(135deg, #f20a3a, #ff5a73);
+            color: #fff;
+            font-weight: 900;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 20px;
+        }
+
+        .topic-link {
+            display: block;
+            padding: 12px 14px;
+            border-radius: 14px;
+            border: 1px solid #fecdd3;
+            margin-bottom: 10px;
+            background: #fff7f8;
+            color: #8a001c;
+            font-weight: 900;
+            text-decoration: none;
+        }
+
+        .question-box {
+            padding: 16px;
+            border: 1px solid #fecdd3;
+            border-radius: 18px;
+            background: #fff7f8;
+            margin-bottom: 14px;
+        }
+
+        .audio-player {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .student-link {
+            display: inline-block;
+            margin-top: 12px;
+            color: #be123c;
+            font-weight: 900;
+            text-decoration: none;
+        }
+    
+        .student-view-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 14px;
+            margin-right: 10px;
+            padding: 13px 22px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #f20a3a, #ff5a73);
+            color: #fff;
+            font-weight: 900;
+            text-decoration: none;
+            box-shadow: 0 16px 36px rgba(242, 10, 58, 0.18);
+        }
+
+        .student-view-btn:hover {
+            transform: translateY(-1px);
+        }
+
+    </style>
+</head>
+<body>
+<div class="page">
+    <h1>Admin Part 3 Upload Data</h1>
+    <p>Upload Part 3 listening data: topic, audio link, transcript, statements, and correct answers.</p>
+
+    <div class="card">
+        <h2>Create New Topic</h2>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="create_topic">
+            <label>Topic Title</label>
+            <input name="title" placeholder="Example: City life discussion">
+            <button class="btn" type="submit">Create Topic</button>
+        </form>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <h2>Topics</h2>
+            {% for topic in topics %}
+                <a class="topic-link" href="?topic={{ topic.id }}">{{ topic.title }}</a>
+            {% endfor %}
+        </div>
+
+        <div>
+            {% if active_topic %}
+                <div class="card">
+                    <h2>Topic Settings</h2>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="save_topic">
+                        <input type="hidden" name="topic_id" value="{{ active_topic.id }}">
+
+                        <label>Topic Title</label>
+                        <input name="title" value="{{ active_topic.title }}">
+
+                        <label>Google Drive Audio Link</label>
+                        <input name="audio_url" value="{{ active_topic.audio_url }}" placeholder="Paste Google Drive audio link here">
+
+                        {% if active_topic.audio_url %}
+                            <audio class="audio-player" controls preload="metadata">
+                                <source src="{% url 'secure_part3_topic_audio' active_topic.id %}" type="audio/mpeg">
+                            </audio>
+                        {% endif %}
+
+                        <label>Answer Pool</label>
+                        <textarea name="answer_pool">{{ active_topic.answer_pool }}</textarea>
+
+                        <label>Transcript / Paragraph</label>
+                        <textarea name="transcript">{{ active_topic.transcript }}</textarea>
+
+                        <button class="btn" type="submit">Save Topic Data</button>
+
+                        <br>
+                        <a class="student-view-btn" href="{% url 'student_part3_topic' active_topic.id %}" target="_blank">👀 View Student Interface</a>
+                    </form>
+                </div>
+
+                <div class="card">
+                    <h2>Questions</h2>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="save_questions">
+                        <input type="hidden" name="topic_id" value="{{ active_topic.id }}">
+
+                        {% for question in active_topic.questions.all %}
+                            <div class="question-box">
+                                <label>Statement {{ question.order }}</label>
+                                <textarea name="statement_{{ question.id }}">{{ question.statement }}</textarea>
+
+                                <label>Correct Answer</label>
+                                <select name="correct_answer_{{ question.id }}">
+                                    <option value="">-- Select correct answer --</option>
+                                    {% for option in answer_options %}
+                                        <option value="{{ option }}" {% if question.correct_answer == option %}selected{% endif %}>{{ option }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        {% endfor %}
+
+                        <button class="btn" type="submit">Save Questions</button>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</body>
+</html>

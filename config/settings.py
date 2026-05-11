@@ -13,12 +13,13 @@ load_dotenv(BASE_DIR / ".env.server")
 
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key-change-me")
-DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
+DEBUG = os.environ.get("DJANGO_DEBUG", "True").strip().lower() in {"1", "true", "yes", "on"}
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
     ".onrender.com",
+    ".pythonanywhere.com",
     "tsaptis.com",
     "www.tsaptis.com",
 ]
@@ -35,6 +36,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:8000",
     "https://tsaptis.com",
     "https://www.tsaptis.com",
+    "https://*.pythonanywhere.com",
 ]
 
 for host in [RENDER_EXTERNAL_HOSTNAME, CUSTOM_DOMAIN]:

@@ -1,4 +1,4 @@
-from django.core.files.base import ContentFile
+﻿from django.core.files.base import ContentFile
 from uuid import uuid4
 import base64
 from django.shortcuts import render, get_object_or_404
@@ -210,8 +210,6 @@ def dashboard(request):
         return render(request, "core/dashboard.html", {
             "lessons": lessons
         })
-
-    return redirect("listening")
 
     return redirect("listening")
 
@@ -608,7 +606,6 @@ def admin_part2_topic_detail(request, topic_id):
         topic.title = request.POST.get("title", "").strip() or topic.title
         topic.description = request.POST.get("description", "").strip()
         topic.data_choices = request.POST.get("data_choices", "").strip()
-        topic.voice_info = request.POST.get("voice_info", "").strip()
         topic.save()
 
         for voice in voices:
@@ -1117,7 +1114,6 @@ def admin_part2_gioi_detail(request, topic_id):
         topic.description = request.POST.get("description", "").strip()
         topic.audio_url = request.POST.get("audio_url", "").strip()
         topic.data_choices = request.POST.get("data_choices", "").strip()
-        topic.voice_info = request.POST.get("voice_info", "").strip()
         topic.save()
 
         for voice in voices:
@@ -1241,7 +1237,6 @@ def admin_part2_gioi_detail(request, topic_id):
         topic.description = request.POST.get("description", "").strip()
         topic.audio_url = request.POST.get("audio_url", "").strip()
         topic.data_choices = request.POST.get("data_choices", "").strip()
-        topic.voice_info = request.POST.get("voice_info", "").strip()
         topic.save()
 
         for voice in voices:
@@ -1257,7 +1252,6 @@ def admin_part2_gioi_detail(request, topic_id):
         topic.description = request.POST.get("description", "").strip()
         topic.audio_url = request.POST.get("audio_url", "").strip()
         topic.data_choices = request.POST.get("data_choices", "").strip()
-        topic.voice_info = request.POST.get("voice_info", "").strip()
         topic.save()
 
         # Save answer đúng từng person
@@ -1355,7 +1349,6 @@ def admin_part2_gioi_detail(request, topic_id):
         topic.description = request.POST.get("description", "").strip()
         topic.audio_url = request.POST.get("audio_url", "").strip()
         topic.data_choices = request.POST.get("data_choices", "").strip()
-        topic.voice_info = request.POST.get("voice_info", "").strip()
         topic.save()
 
         for voice in voices:
@@ -1452,7 +1445,6 @@ def admin_part2_gioi_detail(request, topic_id):
         topic.description = request.POST.get("description", "").strip()
         topic.audio_url = request.POST.get("audio_url", "").strip()
         topic.data_choices = request.POST.get("data_choices", "").strip()
-        topic.voice_info = request.POST.get("voice_info", "").strip()
         topic.save()
 
         for voice in voices:
@@ -1543,8 +1535,8 @@ def admin_part2_gioi_detail(request, topic_id):
 
             # Chỉ cập nhật voice_info nếu chưa khóa
             if not getattr(topic, "voice_info_locked", False):
-                topic.voice_info = request.POST.get("voice_info", "").strip()
-
+                pass
+        
             topic.save()
 
             for voice in voices:
@@ -1557,12 +1549,11 @@ def admin_part2_gioi_detail(request, topic_id):
 
         if action == "save_and_lock_voice_info":
             if not getattr(topic, "voice_info_locked", False):
-                topic.voice_info = request.POST.get("voice_info", "").strip()
                 topic.voice_info_locked = True
                 topic.save()
-                messages.success(request, "Đã lưu và khóa information voice.")
+                messages.success(request, "Saved and locked voice information.")
             else:
-                messages.warning(request, "Information voice đang bị khóa.")
+                messages.warning(request, "Voice information is already locked.")
             return redirect("admin_part2_gioi_detail", topic_id=topic.id)
 
         if action == "unlock_voice_info":
@@ -2335,3 +2326,108 @@ def admin_part3_questions(request):
 def student_part3_red(request):
     return render(request, "part3_red_student.html")
 # ===== END PART 3 RED LISTENING UI OVERRIDE =====
+
+
+@login_required
+def secure_part2_topic_audio_view(request, topic_id):
+    topic = get_object_or_404(Part2Topic, id=topic_id)
+    drive_file_id = extract_drive_file_id(getattr(topic, "audio_url", ""))
+
+    if drive_file_id:
+        return _google_drive_download_response(drive_file_id)
+
+    if getattr(topic, "audio_url", ""):
+        response = HttpResponseRedirect(topic.audio_url)
+        response["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+        return response
+
+    raise Http404("Part 2 topic audio does not exist.")
+
+
+@login_required
+def admin_part3_upload_data_view(request):
+    from .models import Part3Topic, Part3Question
+
+    if request.method == "POST":
+        action = request.POST.get("action", "")
+
+        if action == "create_topic":
+            title = request.POST.get("title", "").strip() or "New Part 3 Topic"
+            topic = Part3Topic.objects.create(title=title)
+            for i in range(1, 5):
+                Part3Question.objects.create(topic=topic, order=i)
+            return redirect("admin_part3_upload_data")
+
+        topic_id = request.POST.get("topic_id")
+        topic = get_object_or_404(Part3Topic, id=topic_id)
+
+        if action == "save_topic":
+            topic.title = request.POST.get("title", "").strip() or topic.title
+            topic.audio_url = request.POST.get("audio_url", "").strip()
+            topic.transcript = request.POST.get("transcript", "").strip()
+            topic.answer_pool = request.POST.get("answer_pool", "").strip() or "Man\nWoman\nBoth"
+            topic.save()
+            return redirect("admin_part3_upload_data")
+
+        if action == "save_questions":
+            for question in topic.questions.all():
+                question.statement = request.POST.get(f"statement_{question.id}", "").strip()
+                question.correct_answer = request.POST.get(f"correct_answer_{question.id}", "").strip()
+                question.save()
+            return redirect("admin_part3_upload_data")
+
+    topics = Part3Topic.objects.all().order_by("-id")
+
+    if not topics.exists():
+        topic = Part3Topic.objects.create(title="Part 3 Topic 1")
+        for i in range(1, 5):
+            Part3Question.objects.create(topic=topic, order=i)
+
+    topics = Part3Topic.objects.all().order_by("-id")
+    active_topic = topics.first()
+
+    context = {
+        "topics": topics,
+        "active_topic": active_topic,
+        "answer_options": [x.strip() for x in active_topic.answer_pool.splitlines() if x.strip()] if active_topic else [],
+    }
+    return render(request, "core/admin_part3_upload_data.html", context)
+
+
+@login_required
+def student_part3_topic_view(request, topic_id):
+    from .models import Part3Topic
+
+    topic = get_object_or_404(Part3Topic, id=topic_id)
+    answer_options = [x.strip() for x in topic.answer_pool.splitlines() if x.strip()]
+
+    rows = []
+    for question in topic.questions.all():
+        rows.append({
+            "question": question,
+            "options": answer_options,
+        })
+
+    return render(request, "core/student_part3_topic.html", {
+        "topic": topic,
+        "rows": rows,
+    })
+
+
+@login_required
+def secure_part3_topic_audio_view(request, topic_id):
+    from .models import Part3Topic
+
+    topic = get_object_or_404(Part3Topic, id=topic_id)
+    drive_file_id = extract_drive_file_id(getattr(topic, "audio_url", ""))
+
+    if drive_file_id:
+        return _google_drive_download_response(drive_file_id)
+
+    if getattr(topic, "audio_url", ""):
+        response = HttpResponseRedirect(topic.audio_url)
+        response["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+        return response
+
+    raise Http404("Part 3 topic audio does not exist.")
+

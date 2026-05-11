@@ -64,9 +64,8 @@ class ListeningQuestion(models.Model):
     listening_transcript = models.TextField(blank=True, verbose_name=_vi(r"\u0110\u1ec1 b\u00e0i nghe / transcript"))
 
     audio_url = models.URLField(blank=True, verbose_name=_vi(r"Link audio ngo\u00e0i"))
-    voice_info = models.TextField("Information của voice", blank=True)
-    voice_info_locked = models.BooleanField("Lock information voice", default=False)
-    voice_info = models.TextField("Information của voice", blank=True)
+    voice_info = models.TextField("Voice information", blank=True)
+    voice_info_locked = models.BooleanField("Lock voice information", default=False)
     audio_drive_link = models.URLField(blank=True, verbose_name=_vi(r"Link Google Drive MP3"))
     audio_drive_file_id = models.CharField(max_length=255, blank=True, default="", verbose_name=_vi(r"Google Drive File ID"))
     audio_file = models.FileField(upload_to="listening_audio/", blank=True, null=True, verbose_name=_vi(r"File audio local"))
@@ -306,49 +305,53 @@ class SiteBackground(models.Model):
 
     @property
     def ticker_texts(self):
+        defaults = [
+            "18 STUDENTS REGISTERED",
+            "APTIS B1+ COMMITMENT",
+            "30-DAY ACCELERATION",
+            "FLEXIBLE 1:1 COACHING",
+            "4-PART LISTENING PRACTICE",
+        ]
         return [
-            self.ticker_text_1,
-            self.ticker_text_2,
-            self.ticker_text_3,
-            self.ticker_text_4,
-            self.ticker_text_5,
+            getattr(self, f"ticker_text_{index}", default) or default
+            for index, default in enumerate(defaults, start=1)
         ]
 
 
 class LoginThumbnail(models.Model):
-    name = models.CharField("T?n thumbnail", max_length=255, blank=True)
-    image = models.ImageField("?nh thumbnail upload", upload_to="login_thumbnails/", blank=True, null=True)
-    image_url = models.URLField("?ng d?n ?nh thumbnail", blank=True)
+    name = models.CharField("Thumbnail name", max_length=255, blank=True)
+    image = models.ImageField("Thumbnail image upload", upload_to="login_thumbnails/", blank=True, null=True)
+    image_url = models.URLField("Thumbnail image URL", blank=True)
 
     video = models.FileField("Video thumbnail upload", upload_to="login_thumbnail_videos/", blank=True, null=True)
-    video_url = models.URLField("?ng d?n video thumbnail", blank=True)
+    video_url = models.URLField("Thumbnail video URL", blank=True)
 
-    overlay_left_image = models.ImageField("?nh n?i 1", upload_to="login_overlay_images/", blank=True, null=True)
-    overlay_right_image = models.ImageField("?nh n?i 2", upload_to="login_overlay_images/", blank=True, null=True)
+    overlay_left_image = models.ImageField("Floating image 1", upload_to="login_overlay_images/", blank=True, null=True)
+    overlay_right_image = models.ImageField("Floating image 2", upload_to="login_overlay_images/", blank=True, null=True)
 
-    overlay_left_x = models.PositiveIntegerField("X ?nh n?i 1 (%)", default=6)
-    overlay_left_y = models.PositiveIntegerField("Y ?nh n?i 1 (%)", default=58)
-    overlay_left_w = models.PositiveIntegerField("K?ch thc ?nh n?i 1 (%)", default=26)
+    overlay_left_x = models.PositiveIntegerField("Floating image 1 X (%)", default=6)
+    overlay_left_y = models.PositiveIntegerField("Floating image 1 Y (%)", default=58)
+    overlay_left_w = models.PositiveIntegerField("Floating image 1 size (%)", default=26)
 
-    overlay_right_x = models.PositiveIntegerField("X ?nh n?i 2 (%)", default=58)
-    overlay_right_y = models.PositiveIntegerField("Y ?nh n?i 2 (%)", default=50)
-    overlay_right_w = models.PositiveIntegerField("K?ch thc ?nh n?i 2 (%)", default=24)
+    overlay_right_x = models.PositiveIntegerField("Floating image 2 X (%)", default=58)
+    overlay_right_y = models.PositiveIntegerField("Floating image 2 Y (%)", default=50)
+    overlay_right_w = models.PositiveIntegerField("Floating image 2 size (%)", default=24)
 
-    ticker_text_1 = models.CharField("Chch?y 1", max_length=255, blank=True, default="")
-    ticker_text_2 = models.CharField("Chch?y 2", max_length=255, blank=True, default="")
-    ticker_text_3 = models.CharField("Chch?y 3", max_length=255, blank=True, default="")
-    ticker_text_4 = models.CharField("Chch?y 4", max_length=255, blank=True, default="")
-    ticker_text_5 = models.CharField("Chch?y 5", max_length=255, blank=True, default="")
+    ticker_text_1 = models.CharField("Ticker text 1", max_length=255, blank=True, default="")
+    ticker_text_2 = models.CharField("Ticker text 2", max_length=255, blank=True, default="")
+    ticker_text_3 = models.CharField("Ticker text 3", max_length=255, blank=True, default="")
+    ticker_text_4 = models.CharField("Ticker text 4", max_length=255, blank=True, default="")
+    ticker_text_5 = models.CharField("Ticker text 5", max_length=255, blank=True, default="")
 
-    is_active = models.BooleanField("?ang sd?ng", default=True)
+    is_active = models.BooleanField("Is active", default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = "Thumbnail ng nh?p"
-        verbose_name_plural = "Thumbnail ng nh?p"
+        verbose_name = "Login thumbnail"
+        verbose_name_plural = "Login thumbnail"
 
     def __str__(self):
-        return self.name or "Thumbnail ng nh?p"
+        return self.name or "Login thumbnail"
 
     @property
     def display_video_url(self):
@@ -369,26 +372,54 @@ class LoginOverlayImage(models.Model):
         LoginThumbnail,
         on_delete=models.CASCADE,
         related_name="overlay_images",
-        verbose_name="Thumbnail ng nh?p",
+        verbose_name="Login thumbnail",
     )
-    image = models.ImageField("?nh n?i", upload_to="login_overlay_images/")
+    image = models.ImageField("Floating image", upload_to="login_overlay_images/")
     x = models.PositiveIntegerField("X (%)", default=10)
     y = models.PositiveIntegerField("Y (%)", default=55)
-    w = models.PositiveIntegerField("K?ch thc (%)", default=24)
-    order = models.PositiveIntegerField("Tht?", default=0)
-    is_active = models.BooleanField("?ang d?ng", default=True)
+    w = models.PositiveIntegerField("Size (%)", default=24)
+    order = models.PositiveIntegerField("Order", default=0)
+    is_active = models.BooleanField("Is active", default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        verbose_name = "?nh n?i ng nh?p"
-        verbose_name_plural = "?nh n?i ng nh?p"
+        verbose_name = "Login floating image"
+        verbose_name_plural = "Login floating image"
         ordering = ["order", "id"]
 
     def __str__(self):
-        return f"?nh n?i {self.id}"
+        return f"Floating image {self.id}"
 
     @property
     def display_url(self):
         if self.image:
             return self.image.url
         return ""
+
+
+class Part3Topic(models.Model):
+    title = models.CharField(max_length=255, default="New Part 3 Topic")
+    audio_url = models.TextField(blank=True)
+    transcript = models.TextField(blank=True)
+    answer_pool = models.TextField(
+        default="Man\nWoman\nBoth",
+        help_text="One answer option per line."
+    )
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
+
+
+class Part3Question(models.Model):
+    topic = models.ForeignKey(Part3Topic, on_delete=models.CASCADE, related_name="questions")
+    order = models.PositiveIntegerField(default=1)
+    statement = models.TextField(blank=True)
+    correct_answer = models.CharField(max_length=50, blank=True)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return f"{self.topic.title} - Question {self.order}"

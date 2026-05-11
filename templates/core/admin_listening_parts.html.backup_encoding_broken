@@ -1,0 +1,217 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ch?n Part c?n qu?n l? | ?i?m TSA V? Aptis</title>
+    <style>
+        :root {
+            --red: #ef233c;
+            --red-dark: #9f001f;
+            --dark: #3b0010;
+            --soft: #fff1f4;
+            --white: #ffffff;
+            --muted: #667085;
+            --border: #ffd0d8;
+            --shadow: 0 18px 45px rgba(239, 35, 60, .12);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: var(--dark);
+            background:
+                radial-gradient(circle at top left, rgba(239, 35, 60, .10), transparent 35%),
+                linear-gradient(180deg, #fff7f9 0%, #ffffff 100%);
+        }
+
+        .page {
+            min-height: 100vh;
+            padding: 32px;
+        }
+
+        .wrap {
+            max-width: 1320px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            padding: 32px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            background: var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        h1 {
+            margin: 0 0 10px;
+            font-size: clamp(34px, 5vw, 56px);
+            line-height: 1.05;
+            font-weight: 950;
+        }
+
+        .desc {
+            margin: 0;
+            color: var(--muted);
+            font-size: 16px;
+            font-weight: 650;
+            line-height: 1.6;
+        }
+
+        .parts-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(260px, 1fr));
+            gap: 18px;
+        }
+
+        .part-card {
+            min-height: 240px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 26px;
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            background: rgba(255, 255, 255, .96);
+            box-shadow: var(--shadow);
+        }
+
+        .badge {
+            width: 46px;
+            height: 46px;
+            display: grid;
+            place-items: center;
+            border-radius: 14px;
+            background: var(--red);
+            color: #ffffff;
+            font-size: 20px;
+            font-weight: 950;
+            box-shadow: 0 14px 30px rgba(239, 35, 60, .25);
+        }
+
+        .part-card h2 {
+            margin: 18px 0 10px;
+            font-size: 30px;
+            line-height: 1.05;
+            font-weight: 950;
+        }
+
+        .part-card p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 15px;
+            font-weight: 650;
+            line-height: 1.55;
+        }
+
+        .card-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .pill,
+        .btn {
+            min-height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 16px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            background: var(--white);
+            color: var(--red-dark);
+            font-weight: 900;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .btn.primary {
+            min-height: 46px;
+            padding: 0 20px;
+            border-color: var(--red);
+            background: var(--red);
+            color: #ffffff;
+            transition: .22s ease;
+        }
+
+        .btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 30px rgba(239, 35, 60, .22);
+        }
+
+        @media (max-width: 1200px) {
+            .parts-grid {
+                grid-template-columns: repeat(2, minmax(260px, 1fr));
+            }
+        }
+
+        @media (max-width: 720px) {
+            .page {
+                padding: 18px;
+            }
+
+            .parts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-actions {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <div class="wrap">
+            <section class="hero">
+                <h1>Ch?n Part c?n qu?n l?</h1>
+                <p class="desc">
+                    Hi?n th? 4 part theo d?ng th? bo tr?n. Part 1 v? Part 2 ?? kh?a d? li?u;
+                    Part 3 v? Part 4 ?ang ?? tr?ng ?? thi?t k? ti?p.
+                </p>
+            </section>
+
+            <section class="parts-grid">
+                {% for part, count in part_counts.items %}
+                    <article class="part-card">
+                        <div>
+                            <div class="badge">{{ part }}</div>
+                            <h2>Part {{ part }}</h2>
+
+                            {% if part == 1 %}
+                                <p>C?p nh?t h?ng lo?t c?u h?i, audio, ??p ?n v? transcript cho Part 1. D? li?u ph?n n?y ?ang ???c kh?a ?? tr?nh ch?nh nh?m.</p>
+                            {% elif part == 2 %}
+                                <p>Khu v?c qu?n l? d? li?u cho Part 2. D? li?u ph?n n?y ?ang ???c kh?a ?? tr?nh ch?nh nh?m.</p>
+                            {% elif part == 3 %}
+                                <p>Khu v?c Part 3 ?? ???c d?n s?ch d? li?u c?. Ch? d?ng ?? thi?t k? giao di?n Admin v? H?c vi?n Part 3 ri?ng.</p>
+                            {% elif part == 4 %}
+                                <p>Khu v?c Part 4 ?? ???c d?n s?ch d? li?u c?. Ch?a tri?n khai d? li?u th?t.</p>
+                            {% endif %}
+                        </div>
+
+                        <div class="card-actions">
+                            {% if part == 1 or part == 2 %}
+                                <span class="pill">?? kh?a d? li?u</span>
+                            {% else %}
+                                <span class="pill">?? x?a d? li?u</span>
+                            {% endif %}
+
+                            <a class="btn primary" href="/dashboard/part-{{ part }}/">M? Part {{ part }}</a>
+                        </div>
+                    </article>
+                {% endfor %}
+            </section>
+        </div>
+    </main>
+</body>
+</html>
