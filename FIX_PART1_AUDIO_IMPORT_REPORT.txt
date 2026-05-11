@@ -1,0 +1,61 @@
+FIX PART 1 AUDIO IMPORT REPORT
+Created: 0
+Updated existing: 0
+Bad rows: 191
+Part 1 total questions: 0
+Part 1 with audio_url: 0
+Part 1 with audio_drive_link: 0
+
+First 20 rows:
+
+Bad rows:
+1,1,1. Lis 1 p1.mp3https://drive.google.com/file/d/1tvS3HZYIx4xsVUjpj6bPMe0hrURlaZ5u/view?usp=drivesdk
+1,2,2. Lis 2 p1.mp3https://drive.google.com/file/d/190iMVfigwwaLhiHWObcivWC8hTlb952O/view?usp=drivesdk
+1,3,3. Lis 3 p1.mp3https://drive.google.com/file/d/1gE_WY6Qx52nZCikLo-CfheF7AVGyizjG/view?usp=drivesdk
+1,4,4. Lis 4 p1.mp3https://drive.google.com/file/d/1uGrX1etZCNTR9HRvIE30IwBkvUztkq-z/view?usp=drivesdk
+1,5,5. Lis 5 p1.mp3https://drive.google.com/file/d/11_ibm_W-Tn-uA3poMI6G7vbzjcASOWJV/view?usp=drivesdk
+1,6,6. Lis 6 p1.mp3https://drive.google.com/file/d/1_nak-IlY-Im9VCMc2PLJzbW_JEXL5wV5/view?usp=drivesdk
+1,7,7. Lis 7 p1.mp3https://drive.google.com/file/d/1XXB-ErZtGXwHhKiNtp7KYoTcoX3I0sNm/view?usp=drivesdk
+1,8,8. Lis 8 p1.mp3https://drive.google.com/file/d/1TdrkyNiCutelNgiL3LtP7YMVM4c2nY8X/view?usp=drivesdk
+1,9,9. Lis 9 p1.mp3https://drive.google.com/file/d/1kmOuJHSR1FIYJwZQ6iBKdtdBfrUzNcmo/view?usp=drivesdk
+1,10,10. Lis 10 p1.mp3https://drive.google.com/file/d/1onP-nH6KpNIau2woKJ8WEgdWhIhJcfn8/view?usp=drivesdk
+1,11,11. Lis 11 p1.mp3https://drive.google.com/file/d/1t_0r3g8kIJWgERvNT5pBVmnT1ljMp5El/view?usp=drivesdk
+1,12,12. Lis 12 p1.mp3https://drive.google.com/file/d/1SrHJ9MpzPAXTkn2gYGZR-1lX5oWOfih4/view?usp=drivesdk
+1,13,13. Lis 13 p1.mp3https://drive.google.com/file/d/1I4VCYq3F9YniJoDQCdr1qrLQ8LdUPeS3/view?usp=drivesdk
+1,14,14. Lis 14 p1.mp3https://drive.google.com/file/d/1tiwZs2ol7X9EK6NZ5O-JuttPGbAISoCP/view?usp=drivesdk
+1,15,15. Lis 15 p1.mp3https://drive.google.com/file/d/1oy0Srb9KOOWGTA7mh4ch7dIbZhHBPjry/view?usp=drivesdk
+1,16,16. Lis 16 p1.mp3https://drive.google.com/file/d/13fUumJoSPAQcgvdUv07XWm6t_Mac3kwX/view?usp=drivesdk
+1,17,17. Lis 17 p1.mp3https://drive.google.com/file/d/1BaSgQhmyoLCbyj9-QDxp2ddUEx_wY8ZD/view?usp=drivesdk
+1,18,18. Lis 18 p1.mp3https://drive.google.com/file/d/1WKwhxCCtLzgN7mRRj0M3Nq88BR1WiAfx/view?usp=drivesdk
+1,19,19. Lis 19 p1.mp3https://drive.google.com/file/d/1gdGOJ0c8zjmxgfx5oRFup3kzPHWORSW5/view?usp=drivesdk
+1,20,20. Lis 20 p1.mp3https://drive.google.com/file/d/1Ui0X8GpBPNS5P3rlH1OUP-P9GEch3vse/view?usp=drivesdk
+1,21,21. Lis 21 p1.mp3https://drive.google.com/file/d/1vFrdbvVYNUYlqvi-TQQIeMf32aegc4Ox/view?usp=drivesdk
+1,22,22. Lis 22 p1.mp3https://drive.google.com/file/d/1vgbZ_WYriIyaE1_5QmVcTNdr--AoLEL_/view?usp=drivesdk
+1,23,23. Lis 23 p1.mp3https://drive.google.com/file/d/1tLznHhyU4Ec2Avjq2fKDckFg7pLUt70i/view?usp=drivesdk
+1,24,24. Lis 24 p1.mp3https://drive.google.com/file/d/1235HoeFNZCtojJWLgPXcA04PpLHZUJkm/view?usp=drivesdk
+1,25,25. Lis 25 p1.mp3https://drive.google.com/file/d/1DQCt85eWU_ozdCG67ycK4N-A31nVcq91/view?usp=drivesdk
+1,26,26. Lis 26 p1.mp3https://drive.google.com/file/d/1ZAvN7EhHFvJZoTGIzgLzlIObAeC-qWcX/view?usp=drivesdk
+1,27,27. Lis 27 p1.mp3https://drive.google.com/file/d/1Q3yhO8dTiak4kT-cnTvlI0ZxuB-pL9Ho/view?usp=drivesdk
+1,28,28. Lis 28 p1.mp3https://drive.google.com/file/d/1WFo2S6KyVgvDbYrcZ4OKWNLpvqA9rJms/view?usp=drivesdk
+1,29,29. Lis 29 p1.mp3https://drive.google.com/file/d/1R2hnAuQb4rU0OaX1OtkQ_uWvdfGHzOiX/view?usp=drivesdk
+1,30,30. Lis 30 p1.mp3https://drive.google.com/file/d/1ATJbqqmsSIHd7_JH0c-VtKJbXXCHFuCv/view?usp=drivesdk
+1,31,31. Lis 31 p1.mp3https://drive.google.com/file/d/1djerro4Fbhq-8d_sPxFOmjFKqanXvTNU/view?usp=drivesdk
+1,32,32. Lis 32 p1.mp3https://drive.google.com/file/d/1kND5eWYXP1VgflEZfz3M_HeNLkjesRFw/view?usp=drivesdk
+1,33,33. Lis 33 p1.mp3https://drive.google.com/file/d/10PsK_zUcDzpN9II27bz7Fau07PH8Iljy/view?usp=drivesdk
+1,34,34. Lis 34 p1.mp3https://drive.google.com/file/d/1dPlYJ9RMO54ofxh4TH_s-cqYrf85vAwE/view?usp=drivesdk
+1,35,35. Lis 35 p1.mp3https://drive.google.com/file/d/1xZxcGaok-sUpanXsTrXXkXB77kcWEcGM/view?usp=drivesdk
+1,36,36. Lis 36 p1.mp3https://drive.google.com/file/d/1ROH2L_2nChP5xQqnS8rSmFV9fzr4yopT/view?usp=drivesdk
+1,37,37. Lis 37 p1.mp3https://drive.google.com/file/d/1ULPNZd_HO_UbsRgPPZIfQnbLOfPyWeUk/view?usp=drivesdk
+1,38,38. Lis 38 p1.mp3https://drive.google.com/file/d/17D2yyQj2GwIxdnnMDcfxplJBQZO8cH8b/view?usp=drivesdk
+1,39,39. Lis 39 p1.mp3https://drive.google.com/file/d/1R2xmVK9ZPpTEvA8heo9uLYbFAe51IP45/view?usp=drivesdk
+1,40,40. Lis 40 p1.mp3https://drive.google.com/file/d/1BTPM4uLHUwyjR-BomAqEOBLD-O-9gsxE/view?usp=drivesdk
+1,41,41. Lis 41 p1.mp3https://drive.google.com/file/d/1Vl6MtR_xNIxQT0AYWDTn_NpUCn_uptmJ/view?usp=drivesdk
+1,42,42. Lis 42 p1.mp3https://drive.google.com/file/d/1R393cLf3HCiCZSZWCmd05XA4nqcgRfIQ/view?usp=drivesdk
+1,43,43. Lis 43 p1.mp3https://drive.google.com/file/d/10LJkXOgbJBoZ2FDDfwPiOdIHVXlf4Mmp/view?usp=drivesdk
+1,44,44. Lis 44 p1.mp3https://drive.google.com/file/d/1nC9ust4bkwzUjj76BE2yP2XCjdHIWunN/view?usp=drivesdk
+1,45,45. Lis 45 p1.mp3https://drive.google.com/file/d/1rLhIlaSwaJ0NcOlr1uZx5aGlzWTdmVAH/view?usp=drivesdk
+1,46,46. Lis 46 p1.mp3https://drive.google.com/file/d/1_sJfLMBq-uQVSojgwhYw1zhHORZ8HicM/view?usp=drivesdk
+1,47,47. Lis 47 p1.mp3https://drive.google.com/file/d/1zytvyOs1c3u0C3hER9IWBnWcaTrDJnGs/view?usp=drivesdk
+1,48,48. Lis 48 p1.mp3https://drive.google.com/file/d/1CkMvF0ZcpEcxFwBzvg-oSU0xQUhFiq0k/view?usp=drivesdk
+1,49,49. Lis 49 p1.mp3https://drive.google.com/file/d/1F8MpP2gh60RIpItWeyhuQ4AEPzrmZs5A/view?usp=drivesdk
+1,50,50. Lis 50 p1.mp3https://drive.google.com/file/d/1ehtPJahA7JVi70WEEPGS1ZEGCg8zr4jE/view?usp=drivesdk
