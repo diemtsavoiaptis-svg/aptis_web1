@@ -1,16 +1,16 @@
 ﻿{
   "version": 2,
-  "builds": [
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "routes": [
     {
-      "src": "vercel_static/index.html",
-      "use": "@vercel/static"
+      "src": "/assets/(.*)",
+      "dest": "/vercel_static/assets/$1"
     },
     {
-      "src": "vercel_static/**",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
+      "src": "/static/(.*)",
+      "dest": "/vercel_static/static/$1"
+    },
     {
       "src": "/(.*)",
       "dest": "/vercel_static/index.html"
