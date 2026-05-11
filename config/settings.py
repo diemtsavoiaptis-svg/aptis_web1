@@ -19,7 +19,6 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
     ".onrender.com",
-    "diemtsavoiaptis.pythonanywhere.com",
     "tsaptis.com",
     "www.tsaptis.com",
 ]
@@ -32,8 +31,6 @@ for host in [RENDER_EXTERNAL_HOSTNAME, CUSTOM_DOMAIN]:
         ALLOWED_HOSTS.append(host)
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://diemtsavoiaptis.pythonanywhere.com",
-    "http://diemtsavoiaptis.pythonanywhere.com",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
     "https://tsaptis.com",
