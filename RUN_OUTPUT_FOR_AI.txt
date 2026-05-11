@@ -1,0 +1,60 @@
+﻿APTIS WEB RUN OUTPUT FOR AI
+===========================
+
+Generated at: 05/12/2026 02:04:22
+
+Current folder:
+C:\Users\Admin\Desktop\aptis_web_full
+
+Git branch:
+main
+
+Git status:
+ M PART2_PREP_REPORT.txt  M add_lock_and_bulk_delete_part1.py  M add_save_total_answers_button.py  M build_admin_part2_management.py  M build_listening_parts_and_part1_bulk.py  M build_part1_manager.py  M build_part2_gioi_12_topics_layout.py  M build_ui_red.py  M core/models.py  M core/urls.py  M core/views.py  M fix_admin_iframe_dashboard.py  M fix_dashboard_admin_links.py  M fix_dashboard_students_full.py  M fix_gioi_4_person_correct_answers.py  M fix_gioi_one_audio_student_choose_versions.py  M fix_listening_menu_no_iframe.py  M fix_may_gioi_one_total_voice.py  M force_add_save_total_button.py  M import_part2_gioi_audio_clean.py  M import_part2_gioi_voice_info_by_topic_number.py  M make_clean_part2_gioi_audio_importer.py  M make_import_voice_info_by_topic_number.py  M open_all_4_parts.py  M part2_kem_total_answer_data.py  M remove_audio_url_choose_answer_in_abc.py  M replace_note_with_big_save_button.py  M restore_dashboard_shell_iframe.py  M templates/core/student_part2_gioi.html  M vercel_static/index.html  M vercel_static/seed.html ?? _backup_before_english_ui/ ?? _backup_fix_login_english/ ?? _backup_fix_part3_english/ ?? _backup_force_english_remaining/ ?? _backup_full_english_ui/ ?? _backup_phase2_ui_english/ ?? _backup_phase3_source_db_english/ ?? add_part3_student_view_button.py ?? bad_text_source_report.txt ?? bulk_import_part3_audio_from_paste.py ?? check_part3_data.py ?? config/settings.py.backup_before_clean_neon ?? config/settings.py.backup_before_neon_clean ?? config/settings.py.backup_before_neon_final ?? config/settings.py.backup_clean_neon ?? config/settings.py.bak ?? config/settings.py.bak2 ?? core/migrations/0026_part3topic_alter_listeningpartquestion_options_and_more.py ?? core/part3_upload_redirect_middleware.py ?? create_bulk_part3_audio_importer.py ?? find_bad_text_source.py ?? find_bad_text_source_safe.py ?? find_rendered_templates.py ?? fix_local_csrf_null_origin.py ?? fix_login_english_only.py ?? fix_part2_answer_pool_save.py ?? fix_part2_listen_button_inline.py ?? fix_part2_student_only_audio_bar.py ?? fix_part3_english_only.py ?? fix_phase2_ui_english.py ?? fix_phase3_source_db_english.py ?? fix_real_student_part2_audio_player.py ?? index.html ?? install_part2_answer_pool.py ?? install_part2_inline_audio.py ?? qa_auth_real_urls.py ?? qa_auth_report.txt ?? qa_auth_report_phase2.txt ?? qa_language_audit.py ?? qa_language_audit_fast.py ?? qa_language_audit_localhost.py ?? qa_language_report.txt ?? qa_language_report_after_login_fix.txt ?? qa_language_report_localhost.txt ?? qa_language_report_short.txt ?? qa_login_after_fix_short.txt ?? qa_real_urls_only.py ?? qa_real_urls_report.txt ?? redesign_student_part2_ui.py ?? redirect_part3_to_upload.py ?? rendered_templates_report.txt ?? setup_part3_listening_upload.py ?? static/css/part3_fixed.css.backup_before_red_theme ?? static/css/part3_force.css.backup_before_red_theme ?? static/css/part3_listening.css.backup_before_red_theme ?? static/css/part3_only.css.backup_before_red_theme ?? templates/core/admin_listening_parts.html.backup_before_fix_part_buttons ?? templates/core/admin_listening_parts.html.backup_before_fix_vietnamese ?? templates/core/admin_listening_parts.html.backup_encoding_broken ?? templates/core/admin_part3_upload_data.html ?? templates/core/student_part3_topic.html ?? templates/dashboard_part3_listening.html.backup_before_fix_vietnamese ?? templates/part3_admin_only.html.backup_before_fix_vietnamese ?? templates/part3_fixed_admin.html.backup_before_fix_vietnamese ?? templates/part3_force_admin.html.backup_before_fix_vietnamese ?? templates/part3_red_admin.html.backup_before_fix_vietnamese ?? unlock_part2_save.py ?? update_part2_topic1_audio.py
+
+
+DJANGO CHECK
+============
+System check identified no issues (0 silenced).
+
+
+CURRENT DATABASE CHECK
+======================
+21 objects imported automatically (use -v 2 for details).  ENGINE= django.db.backends.postgresql HOST= ep-crimson-firefly-aqdffxzr.c-8.us-east-1.aws.neon.tech NAME= neondb NEON_USER_COUNT= 0 NEON_USERS= []
+
+
+SQLITE FILE CHECK
+=================
+SQLITE_EXISTS= True SQLITE_SIZE= 360448
+
+
+SQLITE DIRECT USER CHECK
+========================
+  File "<string>", line 3     conn=sqlite3.connect(p); cur=conn.cursor(); cur.execute(" SELECT name FROM sqlite_master WHERE type=table ORDER BY name\);                                                             ^ SyntaxError: unterminated string literal (detected at line 3)
+
+
+DUMP FILE CHECK
+===============
+DUMP_EXISTS= True DUMP_SIZE= 6 DUMP_HEAD= [ ] 
+
+
+GITIGNORE CONTENT
+=================
+.env
+*.env
+db.sqlite3
+*.sqlite3
+sqlite_data.json
+__pycache__/
+*.pyc
+venv/
+.venv/
+media/
+staticfiles/
+
+
+
+SETTINGS DATABASE SECTION CHECK
+===============================
+  File "<string>", line 1     \)' in text); print('HAS_DJ_DATABASE_URL=', 'dj_database_url' in text); print('HAS_DATABASE_URL=', 'DATABASE_URL' in text)      ^ SyntaxError: unexpected character after line continuation character
+
