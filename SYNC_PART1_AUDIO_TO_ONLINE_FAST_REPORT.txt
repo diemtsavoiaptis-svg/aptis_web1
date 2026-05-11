@@ -1,0 +1,31 @@
+SYNC PART 1 AUDIO TO ONLINE FAST REPORT
+Target DB vendor: postgresql
+Target DB name: neondb
+Local Part 1 rows found: 191
+Created online: 0
+Updated online: 191
+Online Part 1 total: 191
+Online with audio_url: 0
+Online with audio_drive_link: 191
+
+First 20 online rows:
+1 | 1. Lis 1 p1.mp3 | 
+2 | 2. Lis 2 p1.mp3 | 
+3 | 3. Lis 3 p1.mp3 | 
+4 | 4. Lis 4 p1.mp3 | 
+5 | 5. Lis 5 p1.mp3 | 
+6 | 6. Lis 6 p1.mp3 | 
+7 | 7. Lis 7 p1.mp3 | 
+8 | 8. Lis 8 p1.mp3 | 
+9 | 9. Lis 9 p1.mp3 | 
+10 | 10. Lis 10 p1.mp3 | 
+11 | 11. Lis 11 p1.mp3 | 
+12 | 12. Lis 12 p1.mp3 | 
+13 | 13. Lis 13 p1.mp3 | 
+14 | 14. Lis 14 p1.mp3 | 
+15 | 15. Lis 15 p1.mp3 | 
+16 | 16. Lis 16 p1.mp3 | 
+17 | 17. Lis 17 p1.mp3 | 
+18 | 18. Lis 18 p1.mp3 | 
+19 | 19. Lis 19 p1.mp3 | 
+20 | 20. Lis 20 p1.mp3 | 
