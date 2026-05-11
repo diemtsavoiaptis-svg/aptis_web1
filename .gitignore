@@ -1,10 +1,1 @@
-.env
-*.env
-db.sqlite3
-*.sqlite3
-__pycache__/
-*.pyc
-venv/
-.venv/
-media/
-staticfiles/
+﻿.env\n*.env\ndb.sqlite3\n*.sqlite3\nsqlite_data.json\n__pycache__/\n*.pyc\nvenv/\n.venv/\nmedia/\nstaticfiles/\n.env\n

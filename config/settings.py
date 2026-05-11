@@ -7,9 +7,6 @@ from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Load local environment files.
-# .env is for local Neon DATABASE_URL.
-# .env.local / .env.server are kept for compatibility with old setup.
 load_dotenv(BASE_DIR / ".env")
 load_dotenv(BASE_DIR / ".env.local")
 load_dotenv(BASE_DIR / ".env.server")
@@ -29,6 +26,7 @@ ALLOWED_HOSTS = [
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 CUSTOM_DOMAIN = os.environ.get("CUSTOM_DOMAIN")
+
 for host in [RENDER_EXTERNAL_HOSTNAME, CUSTOM_DOMAIN]:
     if host and host not in ALLOWED_HOSTS:
         ALLOWED_HOSTS.append(host)
@@ -41,6 +39,7 @@ CSRF_TRUSTED_ORIGINS = [
     "https://tsaptis.com",
     "https://www.tsaptis.com",
 ]
+
 for host in [RENDER_EXTERNAL_HOSTNAME, CUSTOM_DOMAIN]:
     if host:
         origin = f"https://{host}"
