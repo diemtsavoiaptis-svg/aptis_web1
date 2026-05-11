@@ -3,10 +3,7 @@
 env/
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
 .git/
-.gitignore
 db.sqlite3
 media/
 staticfiles/
@@ -20,8 +17,5 @@ qa_*.txt
 *.bak
 *.bak2
 *.backup*
-*.zip
-*.rar
-*.7z
 node_modules/
 _vercel_static_deploy/
