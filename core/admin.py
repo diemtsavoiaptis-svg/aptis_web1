@@ -419,3 +419,5 @@ class LoginThumbnailAdmin(admin.ModelAdmin):
         "ticker_text_5",
     )
 # ===== End Safe LoginThumbnail admin register =====
+
+

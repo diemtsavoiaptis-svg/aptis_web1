@@ -1975,3 +1975,13 @@ def admin_login_thumbnail_settings(request):
         "current": current,
     })
 # ===== End admin login thumbnail setting =====
+
+
+# ===== Admin dashboard safe placeholder views =====
+@login_required
+def admin_lessons_placeholder(request):
+    return render(request, "core/admin_lessons_placeholder.html")
+
+# ===== End admin dashboard safe placeholder views =====
+
+

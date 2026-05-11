@@ -335,3 +335,5 @@ class LoginThumbnail(models.Model):
         if self.image:
             return self.image.url
         return self.image_url
+
+

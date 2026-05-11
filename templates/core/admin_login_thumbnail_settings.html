@@ -3,14 +3,15 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Chỉnh sửa thumbnail đăng nhập</title>
-<link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
+<title>Thumbnail màn hình đăng nhập</title>
 <style>
 :root{
-    --red:#e60023;
-    --red2:#ff5f76;
-    --deep:#7a0010;
-    --dark:#3f0011;
+    --red:#ef4444;
+    --red2:#f43f5e;
+    --teal:#0f9f91;
+    --blue:#2563eb;
+    --amber:#f59e0b;
+    --dark:#4a0010;
     --line:#ffd1dc;
     --muted:#667085;
 }
@@ -18,100 +19,247 @@
 body{
     margin:0;
     min-height:100vh;
-    background:
-        radial-gradient(circle at top right,rgba(255,95,118,.18),transparent 34%),
-        linear-gradient(135deg,#fffafa,#fff0f4 48%,#fff7f9);
-    font-family:"Segoe UI",Tahoma,Arial,sans-serif;
+    background:linear-gradient(135deg,#fffafa,#fff0f4,#fff7f9);
+    font-family:"Segoe UI",Arial,sans-serif;
     color:var(--dark);
 }
-.wrap{max-width:1420px;margin:0 auto;padding:28px 20px 46px}
+.wrap{max-width:1480px;margin:0 auto;padding:28px 22px 48px}
 .hero,.panel{
     background:white;
     border:1px solid var(--line);
-    border-radius:30px;
+    border-radius:28px;
     padding:30px;
     box-shadow:0 18px 44px rgba(180,0,30,.07);
 }
-.hero{display:flex;justify-content:space-between;gap:20px;align-items:flex-start}
-.kicker{color:var(--red);font-size:15px;font-weight:950;letter-spacing:.08em;text-transform:uppercase}
-h1{margin:12px 0 8px;font-size:48px;line-height:1.02;letter-spacing:-.055em;color:#4a0010}
-.desc{color:var(--muted);font-size:18px;line-height:1.6;font-weight:650}
+.hero{display:flex;justify-content:space-between;gap:20px;align-items:center}
+.kicker{color:#e60023;font-weight:950;letter-spacing:.08em;text-transform:uppercase}
+h1{margin:10px 0;font-size:48px;line-height:1.05;letter-spacing:-.05em}
+.desc{color:var(--muted);font-size:18px;font-weight:650}
 .back{
-    min-height:48px;padding:0 20px;border-radius:16px;
-    background:linear-gradient(135deg,var(--red),var(--red2));
-    color:white;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;
-    font-weight:950;box-shadow:0 14px 28px rgba(230,0,35,.16)
+    min-height:52px;padding:0 22px;border-radius:16px;
+    background:linear-gradient(135deg,#e60023,#ff5f76);
+    color:white;text-decoration:none;display:inline-flex;align-items:center;font-weight:950;
 }
-.panel{margin-top:22px;background:rgba(255,255,255,.84)}
-.grid{display:grid;grid-template-columns:1fr 1.08fr;gap:22px}
+.panel{margin-top:22px}
+.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:24px}
 .card{background:white;border:1px solid var(--line);border-radius:22px;padding:22px}
-h2{margin:0 0 16px;font-size:22px;color:#4a0010}
-.preview{
-    position:relative;width:100%;aspect-ratio:16/9;border-radius:16px;overflow:hidden;
-    background:#fff1f4;border:1px solid #ffd1dc;
-}
-.preview img{width:100%;height:100%;object-fit:cover;display:block}
-.empty-preview{height:100%;display:grid;place-items:center;color:#9f0018;font-weight:950;text-align:center;padding:20px}
-.badge{
-    position:absolute;top:14px;left:14px;min-height:36px;padding:0 14px;border-radius:12px;
-    background:linear-gradient(135deg,var(--red),var(--red2));color:white;
-    display:flex;align-items:center;font-weight:950;box-shadow:0 10px 20px rgba(0,0,0,.12)
-}
-.file-info{margin-top:14px;background:#fff1f4;border:1px solid #ffe1e7;border-radius:16px;padding:16px;font-weight:850}
-.file-info small{display:block;margin-top:5px;color:var(--muted);font-weight:650}
-label{display:block;margin:0 0 9px;color:#5a0012;font-weight:950}
-.upload-box{
-    border:2px dashed #ffb6c2;border-radius:18px;min-height:178px;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
-    background:linear-gradient(135deg,#fffafa,#fff5f7);cursor:pointer;padding:20px
-}
-.upload-icon{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;background:#fff1f4;color:var(--red);font-size:30px;margin-bottom:12px}
-.upload-box strong{font-size:18px}
-.upload-box span{margin-top:5px;color:var(--muted);font-weight:650}
-input[type=file]{display:none}
-.hint{margin-top:12px;color:var(--muted);line-height:1.5;font-weight:650}
-.or{margin:22px 0;display:flex;align-items:center;gap:12px;color:#ff6f86;font-weight:950}
-.or:before,.or:after{content:"";height:1px;flex:1;background:#ffd1dc}
-input[type=text],input[type=url]{
-    width:100%;height:52px;border:1px solid var(--line);border-radius:14px;
-    padding:0 14px;font:inherit;outline:none;background:white
-}
-input:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(230,0,35,.09)}
-.ticker-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:14px}
-.ticker-preview{
-    margin-top:18px;
-    border:1px solid #ffd1dc;
-    border-radius:18px;
-    background:#fffafa;
+h2{margin:0 0 16px;font-size:24px}
+.login-preview{
+    position:relative;
+    width:100%;
+    aspect-ratio:16/9;
+    border-radius:10px;
     overflow:hidden;
-    padding:12px 0;
+    background:#111827;
+    box-shadow:0 26px 70px rgba(0,0,0,.22);
 }
-.ticker-track{
+.login-preview-bg{
+    position:absolute;
+    inset:0;
+    background:
+        linear-gradient(90deg,rgba(8,15,30,.88),rgba(8,15,30,.55),rgba(8,15,30,.84)),
+        radial-gradient(circle at 20% 20%,rgba(20,184,166,.22),transparent 30%),
+        linear-gradient(135deg,#111827,#243447);
+}
+.login-preview-bg img,.login-preview-bg video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    opacity:.44;
+    filter:brightness(.75);
+}
+.back-admin{
+    position:absolute;
+    top:22px;
+    left:22px;
+    z-index:3;
+    min-height:38px;
+    padding:0 16px;
+    border-radius:8px;
+    background:rgba(255,255,255,.18);
+    color:white;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:14px;
+    font-weight:850;
+}
+.top-title{
+    position:absolute;
+    top:30px;
+    left:50%;
+    transform:translateX(-50%);
+    min-width:500px;
+    min-height:66px;
+    padding:0 34px;
+    border-radius:999px;
     display:flex;
-    width:max-content;
-    animation:tickerMove 24s linear infinite;
+    align-items:center;
+    justify-content:center;
+    background:rgba(255,255,255,.13);
+    border:1px solid rgba(255,255,255,.22);
+    box-shadow:inset 0 1px 18px rgba(255,255,255,.14),0 18px 50px rgba(0,0,0,.25);
+    backdrop-filter:blur(10px);
+    z-index:2;
 }
-.ticker-item{
-    margin-right:34px;
-    white-space:nowrap;
-    color:#9f0018;
-    font-size:18px;
+.top-title span{
+    color:white;
+    font-size:38px;
+    letter-spacing:.13em;
     font-weight:950;
+    text-shadow:0 0 10px rgba(255,255,255,.72),0 8px 22px rgba(0,0,0,.65);
 }
-@keyframes tickerMove{
-    from{transform:translateX(0)}
-    to{transform:translateX(-50%)}
+.big-text{
+    position:absolute;
+    left:21%;
+    top:46%;
+    color:white;
+    font-size:62px;
+    line-height:1;
+    font-weight:950;
+    letter-spacing:.02em;
+    text-shadow:0 0 12px rgba(255,255,255,.75),0 12px 28px rgba(0,0,0,.65);
+    z-index:1;
 }
-.note{margin-top:16px;padding:15px 16px;border-radius:16px;border:1px solid #ffb6c2;background:#fff1f4;color:#9f0018;font-weight:750;line-height:1.6}
-.actions{margin-top:24px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+.preview-card-item{
+    position:absolute;
+    width:290px;
+    height:205px;
+    border-radius:14px;
+    overflow:hidden;
+    background:rgba(255,255,255,.93);
+    border:4px solid rgba(255,255,255,.86);
+    box-shadow:0 22px 50px rgba(0,0,0,.34);
+    display:grid;
+    grid-template-rows:1fr 54px;
+    transform:rotate(var(--r,0deg));
+    z-index:3;
+}
+.preview-card-item.big{
+    width:520px;
+    height:375px;
+    border-radius:28px;
+}
+.preview-card-item .icon-zone{
+    display:grid;
+    place-items:center;
+    font-size:58px;
+    background:rgba(255,255,255,.75);
+}
+.preview-card-item.big .icon-zone{font-size:95px}
+.preview-card-item .label-zone{
+    display:grid;
+    place-items:center;
+    color:white;
+    font-weight:950;
+    font-size:17px;
+}
+.preview-card-item.big .label-zone{font-size:34px}
+.card-road{left:7%;top:19%;--r:-3deg}
+.card-task{right:.8%;top:10%;--r:0deg}
+.card-doc{left:8%;bottom:18%;--r:2deg}
+.card-cert{right:16%;bottom:24%;--r:-1deg}
+.label-teal{background:linear-gradient(135deg,#0f9f91,#0d9488)}
+.label-red{background:linear-gradient(135deg,#ef4444,#f43f5e)}
+.label-blue{background:linear-gradient(135deg,#2563eb,#1d4ed8)}
+.label-amber{background:linear-gradient(135deg,#f59e0b,#e89000)}
+.controls{
+    position:absolute;
+    left:20px;
+    right:20px;
+    bottom:18px;
+    height:70px;
+    border-radius:0 0 16px 16px;
+    background:linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.76));
+    z-index:4;
+}
+.progress{
+    position:absolute;
+    left:0;
+    right:0;
+    top:16px;
+    height:7px;
+    background:rgba(255,255,255,.18);
+    border-radius:999px;
+    overflow:hidden;
+}
+.progress:before{
+    content:"";
+    display:block;
+    width:34%;
+    height:100%;
+    background:linear-gradient(90deg,#ef4444,#e11d48);
+}
+.ctrl-icons{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:12px;
+    display:flex;
+    align-items:center;
+    gap:22px;
+    color:white;
+    padding:0 14px;
+    font-weight:850;
+}
+.ctrl-icons .spacer{flex:1}
+.ctrl-icons .time{font-size:13px;opacity:.86}
+label{display:block;margin:14px 0 8px;font-weight:950}
+.upload{
+    min-height:118px;
+    border:2px dashed #ffb6c2;
+    border-radius:18px;
+    display:grid;
+    place-items:center;
+    text-align:center;
+    background:#fffafa;
+    cursor:pointer;
+    font-weight:850;
+    padding:18px;
+}
+.upload input{display:none}
+input[type=text],input[type=url]{
+    width:100%;
+    height:52px;
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:0 14px;
+    font:inherit;
+}
+.ticker-grid{display:grid;gap:12px}
+.note{
+    margin-top:16px;
+    padding:14px 16px;
+    border:1px solid #ffb6c2;
+    background:#fff1f4;
+    border-radius:16px;
+    color:#9f0018;
+    font-weight:750;
+}
+.actions{margin-top:22px;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:14px}
 button{
-    min-height:58px;border-radius:16px;border:1px solid var(--line);
-    font:inherit;font-size:18px;font-weight:950;cursor:pointer
+    min-height:56px;
+    border-radius:16px;
+    border:1px solid var(--line);
+    font:inherit;
+    font-weight:950;
+    cursor:pointer;
 }
-.save{background:linear-gradient(135deg,var(--red),var(--red2));color:white;border:0;box-shadow:0 16px 30px rgba(230,0,35,.18)}
-.danger,.reset{background:white;color:var(--red)}
-.message{margin-top:14px;padding:13px 16px;border-radius:16px;background:#ecfdf3;color:#027a48;font-weight:850}
-@media(max-width:900px){.hero{flex-direction:column}.grid{grid-template-columns:1fr}.actions{grid-template-columns:1fr}}
+.save{background:linear-gradient(135deg,#e60023,#ff5f76);color:white;border:0}
+.light{background:white;color:#e60023}
+.msg{margin-top:14px;padding:13px 16px;border-radius:16px;background:#ecfdf3;color:#027a48;font-weight:850}
+@media(max-width:1100px){
+    .grid{grid-template-columns:1fr}
+    .top-title{min-width:360px}
+    .top-title span{font-size:26px}
+    .preview-card-item{width:200px;height:145px}
+    .preview-card-item.big{width:330px;height:235px}
+    .big-text{font-size:42px}
+}
+@media(max-width:800px){
+    .preview-card-item{display:none}
+    .big-text{display:none}
+}
 </style>
 </head>
 <body>
@@ -120,14 +268,14 @@ button{
 <section class="hero">
     <div>
         <div class="kicker">Dashboard quản trị</div>
-        <h1>Chỉnh sửa thumbnail đăng nhập</h1>
-        <div class="desc">Thay đổi thumbnail và 5 chữ chạy ngang ở màn hình đăng nhập web.</div>
+        <h1>Thumbnail màn hình đăng nhập</h1>
+        <div class="desc">Thiết kế ảnh/video động và các thẻ nổi cho màn hình đăng nhập.</div>
     </div>
     <a class="back" href="/dashboard/">← Quay lại Dashboard</a>
 </section>
 
 {% for message in messages %}
-    <div class="message">{{ message }}</div>
+<div class="msg">{{ message }}</div>
 {% endfor %}
 
 <section class="panel">
@@ -136,101 +284,105 @@ button{
 
 <div class="grid">
     <div class="card">
-        <h2>Thumbnail hiện tại</h2>
+        <h2>Preview màn hình đăng nhập</h2>
 
-        <div class="preview">
-            {% if current and current.display_url %}
-                <div class="badge">✅ Đang sử dụng</div>
-                <img src="{{ current.display_url }}" alt="Thumbnail hiện tại">
-            {% else %}
-                <div class="empty-preview">
-                    Chưa có thumbnail tùy chỉnh.<br>
-                    Vẫn có thể dùng 5 chữ chạy ngang.
-                </div>
-            {% endif %}
-        </div>
-
-        <div class="file-info">
-            {% if current %}
-                {{ current.name|default:"Thumbnail đăng nhập" }}
-                <small>
-                    {% if current.image %}
-                        Ảnh upload từ máy
-                    {% elif current.image_url %}
-                        Ảnh từ đường dẫn
-                    {% else %}
-                        Chưa có ảnh, chỉ dùng chữ chạy ngang
-                    {% endif %}
-                </small>
-            {% else %}
-                Thumbnail mặc định
-                <small>Chưa có ảnh tùy chỉnh</small>
-            {% endif %}
-        </div>
-
-        <div class="ticker-preview">
-            <div class="ticker-track">
-                <span class="ticker-item">{{ current.ticker_text_1|default:"18 HỌC VIÊN ĐÃ ĐĂNG KÝ" }}</span>
-                <span class="ticker-item">{{ current.ticker_text_2|default:"CAM KẾT B1+ APTIS" }}</span>
-                <span class="ticker-item">{{ current.ticker_text_3|default:"30 NGÀY TĂNG TỐC" }}</span>
-                <span class="ticker-item">{{ current.ticker_text_4|default:"KÈM 1:1 LINH HOẠT" }}</span>
-                <span class="ticker-item">{{ current.ticker_text_5|default:"LUYỆN NGHE 4 PART" }}</span>
-
-                <span class="ticker-item">{{ current.ticker_text_1|default:"18 HỌC VIÊN ĐÃ ĐĂNG KÝ" }}</span>
-                <span class="ticker-item">{{ current.ticker_text_2|default:"CAM KẾT B1+ APTIS" }}</span>
-                <span class="ticker-item">{{ current.ticker_text_3|default:"30 NGÀY TĂNG TỐC" }}</span>
-                <span class="ticker-item">{{ current.ticker_text_4|default:"KÈM 1:1 LINH HOẠT" }}</span>
-                <span class="ticker-item">{{ current.ticker_text_5|default:"LUYỆN NGHE 4 PART" }}</span>
+        <div class="login-preview">
+            <div class="login-preview-bg">
+                {% if current and current.display_video_url %}
+                    <video src="{{ current.display_video_url }}" autoplay muted loop playsinline></video>
+                {% elif current and current.display_url %}
+                    <img src="{{ current.display_url }}" alt="Thumbnail đăng nhập">
+                {% endif %}
             </div>
+
+            <div class="back-admin">▦ Quay lại Admin</div>
+
+            <div class="top-title">
+                <span>KHÓA HỌC ONLINE</span>
+            </div>
+
+            <div class="big-text">BÀI GIẢNG</div>
+
+            <div class="preview-card-item card-road">
+                <div class="icon-zone" style="color:#0f9f91;">🗺</div>
+                <div class="label-zone label-teal">LỘ TRÌNH</div>
+            </div>
+
+            <div class="preview-card-item big card-task">
+                <div class="icon-zone" style="color:#ef4444;">📋</div>
+                <div class="label-zone label-red">BÀI TẬP</div>
+            </div>
+
+            <div class="preview-card-item card-doc">
+                <div class="icon-zone" style="color:#2563eb;">📖</div>
+                <div class="label-zone label-blue">TÀI LIỆU</div>
+            </div>
+
+            <div class="preview-card-item card-cert">
+                <div class="icon-zone" style="color:#f59e0b;">🏅</div>
+                <div class="label-zone label-amber">CHỨNG CHỈ</div>
+            </div>
+
+            <div class="controls">
+                <div class="progress"></div>
+                <div class="ctrl-icons">
+                    <span>▶</span>
+                    <span>⏭</span>
+                    <span>🔊</span>
+                    <span class="time">06:45 / 24:30</span>
+                    <span class="spacer"></span>
+                    <span>⚙</span>
+                    <span>▣</span>
+                    <span>⛶</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="note">
+            Preview này là giao diện màn hình đăng nhập. Nếu upload video, video sẽ chạy nền động.
         </div>
     </div>
 
     <div class="card">
-        <h2>Tải thumbnail mới</h2>
+        <h2>Cài đặt video/ảnh</h2>
 
-        <label>Chọn ảnh từ máy</label>
-        <label class="upload-box">
-            <input type="file" name="image" accept="image/png,image/jpeg,image/webp">
-            <div class="upload-icon">🖼️</div>
-            <strong>Kéo & thả thumbnail vào đây</strong>
-            <span>hoặc nhấp để chọn tệp</span>
+        <label>Chọn video động từ máy</label>
+        <label class="upload">
+            <input type="file" name="video" accept="video/mp4,video/webm">
+            🎬 Bấm để chọn video MP4/WebM
         </label>
 
-        <div class="hint">
-            Định dạng: JPG, PNG, WebP • Khuyến nghị: 1200×630 hoặc 1920×1080.
-        </div>
+        <label>Chọn ảnh từ máy</label>
+        <label class="upload">
+            <input type="file" name="image" accept="image/png,image/jpeg,image/webp">
+            🖼 Bấm để chọn ảnh thumbnail
+        </label>
 
-        <div class="or">HOẶC</div>
+        <label>Dán link video</label>
+        <input type="url" name="video_url" placeholder="https://example.com/video.mp4">
 
-        <label>Hoặc dán đường dẫn thumbnail</label>
-        <input type="url" name="image_url" placeholder="https://example.com/login-thumbnail.jpg">
-
-        <div style="height:16px"></div>
+        <label>Dán link ảnh</label>
+        <input type="url" name="image_url" placeholder="https://example.com/image.jpg">
 
         <label>Tên thumbnail</label>
-        <input type="text" name="name" value="{{ current.name|default:'' }}" placeholder="Ví dụ: Thumbnail màn hình đăng nhập">
+        <input type="text" name="name" value="{{ current.name|default:'' }}" placeholder="Ví dụ: Thumbnail đăng nhập">
 
-        <div style="height:18px"></div>
-
-        <h2>5 chữ chạy ngang</h2>
+        <h2 style="margin-top:22px">5 chữ chạy ngang</h2>
         <div class="ticker-grid">
-            <input type="text" name="ticker_text_1" value="{{ current.ticker_text_1|default:'18 HỌC VIÊN ĐÃ ĐĂNG KÝ' }}" placeholder="Chữ chạy 1">
-            <input type="text" name="ticker_text_2" value="{{ current.ticker_text_2|default:'CAM KẾT B1+ APTIS' }}" placeholder="Chữ chạy 2">
-            <input type="text" name="ticker_text_3" value="{{ current.ticker_text_3|default:'30 NGÀY TĂNG TỐC' }}" placeholder="Chữ chạy 3">
-            <input type="text" name="ticker_text_4" value="{{ current.ticker_text_4|default:'KÈM 1:1 LINH HOẠT' }}" placeholder="Chữ chạy 4">
-            <input type="text" name="ticker_text_5" value="{{ current.ticker_text_5|default:'LUYỆN NGHE 4 PART' }}" placeholder="Chữ chạy 5">
-        </div>
-
-        <div class="note">
-            Bạn nhập gì thì màn hình đăng nhập sẽ chạy ngang đúng nội dung đó. Có thể chỉ lưu chữ chạy, không bắt buộc phải đổi ảnh.
+            <input type="text" name="ticker_text_1" value="{{ current.ticker_text_1|default:'18 HỌC VIÊN ĐÃ ĐĂNG KÝ' }}">
+            <input type="text" name="ticker_text_2" value="{{ current.ticker_text_2|default:'CAM KẾT B1+ APTIS' }}">
+            <input type="text" name="ticker_text_3" value="{{ current.ticker_text_3|default:'30 NGÀY TĂNG TỐC' }}">
+            <input type="text" name="ticker_text_4" value="{{ current.ticker_text_4|default:'KÈM 1:1 LINH HOẠT' }}">
+            <input type="text" name="ticker_text_5" value="{{ current.ticker_text_5|default:'LUYỆN NGHE 4 PART' }}">
         </div>
     </div>
 </div>
 
 <div class="actions">
-    <button class="save" name="action" value="save_thumbnail" type="submit">💾 Lưu thumbnail / chữ chạy</button>
-    <button class="danger" name="action" value="delete_thumbnail" type="submit">🗑 Xóa ảnh hiện tại</button>
-    <button class="reset" name="action" value="restore_default" type="submit">↻ Khôi phục mặc định</button>
+    <button class="save" name="action" value="save_thumbnail" type="submit">💾 Lưu video/ảnh</button>
+    <button class="light" name="action" value="delete_video" type="submit">🎬 Xóa video</button>
+    <button class="light" name="action" value="delete_image" type="submit">🖼 Xóa ảnh</button>
+    <button class="light" name="action" value="restore_default" type="submit">↻ Mặc định</button>
 </div>
 
 </form>

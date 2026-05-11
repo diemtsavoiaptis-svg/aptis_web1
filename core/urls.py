@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 from . import listening_ui
 
-urlpatterns = [
+urlpatterns = [    path("dashboard/lessons/", views.admin_lessons_placeholder, name="admin_lessons_placeholder"),
     path("dashboard/login-thumbnail/", views.admin_login_thumbnail_settings, name="admin_login_thumbnail_settings"),
     path("dashboard/background/", views.admin_background_settings, name="admin_background_settings"),
     path("listening/part-2/may-gioi/", views.student_part2_gioi_topics, name="student_part2_gioi_topics"),

@@ -1,0 +1,46 @@
+{% load static %}
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Quản lý bài học</title>
+<style>
+body{
+    margin:0;
+    min-height:100vh;
+    background:linear-gradient(135deg,#fffafa,#fff0f4);
+    font-family:Segoe UI,Arial,sans-serif;
+    color:#4a0010;
+}
+.wrap{max-width:1100px;margin:auto;padding:36px 22px}
+.card{
+    background:white;
+    border:1px solid #ffd1dc;
+    border-radius:28px;
+    padding:34px;
+    box-shadow:0 18px 44px rgba(180,0,30,.08);
+}
+h1{font-size:46px;margin:0 0 12px}
+p{font-size:18px;color:#667085}
+a{
+    display:inline-flex;
+    margin-top:20px;
+    padding:14px 22px;
+    border-radius:16px;
+    background:linear-gradient(135deg,#e60023,#ff5f76);
+    color:white;
+    text-decoration:none;
+    font-weight:900;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+    <div class="card">
+        <h1>Quản lý bài học</h1>
+        <p>Mục bài học đã mở. Có thể tiếp tục thêm giao diện quản lý video/nội dung bài học sau.</p>
+        <a href="/dashboard/">← Quay lại Dashboard</a>
+    </div>
+</div>
+</body>
+</html>
