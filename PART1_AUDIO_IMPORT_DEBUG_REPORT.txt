@@ -1,0 +1,188 @@
+﻿=== PART 1 AUDIO IMPORT DEBUG REPORT ===
+Generated at: 05/12/2026 02:28:57
+
+--- GIT STATUS ---
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   PART2_PREP_REPORT.txt
+	modified:   add_lock_and_bulk_delete_part1.py
+	modified:   add_save_total_answers_button.py
+	modified:   build_admin_part2_management.py
+	modified:   build_listening_parts_and_part1_bulk.py
+	modified:   build_part1_manager.py
+	modified:   build_part2_gioi_12_topics_layout.py
+	modified:   build_ui_red.py
+	modified:   core/models.py
+	modified:   core/urls.py
+	modified:   core/views.py
+	modified:   fix_admin_iframe_dashboard.py
+	modified:   fix_dashboard_admin_links.py
+	modified:   fix_dashboard_students_full.py
+	modified:   fix_gioi_4_person_correct_answers.py
+	modified:   fix_gioi_one_audio_student_choose_versions.py
+	modified:   fix_listening_menu_no_iframe.py
+	modified:   fix_may_gioi_one_total_voice.py
+	modified:   force_add_save_total_button.py
+	modified:   import_part2_gioi_audio_clean.py
+	modified:   import_part2_gioi_voice_info_by_topic_number.py
+	modified:   make_clean_part2_gioi_audio_importer.py
+	modified:   make_import_voice_info_by_topic_number.py
+	modified:   open_all_4_parts.py
+	modified:   part2_kem_total_answer_data.py
+	modified:   remove_audio_url_choose_answer_in_abc.py
+	modified:   replace_note_with_big_save_button.py
+	modified:   restore_dashboard_shell_iframe.py
+	modified:   templates/core/student_part2_gioi.html
+	modified:   vercel_static/index.html
+	modified:   vercel_static/seed.html
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	_backup_before_english_ui/
+	_backup_fix_login_english/
+	_backup_fix_part3_english/
+	_backup_force_english_remaining/
+	_backup_full_english_ui/
+	_backup_phase2_ui_english/
+	_backup_phase3_source_db_english/
+	add_part3_student_view_button.py
+	bad_text_source_report.txt
+	bulk_import_listening_data.py
+	bulk_import_part3_audio_from_paste.py
+	check_part3_data.py
+	config/settings.py.backup_before_clean_neon
+	config/settings.py.backup_before_neon_clean
+	config/settings.py.backup_before_neon_final
+	config/settings.py.backup_clean_neon
+	config/settings.py.bak
+	config/settings.py.bak2
+	core/migrations/0026_part3topic_alter_listeningpartquestion_options_and_more.py
+	core/part3_upload_redirect_middleware.py
+	create_bulk_import_listening_data.py
+	create_bulk_part3_audio_importer.py
+	find_bad_text_source.py
+	find_bad_text_source_safe.py
+	find_rendered_templates.py
+	fix_local_csrf_null_origin.py
+	fix_login_english_only.py
+	fix_part2_answer_pool_save.py
+	fix_part2_listen_button_inline.py
+	fix_part2_student_only_audio_bar.py
+	fix_part3_english_only.py
+	fix_phase2_ui_english.py
+	fix_phase3_source_db_english.py
+	fix_real_student_part2_audio_player.py
+	index.html
+	install_part2_answer_pool.py
+	install_part2_inline_audio.py
+	qa_auth_real_urls.py
+	qa_auth_report.txt
+	qa_auth_report_phase2.txt
+	qa_language_audit.py
+	qa_language_audit_fast.py
+	qa_language_audit_localhost.py
+	qa_language_report.txt
+	qa_language_report_after_login_fix.txt
+	qa_language_report_localhost.txt
+	qa_language_report_short.txt
+	qa_login_after_fix_short.txt
+	qa_real_urls_only.py
+	qa_real_urls_report.txt
+	redesign_student_part2_ui.py
+	redirect_part3_to_upload.py
+	rendered_templates_report.txt
+	setup_part3_listening_upload.py
+	static/css/part3_fixed.css.backup_before_red_theme
+	static/css/part3_force.css.backup_before_red_theme
+	static/css/part3_listening.css.backup_before_red_theme
+	static/css/part3_only.css.backup_before_red_theme
+	templates/core/admin_listening_parts.html.backup_before_fix_part_buttons
+	templates/core/admin_listening_parts.html.backup_before_fix_vietnamese
+	templates/core/admin_listening_parts.html.backup_encoding_broken
+	templates/core/admin_part3_upload_data.html
+	templates/core/student_part3_topic.html
+	templates/dashboard_part3_listening.html.backup_before_fix_vietnamese
+	templates/part3_admin_only.html.backup_before_fix_vietnamese
+	templates/part3_fixed_admin.html.backup_before_fix_vietnamese
+	templates/part3_force_admin.html.backup_before_fix_vietnamese
+	templates/part3_red_admin.html.backup_before_fix_vietnamese
+	unlock_part2_save.py
+	update_part2_topic1_audio.py
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+
+--- FILES RELATED TO IMPORT / AUDIO / REPORT ---
+
+Name                                                                 Length LastWriteTime        
+----                                                                 ------ -------------        
+add_lock_and_bulk_delete_part1.py                                     21036 5/11/2026 11:28:16 PM
+AUDIO_DEBUG_REPORT.txt                                                19341 5/12/2026 2:19:10 AM 
+bad_text_source_report.txt                                             7442 5/11/2026 11:30:55 PM
+build_listening_parts_and_part1_bulk.py                               22654 5/11/2026 11:28:16 PM
+build_part1_manager.py                                                17747 5/11/2026 11:28:16 PM
+bulk_import_listening_data.py                                          8980 5/12/2026 2:25:34 AM 
+bulk_import_part3_audio_from_paste.py                                  4464 5/12/2026 1:24:47 AM 
+check_and_import_part2_voice_info.py                                   3845 5/11/2026 11:17:19 PM
+create_bulk_import_listening_data.py                                   8843 5/12/2026 2:25:34 AM 
+create_bulk_part3_audio_importer.py                                    4476 5/12/2026 1:24:47 AM 
+db_backup_before_lock_part1_2_delete_part3_4_20260511_230117.sqlite3 360448 5/11/2026 10:59:02 PM
+fix_gioi_one_audio_student_choose_versions.py                         22215 5/11/2026 11:28:16 PM
+fix_missing_view_imports.py                                             590 5/11/2026 5:29:02 PM 
+fix_part2_student_only_audio_bar.py                                    2997 5/12/2026 12:03:13 AM
+fix_real_student_part2_audio_player.py                                 7155 5/12/2026 12:06:14 AM
+HEALTH_REPORT.txt                                                      1779 5/11/2026 11:13:02 PM
+import_part1_audio_manual.py                                           4680 5/11/2026 11:13:02 PM
+import_part1_from_terminal.py                                          2496 5/11/2026 11:17:19 PM
+import_part2_gioi_audio_clean.py                                       5428 5/11/2026 11:28:17 PM
+import_part2_gioi_voice_info_by_topic_number.py                        5190 5/11/2026 11:28:17 PM
+install_part2_inline_audio.py                                          4763 5/11/2026 11:54:56 PM
+make_check_import_voice_info.py                                        4013 5/11/2026 11:17:19 PM
+make_clean_part2_gioi_audio_importer.py                                5590 5/11/2026 11:28:17 PM
+make_import_terminal.py                                                2657 5/11/2026 11:17:19 PM
+make_import_voice_info_by_topic_number.py                              5376 5/11/2026 11:28:17 PM
+make_part2_prep_report.py                                              1185 5/11/2026 5:29:02 PM 
+NEON_DEBUG_REPORT.txt                                                  4200 5/12/2026 2:03:10 AM 
+NEON_IMPORT_OUTPUT_FOR_AI.txt                                          1422 5/12/2026 2:08:39 AM 
+NEON_USER_IMPORT_OUTPUT_FOR_AI.txt                                     1216 5/12/2026 2:10:08 AM 
+part1_32_import.tsv                                                   14308 5/11/2026 5:29:02 PM 
+part1_audio_drive.txt                                                 20938 5/11/2026 5:29:02 PM 
+PART2_PREP_REPORT.txt                                                 10779 5/11/2026 11:28:17 PM
+qa_auth_report.txt                                                    52836 5/11/2026 11:26:54 PM
+qa_auth_report_phase2.txt                                               852 5/11/2026 11:28:35 PM
+qa_language_report.txt                                               192570 5/11/2026 11:23:09 PM
+qa_language_report_after_login_fix.txt                                59072 5/11/2026 11:25:16 PM
+qa_language_report_localhost.txt                                      59054 5/11/2026 11:24:15 PM
+qa_language_report_short.txt                                          94321 5/11/2026 11:28:17 PM
+qa_real_urls_report.txt                                               13632 5/11/2026 11:25:58 PM
+remove_audio_url_choose_answer_in_abc.py                              21325 5/11/2026 11:28:17 PM
+rendered_templates_report.txt                                          2448 5/11/2026 11:32:08 PM
+update_part2_topic1_audio.py                                           2130 5/11/2026 11:59:30 PM
+
+
+
+
+--- BULK_LISTENING_IMPORT_REPORT.txt ---
+BULK_LISTENING_IMPORT_REPORT.txt NOT FOUND
+
+--- PART1_AUDIO_DRIVE_IMPORT_REPORT.txt ---
+PART1_AUDIO_DRIVE_IMPORT_REPORT.txt NOT FOUND
+
+--- DJANGO PART 1 AUDIO DATABASE CHECK ---
+21 objects imported automatically (use -v 2 for details).
+
+Part 1 total questions: 0
+Part 1 with audio_url: 0
+Part 1 with audio_drive_link: 0
+First 20:
+
+
+--- DJANGO CHECK ---
+System check identified no issues (0 silenced).
+
+
+=== END REPORT ===
