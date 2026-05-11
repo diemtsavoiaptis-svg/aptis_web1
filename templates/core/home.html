@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>?i?m TSA V?i Aptis</title>
+<title>Aptis Learning Platform</title>
 <link rel="stylesheet" href="{% static 'core/css/aptis_font_lock.css' %}">
 <style>
 :root{
@@ -241,8 +241,8 @@ body.overlay-zooming .bg-image{
     <div id="authWrap" class="auth-modal-wrap">
         <main class="auth-modal">
             <button class="close-btn" type="button" onclick="closeAuth()">?</button>
-            <h1 class="brand-title">?i?m TSA V?i Aptis</h1>
-            <p id="modeDesc" class="brand-desc">Nh?p th?ng tin ?? v?o h?c.</p>
+            <h1 class="brand-title">Aptis Learning Platform</h1>
+            <p id="modeDesc" class="brand-desc">Enter your information to start learning.</p>
 
             <div class="tabs">
                 <button id="loginTab" class="tab-btn active" type="button" onclick="switchTab('login')">login</button>
@@ -253,10 +253,10 @@ body.overlay-zooming .bg-image{
                 <form method="post" action="{% url 'login' %}">
                     {% csrf_token %}
                     <input type="text" name="email" placeholder="Email" autocomplete="username" required>
-                    <input type="password" name="password" placeholder="M?t kh?u" autocomplete="current-password" required>
+                    <input type="password" name="password" placeholder="Password" autocomplete="current-password" required>
                     <button class="submit-btn" type="submit">login</button>
                 </form>
-                <div class="note-box">T?i kho?n m?i ??ng k? c?n ???c admin duy?t tr??c khi login.</div>
+                <div class="note-box">New accounts must be approved by an admin before login.</div>
             </section>
 
             <section id="registerPanel" class="form-panel">
@@ -265,10 +265,10 @@ body.overlay-zooming .bg-image{
                     <input type="text" name="full_name" placeholder="H? t?n student" required>
                     <input type="text" name="phone" placeholder="S? ?i?n tho?i" required>
                     <input type="email" name="email" placeholder="Email" required>
-                    <input type="password" name="password" placeholder="M?t kh?u" required>
-                    <button class="submit-btn" type="submit">T?o t?i kho?n</button>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <button class="submit-btn" type="submit">Create Account</button>
                 </form>
-                <div class="note-box">T?i kho?n m?i ??ng k? c?n ???c admin duy?t tr??c khi login.</div>
+                <div class="note-box">New accounts must be approved by an admin before login.</div>
             </section>
         </main>
     </div>
@@ -312,7 +312,7 @@ function switchTab(type){
     if(type==="login"){
         loginTab.classList.add("active");
         loginPanel.classList.add("active");
-        modeDesc.textContent="Nh?p th?ng tin ?? v?o h?c.";
+        modeDesc.textContent="Enter your information to start learning.";
     }else{
         registerTab.classList.add("active");
         registerPanel.classList.add("active");

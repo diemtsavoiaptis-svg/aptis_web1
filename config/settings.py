@@ -60,6 +60,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "core.local_csrf_middleware.LocalCSRFFixMiddleware",
     "core.english_ui_middleware.EnglishUIMiddleware",
     "core.lock_parts_middleware.LockPartOneTwoMiddleware",
     "core.part3_force_middleware.ForcePart3Middleware",

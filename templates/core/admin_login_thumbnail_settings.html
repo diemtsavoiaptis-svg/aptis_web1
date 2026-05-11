@@ -5,7 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thumbnail m?n h?nh login</title>
+<title>Login Screen Thumbnail</title>
 <link rel="stylesheet" href="{% static 'core/css/aptis_font_lock.css' %}">
 <style>
 :root{
@@ -430,10 +430,10 @@ body.preview-fullscreen-lock{
     <div class="hero">
         <div>
             <small>Admin Dashboard</small>
-            <h1>Thumbnail m?n h?nh login</h1>
-            <p>Interface basic: ch? th?m ?nh, k?o ?nh trong preview r?i l?u.</p>
+            <h1>Login Screen Thumbnail</h1>
+            <p>Basic interface: add images, drag them inside the preview, then save.</p>
         </div>
-        <a class="back" href="{% url 'dashboard' %}">? Quay l?i Dashboard</a>
+        <a class="back" href="{% url 'dashboard' %}">← Back to Dashboard</a>
     </div>
 
     {% for message in messages %}
@@ -447,11 +447,11 @@ body.preview-fullscreen-lock{
         <div class="grid">
             <div class="panel">
                 <h2>Preview</h2>
-                <p class="note">K?o ?nh ?? ??t v? tr?. Admin kh?ng ph?ng to ?nh khi hover n?a.</p>
+                <p class="note">Drag images to set their position. Admin no longer zooms images on hover.</p>
                 <div class="capture-bar">
-                    <button class="capture-btn" type="button" id="captureVideoFrameBtn">?? L?y thumbnail t? video</button>
+                    <button class="capture-btn" type="button" id="captureVideoFrameBtn">Get Thumbnail from Video</button>
                 </div>
-                <div class="capture-note">M?o: ph?t video ??n ??ng b? c?c b?n mu?n, r?i b?m n?t n?y ?? ch?p frame l?m thumbnail.</div>
+                <div class="capture-note">Tip: play the video to the frame you want, then click this button to capture it as a thumbnail.</div>
 
                 <button class="fullscreen-btn" type="button" id="previewFullscreenBtn">? Ph?ng to to?n m?n h?nh</button>
 
@@ -488,11 +488,11 @@ body.preview-fullscreen-lock{
             </div>
 
             <div class="panel">
-                <h2>Th?m ?nh</h2>
+                <h2>Add Image</h2>
 
                 <div class="add-box" id="addBox">
                     <div class="add-line">
-                        + Th?m ?nh
+                        + Add Image
                         <input type="file" name="overlay_images" accept="image/*" style="display:none">
                     </div>
                 </div>
@@ -530,8 +530,8 @@ body.preview-fullscreen-lock{
                     </div>
                     {% empty %}
                     <div class="current-row">
-                        <b>Ch?a c? ?nh n?i</b>
-                        <small>B?m + Th?m ?nh ?? upload ?nh ??u ti?n.</small>
+                        <b>No Floating Images Yet</b>
+                        <small>Click + Add Image to upload the first image.</small>
                     </div>
                     {% endfor %}
                 </div>
@@ -541,7 +541,7 @@ body.preview-fullscreen-lock{
         </div>
     
         <div class="save-all-bar">
-            <button class="save-all-btn" type="submit" name="action" value="save_thumbnail">?? L?u to?n b? interface</button>
+            <button class="save-all-btn" type="submit" name="action" value="save_thumbnail">Save Full Interface</button>
         </div>
 
     </form>
@@ -554,7 +554,7 @@ body.preview-fullscreen-lock{
     function createAddLine(){
         const line = document.createElement("div");
         line.className = "add-line";
-        line.innerHTML = '+ Th?m ?nh <input type="file" name="overlay_images" accept="image/*" style="display:none">';
+        line.innerHTML = '+ Add Image <input type="file" name="overlay_images" accept="image/*" style="display:none">';
         const input = line.querySelector("input");
 
         line.addEventListener("click", function(){
@@ -870,7 +870,7 @@ body.preview-fullscreen-lock{
 
         captureBtn.textContent = "? ?? l?y thumbnail t? video";
         setTimeout(function(){
-            captureBtn.textContent = "?? L?y thumbnail t? video";
+            captureBtn.textContent = "Get Thumbnail from Video";
         }, 1800);
     });
 })();
