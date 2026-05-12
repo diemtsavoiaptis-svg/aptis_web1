@@ -1,4 +1,4 @@
-﻿{% load static %}
+{% load static %}
 <!doctype html>
 <html lang="vi">
 <head>
@@ -109,9 +109,10 @@
             </div>
 
             <div class="part-tabs">
-                {% for part in part_tabs %}
-                    <a class="{% if part == part_number %}active{% endif %}" href="{% url 'listening' %}?part={{ part }}">Part {{ part }}</a>
-                {% endfor %}
+                <a class="{% if part_number == 1 %}active{% endif %}" href="{% url 'listening' %}?part=1">Part 1</a>
+                <a class="{% if part_number == 2 %}active{% endif %}" href="{% url 'student_part2' %}">Part 2</a>
+                <a class="{% if part_number == 3 %}active{% endif %}" href="{% url 'student_part3' %}">Part 3</a>
+                <a class="{% if part_number == 4 %}active{% endif %}" href="{% url 'student_part4' %}">Part 4</a>
             </div>
 
             {% if no_question %}
