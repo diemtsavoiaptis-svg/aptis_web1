@@ -246,6 +246,21 @@
             border-radius: 999px;
         }
 
+        .part4-native-audio {
+            width: 100%;
+            height: 46px;
+            border-radius: 999px;
+            background: #eef0f2;
+        }
+
+        .audio-player.native-mode {
+            display: block;
+            padding: 14px 18px;
+            background: transparent;
+            box-shadow: none;
+            margin-bottom: 18px;
+        }
+
         .audio-player {
             min-height: 62px;
             border-radius: 24px;
@@ -572,7 +587,22 @@
                 flex-direction: column;
             }
 
-            .audio-player {
+            .part4-native-audio {
+            width: 100%;
+            height: 46px;
+            border-radius: 999px;
+            background: #eef0f2;
+        }
+
+        .audio-player.native-mode {
+            display: block;
+            padding: 14px 18px;
+            background: transparent;
+            box-shadow: none;
+            margin-bottom: 18px;
+        }
+
+        .audio-player {
                 grid-template-columns: 42px 32px 1fr;
             }
 
@@ -637,13 +667,11 @@
             </div>
             <div class="progress-bar"><div style="width: {{ progress_percent }}%"></div></div>
 
-            <section class="audio-player real-audio-mode">
+            <section class="audio-player native-mode">
                 {% if selected.audio_url %}
-                    <audio class="real-part4-audio" controls controlsList="nodownload noplaybackrate" preload="none" src="{% url 'secure_part4_audio' selected.id %}"></audio>
-                    <div class="play-count">Audio Part 4</div>
+                    <audio class="part4-native-audio" controls controlsList="nodownload noplaybackrate" preload="metadata" src="{{ selected.audio_url }}"></audio>
                 {% else %}
                     <div class="no-audio-note">Chưa có audio cho bài này</div>
-                    <div class="play-count">Audio sẽ được bổ sung sau</div>
                 {% endif %}
             </section>
 
