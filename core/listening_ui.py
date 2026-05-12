@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from .models import ListeningQuestion, StudentProfile
@@ -25,7 +25,10 @@ def listening_page(request):
     except Exception:
         current_index = 1
 
-    if part_number not in [1, 2, 3, 4]:
+    if part_number == 4:
+        return redirect("student_part4")
+
+    if part_number not in [1, 2, 3]:
         part_number = 1
 
     questions = ListeningQuestion.objects.filter(part=part_number).order_by("question_number", "id")
