@@ -1995,7 +1995,39 @@ def student_part3_page(request):
 # ===== Real Listening Part 4 admin/student interface =====
 
 def student_part4_page(request):
-    materials = ListeningPartMaterial.objects.filter(part=4, is_active=True).order_by("id")
+    all_materials = ListeningPartMaterial.objects.filter(part=4, is_active=True).order_by("id")
+
+    # Only show real Part 4 rows that have at least one usable question/answer/paraphrase.
+    valid_ids = []
+    for material in all_materials:
+        q16 = material.questions.filter(order=16).first()
+        q17 = material.questions.filter(order=17).first()
+
+        has_q16_data = q16 and (
+            (q16.question_text or "").strip()
+            and (
+                (q16.option_a or "").strip()
+                or (q16.option_b or "").strip()
+                or (q16.option_c or "").strip()
+            )
+        )
+
+        has_q17_data = q17 and (
+            (q17.question_text or "").strip()
+            and (
+                (q17.option_a or "").strip()
+                or (q17.option_b or "").strip()
+                or (q17.option_c or "").strip()
+            )
+        )
+
+        has_paraphrase = bool((material.transcript or "").strip())
+
+        if has_q16_data or has_q17_data or has_paraphrase:
+            valid_ids.append(material.id)
+
+    materials = all_materials.filter(id__in=valid_ids).order_by("id")
+
     selected_id = request.GET.get("set")
     selected = None
 
@@ -2005,13 +2037,15 @@ def student_part4_page(request):
     if selected is None:
         selected = materials.first()
 
-    questions = selected.questions.all().order_by("order", "id") if selected else []
+    questions = selected.questions.filter(order__in=[16, 17]).order_by("order", "id") if selected else []
 
     return render(request, "core/student_part4.html", {
         "materials": materials,
         "selected": selected,
         "questions": questions,
     })
+
+
 # ===== End Student Listening Part 4 Aptis Keys style interface =====
 
 
