@@ -3,18 +3,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Part 4 | Diem TSA with Aptis</title>
+    <title>Admin Part 4 Table | Diem TSA with Aptis</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
         :root {
-            --red: #b91c1c;
-            --red-dark: #7f1d1d;
-            --red-soft: #fee2e2;
-            --bg: #f8fafc;
-            --text: #111827;
+            --red: #d9001b;
+            --red-2: #ff3157;
+            --dark: #3b0012;
+            --soft: #fff1f5;
+            --soft-2: #ffe4ec;
+            --border: #ffc2d1;
             --muted: #6b7280;
-            --line: #e5e7eb;
-            --card: #ffffff;
+            --white: #ffffff;
+            --shadow: 0 24px 70px rgba(120, 0, 25, 0.12);
+            --soft-shadow: 0 14px 36px rgba(120, 0, 25, 0.08);
         }
 
         * {
@@ -23,252 +26,83 @@
 
         body {
             margin: 0;
-            font-family: Inter, Arial, sans-serif;
-            background: linear-gradient(180deg, #fff7f7, #f8fafc 42%, #ffffff);
-            color: var(--text);
+            font-family: Inter, Arial, Helvetica, sans-serif;
+            color: var(--dark);
+            background:
+                radial-gradient(circle at top right, rgba(255, 49, 87, 0.18), transparent 34%),
+                radial-gradient(circle at top left, rgba(217, 0, 27, 0.10), transparent 30%),
+                linear-gradient(180deg, #fff7fa 0%, #fff1f5 42%, #fff 100%);
+            min-height: 100vh;
         }
 
         .page {
-            min-height: 100vh;
-            padding: 28px;
+            max-width: 1560px;
+            margin: 0 auto;
+            padding: 28px 18px 46px;
         }
 
-        .topbar {
-            max-width: 1320px;
-            margin: 0 auto 22px;
+        .top-card {
+            background: rgba(255, 255, 255, 0.94);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            box-shadow: var(--shadow);
+            padding: 26px 30px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            gap: 14px;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 24px;
         }
 
         .brand {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 16px;
         }
 
         .brand-mark {
-            width: 50px;
-            height: 50px;
-            border-radius: 18px;
-            background: linear-gradient(135deg, var(--red-dark), var(--red));
+            width: 62px;
+            height: 62px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, var(--red), var(--red-2));
             color: #fff;
             display: grid;
             place-items: center;
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 950;
-            box-shadow: 0 16px 32px rgba(185, 28, 28, 0.25);
+            box-shadow: 0 16px 36px rgba(217, 0, 27, 0.24);
         }
 
-        .brand-title {
-            font-size: 20px;
-            font-weight: 950;
-            letter-spacing: -0.04em;
-        }
-
-        .brand-subtitle {
-            color: var(--muted);
+        .eyebrow {
+            color: var(--red);
             font-size: 13px;
-            font-weight: 750;
-            margin-top: 4px;
+            font-weight: 950;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 38px;
+            line-height: 1.05;
+            letter-spacing: -0.06em;
+            color: var(--dark);
+        }
+
+        .subtitle {
+            margin: 10px 0 0;
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.55;
+            font-weight: 650;
         }
 
         .top-actions {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
-        }
-
-        .top-actions a {
-            text-decoration: none;
-            padding: 10px 14px;
-            border-radius: 999px;
-            color: var(--red-dark);
-            background: #fff;
-            border: 1px solid #fecaca;
-            font-weight: 850;
-            font-size: 13px;
-        }
-
-        .layout {
-            max-width: 1320px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 360px minmax(0, 1fr);
-            gap: 22px;
-        }
-
-        .panel {
-            background: rgba(255, 255, 255, 0.92);
-            border: 1px solid #fee2e2;
-            border-radius: 28px;
-            box-shadow: 0 24px 70px rgba(127, 29, 29, 0.10);
-            overflow: hidden;
-        }
-
-        .side-head {
-            padding: 24px;
-            background: linear-gradient(135deg, var(--red-dark), var(--red));
-            color: #fff;
-        }
-
-        .eyebrow {
-            font-size: 12px;
-            font-weight: 950;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            opacity: 0.84;
-        }
-
-        .side-head h1 {
-            margin: 8px 0 6px;
-            font-size: 30px;
-            letter-spacing: -0.05em;
-        }
-
-        .side-head p {
-            margin: 0;
-            line-height: 1.55;
-            font-weight: 650;
-            opacity: 0.88;
-        }
-
-        .list {
-            padding: 16px;
-            display: grid;
-            gap: 12px;
-        }
-
-        .item {
-            display: block;
-            padding: 15px;
-            border-radius: 20px;
-            border: 1px solid var(--line);
-            background: #fff;
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .item.active,
-        .item:hover {
-            border-color: #ef4444;
-            background: #fff7f7;
-        }
-
-        .item-title {
-            font-weight: 950;
-            margin-bottom: 6px;
-        }
-
-        .item-meta {
-            color: var(--muted);
-            font-size: 12px;
-            font-weight: 750;
-        }
-
-        .main {
-            padding: 24px;
-        }
-
-        .section-title {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            align-items: flex-start;
-            margin-bottom: 18px;
-        }
-
-        .section-title h2 {
-            margin: 0;
-            font-size: 28px;
-            letter-spacing: -0.05em;
-        }
-
-        .section-title p {
-            margin: 6px 0 0;
-            color: var(--muted);
-            font-weight: 650;
-            line-height: 1.6;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-        }
-
-        .field {
-            display: grid;
-            gap: 7px;
-        }
-
-        .field.full {
-            grid-column: 1 / -1;
-        }
-
-        label {
-            font-size: 12px;
-            font-weight: 950;
-            color: #7f1d1d;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-        }
-
-        input,
-        textarea,
-        select {
-            width: 100%;
-            border: 1px solid #fecaca;
-            background: #fff;
-            border-radius: 16px;
-            padding: 12px 13px;
-            font: inherit;
-            outline: none;
-        }
-
-        textarea {
-            min-height: 98px;
-            resize: vertical;
-        }
-
-        input:focus,
-        textarea:focus,
-        select:focus {
-            border-color: #ef4444;
-            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.13);
-        }
-
-        .question-box {
-            margin-top: 18px;
-            display: grid;
-            gap: 14px;
-        }
-
-        .question-card {
-            border: 1px solid var(--line);
-            border-radius: 24px;
-            padding: 18px;
-            background: #fff;
-        }
-
-        .question-card h3 {
-            margin: 0 0 14px;
-            font-size: 18px;
-        }
-
-        .option-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 12px;
-        }
-
-        .actions {
-            margin-top: 20px;
-            display: flex;
             justify-content: flex-end;
-            gap: 12px;
-            flex-wrap: wrap;
         }
 
         .btn {
@@ -279,241 +113,478 @@
             cursor: pointer;
             text-decoration: none;
             display: inline-flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+            white-space: nowrap;
         }
 
         .btn-primary {
-            background: var(--red);
+            background: linear-gradient(135deg, var(--red), var(--red-2));
             color: #fff;
-            box-shadow: 0 14px 30px rgba(185, 28, 28, 0.22);
+            box-shadow: 0 14px 30px rgba(217, 0, 27, 0.22);
         }
 
         .btn-soft {
-            background: #fee2e2;
-            color: var(--red-dark);
+            background: #fff7fa;
+            border: 1px solid var(--border);
+            color: var(--dark);
         }
 
         .btn-danger {
-            background: #7f1d1d;
+            background: #3b0012;
             color: #fff;
         }
 
-        .empty {
-            padding: 42px 20px;
-            border: 1px dashed #fecaca;
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid var(--border);
             border-radius: 24px;
-            background: #fff7f7;
-            text-align: center;
+            padding: 18px 20px;
+            box-shadow: var(--soft-shadow);
         }
 
-        .empty h2 {
-            margin: 0 0 8px;
-        }
-
-        .empty p {
-            margin: 0;
+        .stat-label {
+            font-size: 13px;
             color: var(--muted);
+            font-weight: 850;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 950;
+            color: var(--red);
+            line-height: 1;
+        }
+
+        .table-shell {
+            background: rgba(255, 255, 255, 0.94);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            box-shadow: var(--shadow);
+            padding: 22px;
+            overflow: hidden;
+        }
+
+        .table-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 260px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            background: #fff7fa;
+            padding: 12px 16px;
+        }
+
+        .search-box span {
+            font-size: 18px;
+        }
+
+        .search-box input {
+            border: 0;
+            outline: 0;
+            background: transparent;
+            width: 100%;
+            font: inherit;
+            color: var(--dark);
             font-weight: 650;
         }
 
-        @media (max-width: 980px) {
-            .layout {
-                grid-template-columns: 1fr;
-            }
-
-            .form-grid,
-            .option-grid {
-                grid-template-columns: 1fr;
-            }
+        .table-scroll {
+            overflow-x: auto;
+            border: 1px solid #ffd0dc;
+            border-radius: 24px;
+            background: #fff;
         }
 
-        @media (max-width: 640px) {
-            .page {
-                padding: 16px;
-            }
+        table {
+            width: 100%;
+            min-width: 1780px;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
 
-            .topbar {
+        th {
+            position: sticky;
+            top: 0;
+            z-index: 3;
+            background: linear-gradient(135deg, var(--red), var(--red-2));
+            color: #fff;
+            text-align: left;
+            padding: 14px 12px;
+            font-size: 12px;
+            font-weight: 950;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            white-space: nowrap;
+            border-right: 1px solid rgba(255,255,255,0.20);
+        }
+
+        td {
+            vertical-align: top;
+            padding: 12px;
+            border-bottom: 1px solid #ffe1e9;
+            border-right: 1px solid #fff0f4;
+            background: rgba(255,255,255,0.96);
+        }
+
+        tr:nth-child(even) td {
+            background: #fff9fb;
+        }
+
+        tr:hover td {
+            background: #fff1f5;
+        }
+
+        th:first-child {
+            border-top-left-radius: 22px;
+        }
+
+        th:last-child {
+            border-top-right-radius: 22px;
+            border-right: 0;
+        }
+
+        .col-audio { width: 230px; }
+        .col-question { width: 210px; }
+        .col-topic { width: 210px; }
+        .col-q { width: 260px; }
+        .col-answer { width: 190px; }
+        .col-para { width: 330px; }
+        .col-action { width: 115px; }
+
+        input,
+        textarea {
+            width: 100%;
+            border: 1px solid #ffc2d1;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 11px 12px;
+            font: inherit;
+            color: var(--dark);
+            outline: none;
+            font-size: 14px;
+            line-height: 1.45;
+        }
+
+        textarea {
+            min-height: 92px;
+            resize: vertical;
+        }
+
+        .small-area {
+            min-height: 70px;
+        }
+
+        .big-area {
+            min-height: 118px;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: var(--red-2);
+            box-shadow: 0 0 0 4px rgba(255, 49, 87, 0.12);
+        }
+
+        .row-actions {
+            display: grid;
+            gap: 8px;
+        }
+
+        .mini-btn {
+            border: 0;
+            border-radius: 14px;
+            padding: 10px 12px;
+            font-size: 13px;
+            font-weight: 950;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .save-one {
+            background: var(--red);
+            color: #fff;
+        }
+
+        .delete-one {
+            background: #3b0012;
+            color: #fff;
+        }
+
+        .empty-box {
+            border: 1px dashed var(--border);
+            background: #fff7fa;
+            border-radius: 24px;
+            padding: 36px 22px;
+            text-align: center;
+            color: var(--muted);
+            font-weight: 750;
+        }
+
+        .hint {
+            margin-top: 12px;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 650;
+            line-height: 1.5;
+        }
+
+        .messages {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .message {
+            border: 1px solid var(--border);
+            background: #fff;
+            border-left: 6px solid var(--red);
+            border-radius: 18px;
+            padding: 13px 16px;
+            font-weight: 850;
+            color: var(--dark);
+            box-shadow: var(--soft-shadow);
+        }
+
+        @media (max-width: 900px) {
+            .top-card {
                 flex-direction: column;
                 align-items: flex-start;
             }
 
-            .main {
-                padding: 18px;
+            .top-actions {
+                justify-content: flex-start;
+            }
+
+            h1 {
+                font-size: 30px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 560px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .page {
+                padding: 18px 12px 36px;
             }
         }
     </style>
 </head>
+
 <body>
 <div class="page">
-    <header class="topbar">
+    <header class="top-card">
         <div class="brand">
             <div class="brand-mark">4</div>
             <div>
-                <div class="brand-title">Listening Part 4 Manager</div>
-                <div class="brand-subtitle">Diem TSA with Aptis Admin</div>
+                <div class="eyebrow">Dashboard Admin</div>
+                <h1>Listening Part 4 Table</h1>
+                <p class="subtitle">Manage audio, topic, question 16, question 17, answers and paraphrase data in one table.</p>
             </div>
         </div>
 
-        <nav class="top-actions">
-            <a href="{% url 'dashboard' %}">Dashboard</a>
-            <a href="{% url 'admin_listening_parts' %}">Listening Parts</a>
-            <a href="{% url 'student_part4' %}">Student Preview</a>
-        </nav>
+        <div class="top-actions">
+            <a class="btn btn-soft" href="{% url 'admin_listening_parts' %}">← Listening Parts</a>
+            <a class="btn btn-soft" href="{% url 'student_part4' %}">Student Preview</a>
+            <a class="btn btn-soft" href="{% url 'dashboard' %}">Dashboard</a>
+            <form method="post" style="margin:0;">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="create_row">
+                <button class="btn btn-primary" type="submit">+ Add Row</button>
+            </form>
+        </div>
     </header>
 
-    <main class="layout">
-        <aside class="panel">
-            <div class="side-head">
-                <div class="eyebrow">Admin</div>
-                <h1>Part 4</h1>
-                <p>Create and manage real Listening Part 4 sets: title, audio, transcript, questions and answer keys.</p>
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="message">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <section class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Total Part 4 rows</div>
+            <div class="stat-value">{{ total_rows }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Rows with audio</div>
+            <div class="stat-value">{{ audio_count }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Question 16 items</div>
+            <div class="stat-value">{{ q16_count }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Question 17 items</div>
+            <div class="stat-value">{{ q17_count }}</div>
+        </div>
+    </section>
+
+    <section class="table-shell">
+        <div class="table-toolbar">
+            <div>
+                <div class="eyebrow">Bulk Editing Table</div>
+                <div class="hint">
+                    One row equals one Part 4 set. Columns are designed exactly for Audio Link, Question, Topic, Question 16, three answers, Question 17, three answers and Paraphrase Data.
+                </div>
             </div>
 
-            <div class="list">
-                <form method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="action" value="create_material">
-                    <button class="btn btn-primary" type="submit" style="width: 100%;">+ Create new Part 4 set</button>
-                </form>
-
-                {% for item in materials %}
-                    <a class="item {% if selected and item.id == selected.id %}active{% endif %}" href="?set={{ item.id }}">
-                        <div class="item-title">{{ item.title }}</div>
-                        <div class="item-meta">{{ item.questions.count }} questions</div>
-                    </a>
-                {% empty %}
-                    <div class="empty">
-                        <h2>No data</h2>
-                        <p>Create your first Part 4 set.</p>
-                    </div>
-                {% endfor %}
+            <div class="search-box">
+                <span>🔎</span>
+                <input id="quickSearch" type="text" placeholder="Search audio, question, topic, answers, paraphrase...">
             </div>
-        </aside>
+        </div>
 
-        <section class="panel main">
-            {% if selected %}
-                <div class="section-title">
-                    <div>
-                        <div class="eyebrow" style="color: var(--red-dark);">Editing</div>
-                        <h2>{{ selected.title }}</h2>
-                        <p>This content will appear on the student Listening Part 4 page.</p>
-                    </div>
+        {% if rows %}
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="save_all">
+
+                <div class="table-scroll">
+                    <table id="part4Table">
+                        <thead>
+                            <tr>
+                                <th class="col-audio">Audio Link</th>
+                                <th class="col-question">Question</th>
+                                <th class="col-topic">Topic</th>
+                                <th class="col-q">Question 16</th>
+                                <th class="col-answer">Q16 Answer A</th>
+                                <th class="col-answer">Q16 Answer B</th>
+                                <th class="col-answer">Q16 Answer C</th>
+                                <th class="col-q">Question 17</th>
+                                <th class="col-answer">Q17 Answer A</th>
+                                <th class="col-answer">Q17 Answer B</th>
+                                <th class="col-answer">Q17 Answer C</th>
+                                <th class="col-para">Paraphrase Data</th>
+                                <th class="col-action">Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for row in rows %}
+                                <tr>
+                                    <td>
+                                        <input type="hidden" name="material_id" value="{{ row.material.id }}">
+                                        <input name="audio_url_{{ row.material.id }}" value="{{ row.material.audio_url }}" placeholder="https://...">
+                                    </td>
+
+                                    <td>
+                                        <textarea class="small-area" name="question_label_{{ row.material.id }}" placeholder="Question set label">{{ row.material.description }}</textarea>
+                                    </td>
+
+                                    <td>
+                                        <textarea class="small-area" name="topic_{{ row.material.id }}" placeholder="Topic">{{ row.material.title }}</textarea>
+                                    </td>
+
+                                    <td>
+                                        <textarea name="q16_text_{{ row.material.id }}" placeholder="Question 16">{{ row.q16.question_text }}</textarea>
+                                    </td>
+
+                                    <td>
+                                        <textarea class="small-area" name="q16_a_{{ row.material.id }}" placeholder="Answer A">{{ row.q16.option_a }}</textarea>
+                                    </td>
+
+                                    <td>
+                                        <textarea class="small-area" name="q16_b_{{ row.material.id }}" placeholder="Answer B">{{ row.q16.option_b }}</textarea>
+                                    </td>
+
+                                    <td>
+                                        <textarea class="small-area" name="q16_c_{{ row.material.id }}" placeholder="Answer C">{{ row.q16.option_c }}</textarea>
+                                    </td>
+
+                                    <td>
+                                        <textarea name="q17_text_{{ row.material.id }}" placeholder="Question 17">{{ row.q17.question_text }}</textarea>
+                                    </td>
+
+                                    <td>
+                                        <textarea class="small-area" name="q17_a_{{ row.material.id }}" placeholder="Answer A">{{ row.q17.option_a }}</textarea>
+                                    </td>
+
+                                    <td>
+                                        <textarea class="small-area" name="q17_b_{{ row.material.id }}" placeholder="Answer B">{{ row.q17.option_b }}</textarea>
+                                    </td>
+
+                                    <td>
+                                        <textarea class="small-area" name="q17_c_{{ row.material.id }}" placeholder="Answer C">{{ row.q17.option_c }}</textarea>
+                                    </td>
+
+                                    <td>
+                                        <textarea class="big-area" name="paraphrase_{{ row.material.id }}" placeholder="Paraphrase data">{{ row.material.transcript }}</textarea>
+                                    </td>
+
+                                    <td>
+                                        <div class="row-actions">
+                                            <button class="mini-btn save-one" type="submit" name="save_one" value="{{ row.material.id }}">Save</button>
+                                            <button class="mini-btn delete-one" type="submit" name="delete_one" value="{{ row.material.id }}" onclick="return confirm('Delete this Part 4 row?');">Delete</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
 
-                <form method="post">
-                    {% csrf_token %}
-                    <input type="hidden" name="action" value="save_material">
-                    <input type="hidden" name="material_id" value="{{ selected.id }}">
-
-                    <div class="form-grid">
-                        <div class="field full">
-                            <label>Title</label>
-                            <input name="title" value="{{ selected.title }}">
-                        </div>
-
-                        <div class="field full">
-                            <label>Audio URL</label>
-                            <input name="audio_url" value="{{ selected.audio_url }}" placeholder="https://drive.google.com/...">
-                        </div>
-
-                        <div class="field full">
-                            <label>Instructions</label>
-                            <textarea name="instructions">{{ selected.instructions }}</textarea>
-                        </div>
-
-                        <div class="field full">
-                            <label>Transcript</label>
-                            <textarea name="transcript">{{ selected.transcript }}</textarea>
-                        </div>
-                    </div>
-
-                    <div class="question-box">
-                        {% for q in questions %}
-                            <div class="question-card">
-                                <h3>Question {{ q.order }}</h3>
-                                <input type="hidden" name="question_id" value="{{ q.id }}">
-
-                                <div class="form-grid">
-                                    <div class="field full">
-                                        <label>Question text</label>
-                                        <textarea name="question_text_{{ q.id }}">{{ q.question_text }}</textarea>
-                                    </div>
-
-                                    <div class="option-grid field full">
-                                        <div class="field">
-                                            <label>Option A</label>
-                                            <input name="option_a_{{ q.id }}" value="{{ q.option_a }}">
-                                        </div>
-                                        <div class="field">
-                                            <label>Option B</label>
-                                            <input name="option_b_{{ q.id }}" value="{{ q.option_b }}">
-                                        </div>
-                                        <div class="field">
-                                            <label>Option C</label>
-                                            <input name="option_c_{{ q.id }}" value="{{ q.option_c }}">
-                                        </div>
-                                        <div class="field">
-                                            <label>Option D</label>
-                                            <input name="option_d_{{ q.id }}" value="{{ q.option_d }}">
-                                        </div>
-                                        <div class="field">
-                                            <label>Option E</label>
-                                            <input name="option_e_{{ q.id }}" value="{{ q.option_e }}">
-                                        </div>
-                                        <div class="field">
-                                            <label>Option F</label>
-                                            <input name="option_f_{{ q.id }}" value="{{ q.option_f }}">
-                                        </div>
-                                    </div>
-
-                                    <div class="field">
-                                        <label>Correct answer</label>
-                                        <select name="correct_answer_{{ q.id }}">
-                                            <option value="A" {% if q.correct_answer == "A" %}selected{% endif %}>A</option>
-                                            <option value="B" {% if q.correct_answer == "B" %}selected{% endif %}>B</option>
-                                            <option value="C" {% if q.correct_answer == "C" %}selected{% endif %}>C</option>
-                                            <option value="D" {% if q.correct_answer == "D" %}selected{% endif %}>D</option>
-                                            <option value="E" {% if q.correct_answer == "E" %}selected{% endif %}>E</option>
-                                            <option value="F" {% if q.correct_answer == "F" %}selected{% endif %}>F</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="field full">
-                                        <label>Explanation</label>
-                                        <textarea name="explanation_{{ q.id }}">{{ q.explanation }}</textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-
-                    <div class="actions">
-                        <button class="btn btn-primary" type="submit">Save Part 4 set</button>
-                    </div>
-                </form>
-
-                <form method="post" class="actions">
-                    {% csrf_token %}
-                    <input type="hidden" name="action" value="add_question">
-                    <input type="hidden" name="material_id" value="{{ selected.id }}">
-                    <button class="btn btn-soft" type="submit">+ Add question</button>
-                </form>
-
-                <form method="post" class="actions" onsubmit="return confirm('Delete this Part 4 set?');">
-                    {% csrf_token %}
-                    <input type="hidden" name="action" value="delete_material">
-                    <input type="hidden" name="material_id" value="{{ selected.id }}">
-                    <button class="btn btn-danger" type="submit">Delete set</button>
-                </form>
-            {% else %}
-                <div class="empty">
-                    <h2>No Part 4 set selected</h2>
-                    <p>Create or select a Part 4 set from the left column.</p>
+                <div class="top-actions" style="margin-top:18px;">
+                    <button class="btn btn-primary" type="submit">Save All Rows</button>
+                    <a class="btn btn-soft" href="{% url 'student_part4' %}">Open Student Preview</a>
                 </div>
-            {% endif %}
-        </section>
-    </main>
+            </form>
+        {% else %}
+            <div class="empty-box">
+                No Part 4 rows yet. Click <strong>Add Row</strong> to create the first table row.
+            </div>
+        {% endif %}
+    </section>
 </div>
+
+<script>
+const quickSearch = document.getElementById("quickSearch");
+const table = document.getElementById("part4Table");
+
+if (quickSearch && table) {
+    quickSearch.addEventListener("input", function () {
+        const keyword = quickSearch.value.trim().toLowerCase();
+        const rows = table.querySelectorAll("tbody tr");
+
+        rows.forEach(row => {
+            const text = row.innerText.toLowerCase();
+            const inputs = Array.from(row.querySelectorAll("input, textarea"))
+                .map(el => el.value.toLowerCase())
+                .join(" ");
+
+            row.style.display = (text + " " + inputs).includes(keyword) ? "" : "none";
+        });
+    });
+}
+</script>
 </body>
 </html>
