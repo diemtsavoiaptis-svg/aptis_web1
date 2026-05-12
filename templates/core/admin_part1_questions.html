@@ -1,4 +1,4 @@
-﻿{% load static %}
+{% load static %}
 <!doctype html>
 <html lang="vi">
 <head>
@@ -505,7 +505,7 @@ article:hover {
 
                         <td>
                             <input type="hidden" name="row_id" value="{{ q.id }}">
-                            <input class="num-input" type="number" name="question_number_{{ q.id }}" value="{{ q.question_number }}">
+                            <input class="num-input part1-order-input" type="number" name="question_number_{{ q.id }}" value="{{ q.question_number }}" data-original-value="{{ q.question_number }}">
                         </td>
 
                         <td>
@@ -633,6 +633,80 @@ if(search && table){
     });
 }
 </script>
+
+<script id="part1-instant-order-swap">
+(function () {
+    function normalizeNumber(value) {
+        const n = parseInt(String(value || "").trim(), 10);
+        return Number.isFinite(n) ? n : null;
+    }
+
+    function setupInstantOrderSwap() {
+        const inputs = Array.from(document.querySelectorAll(".part1-order-input"));
+
+        inputs.forEach(input => {
+            if (input.dataset.swapReady === "1") return;
+            input.dataset.swapReady = "1";
+
+            input.addEventListener("focus", function () {
+                this.dataset.beforeEditValue = this.value;
+            });
+
+            input.addEventListener("change", function () {
+                const currentInput = this;
+                const oldValue = normalizeNumber(currentInput.dataset.beforeEditValue || currentInput.dataset.originalValue);
+                const newValue = normalizeNumber(currentInput.value);
+
+                if (!oldValue || !newValue || oldValue === newValue) {
+                    currentInput.dataset.beforeEditValue = currentInput.value;
+                    currentInput.dataset.originalValue = currentInput.value;
+                    return;
+                }
+
+                const allInputs = Array.from(document.querySelectorAll(".part1-order-input"));
+
+                const targetInput = allInputs.find(other => {
+                    return other !== currentInput && normalizeNumber(other.value) === newValue;
+                });
+
+                if (targetInput) {
+                    targetInput.value = oldValue;
+                    targetInput.dataset.originalValue = oldValue;
+                    targetInput.dataset.beforeEditValue = oldValue;
+
+                    const targetRow = targetInput.closest("tr");
+                    if (targetRow) {
+                        targetRow.style.outline = "3px solid #e60023";
+                        targetRow.style.outlineOffset = "-3px";
+                        setTimeout(() => {
+                            targetRow.style.outline = "";
+                            targetRow.style.outlineOffset = "";
+                        }, 900);
+                    }
+                }
+
+                currentInput.dataset.originalValue = newValue;
+                currentInput.dataset.beforeEditValue = newValue;
+
+                const currentRow = currentInput.closest("tr");
+                if (currentRow) {
+                    currentRow.style.outline = "3px solid #ff5f76";
+                    currentRow.style.outlineOffset = "-3px";
+                    setTimeout(() => {
+                        currentRow.style.outline = "";
+                        currentRow.style.outlineOffset = "";
+                    }, 900);
+                }
+            });
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", setupInstantOrderSwap);
+    window.addEventListener("load", setupInstantOrderSwap);
+    setupInstantOrderSwap();
+})();
+</script>
+
 </body>
 </html>
 
