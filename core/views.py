@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+﻿from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
@@ -1830,3 +1830,20 @@ def student_part3_page(request):
 def student_part4_page(request):
     return _student_part34_page(request, 4)
 # ===== End Listening Part 3/4 material upload + student practice =====
+
+# === TSA PART 3 ADMIN DESIGN START ===
+@login_required
+def admin_part3_questions(request):
+    is_admin_user = (
+        request.user.is_staff
+        or request.user.is_superuser
+        or request.user.username == "admin"
+        or request.user.email == "admin@gmail.com"
+    )
+
+    if not is_admin_user:
+        return redirect("listening")
+
+    return render(request, "core/admin_part3_questions.html")
+# === TSA PART 3 ADMIN DESIGN END ===
+
