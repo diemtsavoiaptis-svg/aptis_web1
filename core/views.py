@@ -1847,3 +1847,9 @@ def admin_part3_questions(request):
     return render(request, "core/admin_part3_questions.html")
 # === TSA PART 3 ADMIN DESIGN END ===
 
+# === TSA STUDENT PART 3 UI START ===
+@login_required
+def student_part3_page(request):
+    return render(request, "core/listening_part3.html")
+# === TSA STUDENT PART 3 UI END ===
+
