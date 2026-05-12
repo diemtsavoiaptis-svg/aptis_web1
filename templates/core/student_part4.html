@@ -568,10 +568,10 @@
     </style>
 </head>
 
-<body>
+<body class="student-body" data-watermark="{{ student_watermark }}">
 <div id="random-watermark-layer" aria-hidden="true"></div>
 
-<div class="student-shell">
+<div class="student-shell protected-content">
     <header class="student-top">
         <div class="brand-inline">
             <div class="brand-logo">A</div>
@@ -726,70 +726,7 @@
     </div>
 </nav>
 
-<script>
-(function () {
-    function buildWatermark() {
-        const layer = document.getElementById("random-watermark-layer");
-        if (!layer) return;
 
-        layer.innerHTML = "";
-
-        const username = "{{ request.user.username|default:'ADMIN'|escapejs }}";
-        const email = "{{ request.user.email|default:'ADMIN@GMAIL.COM'|escapejs }}";
-        const userId = "{{ request.user.id|default:'2'|escapejs }}";
-        const text = `ID ${userId} - ${username.toUpperCase()} - ${email.toUpperCase()}`;
-
-        const w = window.innerWidth;
-        const h = window.innerHeight;
-        const cols = Math.max(3, Math.floor(w / 360));
-        const rows = Math.max(3, Math.floor(h / 190));
-        const total = Math.max(12, Math.min(34, cols * rows));
-
-        const used = [];
-
-        function tooClose(x, y) {
-            return used.some(([ux, uy]) => Math.abs(ux - x) < 210 && Math.abs(uy - y) < 105);
-        }
-
-        for (let i = 0; i < total; i++) {
-            let x = 0;
-            let y = 0;
-            let safe = 0;
-
-            do {
-                x = Math.random() * Math.max(220, w - 280);
-                y = Math.random() * Math.max(120, h - 90);
-                safe += 1;
-            } while (tooClose(x, y) && safe < 50);
-
-            used.push([x, y]);
-
-            const item = document.createElement("div");
-            item.className = "random-watermark-item";
-            item.textContent = text;
-
-            const angle = -25 + Math.random() * 8;
-            const opacity = 0.08 + Math.random() * 0.07;
-            const scale = 0.92 + Math.random() * 0.18;
-
-            item.style.left = x + "px";
-            item.style.top = y + "px";
-            item.style.opacity = opacity.toFixed(2);
-            item.style.transform = `rotate(${angle}deg) scale(${scale})`;
-
-            layer.appendChild(item);
-        }
-    }
-
-    let resizeTimer = null;
-    window.addEventListener("resize", function () {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(buildWatermark, 160);
-    });
-
-    document.addEventListener("DOMContentLoaded", buildWatermark);
-})();
-</script>
 
 <script>
 const paragraphBtn = document.getElementById("paragraphBtn");
@@ -884,5 +821,74 @@ const bottomCheckBtn = document.getElementById("bottomCheckBtn");
 if (checkBtn) checkBtn.addEventListener("click", checkAnswers);
 if (bottomCheckBtn) bottomCheckBtn.addEventListener("click", checkAnswers);
 </script>
+
+<script id="random-watermark-script">
+(function () {
+  function buildWatermark() {
+    const old = document.getElementById('random-watermark-layer');
+    if (old) old.remove();
+
+    const layer = document.createElement('div');
+    layer.id = 'random-watermark-layer';
+
+    const text = `{{ request.user.username|default:"APTIS" }} · {{ request.user.email|default:"admin@gmail.com" }}`;
+
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+
+    const cols = Math.max(2, Math.floor(w / 420));
+    const rows = Math.max(2, Math.floor(h / 260));
+    const total = Math.max(6, Math.min(12, cols * rows));
+
+    const used = [];
+
+    function tooClose(x, y) {
+      return used.some(([ux, uy]) => Math.abs(ux - x) < 220 && Math.abs(uy - y) < 120);
+    }
+
+    for (let i = 0; i < total; i++) {
+      let x = 0, y = 0, safe = 0;
+      do {
+        x = Math.random() * Math.max(200, w - 260);
+        y = Math.random() * Math.max(120, h - 100);
+        safe++;
+      } while (tooClose(x, y) && safe < 40);
+
+      used.push([x, y]);
+
+      const item = document.createElement('div');
+      item.className = 'random-watermark-item';
+      item.textContent = text;
+
+      const angle = -28 + Math.random() * 12;
+      const opacity = 0.08 + Math.random() * 0.06;
+      const scale = 0.90 + Math.random() * 0.18;
+
+      item.style.left = x + 'px';
+      item.style.top = y + 'px';
+      item.style.opacity = opacity.toFixed(2);
+      item.style.transform = `rotate(${angle}deg) scale(${scale})`;
+
+      layer.appendChild(item);
+    }
+
+    document.body.appendChild(layer);
+  }
+
+  let timer = null;
+  function rebuildLater() {
+    clearTimeout(timer);
+    timer = setTimeout(buildWatermark, 180);
+  }
+
+  document.addEventListener('DOMContentLoaded', buildWatermark);
+  window.addEventListener('resize', rebuildLater);
+})();
+</script>
+
+
+{% include "core/_student_watermark.html" %}
+<script src="{% static 'js/student_watermark_security.js' %}"></script>
+
 </body>
 </html>
