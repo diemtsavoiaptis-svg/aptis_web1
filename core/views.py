@@ -1831,7 +1831,7 @@ def student_part4_page(request):
     return _student_part34_page(request, 4)
 # ===== End Listening Part 3/4 material upload + student practice =====
 
-# === TSA PART 3 ADMIN DESIGN START ===
+# === TSA PART 3 FULL INTEGRATION START ===
 @login_required
 def admin_part3_questions(request):
     is_admin_user = (
@@ -1844,12 +1844,157 @@ def admin_part3_questions(request):
     if not is_admin_user:
         return redirect("listening")
 
-    return render(request, "core/admin_part3_questions.html")
-# === TSA PART 3 ADMIN DESIGN END ===
+    if request.method == "POST":
+        action = request.POST.get("action", "")
 
-# === TSA STUDENT PART 3 UI START ===
+        if action == "create_material":
+            material = ListeningPartMaterial.objects.create(
+                part=3,
+                title="Changes in the workplace",
+                description="Part 3 listening set",
+                instructions="Listen to two people discussing potential modifications to the topic above. Read the statements and decide whose opinion matches best: the man's, the woman's, or both.`nWho expresses which opinion?",
+                is_active=True,
+            )
+
+            sample_questions = [
+                "Continuity is important when planning a career",
+                "Job security cannot be guaranteed",
+                "Job satisfaction is important for motivator",
+                "Technological improvement is good for the economy",
+            ]
+
+            for index, text in enumerate(sample_questions, start=1):
+                ListeningPartQuestion.objects.create(
+                    material=material,
+                    order=index,
+                    question_text=text,
+                    option_a="The man",
+                    option_b="The woman",
+                    option_c="Both",
+                    correct_answer="A",
+                )
+
+            messages.success(request, "Created a new Part 3 set.")
+            return redirect(f"{request.path}?material_id={material.id}")
+
+        material_id = request.POST.get("material_id")
+        material = get_object_or_404(ListeningPartMaterial, id=material_id, part=3)
+
+        if action == "delete_material":
+            material.delete()
+            messages.success(request, "Deleted the Part 3 set.")
+            return redirect("admin_part3_questions")
+
+        if action == "save_material":
+            material.title = request.POST.get("title", "").strip() or material.title
+            material.audio_url = request.POST.get("audio_url", "").strip()
+            material.instructions = request.POST.get("instructions", "").strip()
+            material.transcript = request.POST.get("transcript", "").strip()
+            material.is_active = request.POST.get("is_active") == "1"
+            material.save()
+
+            question_ids = request.POST.getlist("question_id")
+
+            for position, question_id in enumerate(question_ids, start=1):
+                question = ListeningPartQuestion.objects.filter(id=question_id, material=material).first()
+                if not question:
+                    continue
+
+                question.order = position
+                question.question_text = request.POST.get(f"question_text_{question.id}", "").strip()
+                question.option_a = request.POST.get(f"option_a_{question.id}", "The man").strip() or "The man"
+                question.option_b = request.POST.get(f"option_b_{question.id}", "The woman").strip() or "The woman"
+                question.option_c = request.POST.get(f"option_c_{question.id}", "Both").strip() or "Both"
+                question.correct_answer = request.POST.get(f"correct_answer_{question.id}", "A").strip()[:1] or "A"
+                question.explanation = request.POST.get(f"explanation_{question.id}", "").strip()
+                question.save()
+
+            messages.success(request, "Saved the Part 3 set.")
+            return redirect(f"{request.path}?material_id={material.id}")
+
+    materials = ListeningPartMaterial.objects.filter(part=3).prefetch_related("questions").order_by("id")
+
+    selected = None
+    selected_id = request.GET.get("material_id")
+
+    if selected_id:
+        selected = materials.filter(id=selected_id).first()
+
+    if selected is None:
+        selected = materials.first()
+
+    questions = []
+
+    if selected:
+        questions = list(selected.questions.all().order_by("order", "id"))
+
+        while len(questions) < 4:
+            q = ListeningPartQuestion.objects.create(
+                material=selected,
+                order=len(questions) + 1,
+                question_text=f"Statement {len(questions) + 1}",
+                option_a="The man",
+                option_b="The woman",
+                option_c="Both",
+                correct_answer="A",
+            )
+            questions.append(q)
+
+        questions = questions[:4]
+
+    return render(request, "core/admin_part3_questions.html", {
+        "materials": materials,
+        "selected": selected,
+        "questions": questions,
+    })
+
+
 @login_required
 def student_part3_page(request):
-    return render(request, "core/listening_part3.html")
-# === TSA STUDENT PART 3 UI END ===
+    materials = list(
+        ListeningPartMaterial.objects
+        .filter(part=3, is_active=True)
+        .prefetch_related("questions")
+        .order_by("id")
+    )
+
+    total_questions = sum(max(4, item.questions.count()) for item in materials)
+
+    try:
+        set_index = int(request.GET.get("set", "0"))
+    except ValueError:
+        set_index = 0
+
+    if set_index < 0:
+        set_index = 0
+
+    if materials and set_index >= len(materials):
+        set_index = len(materials) - 1
+
+    selected = materials[set_index] if materials else None
+    questions = []
+    start_number = 1
+
+    if selected:
+        for item in materials[:set_index]:
+            start_number += max(4, item.questions.count())
+
+        raw_questions = list(selected.questions.all().order_by("order", "id"))[:4]
+
+        for index, question in enumerate(raw_questions, start=start_number):
+            question.display_number = index
+            questions.append(question)
+
+    return render(request, "core/listening_part3.html", {
+        "materials": materials,
+        "selected": selected,
+        "questions": questions,
+        "total_questions": total_questions or 0,
+        "start_number": start_number,
+        "prev_index": max(0, set_index - 1),
+        "next_index": min(len(materials) - 1, set_index + 1) if materials else 0,
+        "has_prev": set_index > 0,
+        "has_next": bool(materials) and set_index < len(materials) - 1,
+    })
+# === TSA PART 3 FULL INTEGRATION END ===
 

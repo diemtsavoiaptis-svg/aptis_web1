@@ -7,9 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         html, body {
             margin: 0;
@@ -31,12 +29,11 @@
             margin: 0 0 18px;
             font-size: 22px;
             font-weight: 800;
-            color: #111827;
         }
 
         .audio-bar {
             width: 100%;
-            height: 48px;
+            min-height: 48px;
             border-radius: 4px;
             background: #f3231d;
             display: flex;
@@ -47,13 +44,12 @@
             color: #ffffff;
         }
 
-        .play-btn,
-        .volume-btn {
+        .play-btn, .volume-btn {
             width: 20px;
             height: 20px;
             border: 0;
             background: transparent;
-            color: #ffffff;
+            color: white;
             cursor: pointer;
             display: grid;
             place-items: center;
@@ -97,7 +93,11 @@
             margin-left: auto;
             font-size: 12px;
             font-weight: 800;
-            color: #ffffff;
+            color: white;
+        }
+
+        .real-audio {
+            display: none;
         }
 
         .question-card {
@@ -119,7 +119,6 @@
             max-width: 970px;
             font-size: 13px;
             line-height: 1.55;
-            color: #111827;
         }
 
         .statement-list {
@@ -129,7 +128,7 @@
 
         .statement-row {
             display: grid;
-            grid-template-columns: max-content minmax(230px, auto);
+            grid-template-columns: max-content minmax(180px, auto);
             align-items: center;
             gap: 12px;
             width: fit-content;
@@ -138,7 +137,6 @@
         .statement-text {
             font-size: 13px;
             line-height: 1.4;
-            color: #111827;
             white-space: nowrap;
         }
 
@@ -147,7 +145,7 @@
             height: 33px;
             border: 1px solid #d7ca8a;
             border-radius: 5px;
-            background: #ffffff;
+            background: white;
             color: #111827;
             font-size: 12px;
             padding: 0 38px 0 14px;
@@ -156,25 +154,41 @@
 
         .answer-select:focus {
             border-color: #82b7ff;
-            box-shadow: 0 0 0 3px rgba(22, 135, 255, .25);
+            box-shadow: 0 0 0 3px rgba(22,135,255,.25);
         }
 
         .bottom-actions {
             margin-top: 14px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
-        .paragraph-btn {
+        .paragraph-btn, .nav-btn {
             border: 0;
             border-radius: 5px;
             background: #0d6efd;
-            color: #ffffff;
+            color: white;
             padding: 9px 12px;
             font-size: 13px;
             cursor: pointer;
         }
 
-        .paragraph-btn:hover {
-            background: #0b5ed7;
+        .nav-btn {
+            background: #ffffff;
+            color: #111827;
+            border: 1px solid #d1d5db;
+        }
+
+        .nav-btn.primary {
+            border-color: #0d6efd;
+            background: #0d6efd;
+            color: white;
+        }
+
+        .nav-btn:disabled {
+            opacity: .45;
+            cursor: not-allowed;
         }
 
         .paragraph-box {
@@ -187,202 +201,132 @@
             border: 1px solid #e5e7eb;
             font-size: 14px;
             line-height: 1.65;
-            color: #111827;
         }
 
-        .nav-row {
-            width: min(1080px, 100%);
-            margin-top: 18px;
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-        }
-
-        .nav-btn {
-            border: 1px solid #d1d5db;
-            background: #ffffff;
-            color: #111827;
-            border-radius: 5px;
-            padding: 9px 14px;
-            font-size: 13px;
-            cursor: pointer;
-        }
-
-        .nav-btn.primary {
-            border-color: #0d6efd;
-            background: #0d6efd;
-            color: #ffffff;
-        }
-
-        .nav-btn:disabled {
-            opacity: .45;
-            cursor: not-allowed;
+        .empty {
+            width: min(900px, 100%);
+            padding: 28px;
+            border-radius: 12px;
+            background: #f8f9fa;
+            border: 1px solid #e5e7eb;
+            line-height: 1.6;
         }
 
         @media (max-width: 760px) {
-            body {
-                padding: 18px 14px 32px;
-            }
-
-            .question-title {
-                font-size: 20px;
-            }
-
-            .audio-bar {
-                padding: 0 14px;
-            }
-
-            .plays-left {
-                font-size: 11px;
-            }
-
-            .question-card {
-                padding: 20px 16px 26px;
-            }
-
+            body { padding: 18px 14px 32px; }
+            .audio-bar { padding: 0 14px; }
+            .plays-left { font-size: 11px; }
+            .question-card { padding: 20px 16px 26px; }
             .statement-row {
                 width: 100%;
                 grid-template-columns: 1fr;
                 gap: 6px;
             }
-
-            .statement-text {
-                white-space: normal;
-            }
-
-            .answer-select {
-                width: 100%;
-            }
+            .statement-text { white-space: normal; }
+            .answer-select { width: 100%; }
         }
     </style>
 </head>
 
 <body>
+{% if selected %}
 <main class="part3-page">
-    <h1 class="question-title" id="questionTitle">Question 1 of 12</h1>
+    <h1 class="question-title">Question {{ start_number }} of {{ total_questions }}</h1>
 
     <section class="audio-bar" aria-label="Audio player">
-        <button class="play-btn" type="button" aria-label="Play audio">
+        <button class="play-btn" type="button" onclick="playAudio()" aria-label="Play audio">
             <span class="play-icon"></span>
         </button>
 
-        <button class="volume-btn" type="button" aria-label="Volume">
+        <button class="volume-btn" type="button" onclick="playAudio()" aria-label="Volume">
             <span class="volume-icon">🔊</span>
         </button>
 
         <div class="fake-slider" aria-hidden="true"></div>
 
-        <div class="plays-left">2 of 2 plays remaining</div>
+        <div class="plays-left" id="playsLeft">2 of 2 plays remaining</div>
+
+        {% if selected.audio_url %}
+            <audio id="realAudio" class="real-audio" src="{{ selected.audio_url }}"></audio>
+        {% endif %}
     </section>
 
     <section class="question-card">
-        <h2 class="topic" id="topicTitle">Topic: Changes in the workplace</h2>
+        <h2 class="topic">Topic: {{ selected.title }}</h2>
 
         <p class="instruction">
-            Listen to two people discussing potential modifications to the topic above.
-            Read the statements and decide whose opinion matches best: the man's, the woman's, or both.
-            <br>
-            Who expresses which opinion?
+            {% if selected.instructions %}
+                {{ selected.instructions|linebreaksbr }}
+            {% else %}
+                Listen to two people discussing potential modifications to the topic above.
+                Read the statements and decide whose opinion matches best: the man's, the woman's, or both.
+                <br>
+                Who expresses which opinion?
+            {% endif %}
         </p>
 
-        <div class="statement-list" id="statementList"></div>
+        <div class="statement-list">
+            {% for q in questions %}
+            <div class="statement-row">
+                <div class="statement-text">{{ q.display_number }}. {{ q.question_text }}</div>
+
+                <select class="answer-select">
+                    <option>-- Select an answer --</option>
+                    <option>{{ q.option_a|default:"The man" }}</option>
+                    <option>{{ q.option_b|default:"The woman" }}</option>
+                    <option>{{ q.option_c|default:"Both" }}</option>
+                </select>
+            </div>
+            {% endfor %}
+        </div>
     </section>
 
     <div class="bottom-actions">
         <button class="paragraph-btn" type="button" onclick="toggleParagraph()">Show paragraph</button>
+
+        <button class="nav-btn" type="button" onclick="window.location.href='?set={{ prev_index }}'" {% if not has_prev %}disabled{% endif %}>Previous</button>
+        <button class="nav-btn primary" type="button" onclick="window.location.href='?set={{ next_index }}'" {% if not has_next %}disabled{% endif %}>Next</button>
     </div>
 
     <article class="paragraph-box" id="paragraphBox">
-        This paragraph area is used for the transcript or explanation after the student finishes the question.
-        The real transcript can be connected later when Part 3 data is added.
+        {% if selected.transcript %}
+            {{ selected.transcript|linebreaksbr }}
+        {% else %}
+            No transcript has been added yet.
+        {% endif %}
     </article>
-
-    <div class="nav-row">
-        <button class="nav-btn" id="prevBtn" type="button" onclick="changeGroup(-1)">Previous</button>
-        <button class="nav-btn primary" id="nextBtn" type="button" onclick="changeGroup(1)">Next</button>
-    </div>
 </main>
+{% else %}
+<div class="empty">
+    <h2>No Part 3 data yet</h2>
+    <p>Please ask the admin to create an active Part 3 set in the management page.</p>
+</div>
+{% endif %}
 
 <script>
-const groups = [
-    {
-        title: "Topic: Changes in the workplace",
-        statements: [
-            "Continuity is important when planning a career",
-            "Job security cannot be guaranteed",
-            "Job satisfaction is important for motivator",
-            "Technological improvement is good for the economy"
-        ]
-    },
-    {
-        title: "Topic: Training courses",
-        statements: [
-            "Online training is more convenient for employees",
-            "Face-to-face learning gives better communication",
-            "Companies should pay for professional development",
-            "Training should be linked to promotion opportunities"
-        ]
-    },
-    {
-        title: "Topic: Office communication",
-        statements: [
-            "Regular meetings can waste valuable working time",
-            "Email is useful for keeping clear records",
-            "Informal conversations help build stronger teams",
-            "Managers should give feedback more frequently"
-        ]
+let playsRemaining = 2;
+
+function playAudio() {
+    const audio = document.getElementById("realAudio");
+    const label = document.getElementById("playsLeft");
+
+    if (!audio || playsRemaining <= 0) return;
+
+    audio.currentTime = 0;
+    audio.play();
+
+    playsRemaining -= 1;
+
+    if (label) {
+        label.textContent = playsRemaining + " of 2 plays remaining";
     }
-];
-
-let groupIndex = 0;
-
-function renderGroup() {
-    const group = groups[groupIndex];
-    const startNumber = groupIndex * 4 + 1;
-
-    document.getElementById("questionTitle").textContent = "Question " + startNumber + " of 12";
-    document.getElementById("topicTitle").textContent = group.title;
-
-    const list = document.getElementById("statementList");
-    list.innerHTML = "";
-
-    group.statements.forEach(function(statement, index) {
-        const number = startNumber + index;
-
-        const row = document.createElement("div");
-        row.className = "statement-row";
-
-        row.innerHTML = 
-            <div class="statement-text">. </div>
-            <select class="answer-select">
-                <option>-- Select an answer --</option>
-                <option>The man</option>
-                <option>The woman</option>
-                <option>Both</option>
-            </select>
-        ;
-
-        list.appendChild(row);
-    });
-
-    document.getElementById("prevBtn").disabled = groupIndex === 0;
-    document.getElementById("nextBtn").disabled = groupIndex === groups.length - 1;
-}
-
-function changeGroup(direction) {
-    const next = groupIndex + direction;
-    if (next < 0 || next >= groups.length) return;
-    groupIndex = next;
-    renderGroup();
-    document.getElementById("paragraphBox").style.display = "none";
 }
 
 function toggleParagraph() {
     const box = document.getElementById("paragraphBox");
+    if (!box) return;
     box.style.display = box.style.display === "block" ? "none" : "block";
 }
-
-renderGroup();
 </script>
 </body>
 </html>
