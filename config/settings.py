@@ -60,6 +60,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'django.middleware.gzip.GZipMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'core.middleware.SecurityHeadersMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -224,4 +225,15 @@ for host in EXTRA_VERCEL_PREVIEW_HOSTS:
     if origin not in CSRF_TRUSTED_ORIGINS:
         CSRF_TRUSTED_ORIGINS.append(origin)
 # === EXTRA VERCEL PREVIEW HOSTS END ===
+
+
+# === STATIC SPEED OPTIMIZATION START ===
+# Compress static files and allow browser/CDN caching.
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+WHITENOISE_MAX_AGE = 31536000
+WHITENOISE_USE_FINDERS = False
+
+# Trust Vercel proxy HTTPS header.
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+# === STATIC SPEED OPTIMIZATION END ===
 
