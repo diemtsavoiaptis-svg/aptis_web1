@@ -209,3 +209,19 @@ for origin in FINAL_CSRF_TRUSTED_ORIGINS:
 DEBUG = False
 # === FINAL VERCEL HOST FIX END ===
 
+# === EXTRA VERCEL PREVIEW HOSTS START ===
+EXTRA_VERCEL_PREVIEW_HOSTS = [
+    "aptis-web1-4kguv4sy9-diem-tsa-voi-aptis-s-projects.vercel.app",
+    "aptis-web1-ovcmk9s15-diem-tsa-voi-aptis-s-projects.vercel.app",
+]
+
+for host in EXTRA_VERCEL_PREVIEW_HOSTS:
+    if host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(host)
+
+for host in EXTRA_VERCEL_PREVIEW_HOSTS:
+    origin = f"https://{host}"
+    if origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(origin)
+# === EXTRA VERCEL PREVIEW HOSTS END ===
+
