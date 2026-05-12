@@ -669,7 +669,7 @@
 
             <section class="audio-player native-mode">
                 {% if selected.audio_url %}
-                    <audio class="part4-native-audio" controls controlsList="nodownload noplaybackrate" preload="metadata" src="{{ selected.audio_url }}"></audio>
+                    <audio class="part4-native-audio" controls controlsList="nodownload noplaybackrate" preload="metadata" src="{% url 'secure_part4_audio' selected.id %}"></audio>
                 {% else %}
                     <div class="no-audio-note">Chưa có audio cho bài này</div>
                 {% endif %}

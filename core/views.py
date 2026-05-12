@@ -2231,3 +2231,24 @@ def student_part4_page(request):
     })
 # ===== End Final Student Part 4 view =====
 
+
+# === FIX PART 4 GOOGLE DRIVE AUDIO STREAM START ===
+@login_required
+def secure_part4_audio_view(request, material_id):
+    material = get_object_or_404(ListeningPartMaterial, id=material_id, part=4)
+
+    audio_url = (getattr(material, "audio_url", "") or "").strip()
+
+    if not audio_url:
+        raise Http404("Audio không tồn tại.")
+
+    drive_file_id = extract_drive_file_id(audio_url)
+
+    if drive_file_id:
+        return _google_drive_download_response(drive_file_id)
+
+    response = HttpResponseRedirect(audio_url)
+    response["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    return response
+# === FIX PART 4 GOOGLE DRIVE AUDIO STREAM END ===
+
