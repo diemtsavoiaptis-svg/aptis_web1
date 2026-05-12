@@ -1,12 +1,7 @@
-﻿venv/
-__pycache__/
-*.pyc
-.cache/
-.ipython/
-.local/
-.virtualenvs/
-.env
+﻿.env
 .env.local
 .env.server
+*.sqlite3
 db.sqlite3
-*.zip
+__pycache__/
+*.pyc
