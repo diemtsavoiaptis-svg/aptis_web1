@@ -33,18 +33,9 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret-key-change-me')
 
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = [
-    "diemtsavoiaptis.pythonanywhere.com",
-    "127.0.0.1",
-    "localhost",
-    ".onrender.com",
-]
-
 CSRF_TRUSTED_ORIGINS = [
-    "https://diemtsavoiaptis.pythonanywhere.com",
-    "http://diemtsavoiaptis.pythonanywhere.com",
-    "http://127.0.0.1:8000",
-    "http://localhost:8000",
+    'https://tsaptis.com',
+    'https://www.tsaptis.com',
 ]
 
 INSTALLED_APPS = [
@@ -169,4 +160,25 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 
 # Cho phép dashboard nhúng các trang nội bộ vào khung bên phải
+
+
+# PythonAnywhere deploy override
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "diemtsavoiaptis.pythonanywhere.com",
+    ".pythonanywhere.com",
+    ".onrender.com",
+]
+
 X_FRAME_OPTIONS = "SAMEORIGIN"
+
+CSRF_TRUSTED_ORIGINS = list(set(globals().get("CSRF_TRUSTED_ORIGINS", []) + [
+    "http://diemtsavoiaptis.pythonanywhere.com",
+    "https://diemtsavoiaptis.pythonanywhere.com",
+]))
+
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = False
+
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
