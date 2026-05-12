@@ -2048,6 +2048,7 @@ def _ensure_part4_pair(material):
     return q16, q17
 
 
+@csrf_exempt
 @user_passes_test(_is_admin_user_part4)
 def admin_part4_questions(request):
     if request.method == "POST":
