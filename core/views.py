@@ -973,8 +973,8 @@ def student_part2_gioi_topics(request):
     return render(request, "core/student_part2_topic_list.html", {
         "version_title": "Mày giỏi",
         "topics": topics,
-        "back_url": "/listening/part-2/",
-        "topic_url_prefix": "/listening/part-2/may-gioi/",
+        "back_url": "/listening/part-4/",
+        "topic_url_prefix": "/listening/part-4/may-gioi/",
     })
 
 
@@ -983,8 +983,8 @@ def student_part2_dot_topics(request):
     return render(request, "core/student_part2_topic_list.html", {
         "version_title": "Mày dốt",
         "topics": topics,
-        "back_url": "/listening/part-2/",
-        "topic_url_prefix": "/listening/part-2/may-dot/",
+        "back_url": "/listening/part-4/",
+        "topic_url_prefix": "/listening/part-4/may-dot/",
     })
 
 
@@ -1173,8 +1173,8 @@ def student_part2_gioi_topics(request):
     return render(request, "core/student_part2_topic_list.html", {
         "version_title": "Mày giỏi",
         "topics": topics,
-        "back_url": "/listening/part-2/",
-        "topic_url_prefix": "/listening/part-2/may-gioi/",
+        "back_url": "/listening/part-4/",
+        "topic_url_prefix": "/listening/part-4/may-gioi/",
     })
 
 
@@ -1183,8 +1183,8 @@ def student_part2_kem_topics(request):
     return render(request, "core/student_part2_topic_list.html", {
         "version_title": "Mày kém",
         "topics": topics,
-        "back_url": "/listening/part-2/",
-        "topic_url_prefix": "/listening/part-2/may-kem/",
+        "back_url": "/listening/part-4/",
+        "topic_url_prefix": "/listening/part-4/may-kem/",
     })
 
 

@@ -1,0 +1,13 @@
+=== PART 3 / PART 4 FIX REPORT ===
+
+FILE: templates\core\dashboard.html
+Part 3 labels: []
+Part 3 hrefs: []
+Part 4 labels: []
+Part 4 hrefs: []
+
+FILE: templates\core\listening_parts.html
+Part 3 labels: ['Mở Part 3']
+Part 3 hrefs: ['/dashboard/part-3/', '/dashboard/part-3/']
+Part 4 labels: ['Mở Part 4']
+Part 4 hrefs: ['/dashboard/part-4/', '/dashboard/part-4/']

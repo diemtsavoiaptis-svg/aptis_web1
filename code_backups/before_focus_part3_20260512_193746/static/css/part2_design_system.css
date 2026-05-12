@@ -1,0 +1,415 @@
+
+/* =========================================================
+   PART 2 DESIGN SYSTEM ONLY
+   Brand: TSA Primary #b21c24 / Coral #e63946
+   ========================================================= */
+
+:root {
+    --tsa-primary: #b21c24;
+    --tsa-coral: #e63946;
+    --tsa-soft: #fef2f2;
+    --tsa-slate: #f8fafc;
+    --tsa-ink: #101827;
+    --tsa-muted: #64748b;
+    --tsa-border: rgba(178, 28, 36, 0.16);
+    --tsa-radius-xl: 2rem;
+    --tsa-radius-2xl: 2.5rem;
+    --tsa-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
+    --tsa-red-shadow: 0 18px 38px rgba(178, 28, 36, 0.28);
+    --tsa-font: "Inter", "Lexend", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body.tsa-part2-student,
+body.tsa-part2-admin {
+    font-family: var(--tsa-font) !important;
+    background: var(--tsa-slate) !important;
+    color: var(--tsa-ink) !important;
+}
+
+/* =========================
+   STUDENT PART 2
+   ========================= */
+
+body.tsa-part2-student .student-part2-shell,
+body.tsa-part2-student .part2-student-shell,
+body.tsa-part2-student main,
+body.tsa-part2-student .main-content,
+body.tsa-part2-student .content {
+    max-width: 1280px !important;
+    margin: 0 auto !important;
+    padding: 28px !important;
+    box-sizing: border-box !important;
+}
+
+body.tsa-part2-student .tsa-part2-student-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 3fr) minmax(260px, 1fr) !important;
+    gap: 28px !important;
+    align-items: start !important;
+}
+
+body.tsa-part2-student .tsa-part2-main-card,
+body.tsa-part2-student .tsa-part2-side-card,
+body.tsa-part2-student .card,
+body.tsa-part2-student .panel,
+body.tsa-part2-student section {
+    border-radius: var(--tsa-radius-2xl) !important;
+    border: 1px solid var(--tsa-border) !important;
+    background: #fff !important;
+    box-shadow: var(--tsa-shadow) !important;
+}
+
+body.tsa-part2-student .tsa-part2-guide {
+    background: var(--tsa-soft) !important;
+    border-left: 7px solid var(--tsa-primary) !important;
+    border-radius: 1.5rem !important;
+    padding: 18px 22px !important;
+    margin-bottom: 22px !important;
+    font-weight: 800 !important;
+    color: var(--tsa-primary) !important;
+}
+
+body.tsa-part2-student h1,
+body.tsa-part2-student h2,
+body.tsa-part2-student .topic-title,
+body.tsa-part2-student [class*="title"] {
+    color: var(--tsa-ink) !important;
+    font-weight: 950 !important;
+    letter-spacing: -0.04em !important;
+}
+
+body.tsa-part2-student audio {
+    width: 100% !important;
+    accent-color: var(--tsa-primary) !important;
+    border-radius: 999px !important;
+}
+
+body.tsa-part2-student .audio-box,
+body.tsa-part2-student .audio-player,
+body.tsa-part2-student [class*="audio"] {
+    border-radius: 1.7rem !important;
+}
+
+body.tsa-part2-student select,
+body.tsa-part2-student .select,
+body.tsa-part2-student input,
+body.tsa-part2-student textarea {
+    min-height: 58px !important;
+    border-radius: 1.4rem !important;
+    border: 1.5px solid rgba(178, 28, 36, 0.18) !important;
+    background: #f8fafc !important;
+    font-weight: 850 !important;
+    color: #334155 !important;
+    padding: 0 18px !important;
+    outline: none !important;
+}
+
+body.tsa-part2-student select:focus,
+body.tsa-part2-student input:focus,
+body.tsa-part2-student textarea:focus {
+    border-color: var(--tsa-primary) !important;
+    box-shadow: 0 0 0 5px rgba(178, 28, 36, 0.10) !important;
+    background: #fff !important;
+}
+
+body.tsa-part2-student label,
+body.tsa-part2-student .speaker-label,
+body.tsa-part2-student [class*="speaker"] {
+    font-weight: 950 !important;
+}
+
+body.tsa-part2-student .speaker-label,
+body.tsa-part2-student [class*="kicker"] {
+    text-transform: uppercase !important;
+    letter-spacing: 0.28em !important;
+    font-size: 11px !important;
+    font-style: italic !important;
+    color: #94a3b8 !important;
+}
+
+body.tsa-part2-student button,
+body.tsa-part2-student .btn,
+body.tsa-part2-student a[class*="btn"] {
+    border-radius: 1.2rem !important;
+    font-weight: 950 !important;
+}
+
+body.tsa-part2-student .primary-btn,
+body.tsa-part2-student button[type="submit"],
+body.tsa-part2-student .save-btn,
+body.tsa-part2-student .btn-primary {
+    background: var(--tsa-primary) !important;
+    color: #fff !important;
+    box-shadow: var(--tsa-red-shadow) !important;
+    border: 0 !important;
+}
+
+body.tsa-part2-student .tsa-part2-progress {
+    height: 5px !important;
+    background: rgba(178, 28, 36, 0.12) !important;
+    border-radius: 999px !important;
+    overflow: hidden !important;
+    margin-bottom: 22px !important;
+}
+
+body.tsa-part2-student .tsa-part2-progress > span {
+    display: block !important;
+    width: var(--progress, 25%) !important;
+    height: 100% !important;
+    background: var(--tsa-coral) !important;
+    border-radius: 999px !important;
+}
+
+/* =========================
+   ADMIN PART 2
+   ========================= */
+
+body.tsa-part2-admin {
+    background: #f8fafc !important;
+}
+
+body.tsa-part2-admin .sidebar,
+body.tsa-part2-admin .admin-sidebar,
+body.tsa-part2-admin .dashboard-sidebar,
+body.tsa-part2-admin aside {
+    width: 240px !important;
+    min-width: 240px !important;
+    background: var(--tsa-primary) !important;
+}
+
+body.tsa-part2-admin main,
+body.tsa-part2-admin .main-content,
+body.tsa-part2-admin .dashboard-main,
+body.tsa-part2-admin .content,
+body.tsa-part2-admin .admin-main {
+    margin-left: 240px !important;
+    width: calc(100vw - 240px) !important;
+    max-width: calc(100vw - 240px) !important;
+    padding: 30px !important;
+    box-sizing: border-box !important;
+}
+
+body.tsa-part2-admin h1 {
+    font-size: clamp(38px, 4vw, 64px) !important;
+    font-weight: 1000 !important;
+    letter-spacing: -0.06em !important;
+    color: var(--tsa-ink) !important;
+}
+
+body.tsa-part2-admin h2,
+body.tsa-part2-admin h3 {
+    font-weight: 950 !important;
+    color: var(--tsa-ink) !important;
+}
+
+body.tsa-part2-admin .card,
+body.tsa-part2-admin .panel,
+body.tsa-part2-admin section,
+body.tsa-part2-admin .admin-card {
+    border-radius: var(--tsa-radius-2xl) !important;
+    border: 1px solid rgba(15, 23, 42, 0.07) !important;
+    background: #fff !important;
+    box-shadow: var(--tsa-shadow) !important;
+}
+
+body.tsa-part2-admin input,
+body.tsa-part2-admin textarea,
+body.tsa-part2-admin select {
+    min-height: 56px !important;
+    border-radius: 1.2rem !important;
+    border: 1px solid rgba(148, 163, 184, 0.32) !important;
+    background: #f8fafc !important;
+    font-weight: 800 !important;
+    outline: none !important;
+}
+
+body.tsa-part2-admin input:focus,
+body.tsa-part2-admin textarea:focus,
+body.tsa-part2-admin select:focus {
+    border-color: var(--tsa-primary) !important;
+    box-shadow: 0 0 0 5px rgba(178, 28, 36, 0.10) !important;
+    background: #fff !important;
+}
+
+body.tsa-part2-admin button,
+body.tsa-part2-admin .btn,
+body.tsa-part2-admin a[class*="btn"] {
+    min-height: 50px !important;
+    border-radius: 1rem !important;
+    font-weight: 950 !important;
+}
+
+body.tsa-part2-admin button[type="submit"],
+body.tsa-part2-admin .btn-primary,
+body.tsa-part2-admin .save-btn,
+body.tsa-part2-admin .tsa-save-data-btn {
+    background: var(--tsa-primary) !important;
+    color: #fff !important;
+    border: 0 !important;
+    box-shadow: var(--tsa-red-shadow) !important;
+}
+
+.tsa-preview-open-btn {
+    border: 1px solid rgba(148, 163, 184, 0.38) !important;
+    background: #fff !important;
+    color: #475569 !important;
+    padding: 0 22px !important;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08) !important;
+}
+
+.tsa-preview-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2147483600;
+    background: rgba(15, 23, 42, 0.72);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 28px;
+}
+
+.tsa-preview-modal.is-open {
+    display: flex;
+}
+
+.tsa-preview-modal-card {
+    width: min(1180px, 96vw);
+    max-height: 92vh;
+    overflow: auto;
+    background: #f8fafc;
+    border-radius: 2rem;
+    box-shadow: 0 30px 100px rgba(0,0,0,0.32);
+    padding: 26px;
+}
+
+.tsa-preview-modal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.tsa-preview-modal-head h2 {
+    margin: 0;
+    font-weight: 1000;
+    letter-spacing: -0.04em;
+}
+
+.tsa-preview-close {
+    border: 0;
+    background: var(--tsa-primary);
+    color: #fff;
+    width: 46px;
+    height: 46px;
+    border-radius: 999px;
+    font-weight: 1000;
+    cursor: pointer;
+}
+
+.tsa-preview-student {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(250px, 1fr);
+    gap: 24px;
+}
+
+.tsa-preview-left,
+.tsa-preview-right {
+    border-radius: 2rem;
+    background: #fff;
+    border: 1px solid var(--tsa-border);
+    box-shadow: var(--tsa-shadow);
+    padding: 26px;
+}
+
+.tsa-preview-guide {
+    background: var(--tsa-soft);
+    border-left: 7px solid var(--tsa-primary);
+    border-radius: 1.3rem;
+    padding: 16px 18px;
+    margin-bottom: 18px;
+    font-weight: 850;
+    color: var(--tsa-primary);
+}
+
+.tsa-preview-audio {
+    border-radius: 1.5rem;
+    background: #fff7f7;
+    border: 1px solid rgba(230, 57, 70, 0.18);
+    padding: 20px;
+    margin: 18px 0;
+}
+
+.tsa-preview-speaker {
+    margin: 18px 0;
+}
+
+.tsa-preview-speaker small {
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    font-style: italic;
+    color: #94a3b8;
+    font-weight: 950;
+    margin-bottom: 8px;
+}
+
+.tsa-preview-speaker select {
+    width: 100%;
+    min-height: 58px;
+    border-radius: 1.35rem;
+    border: 1.5px solid rgba(178,28,36,0.18);
+    background: #f8fafc;
+    padding: 0 18px;
+    font-weight: 900;
+}
+
+.tsa-preview-save {
+    width: 100%;
+    min-height: 56px;
+    border: 0;
+    border-radius: 1.2rem;
+    background: var(--tsa-primary);
+    color: #fff;
+    font-weight: 1000;
+    box-shadow: var(--tsa-red-shadow);
+}
+
+.tsa-preview-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.tsa-preview-stat {
+    border-radius: 1.4rem;
+    background: #f8fafc;
+    padding: 18px;
+    text-align: center;
+}
+
+.tsa-preview-stat strong {
+    display: block;
+    font-size: 30px;
+    color: var(--tsa-primary);
+    font-weight: 1000;
+}
+
+@media (max-width: 900px) {
+    .tsa-preview-student,
+    body.tsa-part2-student .tsa-part2-student-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    body.tsa-part2-admin main,
+    body.tsa-part2-admin .main-content,
+    body.tsa-part2-admin .dashboard-main,
+    body.tsa-part2-admin .content,
+    body.tsa-part2-admin .admin-main {
+        margin-left: 0 !important;
+        width: 100vw !important;
+        max-width: 100vw !important;
+    }
+}

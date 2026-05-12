@@ -1,0 +1,37 @@
+=== FINAL PART 3 BUTTON REPORT ===
+
+STILL HAS SOURCE ISSUE: final_force_part3_button.py
+# 1) Sửa trực tiếp trong mọi file nguồn: chỉ vùng Part 3 -> trước Part 4
+    if "Part 3" in text and "Mở Part 2" in text:
+        p3 = text.find("Part 3")
+        block = block.replace("Mở Part 2", "Mở Part 3")
+        block = block.replace('/dashboard/part-2/', '/dashboard/part-3/')
+        block = block.replace('"/dashboard/part-2/"', '"/dashboard/part-3/"')
+        block = block.replace("'/dashboard/part-2/'", "'/dashboard/part-3/'")
+        block = block.replace('"part-2"', '"part-3"')
+        block = block.replace("'part-2'", "'part-3'")
+# 2) Chèn script ép sửa Part 3 trực tiếp vào HTML, tránh cache file static
+                if (txt.includes("Part 3") && !txt.includes("Part 4")) {
+            btn.textContent = "Mở Part 3";
+    if all(x in text for x in ["Part 1", "Part 2", "Part 3", "Part 4"]) and "</body>" in text:
+    if "Part 3" in text and "Mở Part 2" in text:
+            if "Part 3" in line or "Mở Part 2" in line or "part-2" in line:
+
+STILL HAS SOURCE ISSUE: fix_only_part3_button.py
+    if "Part 3" not in text or "Mở Part 3" not in text:
+    # Chỉ lấy vùng từ Part 3 đến Part 4, sửa trong vùng đó thôi
+    p3 = text.find("Part 3")
+        block = block.replace("Mở Part 2", "Mở Part 3")
+        block = block.replace('/dashboard/part-2/', '/dashboard/part-3/')
+        block = block.replace('"dashboard/part-2/"', '"dashboard/part-3/"')
+        block = block.replace("'dashboard/part-2/'", "'dashboard/part-3/'")
+print("DONE: only Part 3 button fixed.")
+
+STILL HAS SOURCE ISSUE: templates\core\listening_parts.html
+            <article class="part-card" onclick="window.location.href='/dashboard/part-2/'" style="cursor:pointer">
+                    <a class="open-btn" href="/dashboard/part-2/" href="/dashboard/part-2/">Mở Part 2</a>
+                <h2 class="part-title">Part 3</h2>
+                    Part 3 hiện chưa có dữ liệu. Đã mở trang khung để sau này thiết kế và nhập nội dung.
+                    <a class="open-btn secondary" href="/dashboard/part-3/" href="/dashboard/part-3/">Mở Part 3 2 3</a>
+                if (txt.includes("Part 3") && !txt.includes("Part 4")) {
+            btn.textContent = "Mở Part 3";

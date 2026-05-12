@@ -1,0 +1,164 @@
+{% load static %}
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Listening Part {{ part_number }} | Điểm TSA Với Aptis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="student-id" content="{{ student_id }}">
+    <meta name="student-name" content="{{ student_name }}">
+    <meta name="student-email" content="{{ student_email }}">
+    <link rel="stylesheet" href="{% static 'core/css/app_red.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
+    <link rel="stylesheet" href="{% static 'core/security_protect.css' %}">
+</head>
+<body class="student-body" data-watermark="{{ student_watermark }}">
+<div class="security-watermark" aria-hidden="true">
+    {% for _ in "123456789012345678901234567890123456" %}
+        <span>{{ student_watermark }} · <span data-security-time></span></span>
+    {% endfor %}
+</div>
+
+<div class="student-shell protected-content">
+    <header class="student-top">
+        <div class="brand-inline">
+            <div class="brand-logo">A</div>
+            <div>
+                <strong>Điểm TSA Với Aptis</strong>
+                <span>Listening Practice</span>
+            </div>
+        </div>
+        <div class="student-actions">
+            <span class="student-identity">ID {{ student_id }} · {{ student_name }}</span>
+            <a href="{% url 'dashboard' %}" class="ghost-btn">Trang chính</a>
+            <a href="{% url 'logout' %}" class="ghost-btn">Đăng xuất</a>
+        </div>
+    </header>
+
+    <main class="student-layout">
+        <section class="exam-panel">
+            <div class="exam-title">
+                <div class="part-card">
+                    <span>Part</span>
+                    <strong>{{ part_number }}</strong>
+                </div>
+                <div>
+                    <h1>Listening Practice</h1>
+                    <p>Luyện nghe từng câu, rõ ràng và dễ thao tác.</p>
+                </div>
+            </div>
+
+            <div class="part-tabs">
+                {% for part in part_tabs %}
+                    <a class="{% if part == part_number %}active{% endif %}" href="{% url 'listening' %}?part={{ part }}">Part {{ part }}</a>
+                {% endfor %}
+            </div>
+
+            {% if no_question %}
+                <div class="empty-box">
+                    <h2>Chưa có dữ liệu Listening cho Part {{ part_number }}</h2>
+                    <p>Admin cần nhập câu hỏi trong trang quản trị trước.</p>
+                </div>
+            {% else %}
+                <div class="progress-wrap">
+                    <div class="progress-info">
+                        <strong>Câu {{ current_index }}/{{ total_questions }}</strong>
+                        <span>{{ progress_percent }}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div style="width: {{ progress_percent }}%"></div>
+                    </div>
+                </div>
+
+                <article class="question-card">
+                    <div class="question-head">
+                        <span class="q-badge">Câu {{ current_index }}</span>
+                        <span class="flag">Được bảo vệ</span>
+                    </div>
+
+                    <h2>{{ question.prompt }}</h2>
+
+                    <audio class="audio-player" controls controlsList="nodownload noplaybackrate" src="{{ audio_url }}"></audio>
+
+                    <div class="answer-grid">
+                        <button type="button" class="answer-btn" data-answer="A">
+                            <b>A</b><span>{{ question.option_a }}</span>
+                        </button>
+                        <button type="button" class="answer-btn" data-answer="B">
+                            <b>B</b><span>{{ question.option_b }}</span>
+                        </button>
+                        <button type="button" class="answer-btn" data-answer="C">
+                            <b>C</b><span>{{ question.option_c }}</span>
+                        </button>
+                    </div>
+
+                    <button class="primary-btn full check-answer" type="button">Kiểm tra đáp án</button>
+
+                    <div class="answer-result" hidden>
+                        <h3>Kết quả</h3>
+                        <p>Đáp án đúng: <strong>{{ question.correct_answer }}</strong></p>
+                        <div class="transcript">
+                            <strong>Transcript:</strong>
+                            <p>{{ question.transcript }}</p>
+                        </div>
+                    </div>
+
+                    <div class="question-nav">
+                        {% if prev_url %}
+                            <a class="ghost-btn" href="{{ prev_url }}">← Câu trước</a>
+                        {% endif %}
+                        {% if next_url %}
+                            <a class="primary-btn" href="{{ next_url }}">Câu tiếp theo →</a>
+                        {% endif %}
+                    </div>
+                </article>
+            {% endif %}
+        </section>
+
+        <aside class="question-side">
+            <div class="side-card">
+                <h3>Danh sách câu hỏi</h3>
+                <div class="side-stats">
+                    <div>
+                        <strong>{{ current_index|default:0 }}</strong>
+                        <span>Đang làm</span>
+                    </div>
+                    <div>
+                        <strong>{{ total_questions|default:0 }}</strong>
+                        <span>Tổng câu</span>
+                    </div>
+                </div>
+
+                <div class="question-numbers">
+                    {% for n in all_question_numbers %}
+                        <a class="{% if n == current_index %}current{% endif %}" href="{% url 'listening' %}?part={{ part_number }}&q={{ n }}">{{ n }}</a>
+                    {% endfor %}
+                </div>
+
+                {% if next_url %}
+                    <a class="primary-btn full" href="{{ next_url }}">Đi tới câu tiếp theo</a>
+                {% endif %}
+            </div>
+        </aside>
+    </main>
+</div>
+
+<script src="{% static 'core/security_protect.js' %}" defer></script>
+<script>
+document.querySelectorAll(".answer-btn").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+        document.querySelectorAll(".answer-btn").forEach(function(x) { x.classList.remove("selected"); });
+        btn.classList.add("selected");
+    });
+});
+
+const checkBtn = document.querySelector(".check-answer");
+if (checkBtn) {
+    checkBtn.addEventListener("click", function() {
+        const box = document.querySelector(".answer-result");
+        if (box) box.hidden = false;
+    });
+}
+</script>
+</body>
+</html>

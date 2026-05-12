@@ -1,0 +1,7 @@
+=== PART CARD LINK REPORT ===
+
+FILE: templates\core\dashboard.html
+
+FILE: templates\core\listening_parts.html
+<div class="part-desc"> Cập nhật hàng loạt câu hỏi, audio, đáp án và transcript cho Part 1. Đây là phần đã chốt giao diện/logic. </div> <div class="part-actions"> <span class="status-pill">Đã chốt giao diện</span> <a class="open-btn" href="/dashboard/part-1/">Mở Part 1</a> </div> </article> <article class="part-card" onclick="window.loc
+pill">Đã mở khung</span> <a class="open-btn" href="/dashboard/part-2/" href="/dashboard/part-2/">Mở Part 2</a> </div> </article> <article class="part-card" onclick="window.location.href='/dashboard/part-4/'" style="cursor:pointer"> <div class="part-top"> <div class="part-number">3</div>

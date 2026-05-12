@@ -42,15 +42,15 @@ for p in Path("templates").rglob("*.html"):
 <script>
 (function makeWholePartCardsClickable(){
     const adminLinks = {
-        "Part 1": "/dashboard/part-1/",
-        "Part 2": "/dashboard/part-2/",
-        "Part 3": "/dashboard/part-3/",
+        "Part 1": "/dashboard/part-4/",
+        "Part 2": "/dashboard/part-4/",
+        "Part 3": "/dashboard/part-4/",
         "Part 4": "/dashboard/part-4/"
     };
 
     const studentLinks = {
         "Part 1": "/listening/",
-        "Part 2": "/listening/part-2/",
+        "Part 2": "/listening/part-4/",
         "Part 3": "/listening/part-3/",
         "Part 4": "/listening/part-4/"
     };

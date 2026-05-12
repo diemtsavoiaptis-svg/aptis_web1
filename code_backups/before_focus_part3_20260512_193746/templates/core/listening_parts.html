@@ -1,0 +1,354 @@
+{% load static %}
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Chọn Part cần quản lý | Aptis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
+
+    <style>
+        :root {
+            --red: #e60023;
+            --red2: #ff5f76;
+            --deep: #7a0010;
+            --dark: #3f0011;
+            --soft: #fff1f4;
+            --line: #ffd1dc;
+            --muted: #667085;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top right, rgba(255, 95, 118, .18), transparent 34%),
+                linear-gradient(135deg, #fffafa 0%, #fff0f4 48%, #fff7f9 100%);
+            color: var(--dark);
+            font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+        }
+
+        .wrap {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 28px 20px 40px;
+        }
+
+        .title-box {
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            margin: 0;
+            color: var(--dark);
+            font-size: 30px;
+            line-height: 1.2;
+            font-weight: 950;
+            letter-spacing: -.03em;
+        }
+
+        .subtitle {
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.6;
+            font-weight: 650;
+        }
+
+        .part-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(250px, 1fr));
+            gap: 18px;
+        }
+
+        .part-card {
+            min-height: 300px;
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            background: rgba(255,255,255,.90);
+            box-shadow: 0 20px 46px rgba(180,0,30,.07);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            transition: .18s ease;
+        }
+
+        .part-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 24px 54px rgba(180,0,30,.11);
+        }
+
+        .part-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .part-number {
+            width: 58px;
+            height: 58px;
+            border-radius: 18px;
+            display: grid;
+            place-items: center;
+            color: white;
+            background: linear-gradient(135deg, var(--red), var(--red2));
+            font-size: 24px;
+            font-weight: 950;
+            box-shadow: 0 18px 34px rgba(230,0,35,.18);
+        }
+
+        .count-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 32px;
+            padding: 0 14px;
+            border-radius: 999px;
+            border: 1px solid #ffb6c2;
+            background: #fff1f4;
+            color: #b8001c;
+            font-weight: 950;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .part-title {
+            margin: 26px 0 12px;
+            font-size: 38px;
+            line-height: 1;
+            color: var(--dark);
+            font-weight: 950;
+            letter-spacing: -.045em;
+        }
+
+        .part-desc {
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.7;
+            font-weight: 650;
+        }
+
+        .part-actions {
+            margin-top: auto;
+            padding-top: 28px;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .status-pill {
+            min-height: 42px;
+            padding: 0 16px;
+            border-radius: 999px;
+            border: 1px solid #ffd1dc;
+            background: #fffafa;
+            color: #b8001c;
+            display: inline-flex;
+            align-items: center;
+            font-weight: 950;
+            font-size: 14px;
+        }
+
+        .open-btn {
+            min-height: 48px;
+            padding: 0 20px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            background: linear-gradient(135deg, var(--red), var(--red2));
+            text-decoration: none;
+            font-weight: 950;
+            box-shadow: 0 16px 30px rgba(230,0,35,.16);
+            white-space: nowrap;
+        }
+
+        .open-btn.secondary {
+            background: #fff1f4;
+            color: #b8001c;
+            border: 1px solid #ffb6c2;
+            box-shadow: none;
+        }
+
+        @media (max-width: 1180px) {
+            .part-grid {
+                grid-template-columns: repeat(2, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 640px) {
+            .part-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .part-card {
+                min-height: auto;
+            }
+        }
+    </style>
+
+<style class="part-card-clickable-hover-fix">
+.card:hover,
+.part-card:hover,
+.part-item:hover,
+article:hover {
+    cursor: pointer;
+}
+</style>
+
+    <link rel="stylesheet" href="{% static 'css/sidebar_size_only.css' %}">
+    <link rel="stylesheet" href="{% static 'css/safe_dashboard_layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/student_watermark_security.css' %}">
+    <link rel="stylesheet" href="{% static 'css/focus_part2_only.css' %}">
+</head>
+
+<body>
+    <main class="wrap">
+        <section class="title-box">
+            <h1>Chọn Part cần quản lý</h1>
+            <div class="subtitle">
+                Hiển thị 4 part theo dạng thẻ bo tròn. Part nào chưa có dữ liệu thì vẫn mở khung để chuẩn bị nhập sau.
+            </div>
+        </section>
+
+        <section class="part-grid">
+            <article class="part-card" onclick="window.location.href='/dashboard/part-2/'" style="cursor:pointer">
+                <div class="part-top">
+                    <div class="part-number">1</div>
+                </div>
+
+                <h2 class="part-title">Part 1</h2>
+                <div class="part-desc">
+                    Cập nhật hàng loạt câu hỏi, audio, đáp án và transcript cho Part 1. Đây là phần đã chốt giao diện/logic.
+                </div>
+
+                <div class="part-actions">
+                    <span class="status-pill">Đã chốt giao diện</span>
+                    <a class="open-btn" href="/dashboard/part-1/">Mở Part 1</a>
+                </div>
+            </article>
+
+            <article class="part-card" onclick="window.location.href='/dashboard/part-3/'" style="cursor:pointer">
+                <div class="part-top">
+                    <div class="part-number">2</div>
+                </div>
+
+                <h2 class="part-title">Part 2</h2>
+                <div class="part-desc">
+                    Khu vực quản lý dữ liệu cho Part 2. Chưa có dữ liệu thật. Hiện đã mở khung giao diện.
+                </div>
+
+                <div class="part-actions">
+                    <span class="status-pill">Đã mở khung</span>
+                    <a class="open-btn" href="/dashboard/part-2/" href="/dashboard/part-2/">Mở Part 2</a>
+                </div>
+            </article>
+
+            <article class="part-card" onclick="window.location.href='/dashboard/part-4/'" style="cursor:pointer">
+                <div class="part-top">
+                    <div class="part-number">3</div>
+                </div>
+
+                <h2 class="part-title">Part 3</h2>
+                <div class="part-desc">
+                    Part 3 hiện chưa có dữ liệu. Đã mở trang khung để sau này thiết kế và nhập nội dung.
+                </div>
+
+                <div class="part-actions">
+                    <span class="status-pill">Chưa có dữ liệu</span>
+                    <a class="open-btn secondary" href="/dashboard/part-3/" href="/dashboard/part-3/">Mở Part 3 2 3</a>
+                </div>
+            </article>
+
+            <article class="part-card">
+                <div class="part-top">
+                    <div class="part-number">4</div>
+                </div>
+
+                <h2 class="part-title">Part 4</h2>
+                <div class="part-desc">
+                    Part 4 hiện chưa có dữ liệu. Đã mở trang khung để sau này thiết kế và nhập nội dung.
+                </div>
+
+                <div class="part-actions">
+                    <span class="status-pill">Chưa có dữ liệu</span>
+                    <a class="open-btn secondary" href="/dashboard/part-4/" href="/dashboard/part-4/">Mở Part 4</a>
+                </div>
+            </article>
+        </section>
+    </main>
+
+<script>
+(function safePartCardClickOnly(){
+    const path = window.location.pathname;
+
+    const isAdminPartPage =
+        path === "/dashboard/listening-parts/" ||
+        path === "/dashboard/listening-parts";
+
+    const isStudentListeningPage =
+        path === "/listening/" ||
+        path === "/listening";
+
+    if(!isAdminPartPage && !isStudentListeningPage) return;
+
+    const adminLinks = {
+        "1": "/dashboard/part-1/",
+        "2": "/dashboard/part-2/",
+        "3": "/dashboard/part-3/",
+        "4": "/dashboard/part-4/"
+    };
+
+    const studentLinks = {
+        "1": "/listening/",
+        "2": "/listening/part-2/",
+        "3": "/listening/part-3/",
+        "4": "/listening/part-4/"
+    };
+
+    const links = isStudentListeningPage ? studentLinks : adminLinks;
+
+    document.querySelectorAll(".part-card, .part-item, .card, article").forEach(card => {
+        const text = (card.innerText || "").replace(/\s+/g, " ");
+        const match = text.match(/\bPart\s*([1-4])\b/i);
+        if(!match) return;
+
+        const partNo = match[1];
+        const url = links[partNo];
+        if(!url) return;
+
+        const rect = card.getBoundingClientRect();
+        if(rect.width < 120 || rect.height < 80) return;
+
+        card.style.cursor = "pointer";
+        card.setAttribute("role", "button");
+        card.setAttribute("tabindex", "0");
+
+        card.addEventListener("click", function(e){
+            if(e.target.closest("a, button, input, textarea, select, label")) return;
+            window.location.href = url;
+        });
+
+        card.addEventListener("keydown", function(e){
+            if(e.key === "Enter" || e.key === " "){
+                e.preventDefault();
+                window.location.href = url;
+            }
+        });
+    });
+})();
+</script>
+
+    {% include "core/_student_watermark.html" %}
+    <script src="{% static 'js/student_watermark_security.js' %}"></script>
+    <script src="{% static 'js/focus_part2_only.js' %}"></script>
+</body>
+</html>

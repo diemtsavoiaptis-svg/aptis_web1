@@ -331,7 +331,6 @@ article:hover {
 
     <link rel="stylesheet" href="{% static 'css/sidebar_size_only.css' %}">
     <link rel="stylesheet" href="{% static 'css/safe_dashboard_layout.css' %}">
-    <link rel="stylesheet" href="{% static 'css/focus_part2_only.css' %}">
 </head>
 
 <body>
@@ -693,6 +692,59 @@ document.querySelectorAll(".quick-card").forEach(card => {
     });
 });
 </script>
-    <script src="{% static 'js/focus_part2_only.js' %}"></script>
+    <script src="{% static 'js/force_fix_part3_part4_cards.js' %}"></script>
+
+<script id="force-part3-button-only">
+(function () {
+    function fixPart3ButtonOnly() {
+        const buttons = Array.from(document.querySelectorAll("a, button"));
+
+        buttons.forEach(function (btn) {
+            const label = (btn.innerText || btn.textContent || "").trim();
+            if (!label.includes("Mở Part")) return;
+
+            let node = btn.parentElement;
+            let part3Box = null;
+
+            while (node && node !== document.body) {
+                const txt = (node.innerText || node.textContent || "").trim();
+
+                if (txt.includes("Part 3") && !txt.includes("Part 4")) {
+                    part3Box = node;
+                    break;
+                }
+
+                node = node.parentElement;
+            }
+
+            if (!part3Box) return;
+
+            btn.textContent = "Mở Part 3";
+
+            if (btn.tagName.toLowerCase() === "a") {
+                btn.setAttribute("href", "/dashboard/part-3/");
+            } else {
+                btn.onclick = function (e) {
+                    e.preventDefault();
+                    window.location.href = "/dashboard/part-3/";
+                };
+            }
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", fixPart3ButtonOnly);
+    window.addEventListener("load", fixPart3ButtonOnly);
+
+    const observer = new MutationObserver(fixPart3ButtonOnly);
+    observer.observe(document.documentElement, {
+        childList: true,
+        subtree: true,
+        characterData: true
+    });
+
+    setInterval(fixPart3ButtonOnly, 500);
+})();
+</script>
+
 </body>
 </html>

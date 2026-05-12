@@ -208,8 +208,8 @@ for p in matched:
         s = fix_card_link(s, part)
 
     # Nếu chữ bị thành "Mở Part" chung thì sửa theo thứ tự xuất hiện Part 2/3/4
-    s = re.sub(r'(Part 2[\s\S]{0,900}?)Mở Part(?!\s*2)', r'\1Mở Part 2', s, count=1)
-    s = re.sub(r'(Part 3[\s\S]{0,900}?)Mở Part(?!\s*3)', r'\1Mở Part 3', s, count=1)
+    s = re.sub(r'(Part 2[\s\S]{0,900}?)Mở Part(?!\s*2)', r'\1Mở Part 4', s, count=1)
+    s = re.sub(r'(Part 3[\s\S]{0,900}?)Mở Part(?!\s*3)', r'\1Mở Part 4', s, count=1)
     s = re.sub(r'(Part 4[\s\S]{0,900}?)Mở Part(?!\s*4)', r'\1Mở Part 4', s, count=1)
 
     if s != old:

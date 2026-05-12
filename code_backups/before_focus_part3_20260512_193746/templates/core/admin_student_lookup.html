@@ -1,0 +1,417 @@
+{% load static %}
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Duyệt học viên</title>
+<style>
+*{box-sizing:border-box}
+body{
+    margin:0;
+    padding:24px;
+    background:linear-gradient(135deg,#fffafa,#fff1f4);
+    color:#3f0011;
+    font-family:Georgia,"Times New Roman",serif;
+}
+.wrap{
+    display:grid;
+    grid-template-columns:380px minmax(0,1fr);
+    gap:22px;
+    max-width:1180px;
+    margin:0 auto;
+}
+.card{
+    background:white;
+    border:1px solid #ffd1dc;
+    border-radius:26px;
+    box-shadow:0 18px 42px rgba(180,0,30,.08);
+    overflow:hidden;
+}
+.head{
+    padding:18px 22px;
+    background:linear-gradient(135deg,#e60023,#ff5f76);
+    color:white;
+}
+.head h2{
+    margin:0;
+    font-size:25px;
+    font-weight:950;
+}
+.head p{
+    margin:7px 0 0;
+    font-weight:700;
+    opacity:.9;
+}
+.body{padding:22px}
+label{
+    display:block;
+    margin:0 0 7px;
+    color:#7a0010;
+    font-weight:950;
+}
+input{
+    width:100%;
+    height:48px;
+    padding:0 15px;
+    border-radius:16px;
+    border:1px solid #ffd1dc;
+    font-size:16px;
+    font-family:inherit;
+}
+input:focus{
+    outline:none;
+    border-color:#e60023;
+    box-shadow:0 0 0 4px rgba(230,0,35,.1);
+}
+.btn{
+    border:0;
+    min-height:48px;
+    padding:0 20px;
+    border-radius:16px;
+    background:linear-gradient(135deg,#e60023,#ff5f76);
+    color:white;
+    font-weight:950;
+    font-size:16px;
+    font-family:inherit;
+    cursor:pointer;
+}
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:16px;
+}
+.result-list{
+    display:grid;
+    gap:10px;
+    margin-top:18px;
+}
+.result-item{
+    display:block;
+    padding:13px 14px;
+    border:1px solid #ffd1dc;
+    border-radius:16px;
+    background:#fffafa;
+    color:#3f0011;
+    text-decoration:none;
+}
+.result-item.active,.result-item:hover{
+    background:#fff1f4;
+}
+.result-name{
+    font-size:17px;
+    font-weight:950;
+    color:#65000e;
+}
+.result-meta{
+    margin-top:4px;
+    color:#667085;
+    font-size:14px;
+    line-height:1.45;
+}
+.empty{
+    padding:28px;
+    border:1px dashed #ffb6c2;
+    border-radius:20px;
+    color:#667085;
+    line-height:1.6;
+}
+.messages{margin-bottom:14px}
+.message{
+    padding:12px 14px;
+    border-radius:14px;
+    background:#ecfdf3;
+    color:#027a48;
+    font-weight:900;
+}
+.save-row{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:18px;
+}
+@media(max-width:900px){
+    .wrap{grid-template-columns:1fr}
+    .form-grid{grid-template-columns:1fr}
+}
+
+.saved-section{
+    margin-top:24px;
+}
+.saved-table-wrap{
+    overflow:auto;
+    border-radius:22px;
+    border:1px solid #ffd1dc;
+    background:white;
+}
+.saved-table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:760px;
+}
+.saved-table th{
+    background:#fff1f4;
+    color:#7a0010;
+    font-weight:950;
+    padding:14px 12px;
+    text-align:left;
+    border-bottom:1px solid #ffd1dc;
+}
+.saved-table td{
+    padding:13px 12px;
+    border-bottom:1px solid #ffe1e7;
+    color:#3f0011;
+    vertical-align:middle;
+}
+.saved-table tr:hover{
+    background:#fffafa;
+}
+.saved-badge{
+    display:inline-flex;
+    align-items:center;
+    min-height:28px;
+    padding:4px 10px;
+    border-radius:999px;
+    background:#fff1f4;
+    color:#8a0015;
+    border:1px solid #ffd1dc;
+    font-weight:900;
+}
+.saved-action{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:34px;
+    padding:0 12px;
+    border-radius:999px;
+    background:linear-gradient(135deg,#e60023,#ff5f76);
+    color:white;
+    text-decoration:none;
+    font-weight:950;
+}
+
+
+.delete-action{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:34px;
+    padding:0 12px;
+    border-radius:999px;
+    background:#fff1f4;
+    color:#b8001c;
+    border:1px solid #ffb6c2;
+    font-weight:950;
+    font-family:inherit;
+    cursor:pointer;
+}
+.delete-action:hover{
+    background:#ffe1e7;
+}
+.action-row{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    flex-wrap:wrap;
+}
+.inline-delete-form{
+    display:inline;
+    margin:0;
+}
+
+</style>
+<link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sidebar_size_only.css' %}">
+    <link rel="stylesheet" href="{% static 'css/safe_dashboard_layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/student_watermark_security.css' %}">
+    <link rel="stylesheet" href="{% static 'css/focus_part2_only.css' %}">
+</head>
+<body>
+<div class="wrap">
+    <section class="card">
+        <div class="head">
+            <h2>Tra học viên</h2>
+            <p>Nhập tên, Gmail, SĐT hoặc ID học viên.</p>
+        </div>
+        <div class="body">
+            <form method="get">
+                <label>Thông tin cần tra</label>
+                <input name="q" value="{{ q }}" placeholder="Tên, Gmail, SĐT, ID học viên...">
+                <div style="height:12px"></div>
+                <button class="btn" type="submit">Tra học viên</button>
+            </form>
+
+            <div class="result-list">
+                {% for item in results %}
+                    <a class="result-item {% if selected and item.id == selected.id %}active{% endif %}"
+                       href="?q={{ q|urlencode }}&profile_id={{ item.id }}">
+                        <div class="result-name">
+                            {% if item.full_name %}{{ item.full_name }}
+                            {% elif item.name %}{{ item.name }}
+                            {% elif item.user.first_name %}{{ item.user.first_name }}
+                            {% else %}{{ item.user.username }}{% endif %}
+                        </div>
+                        <div class="result-meta">
+                            Gmail: {{ item.user.email|default:"Chưa có" }}<br>
+                            Tài khoản: {{ item.user.username }}
+                        </div>
+                    </a>
+                {% empty %}
+                    {% if q %}<div class="empty">Không tìm thấy học viên phù hợp.</div>{% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="card">
+        <div class="head">
+            <h2>Hồ sơ học viên</h2>
+            <p>Cập nhật Gmail, SĐT, tên và ID học viên.</p>
+        </div>
+        <div class="body">
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="message">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if selected %}
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="save_profile">
+                    <input type="hidden" name="profile_id" value="{{ selected.id }}">
+                    <input type="hidden" name="q" value="{{ q }}">
+
+                    <div class="form-grid">
+                        <div>
+                            <label>Gmail</label>
+                            <input name="gmail" value="{{ profile_email_value }}" placeholder="Gmail học viên">
+                        </div>
+                        <div>
+                            <label>Số điện thoại</label>
+                            <input name="phone" value="{{ phone_value }}" placeholder="Số điện thoại">
+                        </div>
+                        <div>
+                            <label>Tên học viên</label>
+                            <input name="full_name" value="{{ profile_name_value }}" placeholder="Tên học viên">
+                        </div>
+                        <div>
+                            <label>ID học viên</label>
+                            <input name="student_id" value="{{ student_id_value }}" placeholder="ID học viên tự thêm">
+                        </div>
+                    </div>
+
+                    <div class="save-row">
+                        <button class="btn" type="submit">Lưu hồ sơ học viên</button>
+                    </div>
+                </form>
+            {% else %}
+                <div class="empty">
+                    Chưa chọn học viên. Hãy tra học viên bên trái trước.
+                </div>
+            {% endif %}
+        </div>
+    </section>
+</div>
+
+<section class="card saved-section">
+    <div class="head">
+        <h2>Hồ sơ đã lưu</h2>
+        <p>Danh sách học viên đã có hồ sơ trong hệ thống.</p>
+    </div>
+
+    <div class="body">
+        <div class="saved-table-wrap">
+            <table class="saved-table">
+                <thead>
+                    <tr>
+                        <th>ID học viên</th>
+                        <th>Tên</th>
+                        <th>Gmail</th>
+                        <th>Số điện thoại</th>
+                        <th>Tài khoản</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in saved_profiles %}
+                        <tr>
+                            <td>
+                                <span class="saved-badge">
+                                    {% if item.student_id %}
+                                        {{ item.student_id }}
+                                    {% else %}
+                                        Chưa có
+                                    {% endif %}
+                                </span>
+                            </td>
+
+                            <td>
+                                {% if item.full_name %}
+                                    {{ item.full_name }}
+                                {% elif item.name %}
+                                    {{ item.name }}
+                                {% elif item.user.first_name %}
+                                    {{ item.user.first_name }}
+                                {% else %}
+                                    Chưa có
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {% if item.email %}
+                                    {{ item.email }}
+                                {% elif item.gmail %}
+                                    {{ item.gmail }}
+                                {% elif item.user.email %}
+                                    {{ item.user.email }}
+                                {% else %}
+                                    Chưa có
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {% if item.phone %}
+                                    {{ item.phone }}
+                                {% elif item.phone_number %}
+                                    {{ item.phone_number }}
+                                {% elif item.sdt %}
+                                    {{ item.sdt }}
+                                {% else %}
+                                    Chưa có
+                                {% endif %}
+                            </td>
+
+                            <td>{{ item.user.username }}</td>
+
+                            <td>
+                                <div class="action-row">
+                                    <a class="saved-action" href="?profile_id={{ item.id }}&q={{ item.user.email|urlencode }}">
+                                        Mở hồ sơ
+                                    </a>
+
+                                    <form class="inline-delete-form" method="post" onsubmit="return confirm('Bạn chắc chắn muốn xóa thông tin hồ sơ học viên này? Tài khoản đăng nhập vẫn được giữ lại.');">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="action" value="delete_profile">
+                                        <input type="hidden" name="profile_id" value="{{ item.id }}">
+                                        <button class="delete-action" type="submit">Xóa hồ sơ</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6">Chưa có hồ sơ học viên nào.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+    {% include "core/_student_watermark.html" %}
+    <script src="{% static 'js/student_watermark_security.js' %}"></script>
+    <script src="{% static 'js/focus_part2_only.js' %}"></script>
+</body>
+</html>

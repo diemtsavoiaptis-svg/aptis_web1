@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const isPart1 = text.includes("Part 1") || href.includes("part-1") || href.endsWith("/listening/");
         const isPart3 = text.includes("Part 3") || href.includes("part-3");
         const isPart4 = text.includes("Part 4") || href.includes("part-4");
-        const isPart2 = text.includes("Part 2") || href.includes("part-2");
+        const isPart2 = text.includes("Part 2") || href.includes("part-4");
 
         if (isPart2) {
             el.classList.add("tsa-part2-focus");

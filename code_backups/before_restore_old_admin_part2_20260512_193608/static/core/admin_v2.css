@@ -1,0 +1,532 @@
+﻿:root{
+    --tsa-red-1:#cf102d;
+    --tsa-red-2:#ef2945;
+    --tsa-red-3:#fff1f4;
+    --tsa-red-4:#ffd9e1;
+    --tsa-text:#5b0f1b;
+    --tsa-muted:#85515b;
+    --tsa-border:#f2ccd4;
+    --tsa-surface:rgba(255,255,255,.82);
+    --tsa-shadow:0 14px 34px rgba(207,16,45,.12);
+    --tsa-radius:20px;
+    --tsa-heading:"Be Vietnam Pro","Inter",system-ui,sans-serif;
+    --tsa-body:"Inter","Be Vietnam Pro",system-ui,sans-serif;
+}
+
+html, body{
+    font-family:var(--tsa-body);
+    color:var(--tsa-text);
+    background:linear-gradient(90deg,#ffe4eb 0%, #fff8fa 50%, #fff1e6 100%);
+}
+
+body.login{
+    background:linear-gradient(135deg,#ffe4eb 0%, #fff8fa 50%, #fff1e6 100%);
+}
+
+#header{
+    background:linear-gradient(135deg,var(--tsa-red-1),var(--tsa-red-2)) !important;
+    color:#fff;
+    box-shadow:0 10px 24px rgba(207,16,45,.18);
+    padding:16px 28px;
+}
+
+#branding{
+    float:left;
+    display:flex;
+    align-items:center;
+    min-height:56px;
+}
+
+.tsa-branding{
+    display:flex;
+    align-items:center;
+    gap:14px;
+}
+
+.tsa-brand-mark{
+    width:54px;
+    height:54px;
+    border-radius:18px;
+    background:#fff;
+    color:var(--tsa-red-1) !important;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none !important;
+    font-family:var(--tsa-heading);
+    font-weight:800;
+    font-size:24px;
+    box-shadow:0 8px 20px rgba(0,0,0,.12);
+}
+
+.tsa-brand-copy{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+}
+
+#site-name{
+    margin:0 !important;
+    font-family:var(--tsa-heading) !important;
+    font-weight:800 !important;
+    font-size:20px !important;
+    line-height:1.15 !important;
+}
+
+#site-name a{
+    color:#fff !important;
+    text-decoration:none !important;
+}
+
+.tsa-brand-copy p{
+    margin:0;
+    color:rgba(255,255,255,.88);
+    font-size:13px;
+    font-weight:600;
+    line-height:1.3;
+    font-family:var(--tsa-body);
+}
+
+#user-tools{
+    font-family:var(--tsa-heading);
+    font-size:14px;
+    font-weight:700;
+    text-transform:none;
+    letter-spacing:0;
+    padding-top:4px;
+}
+
+#user-tools a,
+#user-tools a:visited{
+    color:#fff !important;
+    text-decoration:none;
+}
+
+#user-tools a:hover{
+    opacity:.88;
+}
+
+div.breadcrumbs{
+    background:rgba(255,255,255,.82);
+    border-bottom:1px solid var(--tsa-border);
+    color:var(--tsa-muted);
+    padding:14px 28px;
+    font-size:14px;
+}
+
+div.breadcrumbs a{
+    color:var(--tsa-red-1);
+    font-weight:700;
+}
+
+#content{
+    padding:26px 28px;
+}
+
+#content h1{
+    font-family:var(--tsa-heading);
+    font-size:28px;
+    font-weight:800;
+    color:var(--tsa-text);
+    margin-bottom:20px;
+}
+
+.module,
+.inline-group,
+.submit-row,
+.dashboard .module,
+#changelist-filter,
+.selector,
+.paginator,
+.object-tools,
+.form-row{
+    border-radius:var(--tsa-radius);
+}
+
+.module,
+.inline-group,
+.submit-row,
+.dashboard .module,
+#changelist-filter,
+.selector{
+    background:var(--tsa-surface);
+    border:1px solid var(--tsa-border);
+    box-shadow:var(--tsa-shadow);
+    overflow:hidden;
+}
+
+.module h2,
+.module caption,
+.inline-group h2{
+    background:linear-gradient(135deg,var(--tsa-red-1),var(--tsa-red-2));
+    color:#fff;
+    font-family:var(--tsa-heading);
+    font-size:18px;
+    font-weight:800;
+    padding:15px 18px;
+    border:none;
+}
+
+a.button,
+.button,
+input[type=submit],
+input[type=button],
+.submit-row input,
+.object-tools a,
+.object-tools a:link,
+.object-tools a:visited{
+    background:linear-gradient(135deg,var(--tsa-red-1),var(--tsa-red-2)) !important;
+    color:#fff !important;
+    border:none !important;
+    border-radius:999px !important;
+    padding:10px 18px !important;
+    font-family:var(--tsa-heading);
+    font-weight:700;
+    box-shadow:0 10px 22px rgba(207,16,45,.16);
+    text-decoration:none !important;
+}
+
+a.button:hover,
+.button:hover,
+input[type=submit]:hover,
+input[type=button]:hover,
+.submit-row input:hover,
+.object-tools a:hover{
+    transform:translateY(-1px);
+    filter:brightness(1.03);
+}
+
+input,
+textarea,
+select{
+    font-family:var(--tsa-body);
+    border:1px solid #e8c5cc !important;
+    border-radius:14px !important;
+    padding:10px 12px !important;
+    background:#fff !important;
+    color:var(--tsa-text) !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+    outline:none !important;
+    border-color:var(--tsa-red-2) !important;
+    box-shadow:0 0 0 4px rgba(239,41,69,.12) !important;
+}
+
+#changelist-search input{
+    min-width:280px;
+}
+
+.results{
+    overflow:auto;
+}
+
+#result_list,
+.results table{
+    width:100%;
+    border-collapse:collapse;
+    background:transparent;
+}
+
+#result_list th,
+#result_list td,
+.results th,
+.results td{
+    border-bottom:1px solid #f3d9df;
+    padding:14px 12px;
+    vertical-align:middle;
+}
+
+#result_list th,
+.results th{
+    background:#fff3f6;
+    color:var(--tsa-text);
+    font-family:var(--tsa-heading);
+    font-size:13px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.02em;
+}
+
+#result_list tr:hover td,
+.results tr:hover td{
+    background:#fffafb;
+}
+
+#changelist-filter h2{
+    background:linear-gradient(135deg,var(--tsa-red-1),var(--tsa-red-2));
+    color:#fff;
+    font-family:var(--tsa-heading);
+    font-size:17px;
+    font-weight:800;
+    padding:15px 18px;
+    margin:0;
+}
+
+#changelist-filter h3{
+    font-family:var(--tsa-heading);
+    color:var(--tsa-text);
+    font-size:14px;
+    font-weight:800;
+    margin:18px 16px 8px;
+}
+
+#changelist-filter ul{
+    margin:0 0 12px;
+    padding:0 16px 0 28px;
+}
+
+#changelist-filter li{
+    margin:6px 0;
+}
+
+#changelist-filter a{
+    color:var(--tsa-red-1);
+    font-weight:700;
+}
+
+.paginator{
+    background:rgba(255,255,255,.85);
+    border:1px solid var(--tsa-border);
+    padding:12px 16px;
+    margin-top:16px;
+    box-shadow:var(--tsa-shadow);
+}
+
+fieldset.module{
+    margin-bottom:20px;
+}
+
+.form-row{
+    padding:14px 18px;
+    border-bottom:1px solid #f3d9df;
+}
+
+.form-row:last-child{
+    border-bottom:none;
+}
+
+.help,
+.helptext{
+    color:var(--tsa-muted);
+    font-size:13px;
+}
+
+.messagelist li{
+    border-radius:16px;
+    border:none;
+    box-shadow:var(--tsa-shadow);
+    font-family:var(--tsa-heading);
+    font-weight:700;
+}
+
+.aligned label{
+    font-family:var(--tsa-heading);
+    font-weight:700;
+    color:var(--tsa-text);
+}
+
+.dashboard .module table th{
+    width:100%;
+}
+
+.dashboard .module table td{
+    white-space:nowrap;
+}
+
+@media (max-width: 1024px){
+    #header{
+        padding:14px 18px;
+    }
+
+    .tsa-branding{
+        gap:10px;
+    }
+
+    .tsa-brand-mark{
+        width:46px;
+        height:46px;
+        font-size:20px;
+        border-radius:14px;
+    }
+
+    #site-name{
+        font-size:18px !important;
+    }
+
+    .tsa-brand-copy p{
+        font-size:12px;
+    }
+
+    #content{
+        padding:18px;
+    }
+}
+
+
+/* ADMIN HEADER CONTRAST FIX */
+#header{
+    background: linear-gradient(135deg, #b80016 0%, #d90429 55%, #ef233c 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 10px 28px rgba(184, 0, 22, 0.22) !important;
+}
+
+#branding,
+#branding *{
+    color: #ffffff !important;
+}
+
+.tsa-branding{
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.tsa-brand-mark{
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    border-radius: 16px;
+    background: #ffffff !important;
+    color: #c1121f !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 24px;
+    text-decoration: none !important;
+    box-shadow: 0 10px 24px rgba(0,0,0,.14);
+}
+
+#site-name,
+#site-name a,
+.tsa-brand-copy h1{
+    color: #ffffff !important;
+    font-family: "Be Vietnam Pro","Inter",system-ui,sans-serif !important;
+    font-size: 24px !important;
+    font-weight: 800 !important;
+    line-height: 1.15 !important;
+    letter-spacing: 0 !important;
+    margin: 0 !important;
+    text-shadow: 0 1px 1px rgba(0,0,0,.14);
+    text-decoration: none !important;
+}
+
+.tsa-brand-copy{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.tsa-brand-copy p{
+    margin: 0 !important;
+    color: rgba(255,255,255,.96) !important;
+    font-family: "Inter","Be Vietnam Pro",system-ui,sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    line-height: 1.4 !important;
+    text-shadow: 0 1px 1px rgba(0,0,0,.10);
+}
+
+#user-tools,
+#user-tools a,
+#user-tools a:link,
+#user-tools a:visited{
+    color: #ffffff !important;
+    font-family: "Be Vietnam Pro","Inter",system-ui,sans-serif !important;
+    font-weight: 700 !important;
+}
+
+#user-tools a:hover{
+    color: #fff5f7 !important;
+    opacity: 1 !important;
+}
+
+@media (max-width: 768px){
+    #site-name,
+    #site-name a,
+    .tsa-brand-copy h1{
+        font-size: 20px !important;
+    }
+
+    .tsa-brand-copy p{
+        font-size: 13px !important;
+    }
+
+    .tsa-brand-mark{
+        width: 46px;
+        height: 46px;
+        min-width: 46px;
+        font-size: 21px;
+    }
+}
+/* END ADMIN HEADER CONTRAST FIX */
+
+
+/* ADMIN TITLE WHITE FIX */
+#nav-sidebar .module caption,
+#nav-sidebar .module h2,
+#nav-sidebar .module caption a,
+#nav-sidebar .module h2 a,
+#nav-sidebar .section-title,
+#nav-sidebar .app-title,
+#nav-sidebar .model-title,
+.module h2,
+.module caption,
+.inline-group h2,
+fieldset h2,
+.results thead th,
+#changelist-filter h2,
+#changelist-filter h3,
+.dashboard .module caption,
+.dashboard .module h2 {
+    color: #ffffff !important;
+    opacity: 1 !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.18) !important;
+    font-weight: 800 !important;
+}
+
+#nav-sidebar .module caption,
+#nav-sidebar .module h2,
+.module caption,
+.module h2,
+.inline-group h2,
+#changelist-filter h2 {
+    background: transparent !important;
+}
+
+#nav-sidebar .module caption a,
+#nav-sidebar .module h2 a,
+.module caption a,
+.module h2 a {
+    color: #ffffff !important;
+    text-decoration: none !important;
+}
+
+#nav-sidebar .module caption a:hover,
+#nav-sidebar .module h2 a:hover,
+.module caption a:hover,
+.module h2 a:hover {
+    color: #fff8fb !important;
+}
+
+#nav-sidebar .module,
+#nav-sidebar .module table,
+.module,
+.results,
+#changelist-filter {
+    border-radius: 18px !important;
+    overflow: hidden !important;
+}
+
+#nav-sidebar .module caption,
+#nav-sidebar .module h2,
+.module caption,
+.module h2,
+#changelist-filter h2 {
+    padding: 14px 16px !important;
+    letter-spacing: 0.2px !important;
+}
+/* END ADMIN TITLE WHITE FIX */

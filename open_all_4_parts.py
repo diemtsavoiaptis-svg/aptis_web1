@@ -55,7 +55,7 @@ if "from . import views" not in u:
     u = u.replace("from django.urls import path", "from django.urls import path\nfrom . import views", 1)
 
 routes = {
-    'dashboard/part-2/': '    path("dashboard/part-2/", views.admin_part2_questions, name="admin_part2_questions"),',
+    'dashboard/part-4/': '    path("dashboard/part-4/", views.admin_part2_questions, name="admin_part2_questions"),',
     'dashboard/part-3/': '    path("dashboard/part-3/", views.admin_part3_questions, name="admin_part3_questions"),',
     'dashboard/part-4/': '    path("dashboard/part-4/", views.admin_part4_questions, name="admin_part4_questions"),',
 }
@@ -535,7 +535,7 @@ parts_page.write_text(r'''{% load static %}
 
                 <div class="part-actions">
                     <span class="status-pill">Đã chốt giao diện</span>
-                    <a class="open-btn" href="/dashboard/part-1/">Mở Part 1</a>
+                    <a class="open-btn" href="/dashboard/part-4/">Mở Part 4</a>
                 </div>
             </article>
 
@@ -552,7 +552,7 @@ parts_page.write_text(r'''{% load static %}
 
                 <div class="part-actions">
                     <span class="status-pill">Đã mở khung</span>
-                    <a class="open-btn" href="/dashboard/part-2/">Mở Part 2</a>
+                    <a class="open-btn" href="/dashboard/part-4/">Mở Part 4</a>
                 </div>
             </article>
 
@@ -569,7 +569,7 @@ parts_page.write_text(r'''{% load static %}
 
                 <div class="part-actions">
                     <span class="status-pill">Chưa có dữ liệu</span>
-                    <a class="open-btn secondary" href="/dashboard/part-3/">Mở Part 3</a>
+                    <a class="open-btn secondary" href="/dashboard/part-4/">Mở Part 4</a>
                 </div>
             </article>
 

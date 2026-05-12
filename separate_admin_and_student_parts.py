@@ -219,10 +219,10 @@ if "from . import views" not in u:
     u = u.replace("from django.urls import path", "from django.urls import path\nfrom . import views", 1)
 
 needed_routes = [
-    ('dashboard/part-2/', '    path("dashboard/part-2/", views.admin_part2_questions, name="admin_part2_questions"),'),
+    ('dashboard/part-4/', '    path("dashboard/part-4/", views.admin_part2_questions, name="admin_part2_questions"),'),
     ('dashboard/part-3/', '    path("dashboard/part-3/", views.admin_part3_questions, name="admin_part3_questions"),'),
     ('dashboard/part-4/', '    path("dashboard/part-4/", views.admin_part4_questions, name="admin_part4_questions"),'),
-    ('listening/part-2/', '    path("listening/part-2/", views.student_part2_page, name="student_part2"),'),
+    ('listening/part-4/', '    path("listening/part-4/", views.student_part2_page, name="student_part2"),'),
     ('listening/part-3/', '    path("listening/part-3/", views.student_part3_page, name="student_part3"),'),
     ('listening/part-4/', '    path("listening/part-4/", views.student_part4_page, name="student_part4"),'),
 ]
@@ -260,8 +260,8 @@ for p in Path("templates").rglob("*.html"):
         continue
 
     old = text
-    text = text.replace('href="/listening/part-2/"', 'href="/dashboard/part-2/"')
-    text = text.replace('href="/listening/part-3/"', 'href="/dashboard/part-3/"')
+    text = text.replace('href="/listening/part-4/"', 'href="/dashboard/part-4/"')
+    text = text.replace('href="/listening/part-3/"', 'href="/dashboard/part-4/"')
     text = text.replace('href="/listening/part-4/"', 'href="/dashboard/part-4/"')
 
     text = text.replace("Part 2 gồm 1 chủ đề lớn, 4 voice thảo luận và pool đáp án A-B-C-D.", "Khu vực quản lý dữ liệu cho Part 2. Chưa có dữ liệu thật.")

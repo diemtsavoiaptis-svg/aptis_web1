@@ -1,0 +1,68 @@
+
+/* Safe dashboard layout: keep sidebar, expand right content */
+body {
+    overflow-x: hidden !important;
+}
+
+/* Keep left sidebar visible */
+.sidebar,
+.admin-sidebar,
+.dashboard-sidebar,
+.side-panel,
+.left-sidebar,
+aside {
+    width: 260px !important;
+    min-width: 260px !important;
+    max-width: 260px !important;
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    z-index: 20 !important;
+}
+
+/* Right content starts after sidebar */
+main,
+.main-content,
+.dashboard-main,
+.content,
+.page-content,
+.admin-main {
+    margin-left: 260px !important;
+    width: calc(100vw - 260px) !important;
+    max-width: calc(100vw - 260px) !important;
+    min-height: 100vh !important;
+    padding-left: 28px !important;
+    padding-right: 28px !important;
+    box-sizing: border-box !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Expand inner cards without hiding them */
+.dashboard-content,
+.dashboard-shell,
+.admin-content,
+.content-shell,
+.container,
+.container-fluid,
+.hero-card,
+.admin-hero,
+.dashboard-card,
+.card,
+.panel,
+.section-card {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* Preview/frame grows inside available space */
+iframe,
+.preview-frame,
+.student-preview,
+.interface-preview,
+.dashboard-iframe {
+    width: 100% !important;
+    max-width: 100% !important;
+}

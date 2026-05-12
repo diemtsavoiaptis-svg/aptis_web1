@@ -1,0 +1,12 @@
+LOCKED UI NOTES
+Time: 2026-05-12 19:36:08.376275
+- Student Part 2 UI: approved and kept.
+- Admin Part 2 UI: restored/kept as previous existing admin interface.
+- Future edits should not change Student Part 2 unless user explicitly asks.
+
+
+=== PART 3 START ===
+Time: 2026-05-12 19:37:46.118176
+- Part 2 student UI approved.
+- Part 2 admin UI approved/kept.
+- Next work: Part 3 only.

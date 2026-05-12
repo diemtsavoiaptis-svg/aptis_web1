@@ -1,0 +1,41 @@
+=== HARD FIX REPORT ===
+
+STILL CHECK: fix_part3_part4_text_links.py
+    # Sửa thủ công các chuỗi tiếng Việt hay bị tách dấu sau normalize nếu vẫn còn dạng lạ
+        "tiếp": "tiếp",
+        "tiếp": "tiếp",
+        "tiếp": "tiếp",
+        "chi tiết": "chi tiết",
+        "chi tiết": "chi tiết",
+        "chi tiết": "chi tiết",
+        "Có thể tiếp tục": "Có thể tiếp tục",
+        "Có thể tiếp tục mở rộng giao diện chi tiết": "Có thể tiếp tục mở rộng giao diện chi tiết",
+        if "tiế ́" in block or "tiế" in block or "chi tiế ́" in block:
+
+STILL CHECK: hard_fix_part3_part4_cards.py
+    # sửa đúng lỗi đang thấy: tiếp / chi tiết
+        (r"tiế\s*[\u0300-\u036f]\s*p", "tiếp"),
+        (r"tiê\s*[\u0300-\u036f]\s*p", "tiếp"),
+        (r"tiế\s+p", "tiếp"),
+        (r"tiế\s+p", "tiếp"),
+        (r"chi\s+tiế\s*[\u0300-\u036f]\s*t", "chi tiết"),
+        (r"chi\s+tiê\s*[\u0300-\u036f]\s*t", "chi tiết"),
+        (r"chi\s+tiế\s+t", "chi tiết"),
+        (r"chi\s+tiế\s+t", "chi tiết"),
+    s = s.replace("tiếp", "tiếp")
+    s = s.replace("tiếp", "tiếp")
+    s = s.replace("tiếp", "tiếp")
+    s = s.replace("chi tiết", "chi tiết")
+    s = s.replace("chi tiết", "chi tiết")
+    s = s.replace("chi tiết", "chi tiết")
+            .replace(/tiế\s*[\u0300-\u036f]\s*p/g, "tiếp")
+            .replace(/tiê\s*[\u0300-\u036f]\s*p/g, "tiếp")
+            .replace(/tiế\s+p/g, "tiếp")
+            .replace(/chi\s+tiế\s*[\u0300-\u036f]\s*t/g, "chi tiết")
+            .replace(/chi\s+tiê\s*[\u0300-\u036f]\s*t/g, "chi tiết")
+            .replace(/chi\s+tiế\s+t/g, "chi tiết");
+    if ("Part 3" in text or "Part 4" in text) and ("Mở Part 4" in text or "tiế ́" in text or "chi tiế ́" in text):
+            if "Mở Part 4" in line or "tiế" in line or "chi tiế" in line:
+
+STILL CHECK: templates\core\listening_parts.html
+                    <a class="open-btn" href="/dashboard/part-2/" href="/dashboard/part-2/">Mở Part 2</a>

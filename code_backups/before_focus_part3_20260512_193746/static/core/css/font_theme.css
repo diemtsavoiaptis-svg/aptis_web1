@@ -1,0 +1,28 @@
+
+/* Font tiếng Việt chuẩn cho toàn bộ web */
+:root {
+    --font-vietnamese: "Segoe UI", Tahoma, Arial, "Helvetica Neue", sans-serif;
+}
+
+html, body,
+button, input, textarea, select,
+.card, .head, .body,
+.side-link, .brand-title, .brand-sub,
+.saved-table, .student-admin-wrap,
+.admin-shell, .admin-sidebar, .admin-main {
+    font-family: var(--font-vietnamese) !important;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Tiêu đề vẫn đậm, mượt nhưng không vỡ dấu */
+h1, h2, h3, h4,
+.profile-title,
+#panelTitle,
+.frame-label,
+.card-head h2,
+.head h2 {
+    font-family: var(--font-vietnamese) !important;
+    font-weight: 900 !important;
+    letter-spacing: -0.025em;
+}
