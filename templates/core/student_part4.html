@@ -310,6 +310,27 @@
             display: none;
         }
 
+        .real-part4-audio {
+            width: 100%;
+            height: 42px;
+            border-radius: 999px;
+            background: transparent;
+            filter: none;
+        }
+
+        .audio-player.real-audio-mode {
+            grid-template-columns: minmax(0, 1fr) auto;
+            padding: 12px 18px;
+        }
+
+        .no-audio-note {
+            color: #fff;
+            font-weight: 900;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.18);
+        }
+
         .question-card {
             border: 1px solid var(--border);
             border-radius: 28px;
@@ -616,15 +637,13 @@
             </div>
             <div class="progress-bar"><div style="width: {{ progress_percent }}%"></div></div>
 
-            <section class="audio-player">
-                <button class="audio-btn" type="button" id="playBtn">▶</button>
-                <div class="volume">🔊</div>
-                <div class="fake-range"></div>
-                <div></div>
-                <div class="play-count">Còn <span id="playLeft">2</span>/2 lượt nghe</div>
-
+            <section class="audio-player real-audio-mode">
                 {% if selected.audio_url %}
-                    <audio class="hidden-audio" id="realAudio" src="{% url 'secure_part4_audio' selected.id %}"></audio>
+                    <audio class="real-part4-audio" controls controlsList="nodownload noplaybackrate" preload="none" src="{% url 'secure_part4_audio' selected.id %}"></audio>
+                    <div class="play-count">Audio Part 4</div>
+                {% else %}
+                    <div class="no-audio-note">Chưa có audio cho bài này</div>
+                    <div class="play-count">Audio sẽ được bổ sung sau</div>
                 {% endif %}
             </section>
 

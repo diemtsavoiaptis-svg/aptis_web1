@@ -2140,6 +2140,28 @@ def admin_part4_questions(request):
 # ===== End real Listening Part 4 table admin interface =====
 
 # ===== Correct Student Listening Part 4 by topic/set =====
+
+
+# ===== End Correct Student Listening Part 4 by topic/set =====
+
+@login_required
+def secure_part4_audio_view(request, material_id):
+    material = get_object_or_404(ListeningPartMaterial, id=material_id, part=4)
+
+    audio_link = (material.audio_url or "").strip()
+    if not audio_link:
+        raise Http404("Part 4 audio does not exist.")
+
+    drive_file_id = extract_drive_file_id(audio_link)
+    if drive_file_id:
+        return _google_drive_download_response(drive_file_id)
+
+    response = HttpResponseRedirect(audio_link)
+    response["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    return response
+
+
+# ===== Final Student Part 4 view: count by topic/set =====
 def student_part4_page(request):
     all_materials = ListeningPartMaterial.objects.filter(part=4, is_active=True).order_by("id")
 
@@ -2149,34 +2171,27 @@ def student_part4_page(request):
         q16 = material.questions.filter(order=16).first()
         q17 = material.questions.filter(order=17).first()
 
-        has_q16_data = q16 and (
-            (q16.question_text or "").strip()
-            and (
-                (q16.option_a or "").strip()
-                or (q16.option_b or "").strip()
-                or (q16.option_c or "").strip()
-            )
+        has_q16 = q16 and (q16.question_text or "").strip() and (
+            (q16.option_a or "").strip()
+            or (q16.option_b or "").strip()
+            or (q16.option_c or "").strip()
         )
 
-        has_q17_data = q17 and (
-            (q17.question_text or "").strip()
-            and (
-                (q17.option_a or "").strip()
-                or (q17.option_b or "").strip()
-                or (q17.option_c or "").strip()
-            )
+        has_q17 = q17 and (q17.question_text or "").strip() and (
+            (q17.option_a or "").strip()
+            or (q17.option_b or "").strip()
+            or (q17.option_c or "").strip()
         )
 
-        has_paraphrase = bool((material.transcript or "").strip())
+        has_text = bool((material.title or "").strip()) or bool((material.transcript or "").strip())
 
-        if has_q16_data or has_q17_data or has_paraphrase:
+        if has_text and (has_q16 or has_q17):
             valid_materials.append(material)
 
     total_sets = len(valid_materials)
 
     selected = None
     current_index = 1
-
     selected_id = request.GET.get("set")
 
     if selected_id:
@@ -2197,12 +2212,10 @@ def student_part4_page(request):
 
     if selected and total_sets:
         if current_index > 1:
-            prev_material = valid_materials[current_index - 2]
-            prev_url = f"/listening/part-4/?set={prev_material.id}"
+            prev_url = f"/listening/part-4/?set={valid_materials[current_index - 2].id}"
 
         if current_index < total_sets:
-            next_material = valid_materials[current_index]
-            next_url = f"/listening/part-4/?set={next_material.id}"
+            next_url = f"/listening/part-4/?set={valid_materials[current_index].id}"
 
     progress_percent = round((current_index / total_sets) * 100, 2) if total_sets else 0
 
@@ -2216,21 +2229,5 @@ def student_part4_page(request):
         "next_url": next_url,
         "progress_percent": progress_percent,
     })
-# ===== End Correct Student Listening Part 4 by topic/set =====
-
-@login_required
-def secure_part4_audio_view(request, material_id):
-    material = get_object_or_404(ListeningPartMaterial, id=material_id, part=4)
-
-    audio_link = (material.audio_url or "").strip()
-    if not audio_link:
-        raise Http404("Part 4 audio does not exist.")
-
-    drive_file_id = extract_drive_file_id(audio_link)
-    if drive_file_id:
-        return _google_drive_download_response(drive_file_id)
-
-    response = HttpResponseRedirect(audio_link)
-    response["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
-    return response
+# ===== End Final Student Part 4 view =====
 
