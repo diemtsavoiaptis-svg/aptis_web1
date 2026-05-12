@@ -1994,82 +1994,6 @@ def student_part3_page(request):
 
 # ===== Real Listening Part 4 admin/student interface =====
 
-def student_part4_page(request):
-    all_materials = ListeningPartMaterial.objects.filter(part=4, is_active=True).order_by("id")
-
-    valid_ids = []
-    for material in all_materials:
-        q16 = material.questions.filter(order=16).first()
-        q17 = material.questions.filter(order=17).first()
-
-        has_q16_data = q16 and (
-            (q16.question_text or "").strip()
-            and (
-                (q16.option_a or "").strip()
-                or (q16.option_b or "").strip()
-                or (q16.option_c or "").strip()
-            )
-        )
-
-        has_q17_data = q17 and (
-            (q17.question_text or "").strip()
-            and (
-                (q17.option_a or "").strip()
-                or (q17.option_b or "").strip()
-                or (q17.option_c or "").strip()
-            )
-        )
-
-        has_paraphrase = bool((material.transcript or "").strip())
-
-        if has_q16_data or has_q17_data or has_paraphrase:
-            valid_ids.append(material.id)
-
-    materials = list(all_materials.filter(id__in=valid_ids).order_by("id"))
-    total_sets = len(materials)
-
-    selected = None
-    current_index = 1
-
-    selected_id = request.GET.get("set")
-    if selected_id:
-        for idx, material in enumerate(materials, start=1):
-            if str(material.id) == str(selected_id):
-                selected = material
-                current_index = idx
-                break
-
-    if selected is None and materials:
-        selected = materials[0]
-        current_index = 1
-
-    questions = selected.questions.filter(order__in=[16, 17]).order_by("order", "id") if selected else []
-
-    prev_url = ""
-    next_url = ""
-
-    if selected and total_sets:
-        if current_index > 1:
-            prev_material = materials[current_index - 2]
-            prev_url = f"/listening/part-4/?set={prev_material.id}"
-
-        if current_index < total_sets:
-            next_material = materials[current_index]
-            next_url = f"/listening/part-4/?set={next_material.id}"
-
-    progress_percent = round((current_index / total_sets) * 100, 2) if total_sets else 0
-
-    return render(request, "core/student_part4.html", {
-        "materials": materials,
-        "selected": selected,
-        "questions": questions,
-        "current_index": current_index,
-        "total_sets": total_sets,
-        "prev_url": prev_url,
-        "next_url": next_url,
-        "progress_percent": progress_percent,
-    })
-
 
 # ===== End Student Listening Part 4 Aptis Keys style interface =====
 
@@ -2215,3 +2139,81 @@ def admin_part4_questions(request):
     })
 # ===== End real Listening Part 4 table admin interface =====
 
+# ===== Correct Student Listening Part 4 by topic/set =====
+def student_part4_page(request):
+    all_materials = ListeningPartMaterial.objects.filter(part=4, is_active=True).order_by("id")
+
+    valid_materials = []
+
+    for material in all_materials:
+        q16 = material.questions.filter(order=16).first()
+        q17 = material.questions.filter(order=17).first()
+
+        has_q16_data = q16 and (
+            (q16.question_text or "").strip()
+            and (
+                (q16.option_a or "").strip()
+                or (q16.option_b or "").strip()
+                or (q16.option_c or "").strip()
+            )
+        )
+
+        has_q17_data = q17 and (
+            (q17.question_text or "").strip()
+            and (
+                (q17.option_a or "").strip()
+                or (q17.option_b or "").strip()
+                or (q17.option_c or "").strip()
+            )
+        )
+
+        has_paraphrase = bool((material.transcript or "").strip())
+
+        if has_q16_data or has_q17_data or has_paraphrase:
+            valid_materials.append(material)
+
+    total_sets = len(valid_materials)
+
+    selected = None
+    current_index = 1
+
+    selected_id = request.GET.get("set")
+
+    if selected_id:
+        for index, material in enumerate(valid_materials, start=1):
+            if str(material.id) == str(selected_id):
+                selected = material
+                current_index = index
+                break
+
+    if selected is None and valid_materials:
+        selected = valid_materials[0]
+        current_index = 1
+
+    questions = selected.questions.filter(order__in=[16, 17]).order_by("order", "id") if selected else []
+
+    prev_url = ""
+    next_url = ""
+
+    if selected and total_sets:
+        if current_index > 1:
+            prev_material = valid_materials[current_index - 2]
+            prev_url = f"/listening/part-4/?set={prev_material.id}"
+
+        if current_index < total_sets:
+            next_material = valid_materials[current_index]
+            next_url = f"/listening/part-4/?set={next_material.id}"
+
+    progress_percent = round((current_index / total_sets) * 100, 2) if total_sets else 0
+
+    return render(request, "core/student_part4.html", {
+        "materials": valid_materials,
+        "selected": selected,
+        "questions": questions,
+        "current_index": current_index,
+        "total_sets": total_sets,
+        "prev_url": prev_url,
+        "next_url": next_url,
+        "progress_percent": progress_percent,
+    })
+# ===== End Correct Student Listening Part 4 by topic/set =====
