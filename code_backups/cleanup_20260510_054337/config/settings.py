@@ -1,4 +1,4 @@
-from pathlib import Path
+﻿from pathlib import Path
 import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -119,3 +119,11 @@ SUPABASE_SERVICE_ROLE_KEY = os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "")
 SUPABASE_BUCKET_NAME = os.environ.get("SUPABASE_BUCKET_NAME", "aptis-audio")
 SUPABASE_SIGNED_URL_EXPIRES = int(os.environ.get("SUPABASE_SIGNED_URL_EXPIRES", "300"))
 # === SUPABASE STORAGE SETTINGS END ===
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "https://*.vercel.app",
+    "https://diemtsavoiaptis.io.vn",
+    "https://www.diemtsavoiaptis.io.vn",
+]
+
