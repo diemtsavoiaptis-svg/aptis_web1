@@ -2217,3 +2217,20 @@ def student_part4_page(request):
         "progress_percent": progress_percent,
     })
 # ===== End Correct Student Listening Part 4 by topic/set =====
+
+@login_required
+def secure_part4_audio_view(request, material_id):
+    material = get_object_or_404(ListeningPartMaterial, id=material_id, part=4)
+
+    audio_link = (material.audio_url or "").strip()
+    if not audio_link:
+        raise Http404("Part 4 audio does not exist.")
+
+    drive_file_id = extract_drive_file_id(audio_link)
+    if drive_file_id:
+        return _google_drive_download_response(drive_file_id)
+
+    response = HttpResponseRedirect(audio_link)
+    response["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    return response
+

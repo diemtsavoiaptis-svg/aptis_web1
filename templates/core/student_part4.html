@@ -624,7 +624,7 @@
                 <div class="play-count">Còn <span id="playLeft">2</span>/2 lượt nghe</div>
 
                 {% if selected.audio_url %}
-                    <audio class="hidden-audio" id="realAudio" src="{{ selected.audio_url }}"></audio>
+                    <audio class="hidden-audio" id="realAudio" src="{% url 'secure_part4_audio' selected.id %}"></audio>
                 {% endif %}
             </section>
 

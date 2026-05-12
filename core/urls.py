@@ -27,6 +27,7 @@ path("", views.home, name="home"),
     path("dashboard/part-1/", views.admin_part1_questions, name="admin_part1_questions"),
     path("listening/", listening_ui.listening_page, name="listening"),
     path("secure/audio/<int:question_id>/", views.secure_audio_view, name="secure_audio"),
+    path("secure/part4-audio/<int:material_id>/", views.secure_part4_audio_view, name="secure_part4_audio"),
     path("security/event/", views.security_event_view, name="security_event"),
     path("dang-xuat/", views.logout_view, name="logout"),
 ]
