@@ -1,4 +1,4 @@
-﻿{% load static %}
+{% load static %}
 <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
 
 <style>
@@ -164,8 +164,8 @@
 </style>
 
 <div class="aptis-parts-wrap">
-  <h3 class="aptis-parts-title">Listening Management</h3>
-  <p class="aptis-parts-subtitle">Choose the listening part you want to manage.</p>
+  <h3 class="aptis-parts-title">Quản lý Listening</h3>
+  <p class="aptis-parts-subtitle">Chọn phần Listening mà bạn muốn quản lý.</p>
 
   <div class="aptis-parts-grid">
     {% for part, count in part_counts.items %}
@@ -173,35 +173,35 @@
         <div>
           <div class="aptis-part-top">
             <div class="aptis-part-number">{{ part }}</div>
-            <div class="aptis-count-pill">{{ count }} item(s)</div>
+            <div class="aptis-count-pill">{{ count }} mục</div>
           </div>
 
           <h2 class="aptis-part-name">Part {{ part }}</h2>
 
           {% if part == 1 %}
-            <p class="aptis-part-desc">Manage short listening questions, audio, answers, and transcript for Part 1.</p>
+            <p class="aptis-part-desc">Quản lý câu hỏi ngắn, audio, đáp án và transcript cho Part 1.</p>
           {% elif part == 2 %}
-            <p class="aptis-part-desc">Manage Part 2 topics, speakers, answer data, audio links, and transcript.</p>
+            <p class="aptis-part-desc">Quản lý chủ đề Part 2, người nói, dữ liệu đáp án, link audio và transcript.</p>
           {% elif part == 3 %}
-            <p class="aptis-part-desc">Manage Part 3 student interface data: topic, audio, four statements, answers, and transcript.</p>
+            <p class="aptis-part-desc">Quản lý dữ liệu giao diện học viên Part 3: chủ đề, audio, 4 nhận định, đáp án và transcript.</p>
           {% elif part == 4 %}
-            <p class="aptis-part-desc">Manage Part 4 listening materials, questions, answers, and transcript.</p>
+            <p class="aptis-part-desc">Quản lý tài liệu nghe Part 4, câu hỏi, đáp án và transcript.</p>
           {% endif %}
         </div>
 
         <div class="aptis-part-footer">
           {% if part == 1 %}
-            <span class="aptis-status">Ready</span>
-            <a class="aptis-part-btn" href="{% url 'admin_part1_questions' %}">Open Part 1</a>
+            <span class="aptis-status">Sẵn sàng</span>
+            <a class="aptis-part-btn" href="{% url 'admin_part1_questions' %}">Mở Part 1</a>
           {% elif part == 2 %}
-            <span class="aptis-status">Ready</span>
-            <a class="aptis-part-btn" href="{% url 'admin_part2_questions' %}">Open Part 2</a>
+            <span class="aptis-status">Sẵn sàng</span>
+            <a class="aptis-part-btn" href="{% url 'admin_part2_questions' %}">Mở Part 2</a>
           {% elif part == 3 %}
-            <span class="aptis-status">Ready</span>
-            <a class="aptis-part-btn" href="{% url 'admin_part3_questions' %}">Open Part 3</a>
+            <span class="aptis-status">Sẵn sàng</span>
+            <a class="aptis-part-btn" href="{% url 'admin_part3_questions' %}">Mở Part 3</a>
           {% elif part == 4 %}
-            <span class="aptis-status">Ready</span>
-            <a class="aptis-part-btn" href="{% url 'admin_part4_questions' %}">Open Part 4</a>
+            <span class="aptis-status">Sẵn sàng</span>
+            <a class="aptis-part-btn" href="{% url 'admin_part4_questions' %}">Mở Part 4</a>
           {% endif %}
         </div>
       </div>

@@ -1,4 +1,4 @@
-﻿from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
@@ -1850,17 +1850,17 @@ def admin_part3_questions(request):
         if action == "create_material":
             material = ListeningPartMaterial.objects.create(
                 part=3,
-                title="Changes in the workplace",
-                description="Part 3 listening set",
-                instructions="Listen to two people discussing potential modifications to the topic above. Read the statements and decide whose opinion matches best: the man's, the woman's, or both.`nWho expresses which opinion?",
+                title="Những thay đổi tại nơi làm việc",
+                description="Bộ câu hỏi nghe Part 3",
+                instructions="Nghe hai người thảo luận về những thay đổi liên quan đến chủ đề bên trên. Đọc các nhận định và chọn xem ý kiến đó thuộc về người nam, người nữ hay cả hai.`nAi thể hiện ý kiến nào?",
                 is_active=True,
             )
 
             sample_questions = [
-                "Continuity is important when planning a career",
-                "Job security cannot be guaranteed",
-                "Job satisfaction is important for motivator",
-                "Technological improvement is good for the economy",
+                "Sự ổn định rất quan trọng khi lập kế hoạch nghề nghiệp",
+                "Sự đảm bảo công việc không thể được chắc chắn",
+                "Sự hài lòng trong công việc là động lực quan trọng",
+                "Cải tiến công nghệ có lợi cho nền kinh tế",
             ]
 
             for index, text in enumerate(sample_questions, start=1):
@@ -1868,13 +1868,13 @@ def admin_part3_questions(request):
                     material=material,
                     order=index,
                     question_text=text,
-                    option_a="The man",
-                    option_b="The woman",
-                    option_c="Both",
+                    option_a="Người nam",
+                    option_b="Người nữ",
+                    option_c="Cả hai",
                     correct_answer="A",
                 )
 
-            messages.success(request, "Created a new Part 3 set.")
+            messages.success(request, "Đã tạo bộ Part 3 mới.")
             return redirect(f"{request.path}?material_id={material.id}")
 
         material_id = request.POST.get("material_id")
@@ -1882,7 +1882,7 @@ def admin_part3_questions(request):
 
         if action == "delete_material":
             material.delete()
-            messages.success(request, "Deleted the Part 3 set.")
+            messages.success(request, "Đã xóa bộ Part 3.")
             return redirect("admin_part3_questions")
 
         if action == "save_material":
@@ -1902,14 +1902,14 @@ def admin_part3_questions(request):
 
                 question.order = position
                 question.question_text = request.POST.get(f"question_text_{question.id}", "").strip()
-                question.option_a = request.POST.get(f"option_a_{question.id}", "The man").strip() or "The man"
-                question.option_b = request.POST.get(f"option_b_{question.id}", "The woman").strip() or "The woman"
-                question.option_c = request.POST.get(f"option_c_{question.id}", "Both").strip() or "Both"
+                question.option_a = request.POST.get(f"option_a_{question.id}", "Người nam").strip() or "Người nam"
+                question.option_b = request.POST.get(f"option_b_{question.id}", "Người nữ").strip() or "Người nữ"
+                question.option_c = request.POST.get(f"option_c_{question.id}", "Cả hai").strip() or "Cả hai"
                 question.correct_answer = request.POST.get(f"correct_answer_{question.id}", "A").strip()[:1] or "A"
                 question.explanation = request.POST.get(f"explanation_{question.id}", "").strip()
                 question.save()
 
-            messages.success(request, "Saved the Part 3 set.")
+            messages.success(request, "Đã lưu bộ Part 3.")
             return redirect(f"{request.path}?material_id={material.id}")
 
     materials = ListeningPartMaterial.objects.filter(part=3).prefetch_related("questions").order_by("id")
@@ -1933,9 +1933,9 @@ def admin_part3_questions(request):
                 material=selected,
                 order=len(questions) + 1,
                 question_text=f"Statement {len(questions) + 1}",
-                option_a="The man",
-                option_b="The woman",
-                option_c="Both",
+                option_a="Người nam",
+                option_b="Người nữ",
+                option_c="Cả hai",
                 correct_answer="A",
             )
             questions.append(q)

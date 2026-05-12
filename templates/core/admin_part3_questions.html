@@ -1,9 +1,9 @@
-﻿{% load static %}
+{% load static %}
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Part 3 Management | Aptis Admin</title>
+    <title>Quản lý Part 3 | Aptis Admin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <style>
@@ -310,13 +310,13 @@
     <section class="hero">
         <div>
             <div class="badge">Listening Part 3</div>
-            <h1>Part 3 Management</h1>
-            <p class="lead">Create real Part 3 sets for students: topic, audio link, instruction, 4 statements, answer labels, correct answers, and transcript.</p>
+            <h1>Quản lý Part 3</h1>
+            <p class="lead">Tạo bộ câu hỏi Part 3 thật cho học viên: chủ đề, link audio, hướng dẫn, 4 nhận định, nhãn đáp án, đáp án đúng và transcript.</p>
         </div>
 
         <div class="actions">
-            <a class="btn light" href="/dashboard/listening-parts/">← Back to Parts</a>
-            <a class="btn light" href="/listening/part-3/" target="_blank">Preview Student Page</a>
+            <a class="btn light" href="/dashboard/listening-parts/">← Quay lại danh sách Part</a>
+            <a class="btn light" href="/listening/part-3/" target="_blank">Xem giao diện học viên</a>
         </div>
     </section>
 
@@ -331,25 +331,25 @@
     <section class="grid">
         <aside class="panel">
             <div class="panel-head">
-                <h2 class="panel-title">Part 3 Sets</h2>
-                <p class="panel-note">{{ materials|length }} set(s) available</p>
+                <h2 class="panel-title">Danh sách bộ Part 3</h2>
+                <p class="panel-note">{{ materials|length }} bộ hiện có</p>
             </div>
 
             <div class="panel-body">
                 <form method="post" style="margin-bottom:14px;">
                     {% csrf_token %}
                     <input type="hidden" name="action" value="create_material">
-                    <button class="btn primary" type="submit" style="width:100%;">+ Create New Set</button>
+                    <button class="btn primary" type="submit" style="width:100%;">+ Tạo bộ mới</button>
                 </form>
 
                 <div class="material-list">
                     {% for item in materials %}
                         <a class="material-link {% if selected and item.id == selected.id %}active{% endif %}" href="?material_id={{ item.id }}">
                             <strong>{{ item.title }}</strong>
-                            <span>{{ item.questions.count }} question(s) · {% if item.is_active %}Active{% else %}Hidden{% endif %}</span>
+                            <span>{{ item.questions.count }} câu hỏi · {% if item.is_active %}Hiển thị{% else %}Ẩn{% endif %}</span>
                         </a>
                     {% empty %}
-                        <div class="empty">No Part 3 set yet. Click Create New Set to start.</div>
+                        <div class="empty">Chưa có bộ Part 3 nào. Bấm Tạo bộ mới để bắt đầu.</div>
                     {% endfor %}
                 </div>
             </div>
@@ -357,8 +357,8 @@
 
         <section class="panel">
             <div class="panel-head">
-                <h2 class="panel-title">{% if selected %}Edit Set{% else %}No Set Selected{% endif %}</h2>
-                <p class="panel-note">Changes here will be shown on the student Part 3 page.</p>
+                <h2 class="panel-title">{% if selected %}Chỉnh sửa bộ câu hỏi{% else %}Chưa chọn bộ câu hỏi{% endif %}</h2>
+                <p class="panel-note">Nội dung chỉnh sửa ở đây sẽ hiển thị trên trang Part 3 của học viên.</p>
             </div>
 
             <div class="panel-body">
@@ -370,26 +370,26 @@
 
                     <div class="two">
                         <div>
-                            <label>Topic title</label>
+                            <label>Tên chủ đề</label>
                             <input name="title" value="{{ selected.title }}" placeholder="Topic: Changes in the workplace">
                         </div>
 
                         <div>
-                            <label>Status</label>
+                            <label>Trạng thái</label>
                             <select name="is_active">
-                                <option value="1" {% if selected.is_active %}selected{% endif %}>Active</option>
-                                <option value="0" {% if not selected.is_active %}selected{% endif %}>Hidden</option>
+                                <option value="1" {% if selected.is_active %}selected{% endif %}>Hiển thị</option>
+                                <option value="0" {% if not selected.is_active %}selected{% endif %}>Ẩn</option>
                             </select>
                         </div>
                     </div>
 
                     <div>
-                        <label>Audio URL</label>
+                        <label>Link audio</label>
                         <input name="audio_url" value="{{ selected.audio_url }}" placeholder="Paste audio link here">
                     </div>
 
                     <div>
-                        <label>Instruction</label>
+                        <label>Hướng dẫn làm bài</label>
                         <textarea name="instructions">{{ selected.instructions }}</textarea>
                     </div>
 
@@ -400,55 +400,55 @@
                         <div class="q-head">
                             <div style="display:flex; align-items:center; gap:12px;">
                                 <div class="q-number">{{ forloop.counter }}</div>
-                                <h3 class="q-title">Statement {{ forloop.counter }}</h3>
+                                <h3 class="q-title">Nhận định {{ forloop.counter }}</h3>
                             </div>
 
                             <div style="max-width:160px;">
                                 <select name="correct_answer_{{ q.id }}">
-                                    <option value="A" {% if q.correct_answer == "A" %}selected{% endif %}>The man</option>
-                                    <option value="B" {% if q.correct_answer == "B" %}selected{% endif %}>The woman</option>
-                                    <option value="C" {% if q.correct_answer == "C" %}selected{% endif %}>Both</option>
+                                    <option value="A" {% if q.correct_answer == "A" %}selected{% endif %}>Người nam</option>
+                                    <option value="B" {% if q.correct_answer == "B" %}selected{% endif %}>Người nữ</option>
+                                    <option value="C" {% if q.correct_answer == "C" %}selected{% endif %}>Cả hai</option>
                                 </select>
                             </div>
                         </div>
 
-                        <label>Statement text</label>
+                        <label>Nhận định text</label>
                         <textarea name="question_text_{{ q.id }}" style="min-height:74px;">{{ q.question_text }}</textarea>
 
                         <div class="options">
                             <div>
-                                <label>Option A label</label>
-                                <input name="option_a_{{ q.id }}" value="{{ q.option_a|default:'The man' }}">
+                                <label>Nhãn đáp án A</label>
+                                <input name="option_a_{{ q.id }}" value="{{ q.option_a|default:'Người nam' }}">
                             </div>
 
                             <div>
-                                <label>Option B label</label>
-                                <input name="option_b_{{ q.id }}" value="{{ q.option_b|default:'The woman' }}">
+                                <label>Nhãn đáp án B</label>
+                                <input name="option_b_{{ q.id }}" value="{{ q.option_b|default:'Người nữ' }}">
                             </div>
 
                             <div>
-                                <label>Option C label</label>
-                                <input name="option_c_{{ q.id }}" value="{{ q.option_c|default:'Both' }}">
+                                <label>Nhãn đáp án C</label>
+                                <input name="option_c_{{ q.id }}" value="{{ q.option_c|default:'Cả hai' }}">
                             </div>
                         </div>
 
-                        <label style="margin-top:12px;">Explanation / note</label>
+                        <label style="margin-top:12px;">Giải thích / ghi chú</label>
                         <textarea name="explanation_{{ q.id }}" style="min-height:70px;">{{ q.explanation }}</textarea>
                     </article>
                     {% endfor %}
 
                     <div>
-                        <label>Transcript / paragraph</label>
+                        <label>Transcript / đoạn văn</label>
                         <textarea name="transcript" style="min-height:150px;">{{ selected.transcript }}</textarea>
                     </div>
 
                     <div style="display:flex; gap:12px; flex-wrap:wrap;">
-                        <button class="btn primary" type="submit">Save Part 3 Set</button>
-                        <button class="btn danger" type="submit" name="action" value="delete_material" onclick="return confirm('Delete this Part 3 set?')">Delete Set</button>
+                        <button class="btn primary" type="submit">Lưu bộ Part 3</button>
+                        <button class="btn danger" type="submit" name="action" value="delete_material" onclick="return confirm('Xóa bộ Part 3 này?')">Xóa bộ này</button>
                     </div>
                 </form>
                 {% else %}
-                    <div class="empty">Create or select a Part 3 set from the left panel.</div>
+                    <div class="empty">Hãy tạo hoặc chọn một bộ Part 3 ở cột bên trái.</div>
                 {% endif %}
             </div>
         </section>

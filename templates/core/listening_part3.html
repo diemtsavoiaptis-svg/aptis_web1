@@ -1,4 +1,4 @@
-﻿{% load static %}
+{% load static %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -231,7 +231,7 @@
 <body>
 {% if selected %}
 <main class="part3-page">
-    <h1 class="question-title">Question {{ start_number }} of {{ total_questions }}</h1>
+    <h1 class="question-title">Câu {{ start_number }} trên {{ total_questions }}</h1>
 
     <section class="audio-bar" aria-label="Audio player">
         <button class="play-btn" type="button" onclick="playAudio()" aria-label="Play audio">
@@ -244,7 +244,7 @@
 
         <div class="fake-slider" aria-hidden="true"></div>
 
-        <div class="plays-left" id="playsLeft">2 of 2 plays remaining</div>
+        <div class="plays-left" id="playsLeft">2 trên 2 lượt nghe còn lại</div>
 
         {% if selected.audio_url %}
             <audio id="realAudio" class="real-audio" src="{{ selected.audio_url }}"></audio>
@@ -252,16 +252,16 @@
     </section>
 
     <section class="question-card">
-        <h2 class="topic">Topic: {{ selected.title }}</h2>
+        <h2 class="topic">Chủ đề: {{ selected.title }}</h2>
 
         <p class="instruction">
             {% if selected.instructions %}
                 {{ selected.instructions|linebreaksbr }}
             {% else %}
-                Listen to two people discussing potential modifications to the topic above.
-                Read the statements and decide whose opinion matches best: the man's, the woman's, or both.
+                Nghe hai người thảo luận về những thay đổi liên quan đến chủ đề bên trên.
+                Đọc các nhận định và chọn xem ý kiến đó thuộc về người nam, người nữ hay cả hai.
                 <br>
-                Who expresses which opinion?
+                Ai thể hiện ý kiến nào?
             {% endif %}
         </p>
 
@@ -271,10 +271,10 @@
                 <div class="statement-text">{{ q.display_number }}. {{ q.question_text }}</div>
 
                 <select class="answer-select">
-                    <option>-- Select an answer --</option>
-                    <option>{{ q.option_a|default:"The man" }}</option>
-                    <option>{{ q.option_b|default:"The woman" }}</option>
-                    <option>{{ q.option_c|default:"Both" }}</option>
+                    <option>-- Chọn đáp án --</option>
+                    <option>{{ q.option_a|default:"Người nam" }}</option>
+                    <option>{{ q.option_b|default:"Người nữ" }}</option>
+                    <option>{{ q.option_c|default:"Cả hai" }}</option>
                 </select>
             </div>
             {% endfor %}
@@ -282,24 +282,24 @@
     </section>
 
     <div class="bottom-actions">
-        <button class="paragraph-btn" type="button" onclick="toggleParagraph()">Show paragraph</button>
+        <button class="paragraph-btn" type="button" onclick="toggleParagraph()">Hiện đoạn văn</button>
 
-        <button class="nav-btn" type="button" onclick="window.location.href='?set={{ prev_index }}'" {% if not has_prev %}disabled{% endif %}>Previous</button>
-        <button class="nav-btn primary" type="button" onclick="window.location.href='?set={{ next_index }}'" {% if not has_next %}disabled{% endif %}>Next</button>
+        <button class="nav-btn" type="button" onclick="window.location.href='?set={{ prev_index }}'" {% if not has_prev %}disabled{% endif %}>Câu trước</button>
+        <button class="nav-btn primary" type="button" onclick="window.location.href='?set={{ next_index }}'" {% if not has_next %}disabled{% endif %}>Câu tiếp</button>
     </div>
 
     <article class="paragraph-box" id="paragraphBox">
         {% if selected.transcript %}
             {{ selected.transcript|linebreaksbr }}
         {% else %}
-            No transcript has been added yet.
+            Chưa có transcript.
         {% endif %}
     </article>
 </main>
 {% else %}
 <div class="empty">
-    <h2>No Part 3 data yet</h2>
-    <p>Please ask the admin to create an active Part 3 set in the management page.</p>
+    <h2>Chưa có dữ liệu Part 3</h2>
+    <p>Vui lòng tạo bộ Part 3 đang hiển thị trong trang quản lý.</p>
 </div>
 {% endif %}
 
@@ -318,7 +318,7 @@ function playAudio() {
     playsRemaining -= 1;
 
     if (label) {
-        label.textContent = playsRemaining + " of 2 plays remaining";
+        label.textContent = playsRemaining + " trên 2 lượt nghe còn lại";
     }
 }
 
