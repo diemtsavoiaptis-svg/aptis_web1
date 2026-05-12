@@ -1,0 +1,22 @@
+﻿{% extends "admin/base.html" %}
+{% load i18n static %}
+
+{% block title %}
+{% if title %}{{ title }} | {% endif %}Diem TSA with Aptis Admin
+{% endblock %}
+
+{% block branding %}
+<div class="custom-admin-brand">
+    <div class="brand-mark">A</div>
+    <div>
+        <div class="brand-title">Diem TSA with Aptis</div>
+        <div class="brand-subtitle">Admin Control Center</div>
+    </div>
+</div>
+{% endblock %}
+
+{% block nav-global %}
+<a class="admin-dashboard-link" href="/dashboard/">Dashboard</a>
+<a class="admin-dashboard-link" href="/dashboard/part-3/">Part 3 Manager</a>
+<a class="admin-dashboard-link" href="/">Student Site</a>
+{% endblock %}
