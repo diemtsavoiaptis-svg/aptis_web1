@@ -1,4 +1,4 @@
-{% load static %}
+﻿{% load static %}
 {% if request.user.is_authenticated %}
 <div
     id="tsaStudentWatermark"
@@ -8,3 +8,4 @@
     data-user-email="{{ request.user.email|default:request.user.get_username }}"
 ></div>
 {% endif %}
+

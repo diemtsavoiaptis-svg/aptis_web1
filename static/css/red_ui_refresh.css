@@ -1,0 +1,249 @@
+﻿:root {
+    --ui-red: #e60023;
+    --ui-red-2: #ff5f76;
+    --ui-red-dark: #650010;
+    --ui-red-deep: #3f0011;
+    --ui-bg: #fff7f8;
+    --ui-soft: #fff1f4;
+    --ui-line: #ffd1dc;
+    --ui-text: #2f0010;
+    --ui-muted: #6b7280;
+    --ui-shadow: 0 22px 60px rgba(160, 0, 30, .12);
+}
+
+html,
+body {
+    scroll-behavior: smooth;
+}
+
+body {
+    background:
+        radial-gradient(circle at 100% 0%, rgba(255, 95, 118, .16), transparent 34%),
+        radial-gradient(circle at 0% 100%, rgba(230, 0, 35, .10), transparent 30%),
+        linear-gradient(135deg, #fffafa, #ffecef) !important;
+    color: var(--ui-text);
+}
+
+.admin-shell {
+    grid-template-columns: 310px minmax(0, 1fr) !important;
+    background: transparent !important;
+}
+
+.admin-sidebar {
+    padding: 24px 18px !important;
+    background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, .18), transparent 34%),
+        linear-gradient(180deg, #82000f 0%, #4a0009 100%) !important;
+    box-shadow: 18px 0 55px rgba(90, 0, 18, .18);
+}
+
+.brand {
+    padding: 14px 12px 24px !important;
+    margin-bottom: 18px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, .16);
+}
+
+.brand-logo {
+    width: 58px !important;
+    height: 58px !important;
+    border-radius: 18px !important;
+    background: linear-gradient(135deg, #ff3656, #e60023) !important;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, .22) !important;
+}
+
+.brand-title {
+    font-size: 25px !important;
+    letter-spacing: -.04em !important;
+}
+
+.brand-sub {
+    font-size: 15px !important;
+    opacity: .82 !important;
+}
+
+.side-menu {
+    gap: 10px !important;
+}
+
+.side-link {
+    min-height: 54px !important;
+    padding: 14px 16px !important;
+    border-radius: 17px !important;
+    background: rgba(255, 255, 255, .10) !important;
+    border: 1px solid rgba(255, 255, 255, .10) !important;
+    font-size: 16px !important;
+    line-height: 1.25 !important;
+    letter-spacing: -.01em;
+    box-shadow: none !important;
+}
+
+.side-link:hover {
+    transform: translateX(4px) !important;
+    background: rgba(255, 255, 255, .18) !important;
+}
+
+.side-link.active {
+    background: linear-gradient(135deg, #ff3857, #e60023) !important;
+    border-color: rgba(255, 255, 255, .28) !important;
+    box-shadow: 0 16px 34px rgba(0, 0, 0, .18) !important;
+}
+
+.side-link.logout {
+    margin-top: 18px !important;
+    background: rgba(255, 255, 255, .14) !important;
+}
+
+.admin-main {
+    padding: 24px !important;
+}
+
+.hero {
+    border-radius: 28px !important;
+    padding: 26px 30px !important;
+    background:
+        radial-gradient(circle at top right, rgba(255, 95, 118, .16), transparent 32%),
+        rgba(255, 255, 255, .88) !important;
+    border: 1px solid rgba(255, 209, 220, .9) !important;
+    box-shadow: var(--ui-shadow) !important;
+    backdrop-filter: blur(16px);
+}
+
+.eyebrow {
+    color: var(--ui-red) !important;
+    font-size: 13px !important;
+}
+
+#panelTitle {
+    color: var(--ui-red-deep) !important;
+    font-size: clamp(30px, 3.2vw, 46px) !important;
+}
+
+#panelDesc {
+    color: var(--ui-muted) !important;
+    font-size: 16px !important;
+    max-width: 760px;
+}
+
+.open-admin,
+.submit-btn,
+.auth-btn.login {
+    background: linear-gradient(135deg, var(--ui-red), var(--ui-red-2)) !important;
+    box-shadow: 0 16px 34px rgba(230, 0, 35, .22) !important;
+}
+
+.open-admin:hover,
+.submit-btn:hover,
+.auth-btn.login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 22px 45px rgba(230, 0, 35, .28) !important;
+}
+
+.content-card,
+.auth-modal,
+.quick-card,
+.message,
+.frame-toolbar {
+    border-color: var(--ui-line) !important;
+    box-shadow: var(--ui-shadow) !important;
+}
+
+.content-card {
+    border-radius: 30px !important;
+    background: rgba(255, 255, 255, .88) !important;
+    overflow: hidden !important;
+}
+
+.quick-grid {
+    gap: 16px !important;
+}
+
+.quick-card {
+    border-radius: 24px !important;
+    background:
+        radial-gradient(circle at top right, rgba(255, 95, 118, .10), transparent 34%),
+        #fffafa !important;
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease !important;
+}
+
+.quick-card:hover {
+    transform: translateY(-4px) !important;
+    border-color: #ff9aaa !important;
+    box-shadow: 0 20px 42px rgba(180, 0, 30, .14) !important;
+}
+
+.quick-card h3 {
+    color: var(--ui-red-dark) !important;
+}
+
+#adminFrame {
+    border-radius: 0 0 30px 30px !important;
+    background: #fffafa !important;
+}
+
+.home-header {
+    justify-content: flex-end !important;
+}
+
+.auth-actions {
+    background: rgba(255, 255, 255, .38) !important;
+    border: 1px solid rgba(255, 255, 255, .48);
+    box-shadow: 0 18px 44px rgba(80, 0, 20, .16) !important;
+}
+
+.auth-modal {
+    border-radius: 34px !important;
+    background:
+        radial-gradient(circle at top right, rgba(255, 95, 118, .18), transparent 38%),
+        rgba(255, 255, 255, .96) !important;
+}
+
+.auth-input {
+    border-radius: 18px !important;
+}
+
+@media (max-width: 1000px) {
+    .admin-shell {
+        grid-template-columns: 1fr !important;
+    }
+
+    .admin-sidebar {
+        position: relative !important;
+        height: auto !important;
+        border-radius: 0 0 28px 28px;
+    }
+
+    .side-menu {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .admin-main {
+        padding: 18px !important;
+    }
+
+    .hero {
+        display: block !important;
+    }
+
+    .open-admin {
+        margin-top: 18px !important;
+        width: 100%;
+    }
+}
+
+@media (max-width: 640px) {
+    .side-menu {
+        grid-template-columns: 1fr !important;
+    }
+
+    .hero {
+        padding: 22px !important;
+    }
+
+    .quick-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .auth-actions {
+        width: 100%;
+    }
+}
