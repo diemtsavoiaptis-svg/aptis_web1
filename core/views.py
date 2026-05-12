@@ -1997,7 +1997,6 @@ def student_part3_page(request):
 def student_part4_page(request):
     all_materials = ListeningPartMaterial.objects.filter(part=4, is_active=True).order_by("id")
 
-    # Only show real Part 4 rows that have at least one usable question/answer/paraphrase.
     valid_ids = []
     for material in all_materials:
         q16 = material.questions.filter(order=16).first()
@@ -2026,23 +2025,49 @@ def student_part4_page(request):
         if has_q16_data or has_q17_data or has_paraphrase:
             valid_ids.append(material.id)
 
-    materials = all_materials.filter(id__in=valid_ids).order_by("id")
+    materials = list(all_materials.filter(id__in=valid_ids).order_by("id"))
+    total_sets = len(materials)
+
+    selected = None
+    current_index = 1
 
     selected_id = request.GET.get("set")
-    selected = None
-
     if selected_id:
-        selected = materials.filter(id=selected_id).first()
+        for idx, material in enumerate(materials, start=1):
+            if str(material.id) == str(selected_id):
+                selected = material
+                current_index = idx
+                break
 
-    if selected is None:
-        selected = materials.first()
+    if selected is None and materials:
+        selected = materials[0]
+        current_index = 1
 
     questions = selected.questions.filter(order__in=[16, 17]).order_by("order", "id") if selected else []
+
+    prev_url = ""
+    next_url = ""
+
+    if selected and total_sets:
+        if current_index > 1:
+            prev_material = materials[current_index - 2]
+            prev_url = f"/listening/part-4/?set={prev_material.id}"
+
+        if current_index < total_sets:
+            next_material = materials[current_index]
+            next_url = f"/listening/part-4/?set={next_material.id}"
+
+    progress_percent = round((current_index / total_sets) * 100, 2) if total_sets else 0
 
     return render(request, "core/student_part4.html", {
         "materials": materials,
         "selected": selected,
         "questions": questions,
+        "current_index": current_index,
+        "total_sets": total_sets,
+        "prev_url": prev_url,
+        "next_url": next_url,
+        "progress_percent": progress_percent,
     })
 
 

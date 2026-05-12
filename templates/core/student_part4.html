@@ -1,4 +1,4 @@
-﻿{% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -611,10 +611,10 @@
 
         {% if selected %}
             <div class="exam-meta">
-                <strong>Câu 1/{{ questions|length }}</strong>
+                <strong>Câu {{ current_index }}/{{ total_sets }}</strong>
                 <span>Part 4</span>
             </div>
-            <div class="progress-bar"><div></div></div>
+            <div class="progress-bar"><div style="width: {{ progress_percent }}%"></div></div>
 
             <section class="audio-player">
                 <button class="audio-btn" type="button" id="playBtn">▶</button>
@@ -714,7 +714,11 @@
 
 <nav class="bottom-nav">
     <div class="bottom-left">
-        <a class="nav-btn back-btn" href="{% url 'listening' %}?part=1">Quay lại</a>
+        {% if prev_url %}
+            <a class="nav-btn back-btn" href="{{ prev_url }}">Câu trước</a>
+        {% else %}
+            <a class="nav-btn back-btn" href="{% url 'listening' %}?part=1">Quay lại</a>
+        {% endif %}
     </div>
 
     <div class="bottom-center">
@@ -722,7 +726,11 @@
     </div>
 
     <div class="bottom-right">
-        <a class="nav-btn next-btn" href="{% url 'student_part4' %}">Câu tiếp theo</a>
+        {% if next_url %}
+            <a class="nav-btn next-btn" href="{{ next_url }}">Câu tiếp theo</a>
+        {% else %}
+            <a class="nav-btn next-btn" href="{% url 'listening' %}?part=1">Hoàn thành</a>
+        {% endif %}
     </div>
 </nav>
 
