@@ -1,0 +1,117 @@
+﻿===== IMPORT START 05/13/2026 02:49:25 =====
+Online Part 4 materials found: 108
+OK 16: ID=17 | Life after university
+OK 17: ID=18 | Security cameras
+OK 18: ID=19 | A new novel of a famous writer
+OK 19: ID=20 | Learning And Development
+OK 20: ID=21 | Work And Books
+OK 21: ID=22 | The History Of Railways
+OK 22: ID=23 | The Environment
+OK 23: ID=24 | A musician's life
+OK 24: ID=25 | A new guide
+OK 25: ID=26 | A research into happiness
+OK 26: ID=27 | Building Design
+OK 27: ID=28 | Criticism of the new novel
+OK 28: ID=29 | Criticism Of The New Novel (Phi├¬n bß║ún 2)
+OK 29: ID=30 | Criticism Of The New Novel (Phi├¬n bß║ún 2)
+OK 30: ID=31 | Writer's block
+OK 31: ID=32 | Professionalism at work
+OK 32: ID=33 | Making plans
+OK 33: ID=34 | A promotion campaign for a product
+OK 34: ID=35 | A Promotion Campaign For A Product (Phi├¬n bß║ún 2)
+OK 35: ID=36 | Script production
+OK 36: ID=37 | Script Production (Phi├¬n bß║ún 2)
+OK 37: ID=38 | Script Production (Phi├¬n bß║ún 3)
+OK 38: ID=39 | Concentration
+OK 39: ID=40 | Modern Society
+OK 40: ID=41 | Customers In Business
+OK 41: ID=42 | Creating Motivation Within A Team
+OK 42: ID=43 | Traveling
+OK 43: ID=44 | A new restaurant
+OK 44: ID=45 | Work from home
+OK 45: ID=46 | Managing financial spending
+OK 46: ID=47 | Managing Financial Spending (Phi├¬n bß║ún 2)
+OK 47: ID=48 | Managing Financial Spending (Phi├¬n bß║ún 3)
+OK 48: ID=49 | The importance of sleep
+OK 49: ID=50 | The Importance Of Sleep (Phi├¬n bß║ún 2)
+OK 50: ID=51 | A book about a life of a scientist
+OK 51: ID=52 | Nutritionist
+OK 52: ID=53 | Cycling expedition
+OK 53: ID=54 | Viral Video
+OK 54: ID=55 | Business Strategy
+
+DONE: Updated online Part 4 audio rows 16-54. Updated: 39
+
+===== CHECK START 05/13/2026 02:49:29 =====
+===== ONLINE DATA CHECK =====
+
+Part 1 total questions: 191
+Part 1 rows with audio_url: 0
+Part 1 rows with audio_drive_link: 191
+
+Part 4 total materials: 108
+Part 4 materials with audio_url: 69
+Part 4 total questions: 216
+
+===== PART 4 AUDIO CHECK 1-54 =====
+1. ID=2 | OK | A break from studying | https://drive.google.com/file/d/1cgtOo8-oI5yEf-OzIxzTsZSh9MMM5NUE/view?usp=drivesdk
+2. ID=3 | OK | A book about a life of a scientist | https://drive.google.com/file/d/12OAEclFCQOqLud3GqnjOGoiyfPgzYeQz/view?usp=drivesdk
+3. ID=4 | OK | A Book About A Life Of A Scientist (Phi├¬n bß║ún 2) | https://drive.google.com/file/d/1r67GFPxD8a2WLV2JyigHgjpn5cwK2ECq/view?usp=drivesdk
+4. ID=5 | OK | The Sport | https://drive.google.com/file/d/1zwYxkiXQTIw0uOCKKkjBz-UGnK-H6Tj0/view?usp=drivesdk
+5. ID=6 | OK | The Sport (Phi├¬n bß║ún 2) | https://drive.google.com/file/d/1z6xCcchFSJsqBoWbEA0C8xM0pLkTPiM_/view?usp=drivesdk
+6. ID=7 | OK | The Sport (Phi├¬n bß║ún 3) | https://drive.google.com/file/d/1Sb8FziuoHlXZZ-wpO9JjFFMgJ_lB1Fp8/view?usp=drivesdk
+7. ID=8 | OK | Television series | https://drive.google.com/file/d/1u-AvnEXVoabL0tXwYBk6T-P2sbgA2YlY/view?usp=drivesdk
+8. ID=9 | OK | Television Series (Phi├¬n bß║ún 2) | https://drive.google.com/file/d/16OjY_Fmlk5t9A_Y-3ymR4DkB6emFwuJh/view?usp=drivesdk
+9. ID=10 | OK | Television Series (Phi├¬n bß║ún 3) | https://drive.google.com/file/d/1WMLESIaqnfa-fCmGFdgDSEhY4-8ZcD_n/view?usp=drivesdk
+10. ID=11 | OK | Advertising and sponsoring | https://drive.google.com/file/d/1To47WJHMykAEqYj3ahW9XjK7n1zu8QES/view?usp=drivesdk
+11. ID=12 | OK | Advertising And Sponsoring (Phi├¬n bß║ún 2) | https://drive.google.com/file/d/1jtxa-DwHpw6SiWbDQlYeymXdORsK8ppv/view?usp=drivesdk
+12. ID=13 | OK | Advertising And Sponsoring (Phi├¬n bß║ún 3) | https://drive.google.com/file/d/1W-_loFs8ZTGJl5U2hsFQm4_k93HJFxg3/view?usp=drivesdk
+13. ID=14 | OK | Famous writers | https://drive.google.com/file/d/1Bs1zsSKu6q8aVMhZawNzoWWFZubUKMOF/view?usp=drivesdk
+14. ID=15 | OK | A regional development plan | https://drive.google.com/file/d/1VKF3bEGoCNdBjPcf-LjJlWx4Htl1egdv/view?usp=drivesdk
+15. ID=16 | OK | Regional Development Plan (Phi├¬n bß║ún 2) | https://drive.google.com/file/d/1G4YrEgXh3LkIqh2oTD3HvNgDlJAYOSSL/view?usp=drivesdk
+16. ID=17 | OK | Life after university | https://drive.google.com/file/d/13ZaotiJqGRlFfrt2QZGhs1Yhbxefzn4o/view?usp=drivesdk
+17. ID=18 | OK | Security cameras | https://drive.google.com/file/d/17UijlOVZvitTKx1E-bIdV9BG2E7UTQwz/view?usp=drivesdk
+18. ID=19 | OK | A new novel of a famous writer | https://drive.google.com/file/d/1x9zeYyVD4cbAwFE2b1ZaiEtgz_OAcyQK/view?usp=drivesdk
+19. ID=20 | OK | Learning And Development | https://drive.google.com/file/d/1bLnosuEItzQkEp7epleTRDTPSHGxhgFy/view?usp=drivesdk
+20. ID=21 | OK | Work And Books | https://drive.google.com/file/d/1RNK4cB8u97DfROe1VZLk2_nF6N1IqAMR/view?usp=drivesdk
+21. ID=22 | OK | The History Of Railways | https://drive.google.com/file/d/1kiIIg-j3kJccnsG8byxOpjEoz81uP0Xd/view?usp=drivesdk
+22. ID=23 | OK | The Environment | https://drive.google.com/file/d/1fOHhKng39mnPRkjhSmIoBf-dJQdyKcJe/view?usp=drivesdk
+23. ID=24 | OK | A musician's life | https://drive.google.com/file/d/16j9uEc2cirbVQO18onChwwHTVohnMfJ9/view?usp=drivesdk
+24. ID=25 | OK | A new guide | https://drive.google.com/file/d/1_E47DoBMCfd2QuKkIkPu8a_bHLXp9s1r/view?usp=drivesdk
+25. ID=26 | OK | A research into happiness | https://drive.google.com/file/d/1ls94H4-7fUxkuC83tJBFB6cXf94NeZOj/view?usp=drivesdk
+26. ID=27 | OK | Building Design | https://drive.google.com/file/d/1upq0w86daNSY_KAV0tPsB98wqOPYMzCT/view?usp=drivesdk
+27. ID=28 | OK | Criticism of the new novel | https://drive.google.com/file/d/1cjrYcvjUFMMHjt80vr0oPxAu7Ft1HG-N/view?usp=drivesdk
+28. ID=29 | OK | Criticism Of The New Novel (Phi├¬n bß║ún 2) | https://drive.google.com/file/d/1M6lRB5jgBj_t2zCpHOXdexI9f5XGwutG/view?usp=drivesdk
+29. ID=30 | OK | Criticism Of The New Novel (Phi├¬n bß║ún 2) | https://drive.google.com/file/d/1c4pmCdm5oTtBySvw3A4OU6-9xsmygSFM/view?usp=drivesdk
+30. ID=31 | OK | Writer's block | https://drive.google.com/file/d/1IkFFp6VO1Iy7j9kSzZEcBphl52QMxtzO/view?usp=drivesdk
+31. ID=32 | OK | Professionalism at work | https://drive.google.com/file/d/1ckMUe6tPSyf7xzzDt30IT_tOI_IRjM4u/view?usp=drivesdk
+32. ID=33 | OK | Making plans | https://drive.google.com/file/d/160WuB4e1ZyDT3MVE3hmlpbzrURChH9Yd/view?usp=drivesdk
+33. ID=34 | OK | A promotion campaign for a product | https://drive.google.com/file/d/1kUHE_SDNzL9V-nhiSmHxLjDnEvhtQQuC/view?usp=drivesdk
+34. ID=35 | OK | A Promotion Campaign For A Product (Phi├¬n bß║ún 2) | https://drive.google.com/file/d/1juMOVz6C1tWVk42HpAugEL3Kuc8bUjLG/view?usp=drivesdk
+35. ID=36 | OK | Script production | https://drive.google.com/file/d/1wfNmvtvA970VRBgBxIMjs0I1LF5uBDHf/view?usp=drivesdk
+36. ID=37 | OK | Script Production (Phi├¬n bß║ún 2) | https://drive.google.com/file/d/14G2eu4TDFirXllwvZo6hR4doFvTDX_BU/view?usp=drivesdk
+37. ID=38 | OK | Script Production (Phi├¬n bß║ún 3) | https://drive.google.com/file/d/14BuLteu581uGUTBmPK-YvCcEmuw5oBWy/view?usp=drivesdk
+38. ID=39 | OK | Concentration | https://drive.google.com/file/d/1JZHivYN6Ehnx9kr6LqLv0karKDaGpW39/view?usp=drivesdk
+39. ID=40 | OK | Modern Society | https://drive.google.com/file/d/1Bavr7qt7NQy7OgtdkbeoanpmWzc0qCA1/view?usp=drivesdk
+40. ID=41 | OK | Customers In Business | https://drive.google.com/file/d/1qtHyibBt2AkL0TSpAL8OWU_dLm49C3et/view?usp=drivesdk
+41. ID=42 | OK | Creating Motivation Within A Team | https://drive.google.com/file/d/1iCzi74fcu1zAQLmymclVrygophpaKMX4/view?usp=drivesdk
+42. ID=43 | OK | Traveling | https://drive.google.com/file/d/11Z0WdA8lEvC8eymJ5U-74f8b_hnghzOV/view?usp=drivesdk
+43. ID=44 | OK | A new restaurant | https://drive.google.com/file/d/11p8o8k4ebrDd69mq-2WXZgiYkqrSYtmj/view?usp=drivesdk
+44. ID=45 | OK | Work from home | https://drive.google.com/file/d/1j2plpeS1KI4UgPbL8v6lnGf1iIAG7pij/view?usp=drivesdk
+45. ID=46 | OK | Managing financial spending | https://drive.google.com/file/d/1jAIyecmw3p3a-Jtog6mMo_LZuu4uGKyT/view?usp=drivesdk
+46. ID=47 | OK | Managing Financial Spending (Phi├¬n bß║ún 2) | https://drive.google.com/file/d/1ic_TuyPV4pqjnmZE8yh9H1Q6kJGXv58I/view?usp=drivesdk
+47. ID=48 | OK | Managing Financial Spending (Phi├¬n bß║ún 3) | https://drive.google.com/file/d/1aDMcaYTVNDOgos8J_2OaDG-nA-gE7GX8/view?usp=drivesdk
+48. ID=49 | OK | The importance of sleep | https://drive.google.com/file/d/1JdBDAjQG56dn8fbL7mtwBuVun37CN02R/view?usp=drivesdk
+49. ID=50 | OK | The Importance Of Sleep (Phi├¬n bß║ún 2) | https://drive.google.com/file/d/1Y2WXPFdSdFhMA6nLTz8bF372pveKFQ1A/view?usp=drivesdk
+50. ID=51 | OK | A book about a life of a scientist | https://drive.google.com/file/d/1BtNXxbW0NEy7cWkg2gZ6IW0mx3TzuFVH/view?usp=drivesdk
+51. ID=52 | OK | Nutritionist | https://drive.google.com/file/d/1PbD0azpnbMVgDalv082gAHTzdXME6anV/view?usp=drivesdk
+52. ID=53 | OK | Cycling expedition | https://drive.google.com/file/d/15gRV_gdOU5UXM-gcPn9LWRaJRwuUPj72/view?usp=drivesdk
+53. ID=54 | OK | Viral Video | https://drive.google.com/file/d/1JnYcLv39bYnW3xhYnpVw_ew-KhgyP4Qr/view?usp=drivesdk
+54. ID=55 | OK | Business Strategy | https://drive.google.com/file/d/161VQLvPvkCXJhYSiZym9XU_7CMLgLcv4/view?usp=drivesdk
+
+All Part 4 rows 1-54 have audio_url.
+
+===== QUICK RESULT =====
+OK: Online database has Part 1 data and Part 4 audio 1-54.
+
+===== END 05/13/2026 02:49:30 =====

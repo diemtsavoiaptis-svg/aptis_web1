@@ -1,0 +1,130 @@
+﻿===== DEDUPE PART 4 START 05/13/2026 02:59:48 =====
+
+===== CLEANING default =====
+Backup saved for default: C:\Users\Admin\Desktop\aptis_web\manage.py\aptis_web1\backups\part4_before_dedupe_default_20260513_025948.json
+Before materials: 108
+Before questions: 216
+KEEP 1: ID=2 | A break from studying
+KEEP 2: ID=3 | A book about a life of a scientist
+KEEP 3: ID=4 | A Book About A Life Of A Scientist (Phi├¬n bß║ún 2)
+KEEP 4: ID=5 | The Sport
+KEEP 5: ID=6 | The Sport (Phi├¬n bß║ún 2)
+KEEP 6: ID=7 | The Sport (Phi├¬n bß║ún 3)
+KEEP 7: ID=8 | Television series
+KEEP 8: ID=9 | Television Series (Phi├¬n bß║ún 2)
+KEEP 9: ID=10 | Television Series (Phi├¬n bß║ún 3)
+KEEP 10: ID=11 | Advertising and sponsoring
+KEEP 11: ID=12 | Advertising And Sponsoring (Phi├¬n bß║ún 2)
+KEEP 12: ID=13 | Advertising And Sponsoring (Phi├¬n bß║ún 3)
+KEEP 13: ID=14 | Famous writers
+KEEP 14: ID=15 | A regional development plan
+KEEP 15: ID=16 | Regional Development Plan (Phi├¬n bß║ún 2)
+KEEP 16: ID=17 | Life after university
+KEEP 17: ID=18 | Security cameras
+KEEP 18: ID=19 | A new novel of a famous writer
+KEEP 19: ID=20 | Learning And Development
+KEEP 20: ID=21 | Work And Books
+KEEP 21: ID=22 | The History Of Railways
+KEEP 22: ID=23 | The Environment
+KEEP 23: ID=24 | A musician's life
+KEEP 24: ID=25 | A new guide
+KEEP 25: ID=26 | A research into happiness
+KEEP 26: ID=27 | Building Design
+KEEP 27: ID=28 | Criticism of the new novel
+KEEP 28: ID=29 | Criticism Of The New Novel (Phi├¬n bß║ún 2)
+KEEP 29: ID=30 | Criticism Of The New Novel (Phi├¬n bß║ún 2)
+KEEP 30: ID=31 | Writer's block
+KEEP 31: ID=32 | Professionalism at work
+KEEP 32: ID=33 | Making plans
+KEEP 33: ID=34 | A promotion campaign for a product
+KEEP 34: ID=35 | A Promotion Campaign For A Product (Phi├¬n bß║ún 2)
+KEEP 35: ID=36 | Script production
+KEEP 36: ID=37 | Script Production (Phi├¬n bß║ún 2)
+KEEP 37: ID=38 | Script Production (Phi├¬n bß║ún 3)
+KEEP 38: ID=39 | Concentration
+KEEP 39: ID=40 | Modern Society
+KEEP 40: ID=41 | Customers In Business
+KEEP 41: ID=42 | Creating Motivation Within A Team
+KEEP 42: ID=43 | Traveling
+KEEP 43: ID=44 | A new restaurant
+KEEP 44: ID=45 | Work from home
+KEEP 45: ID=46 | Managing financial spending
+KEEP 46: ID=47 | Managing Financial Spending (Phi├¬n bß║ún 2)
+KEEP 47: ID=48 | Managing Financial Spending (Phi├¬n bß║ún 3)
+KEEP 48: ID=49 | The importance of sleep
+KEEP 49: ID=50 | The Importance Of Sleep (Phi├¬n bß║ún 2)
+KEEP 50: ID=51 | A book about a life of a scientist
+KEEP 51: ID=52 | Nutritionist
+KEEP 52: ID=53 | Cycling expedition
+KEEP 53: ID=54 | Viral Video
+KEEP 54: ID=55 | Business Strategy
+Deleted duplicate materials: 54
+After materials: 54
+After questions: 108
+After audio rows: 54
+
+===== CLEANING online =====
+Backup saved for online: C:\Users\Admin\Desktop\aptis_web\manage.py\aptis_web1\backups\part4_before_dedupe_online_20260513_025948.json
+Before materials: 108
+Before questions: 216
+KEEP 1: ID=2 | A break from studying
+KEEP 2: ID=3 | A book about a life of a scientist
+KEEP 3: ID=4 | A Book About A Life Of A Scientist (Phi├¬n bß║ún 2)
+KEEP 4: ID=5 | The Sport
+KEEP 5: ID=6 | The Sport (Phi├¬n bß║ún 2)
+KEEP 6: ID=7 | The Sport (Phi├¬n bß║ún 3)
+KEEP 7: ID=8 | Television series
+KEEP 8: ID=9 | Television Series (Phi├¬n bß║ún 2)
+KEEP 9: ID=10 | Television Series (Phi├¬n bß║ún 3)
+KEEP 10: ID=11 | Advertising and sponsoring
+KEEP 11: ID=12 | Advertising And Sponsoring (Phi├¬n bß║ún 2)
+KEEP 12: ID=13 | Advertising And Sponsoring (Phi├¬n bß║ún 3)
+KEEP 13: ID=14 | Famous writers
+KEEP 14: ID=15 | A regional development plan
+KEEP 15: ID=16 | Regional Development Plan (Phi├¬n bß║ún 2)
+KEEP 16: ID=17 | Life after university
+KEEP 17: ID=18 | Security cameras
+KEEP 18: ID=19 | A new novel of a famous writer
+KEEP 19: ID=20 | Learning And Development
+KEEP 20: ID=21 | Work And Books
+KEEP 21: ID=22 | The History Of Railways
+KEEP 22: ID=23 | The Environment
+KEEP 23: ID=24 | A musician's life
+KEEP 24: ID=25 | A new guide
+KEEP 25: ID=26 | A research into happiness
+KEEP 26: ID=27 | Building Design
+KEEP 27: ID=28 | Criticism of the new novel
+KEEP 28: ID=29 | Criticism Of The New Novel (Phi├¬n bß║ún 2)
+KEEP 29: ID=30 | Criticism Of The New Novel (Phi├¬n bß║ún 2)
+KEEP 30: ID=31 | Writer's block
+KEEP 31: ID=32 | Professionalism at work
+KEEP 32: ID=33 | Making plans
+KEEP 33: ID=34 | A promotion campaign for a product
+KEEP 34: ID=35 | A Promotion Campaign For A Product (Phi├¬n bß║ún 2)
+KEEP 35: ID=36 | Script production
+KEEP 36: ID=37 | Script Production (Phi├¬n bß║ún 2)
+KEEP 37: ID=38 | Script Production (Phi├¬n bß║ún 3)
+KEEP 38: ID=39 | Concentration
+KEEP 39: ID=40 | Modern Society
+KEEP 40: ID=41 | Customers In Business
+KEEP 41: ID=42 | Creating Motivation Within A Team
+KEEP 42: ID=43 | Traveling
+KEEP 43: ID=44 | A new restaurant
+KEEP 44: ID=45 | Work from home
+KEEP 45: ID=46 | Managing financial spending
+KEEP 46: ID=47 | Managing Financial Spending (Phi├¬n bß║ún 2)
+KEEP 47: ID=48 | Managing Financial Spending (Phi├¬n bß║ún 3)
+KEEP 48: ID=49 | The importance of sleep
+KEEP 49: ID=50 | The Importance Of Sleep (Phi├¬n bß║ún 2)
+KEEP 50: ID=51 | A book about a life of a scientist
+KEEP 51: ID=52 | Nutritionist
+KEEP 52: ID=53 | Cycling expedition
+KEEP 53: ID=54 | Viral Video
+KEEP 54: ID=55 | Business Strategy
+Deleted duplicate materials: 54
+After materials: 54
+After questions: 108
+After audio rows: 54
+
+DONE: Part 4 deduped to 54 rows and audio 1-54 restored.
+===== DEDUPE PART 4 END 05/13/2026 02:59:59 =====

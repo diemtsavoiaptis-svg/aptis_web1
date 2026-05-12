@@ -1,4 +1,4 @@
-﻿{% load static %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -219,7 +219,7 @@
 
         table {
             width: 100%;
-            min-width: 1780px;
+            min-width: 2200px;
             border-collapse: separate;
             border-spacing: 0;
         }
@@ -265,7 +265,7 @@
             border-right: 0;
         }
 
-        .col-audio { width: 230px; }
+        .col-audio { width: 420px; }
         .col-question { width: 210px; }
         .col-topic { width: 210px; }
         .col-q { width: 260px; }
@@ -427,6 +427,30 @@
             }
         }
     </style>
+
+<style id="audio-url-admin-fix">
+.audio-url-area {
+    min-height: 96px !important;
+    width: 100% !important;
+    font-size: 13px !important;
+    line-height: 1.45 !important;
+    word-break: break-all !important;
+    white-space: pre-wrap !important;
+}
+.audio-url-preview {
+    margin-top: 8px;
+    color: #0f7a32;
+    font-weight: 900;
+    font-size: 12px;
+}
+.audio-url-missing {
+    margin-top: 8px;
+    color: #b00020;
+    font-weight: 900;
+    font-size: 12px;
+}
+</style>
+
 </head>
 
 <body>
@@ -525,7 +549,12 @@
                                 <tr>
                                     <td>
                                         <input type="hidden" name="material_id" value="{{ row.material.id }}">
-                                        <input name="audio_url_{{ row.material.id }}" value="{{ row.material.audio_url }}" placeholder="https://...">
+                                        <textarea class="audio-url-area" name="audio_url_{{ row.material.id }}" placeholder="Paste audio URL here">{{ row.material.audio_url }}</textarea>
+{% if row.material.audio_url %}
+    <div class="audio-url-preview">URL saved</div>
+{% else %}
+    <div class="audio-url-missing">Missing URL</div>
+{% endif %}
                                     </td>
 
                                     <td>
