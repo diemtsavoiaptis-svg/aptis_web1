@@ -2282,78 +2282,90 @@ def secure_part4_audio_view(request, material_id):
 
 
 # ===== Final Student Part 4 view: count by topic/set =====
+@login_required
 def student_part4_page(request):
-    all_materials = ListeningPartMaterial.objects.filter(part=4, is_active=True).order_by("id")
-
-    valid_materials = []
-
-    for material in all_materials:
-        q16 = material.questions.filter(order=16).first()
-        q17 = material.questions.filter(order=17).first()
-
-        has_q16 = q16 and (q16.question_text or "").strip() and (
-            (q16.option_a or "").strip()
-            or (q16.option_b or "").strip()
-            or (q16.option_c or "").strip()
-        )
-
-        has_q17 = q17 and (q17.question_text or "").strip() and (
-            (q17.option_a or "").strip()
-            or (q17.option_b or "").strip()
-            or (q17.option_c or "").strip()
-        )
-
-        has_text = bool((material.title or "").strip()) or bool((material.transcript or "").strip())
-
-        if has_text and (has_q16 or has_q17):
-            valid_materials.append(material)
-
-    total_sets = len(valid_materials)
-
-    selected = None
-    current_index = 1
-    selected_id = request.GET.get("set")
-
-    if selected_id:
-        for index, material in enumerate(valid_materials, start=1):
-            if str(material.id) == str(selected_id):
-                selected = material
-                current_index = index
-                break
-
-    if selected is None and valid_materials:
-        selected = valid_materials[0]
+    try:
+        current_index = int(request.GET.get("set", 1))
+    except ValueError:
         current_index = 1
 
-    questions = selected.questions.filter(order__in=[16, 17]).order_by("order", "id") if selected else []
+    materials_qs = (
+        ListeningPartMaterial.objects
+        .filter(part=4)
+        .only("id", "title", "description", "audio_url", "transcript")
+        .order_by("id")
+    )
 
-    prev_url = ""
-    next_url = ""
+    total_sets = materials_qs.count()
 
-    if selected and total_sets:
-        if current_index > 1:
-            prev_url = f"/listening/part-4/?set={valid_materials[current_index - 2].id}"
+    if total_sets == 0:
+        return render(request, "core/student_part4.html", {
+            "selected": None,
+            "questions": [],
+            "current_index": 0,
+            "total_sets": 0,
+            "progress_percent": 0,
+            "prev_url": None,
+            "next_url": None,
+            "student_watermark": f"{request.user.username} · {request.user.email}",
+        })
 
-        if current_index < total_sets:
-            next_url = f"/listening/part-4/?set={valid_materials[current_index].id}"
+    if current_index < 1:
+        current_index = 1
 
-    progress_percent = round((current_index / total_sets) * 100, 2) if total_sets else 0
+    if current_index > total_sets:
+        current_index = total_sets
 
-    return render(request, "core/student_part4.html", {
-        "materials": valid_materials,
+    selected = materials_qs[current_index - 1]
+
+    questions = list(
+        ListeningPartQuestion.objects
+        .filter(material=selected)
+        .only(
+            "id",
+            "material_id",
+            "order",
+            "question_text",
+            "option_a",
+            "option_b",
+            "option_c",
+            "option_d",
+            "option_e",
+            "option_f",
+            "correct_answer",
+        )
+        .order_by("order", "id")
+    )
+
+    progress_percent = int((current_index / total_sets) * 100) if total_sets else 0
+
+    prev_url = None
+    next_url = None
+
+    if current_index > 1:
+        prev_url = f"{request.path}?set={current_index - 1}"
+
+    if current_index < total_sets:
+        next_url = f"{request.path}?set={current_index + 1}"
+
+    response = render(request, "core/student_part4.html", {
         "selected": selected,
         "questions": questions,
         "current_index": current_index,
         "total_sets": total_sets,
+        "progress_percent": progress_percent,
         "prev_url": prev_url,
         "next_url": next_url,
-        "progress_percent": progress_percent,
+        "student_watermark": f"{request.user.username} · {request.user.email}",
     })
-# ===== End Final Student Part 4 view =====
+
+    response["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    response["Pragma"] = "no-cache"
+    response["Expires"] = "0"
+
+    return response
 
 
-# === FIX PART 4 GOOGLE DRIVE AUDIO STREAM START ===
-@login_required
 def secure_part4_audio_view(request, material_id):
     material = get_object_or_404(ListeningPartMaterial, id=material_id, part=4)
 
