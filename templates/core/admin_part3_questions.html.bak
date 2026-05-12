@@ -413,7 +413,7 @@
                         </div>
 
                         <label>Nhận định text</label>
-                        <textarea name="Câu hỏi_text_{{ q.id }}" style="min-height:74px;">{{ q.question_text }}</textarea>
+                        <textarea name="Câu hỏi_text_{{ q.id }}" style="min-height:74px;">{{ q.Câu hỏi_text }}</textarea>
 
                         <div class="options">
                             <div>
@@ -816,7 +816,6 @@
 </script>
 </body>
 </html>
-
 
 
 
