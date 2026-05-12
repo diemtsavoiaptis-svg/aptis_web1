@@ -421,7 +421,9 @@
         }
 
         .paragraph-btn {
-            background: #1688f0;
+            background: var(--red);
+            color: #fff;
+            box-shadow: 0 14px 30px rgba(217, 0, 27, 0.22);
         }
 
         .paragraph-box {
@@ -595,8 +597,8 @@
                 </div>
             </div>
             <div>
-                <h1>Listening Practice</h1>
-                <p>Luyện nghe Part 4 với giao diện đồng bộ cùng hệ thống học viên.</p>
+                <h1>Luyện nghe Part 4</h1>
+                <p>Luyện nghe từng bài, chọn đáp án và kiểm tra kết quả.</p>
             </div>
         </section>
 
@@ -609,7 +611,7 @@
 
         {% if selected %}
             <div class="exam-meta">
-                <strong>Question 1/{{ questions|length }}</strong>
+                <strong>Câu 1/{{ questions|length }}</strong>
                 <span>Part 4</span>
             </div>
             <div class="progress-bar"><div></div></div>
@@ -619,7 +621,7 @@
                 <div class="volume">🔊</div>
                 <div class="fake-range"></div>
                 <div></div>
-                <div class="play-count"><span id="playLeft">2</span> of 2 plays remaining</div>
+                <div class="play-count">Còn <span id="playLeft">2</span>/2 lượt nghe</div>
 
                 {% if selected.audio_url %}
                     <audio class="hidden-audio" id="realAudio" src="{{ selected.audio_url }}"></audio>
@@ -632,7 +634,7 @@
                     <span class="flag">Được bảo vệ</span>
                 </div>
 
-                <div class="topic">Topic: {{ selected.title }}</div>
+                <div class="topic">Chủ đề: {{ selected.title }}</div>
 
                 {% for q in questions %}
                     <div class="qa-block" data-question="{{ q.id }}">
@@ -691,12 +693,12 @@
                 <div id="resultMessage" class="answer-result" hidden></div>
 
                 <div class="paragraph-wrap">
-                    <button class="paragraph-btn" type="button" id="paragraphBtn">Show Paragraph</button>
+                    <button class="paragraph-btn" type="button" id="paragraphBtn">Hiện bài nghe</button>
                     <div class="paragraph-box" id="paragraphBox">
                         {% if selected.transcript %}
                             {{ selected.transcript }}
                         {% else %}
-                            Transcript has not been added yet.
+                            Chưa có dữ liệu bài nghe.
                         {% endif %}
                     </div>
                 </div>
@@ -712,15 +714,15 @@
 
 <nav class="bottom-nav">
     <div class="bottom-left">
-        <a class="nav-btn back-btn" href="{% url 'listening' %}?part=1">Back</a>
+        <a class="nav-btn back-btn" href="{% url 'listening' %}?part=1">Quay lại</a>
     </div>
 
     <div class="bottom-center">
-        <button class="nav-btn check-btn" type="button" id="bottomCheckBtn">Check result</button>
+        <button class="nav-btn check-btn" type="button" id="bottomCheckBtn">Kiểm tra đáp án</button>
     </div>
 
     <div class="bottom-right">
-        <a class="nav-btn next-btn" href="{% url 'student_part4' %}">Next</a>
+        <a class="nav-btn next-btn" href="{% url 'student_part4' %}">Câu tiếp theo</a>
     </div>
 </nav>
 
@@ -797,8 +799,8 @@ if (paragraphBtn && paragraphBox) {
     paragraphBtn.addEventListener("click", () => {
         paragraphBox.classList.toggle("show");
         paragraphBtn.textContent = paragraphBox.classList.contains("show")
-            ? "Hide Paragraph"
-            : "Show Paragraph";
+            ? "Ẩn bài nghe"
+            : "Hiện bài nghe";
     });
 }
 
