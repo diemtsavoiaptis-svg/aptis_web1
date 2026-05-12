@@ -1,4 +1,4 @@
-﻿{% load static %}
+{% load static %}
 <!doctype html>
 <html lang="vi">
 <head>
@@ -332,6 +332,17 @@ article:hover {
     <link rel="stylesheet" href="{% static 'css/sidebar_size_only.css' %}">
     <link rel="stylesheet" href="{% static 'css/safe_dashboard_layout.css' %}">
     <link rel="stylesheet" href="{% static 'css/red_ui_refresh.css' %}">
+
+<style id="fast-dashboard-no-iframe">
+.fast-dashboard-card {
+    min-height: auto !important;
+}
+#adminFrame,
+.frame-toolbar {
+    display: none !important;
+}
+</style>
+
 </head>
 
 <body>
@@ -353,38 +364,23 @@ article:hover {
                 🎧 Tổng quan Admin
             </button>
 
-            <button class="side-link" type="button"
-                    data-title="Quản lý câu hỏi Listening"
-                    data-desc="Chọn Part và cập nhật dữ liệu câu hỏi, audio, đáp án, transcript."
-                    data-url="/dashboard/listening-parts/">
+            <button class="side-link" type="button" onclick="window.location.href='/dashboard/listening-parts/'">
                 🎧 Quản lý câu hỏi Listening
             </button>
 
-            <button class="side-link" type="button"
-                    data-title="Duyệt học viên"
-                    data-desc="Duyệt tài khoản học viên mới đăng ký, quản lý trạng thái học viên."
-                    data-url="/dashboard/students/">
+            <button class="side-link" type="button" onclick="window.location.href='/dashboard/students/'">
                 ✅ Duyệt học viên
             </button>
 
-            <button class="side-link" type="button"
-                    data-title="Quản lý bài học"
-                    data-desc="Thêm, sửa và quản lý bài học hiển thị cho học viên."
-                    data-url="/admin/core/lesson/">
+            <button class="side-link" type="button" onclick="window.location.href='/admin/core/lesson/'">
                 📚 Quản lý bài học
             </button>
 
-            <button class="side-link" type="button"
-                    data-title="Cảnh báo bảo mật"
-                    data-desc="Theo dõi cảnh báo đăng nhập và các vấn đề bảo mật tài khoản."
-                    data-url="/admin/core/securityalert/">
+            <button class="side-link" type="button" onclick="window.location.href='/admin/core/securityalert/'">
                 🛡️ Cảnh báo bảo mật
             </button>
 
-            <button class="side-link" type="button"
-                    data-title="Giao diện học viên"
-                    data-desc="Xem nhanh giao diện luyện đề mà học viên đang sử dụng."
-                    data-url="/listening/">
+            <button class="side-link" type="button" onclick="window.location.href='/listening/'">
                 👀 Xem giao diện học viên
             </button>
 
@@ -407,7 +403,7 @@ article:hover {
             </button>
         </section>
 
-        <section class="content-card">
+        <section class="content-card fast-dashboard-card">
             <div class="frame-toolbar">
                 <div>
                     <div class="frame-label" id="frameLabel">Tổng quan nhanh</div>
@@ -422,19 +418,19 @@ article:hover {
 
             <div id="welcomePanel" class="welcome-panel">
                 <div class="quick-grid">
-                    <div class="quick-card" data-url="/dashboard/listening-parts/" data-title="Quản lý câu hỏi Listening" data-desc="Chọn Part và cập nhật dữ liệu câu hỏi, audio, đáp án, transcript.">
+                    <div class="quick-card" onclick="window.location.href='/dashboard/listening-parts/'">
                         <div class="quick-icon">🎧</div>
                         <h3>Listening</h3>
                         <p>Quản lý Part 1, Part 2, Part 3, Part 4 trong khung bên phải.</p>
                     </div>
 
-                    <div class="quick-card" data-url="/dashboard/students/" data-title="Duyệt học viên" data-desc="Duyệt tài khoản học viên mới đăng ký, quản lý trạng thái học viên.">
+                    <div class="quick-card" onclick="window.location.href='/dashboard/students/'">
                         <div class="quick-icon">✅</div>
                         <h3>Học viên</h3>
                         <p>Duyệt tài khoản, xem trạng thái và thông tin học viên.</p>
                     </div>
 
-                    <div class="quick-card" data-url="/admin/core/lesson/" data-title="Quản lý bài học" data-desc="Thêm, sửa và quản lý bài học hiển thị cho học viên.">
+                    <div class="quick-card" onclick="window.location.href='/admin/core/lesson/'">
                         <div class="quick-icon">📚</div>
                         <h3>Bài học</h3>
                         <p>Quản lý tiêu đề, mô tả, nội dung và video bài học.</p>
@@ -449,6 +445,7 @@ article:hover {
 
 <script>
 let currentUrl = "";
+/* Fast dashboard mode: iframe loading disabled. */
 
 function setActive(btn){
     document.querySelectorAll(".side-link").forEach(x => x.classList.remove("active"));
@@ -468,7 +465,7 @@ function openHome(){
     setPanel("Tổng quan Admin", "Quản lý học viên, bài nghe và dữ liệu luyện thi Aptis.");
 }
 
-function openFrame(url, title, desc){
+function openFrame(url, title, desc){ window.location.href = url; return;
     currentUrl = url;
     setPanel(title, desc);
 
@@ -660,6 +657,7 @@ function reloadFrame(){
 }
 
 function openCurrentInNewTab(){
+    window.open("/admin/", "_blank"); return;
     if(currentUrl){
         window.open(currentUrl, "_blank");
     }else{
