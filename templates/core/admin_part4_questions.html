@@ -367,6 +367,37 @@
             box-shadow: var(--soft-shadow);
         }
 
+
+        .answer-cell {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .answer-cell textarea {
+            cursor: pointer;
+            transition: 0.16s ease;
+        }
+
+        .answer-cell.selected-correct textarea {
+            border-color: var(--red);
+            background: #fff1f5;
+            box-shadow: 0 0 0 4px rgba(217, 0, 27, 0.12);
+        }
+
+        .answer-cell.selected-correct::after {
+            content: "Correct";
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--red);
+            color: #fff;
+            border-radius: 999px;
+            padding: 5px 9px;
+            font-size: 11px;
+            font-weight: 950;
+            pointer-events: none;
+        }
+
         @media (max-width: 900px) {
             .top-card {
                 flex-direction: column;
@@ -509,32 +540,34 @@
                                         <textarea name="q16_text_{{ row.material.id }}" placeholder="Question 16">{{ row.q16.question_text }}</textarea>
                                     </td>
 
-                                    <td>
+                                    <td class="answer-cell {% if row.q16.correct_answer == 'A' %}selected-correct{% endif %}" data-group="q16_{{ row.material.id }}" data-answer="A">
                                         <textarea class="small-area" name="q16_a_{{ row.material.id }}" placeholder="Answer A">{{ row.q16.option_a }}</textarea>
                                     </td>
 
-                                    <td>
+                                    <td class="answer-cell {% if row.q16.correct_answer == 'B' %}selected-correct{% endif %}" data-group="q16_{{ row.material.id }}" data-answer="B">
                                         <textarea class="small-area" name="q16_b_{{ row.material.id }}" placeholder="Answer B">{{ row.q16.option_b }}</textarea>
                                     </td>
 
-                                    <td>
+                                    <td class="answer-cell {% if row.q16.correct_answer == 'C' %}selected-correct{% endif %}" data-group="q16_{{ row.material.id }}" data-answer="C">
                                         <textarea class="small-area" name="q16_c_{{ row.material.id }}" placeholder="Answer C">{{ row.q16.option_c }}</textarea>
+                                        <input type="hidden" name="q16_correct_{{ row.material.id }}" value="{{ row.q16.correct_answer|default:'A' }}">
                                     </td>
 
                                     <td>
                                         <textarea name="q17_text_{{ row.material.id }}" placeholder="Question 17">{{ row.q17.question_text }}</textarea>
                                     </td>
 
-                                    <td>
+                                    <td class="answer-cell {% if row.q17.correct_answer == 'A' %}selected-correct{% endif %}" data-group="q17_{{ row.material.id }}" data-answer="A">
                                         <textarea class="small-area" name="q17_a_{{ row.material.id }}" placeholder="Answer A">{{ row.q17.option_a }}</textarea>
                                     </td>
 
-                                    <td>
+                                    <td class="answer-cell {% if row.q17.correct_answer == 'B' %}selected-correct{% endif %}" data-group="q17_{{ row.material.id }}" data-answer="B">
                                         <textarea class="small-area" name="q17_b_{{ row.material.id }}" placeholder="Answer B">{{ row.q17.option_b }}</textarea>
                                     </td>
 
-                                    <td>
+                                    <td class="answer-cell {% if row.q17.correct_answer == 'C' %}selected-correct{% endif %}" data-group="q17_{{ row.material.id }}" data-answer="C">
                                         <textarea class="small-area" name="q17_c_{{ row.material.id }}" placeholder="Answer C">{{ row.q17.option_c }}</textarea>
+                                        <input type="hidden" name="q17_correct_{{ row.material.id }}" value="{{ row.q17.correct_answer|default:'A' }}">
                                     </td>
 
                                     <td>
@@ -586,5 +619,28 @@ if (quickSearch && table) {
     });
 }
 </script>
+
+<script>
+document.querySelectorAll(".answer-cell").forEach(function(cell) {
+    cell.addEventListener("click", function() {
+        const group = cell.dataset.group;
+        const answer = cell.dataset.answer;
+
+        if (!group || !answer) return;
+
+        document.querySelectorAll(`.answer-cell[data-group="${group}"]`).forEach(function(item) {
+            item.classList.remove("selected-correct");
+        });
+
+        cell.classList.add("selected-correct");
+
+        const hidden = document.querySelector(`input[name="${group}_correct"]`);
+        if (hidden) {
+            hidden.value = answer;
+        }
+    });
+});
+</script>
+
 </body>
 </html>

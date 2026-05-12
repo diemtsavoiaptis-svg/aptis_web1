@@ -2104,7 +2104,8 @@ def admin_part4_questions(request):
                 q16.option_d = ""
                 q16.option_e = ""
                 q16.option_f = ""
-                q16.correct_answer = "A"
+                q16_correct = request.POST.get(f"q16_correct_{material.id}", "A").strip().upper()[:1] or "A"
+                q16.correct_answer = q16_correct if q16_correct in ["A", "B", "C"] else "A"
                 q16.save()
 
                 q17.question_text = request.POST.get(f"q17_text_{material.id}", "").strip()
@@ -2114,7 +2115,8 @@ def admin_part4_questions(request):
                 q17.option_d = ""
                 q17.option_e = ""
                 q17.option_f = ""
-                q17.correct_answer = "A"
+                q17_correct = request.POST.get(f"q17_correct_{material.id}", "A").strip().upper()[:1] or "A"
+                q17.correct_answer = q17_correct if q17_correct in ["A", "B", "C"] else "A"
                 q17.save()
 
             messages.success(request, "Saved Part 4 table data.")
