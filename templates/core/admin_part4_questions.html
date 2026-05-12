@@ -1,0 +1,519 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Part 4 | Diem TSA with Aptis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --red: #b91c1c;
+            --red-dark: #7f1d1d;
+            --red-soft: #fee2e2;
+            --bg: #f8fafc;
+            --text: #111827;
+            --muted: #6b7280;
+            --line: #e5e7eb;
+            --card: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, Arial, sans-serif;
+            background: linear-gradient(180deg, #fff7f7, #f8fafc 42%, #ffffff);
+            color: var(--text);
+        }
+
+        .page {
+            min-height: 100vh;
+            padding: 28px;
+        }
+
+        .topbar {
+            max-width: 1320px;
+            margin: 0 auto 22px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-mark {
+            width: 50px;
+            height: 50px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, var(--red-dark), var(--red));
+            color: #fff;
+            display: grid;
+            place-items: center;
+            font-size: 24px;
+            font-weight: 950;
+            box-shadow: 0 16px 32px rgba(185, 28, 28, 0.25);
+        }
+
+        .brand-title {
+            font-size: 20px;
+            font-weight: 950;
+            letter-spacing: -0.04em;
+        }
+
+        .brand-subtitle {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 750;
+            margin-top: 4px;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .top-actions a {
+            text-decoration: none;
+            padding: 10px 14px;
+            border-radius: 999px;
+            color: var(--red-dark);
+            background: #fff;
+            border: 1px solid #fecaca;
+            font-weight: 850;
+            font-size: 13px;
+        }
+
+        .layout {
+            max-width: 1320px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 360px minmax(0, 1fr);
+            gap: 22px;
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid #fee2e2;
+            border-radius: 28px;
+            box-shadow: 0 24px 70px rgba(127, 29, 29, 0.10);
+            overflow: hidden;
+        }
+
+        .side-head {
+            padding: 24px;
+            background: linear-gradient(135deg, var(--red-dark), var(--red));
+            color: #fff;
+        }
+
+        .eyebrow {
+            font-size: 12px;
+            font-weight: 950;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            opacity: 0.84;
+        }
+
+        .side-head h1 {
+            margin: 8px 0 6px;
+            font-size: 30px;
+            letter-spacing: -0.05em;
+        }
+
+        .side-head p {
+            margin: 0;
+            line-height: 1.55;
+            font-weight: 650;
+            opacity: 0.88;
+        }
+
+        .list {
+            padding: 16px;
+            display: grid;
+            gap: 12px;
+        }
+
+        .item {
+            display: block;
+            padding: 15px;
+            border-radius: 20px;
+            border: 1px solid var(--line);
+            background: #fff;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .item.active,
+        .item:hover {
+            border-color: #ef4444;
+            background: #fff7f7;
+        }
+
+        .item-title {
+            font-weight: 950;
+            margin-bottom: 6px;
+        }
+
+        .item-meta {
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 750;
+        }
+
+        .main {
+            padding: 24px;
+        }
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: flex-start;
+            margin-bottom: 18px;
+        }
+
+        .section-title h2 {
+            margin: 0;
+            font-size: 28px;
+            letter-spacing: -0.05em;
+        }
+
+        .section-title p {
+            margin: 6px 0 0;
+            color: var(--muted);
+            font-weight: 650;
+            line-height: 1.6;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .field {
+            display: grid;
+            gap: 7px;
+        }
+
+        .field.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 12px;
+            font-weight: 950;
+            color: #7f1d1d;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            border: 1px solid #fecaca;
+            background: #fff;
+            border-radius: 16px;
+            padding: 12px 13px;
+            font: inherit;
+            outline: none;
+        }
+
+        textarea {
+            min-height: 98px;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.13);
+        }
+
+        .question-box {
+            margin-top: 18px;
+            display: grid;
+            gap: 14px;
+        }
+
+        .question-card {
+            border: 1px solid var(--line);
+            border-radius: 24px;
+            padding: 18px;
+            background: #fff;
+        }
+
+        .question-card h3 {
+            margin: 0 0 14px;
+            font-size: 18px;
+        }
+
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .actions {
+            margin-top: 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            border: 0;
+            border-radius: 999px;
+            padding: 13px 18px;
+            font-weight: 950;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-primary {
+            background: var(--red);
+            color: #fff;
+            box-shadow: 0 14px 30px rgba(185, 28, 28, 0.22);
+        }
+
+        .btn-soft {
+            background: #fee2e2;
+            color: var(--red-dark);
+        }
+
+        .btn-danger {
+            background: #7f1d1d;
+            color: #fff;
+        }
+
+        .empty {
+            padding: 42px 20px;
+            border: 1px dashed #fecaca;
+            border-radius: 24px;
+            background: #fff7f7;
+            text-align: center;
+        }
+
+        .empty h2 {
+            margin: 0 0 8px;
+        }
+
+        .empty p {
+            margin: 0;
+            color: var(--muted);
+            font-weight: 650;
+        }
+
+        @media (max-width: 980px) {
+            .layout {
+                grid-template-columns: 1fr;
+            }
+
+            .form-grid,
+            .option-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .page {
+                padding: 16px;
+            }
+
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .main {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-mark">4</div>
+            <div>
+                <div class="brand-title">Listening Part 4 Manager</div>
+                <div class="brand-subtitle">Diem TSA with Aptis Admin</div>
+            </div>
+        </div>
+
+        <nav class="top-actions">
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            <a href="{% url 'admin_listening_parts' %}">Listening Parts</a>
+            <a href="{% url 'student_part4' %}">Student Preview</a>
+        </nav>
+    </header>
+
+    <main class="layout">
+        <aside class="panel">
+            <div class="side-head">
+                <div class="eyebrow">Admin</div>
+                <h1>Part 4</h1>
+                <p>Create and manage real Listening Part 4 sets: title, audio, transcript, questions and answer keys.</p>
+            </div>
+
+            <div class="list">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="create_material">
+                    <button class="btn btn-primary" type="submit" style="width: 100%;">+ Create new Part 4 set</button>
+                </form>
+
+                {% for item in materials %}
+                    <a class="item {% if selected and item.id == selected.id %}active{% endif %}" href="?set={{ item.id }}">
+                        <div class="item-title">{{ item.title }}</div>
+                        <div class="item-meta">{{ item.questions.count }} questions</div>
+                    </a>
+                {% empty %}
+                    <div class="empty">
+                        <h2>No data</h2>
+                        <p>Create your first Part 4 set.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </aside>
+
+        <section class="panel main">
+            {% if selected %}
+                <div class="section-title">
+                    <div>
+                        <div class="eyebrow" style="color: var(--red-dark);">Editing</div>
+                        <h2>{{ selected.title }}</h2>
+                        <p>This content will appear on the student Listening Part 4 page.</p>
+                    </div>
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="save_material">
+                    <input type="hidden" name="material_id" value="{{ selected.id }}">
+
+                    <div class="form-grid">
+                        <div class="field full">
+                            <label>Title</label>
+                            <input name="title" value="{{ selected.title }}">
+                        </div>
+
+                        <div class="field full">
+                            <label>Audio URL</label>
+                            <input name="audio_url" value="{{ selected.audio_url }}" placeholder="https://drive.google.com/...">
+                        </div>
+
+                        <div class="field full">
+                            <label>Instructions</label>
+                            <textarea name="instructions">{{ selected.instructions }}</textarea>
+                        </div>
+
+                        <div class="field full">
+                            <label>Transcript</label>
+                            <textarea name="transcript">{{ selected.transcript }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="question-box">
+                        {% for q in questions %}
+                            <div class="question-card">
+                                <h3>Question {{ q.order }}</h3>
+                                <input type="hidden" name="question_id" value="{{ q.id }}">
+
+                                <div class="form-grid">
+                                    <div class="field full">
+                                        <label>Question text</label>
+                                        <textarea name="question_text_{{ q.id }}">{{ q.question_text }}</textarea>
+                                    </div>
+
+                                    <div class="option-grid field full">
+                                        <div class="field">
+                                            <label>Option A</label>
+                                            <input name="option_a_{{ q.id }}" value="{{ q.option_a }}">
+                                        </div>
+                                        <div class="field">
+                                            <label>Option B</label>
+                                            <input name="option_b_{{ q.id }}" value="{{ q.option_b }}">
+                                        </div>
+                                        <div class="field">
+                                            <label>Option C</label>
+                                            <input name="option_c_{{ q.id }}" value="{{ q.option_c }}">
+                                        </div>
+                                        <div class="field">
+                                            <label>Option D</label>
+                                            <input name="option_d_{{ q.id }}" value="{{ q.option_d }}">
+                                        </div>
+                                        <div class="field">
+                                            <label>Option E</label>
+                                            <input name="option_e_{{ q.id }}" value="{{ q.option_e }}">
+                                        </div>
+                                        <div class="field">
+                                            <label>Option F</label>
+                                            <input name="option_f_{{ q.id }}" value="{{ q.option_f }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="field">
+                                        <label>Correct answer</label>
+                                        <select name="correct_answer_{{ q.id }}">
+                                            <option value="A" {% if q.correct_answer == "A" %}selected{% endif %}>A</option>
+                                            <option value="B" {% if q.correct_answer == "B" %}selected{% endif %}>B</option>
+                                            <option value="C" {% if q.correct_answer == "C" %}selected{% endif %}>C</option>
+                                            <option value="D" {% if q.correct_answer == "D" %}selected{% endif %}>D</option>
+                                            <option value="E" {% if q.correct_answer == "E" %}selected{% endif %}>E</option>
+                                            <option value="F" {% if q.correct_answer == "F" %}selected{% endif %}>F</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="field full">
+                                        <label>Explanation</label>
+                                        <textarea name="explanation_{{ q.id }}">{{ q.explanation }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="actions">
+                        <button class="btn btn-primary" type="submit">Save Part 4 set</button>
+                    </div>
+                </form>
+
+                <form method="post" class="actions">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="add_question">
+                    <input type="hidden" name="material_id" value="{{ selected.id }}">
+                    <button class="btn btn-soft" type="submit">+ Add question</button>
+                </form>
+
+                <form method="post" class="actions" onsubmit="return confirm('Delete this Part 4 set?');">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="delete_material">
+                    <input type="hidden" name="material_id" value="{{ selected.id }}">
+                    <button class="btn btn-danger" type="submit">Delete set</button>
+                </form>
+            {% else %}
+                <div class="empty">
+                    <h2>No Part 4 set selected</h2>
+                    <p>Create or select a Part 4 set from the left column.</p>
+                </div>
+            {% endif %}
+        </section>
+    </main>
+</div>
+</body>
+</html>

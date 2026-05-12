@@ -1817,9 +1817,6 @@ def admin_part3_questions(request):
 
 
 @user_passes_test(_is_admin_user_part34)
-def admin_part4_questions(request):
-    return _admin_part34_page(request, 4)
-
 
 @login_required
 def student_part3_page(request):
@@ -1827,11 +1824,7 @@ def student_part3_page(request):
 
 
 @login_required
-def student_part4_page(request):
-    return _student_part34_page(request, 4)
-# ===== End Listening Part 3/4 material upload + student practice =====
 
-# === TSA PART 3 FULL INTEGRATION START ===
 @login_required
 def admin_part3_questions(request):
     is_admin_user = (
@@ -1997,4 +1990,116 @@ def student_part3_page(request):
         "has_next": bool(materials) and set_index < len(materials) - 1,
     })
 # === TSA PART 3 FULL INTEGRATION END ===
+
+
+# ===== Real Listening Part 4 admin/student interface =====
+def _is_admin_user_part4(user):
+    return user.is_authenticated and (user.is_staff or user.is_superuser or user.username == "admin")
+
+
+def student_part4_page(request):
+    materials = ListeningPartMaterial.objects.filter(part=4, is_active=True).order_by("id")
+    selected_id = request.GET.get("set")
+    selected = None
+
+    if selected_id:
+        selected = materials.filter(id=selected_id).first()
+
+    if selected is None:
+        selected = materials.first()
+
+    questions = selected.questions.all().order_by("order", "id") if selected else []
+
+    return render(request, "core/student_part4.html", {
+        "materials": materials,
+        "selected": selected,
+        "questions": questions,
+    })
+
+
+@user_passes_test(_is_admin_user_part4)
+def admin_part4_questions(request):
+    materials = ListeningPartMaterial.objects.filter(part=4).order_by("-id")
+    selected_id = request.GET.get("set") or request.POST.get("material_id")
+    selected = ListeningPartMaterial.objects.filter(id=selected_id, part=4).first() if selected_id else materials.first()
+
+    if request.method == "POST":
+        action = request.POST.get("action", "")
+
+        if action == "create_material":
+            material = ListeningPartMaterial.objects.create(
+                part=4,
+                title="New Part 4 Set",
+                instructions="Listen to the audio and choose the correct answer.",
+                is_active=True,
+            )
+
+            for i in range(1, 5):
+                ListeningPartQuestion.objects.create(
+                    material=material,
+                    order=i,
+                    question_text=f"Question {i}",
+                    correct_answer="A",
+                )
+
+            messages.success(request, "Created new Part 4 set.")
+            return redirect(f"/dashboard/part-4/?set={material.id}")
+
+        if action == "save_material":
+            material = get_object_or_404(ListeningPartMaterial, id=request.POST.get("material_id"), part=4)
+            material.title = request.POST.get("title", "").strip() or material.title
+            material.audio_url = request.POST.get("audio_url", "").strip()
+            material.instructions = request.POST.get("instructions", "").strip()
+            material.transcript = request.POST.get("transcript", "").strip()
+            material.is_active = True
+            material.save()
+
+            for qid in request.POST.getlist("question_id"):
+                q = ListeningPartQuestion.objects.filter(id=qid, material=material).first()
+                if not q:
+                    continue
+
+                q.question_text = request.POST.get(f"question_text_{qid}", "").strip()
+                q.option_a = request.POST.get(f"option_a_{qid}", "").strip()
+                q.option_b = request.POST.get(f"option_b_{qid}", "").strip()
+                q.option_c = request.POST.get(f"option_c_{qid}", "").strip()
+                q.option_d = request.POST.get(f"option_d_{qid}", "").strip()
+                q.option_e = request.POST.get(f"option_e_{qid}", "").strip()
+                q.option_f = request.POST.get(f"option_f_{qid}", "").strip()
+                q.correct_answer = (request.POST.get(f"correct_answer_{qid}", "A").strip().upper()[:1] or "A")
+                q.explanation = request.POST.get(f"explanation_{qid}", "").strip()
+                q.save()
+
+            messages.success(request, "Saved Part 4 set.")
+            return redirect(f"/dashboard/part-4/?set={material.id}")
+
+        if action == "add_question":
+            material = get_object_or_404(ListeningPartMaterial, id=request.POST.get("material_id"), part=4)
+            next_order = material.questions.count() + 1
+
+            ListeningPartQuestion.objects.create(
+                material=material,
+                order=next_order,
+                question_text=f"Question {next_order}",
+                correct_answer="A",
+            )
+
+            messages.success(request, "Added question.")
+            return redirect(f"/dashboard/part-4/?set={material.id}")
+
+        if action == "delete_material":
+            material = ListeningPartMaterial.objects.filter(id=request.POST.get("material_id"), part=4).first()
+            if material:
+                material.delete()
+                messages.success(request, "Deleted Part 4 set.")
+            return redirect("/dashboard/part-4/")
+
+    questions = selected.questions.all().order_by("order", "id") if selected else []
+
+    return render(request, "core/admin_part4_questions.html", {
+        "materials": materials,
+        "selected": selected,
+        "questions": questions,
+    })
+# ===== End real Listening Part 4 admin/student interface =====
 
