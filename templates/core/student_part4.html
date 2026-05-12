@@ -1,4 +1,4 @@
-{% load static %}
+﻿{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -611,7 +611,7 @@
 
         {% if selected %}
             <div class="exam-meta">
-                <strong>Câu {{ current_index }}/{{ total_sets }}</strong>
+                <strong>Bài {{ current_index }}/{{ total_sets }}</strong>
                 <span>Part 4</span>
             </div>
             <div class="progress-bar"><div style="width: {{ progress_percent }}%"></div></div>
@@ -715,7 +715,7 @@
 <nav class="bottom-nav">
     <div class="bottom-left">
         {% if prev_url %}
-            <a class="nav-btn back-btn" href="{{ prev_url }}">Câu trước</a>
+            <a class="nav-btn back-btn" href="{{ prev_url }}">Bài trước</a>
         {% else %}
             <a class="nav-btn back-btn" href="{% url 'listening' %}?part=1">Quay lại</a>
         {% endif %}
@@ -727,7 +727,7 @@
 
     <div class="bottom-right">
         {% if next_url %}
-            <a class="nav-btn next-btn" href="{{ next_url }}">Câu tiếp theo</a>
+            <a class="nav-btn next-btn" href="{{ next_url }}">Bài tiếp theo</a>
         {% else %}
             <a class="nav-btn next-btn" href="{% url 'listening' %}?part=1">Hoàn thành</a>
         {% endif %}
@@ -900,3 +900,4 @@ if (bottomCheckBtn) bottomCheckBtn.addEventListener("click", checkAnswers);
 
 </body>
 </html>
+
