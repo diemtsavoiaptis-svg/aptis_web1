@@ -1997,25 +1997,6 @@ def _is_admin_user_part4(user):
     return user.is_authenticated and (user.is_staff or user.is_superuser or user.username == "admin")
 
 
-def student_part4_page(request):
-    materials = ListeningPartMaterial.objects.filter(part=4, is_active=True).order_by("id")
-    selected_id = request.GET.get("set")
-    selected = None
-
-    if selected_id:
-        selected = materials.filter(id=selected_id).first()
-
-    if selected is None:
-        selected = materials.first()
-
-    questions = selected.questions.all().order_by("order", "id") if selected else []
-
-    return render(request, "core/student_part4.html", {
-        "materials": materials,
-        "selected": selected,
-        "questions": questions,
-    })
-
 
 @user_passes_test(_is_admin_user_part4)
 def admin_part4_questions(request):
@@ -2102,4 +2083,26 @@ def admin_part4_questions(request):
         "questions": questions,
     })
 # ===== End real Listening Part 4 admin/student interface =====
+
+
+# ===== Student Listening Part 4 Aptis Keys style interface =====
+def student_part4_page(request):
+    materials = ListeningPartMaterial.objects.filter(part=4, is_active=True).order_by("id")
+    selected_id = request.GET.get("set")
+    selected = None
+
+    if selected_id:
+        selected = materials.filter(id=selected_id).first()
+
+    if selected is None:
+        selected = materials.first()
+
+    questions = selected.questions.all().order_by("order", "id") if selected else []
+
+    return render(request, "core/student_part4.html", {
+        "materials": materials,
+        "selected": selected,
+        "questions": questions,
+    })
+# ===== End Student Listening Part 4 Aptis Keys style interface =====
 
