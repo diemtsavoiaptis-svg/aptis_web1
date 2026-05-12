@@ -1,0 +1,39 @@
+
+/* Student watermark security */
+.tsa-student-watermark {
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+    pointer-events: none;
+    opacity: 1;
+    overflow: hidden;
+}
+
+.tsa-student-watermark::before {
+    content: attr(data-watermark-text);
+    position: absolute;
+    inset: -20%;
+    display: block;
+    white-space: pre;
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 5.5;
+    letter-spacing: 1px;
+    color: rgba(160, 0, 24, 0.115);
+    transform: rotate(-22deg);
+    text-transform: uppercase;
+    word-spacing: 26px;
+}
+
+/* Prevent easy selecting/dragging in student practice screens */
+body.tsa-student-secure {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+body.tsa-student-secure img,
+body.tsa-student-secure video,
+body.tsa-student-secure audio {
+    -webkit-user-drag: none;
+    user-drag: none;
+}

@@ -1,0 +1,41 @@
+
+/* Student watermark security - same strong visibility for Part 1/2/3/4 */
+.tsa-student-watermark {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 2147483647 !important;
+    pointer-events: none !important;
+    opacity: 1 !important;
+    overflow: hidden !important;
+    mix-blend-mode: multiply !important;
+}
+
+.tsa-student-watermark::before {
+    content: attr(data-watermark-text) !important;
+    position: absolute !important;
+    inset: -25% !important;
+    display: block !important;
+    white-space: pre !important;
+    font-size: 20px !important;
+    font-weight: 900 !important;
+    line-height: 5.2 !important;
+    letter-spacing: 1px !important;
+    color: rgba(160, 0, 24, 0.22) !important;
+    transform: rotate(-22deg) !important;
+    text-transform: uppercase !important;
+    word-spacing: 26px !important;
+    text-shadow: 0 0 1px rgba(160, 0, 24, 0.16) !important;
+}
+
+/* Keep secure behavior */
+body.tsa-student-secure {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+body.tsa-student-secure img,
+body.tsa-student-secure video,
+body.tsa-student-secure audio {
+    -webkit-user-drag: none;
+    user-drag: none;
+}

@@ -1,0 +1,167 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Điểm TSA Với Aptis</title>
+    <link rel="stylesheet" href="{% static 'core/style.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sidebar_size_only.css' %}">
+    <link rel="stylesheet" href="{% static 'css/safe_dashboard_layout.css' %}">
+</head>
+<body>
+
+<div class="top-actions">
+    <button onclick="openModal('login')" class="btn-main">Đăng nhập</button>
+    <button onclick="openModal('register')" class="btn-light">Đăng ký</button>
+</div>
+
+<div class="page-wrap">
+    <section class="cover">
+        <div class="cover-art">
+            <div class="circle-blue"></div>
+            <div class="shape-yellow"></div>
+            <div class="shape-green"></div>
+        </div>
+
+        <div class="cover-text">
+            <h1>30 NGÀY</h1>
+            <h2>Đạt aim B2</h2>
+            <div class="cover-badge">MỤC TIÊU OVERALL ÍT NHẤT LÀ B1 APTIS</div>
+            <p>Hình thức: Kèm 1:1<br>Giờ học: Linh hoạt</p>
+        </div>
+    </section>
+
+    <section class="profile-section">
+        <div class="avatar">
+            <span>👨‍🎓</span>
+        </div>
+
+        <div class="profile-main">
+            <div>
+                <h3>Điểm TSA Với Aptis</h3>
+                <p><b>663</b> người theo dõi • <b>10</b> đang theo dõi</p>
+                <p>KEY - NGÂN HÀNG ĐỀ SAT 15XX + APTIS C1</p>
+                <p class="link">https://forms.gle/YAWLhnS84NMCh5fb7</p>
+                <p>📚 Nền tảng học bài và luyện đề online</p>
+            </div>
+
+            <div class="profile-buttons">
+                <button>📊 Bảng điều khiển</button>
+                <button>✎ Chỉnh sửa</button>
+            </div>
+        </div>
+
+        <nav class="tabs">
+            <a class="active">Tất cả</a>
+            <a>Giới thiệu</a>
+            <a>Bài học</a>
+            <a>Tài liệu</a>
+            <a>Luyện tập</a>
+            <a>Xem thêm ▾</a>
+        </nav>
+    </section>
+
+    <section class="content-grid">
+        <div class="info-card">
+            <h3>Thông tin khóa học</h3>
+            <p>🎯 Mục tiêu: B1 - B2 Aptis</p>
+            <p>📚 Học theo lộ trình 30 ngày</p>
+            <p>📝 Có bài tập và tài liệu luyện đề</p>
+        </div>
+
+        <div class="post-card">
+            <div class="post-input">
+                <div class="small-avatar">👨‍🎓</div>
+                <div>Bạn muốn học gì hôm nay?</div>
+            </div>
+
+            <div class="quick-actions">
+                <span>🎥 Video bài giảng</span>
+                <span>🖼 Tài liệu</span>
+                <span>📝 Luyện đề</span>
+            </div>
+        </div>
+    </section>
+</div>
+
+{% if messages %}
+<div class="message-box">
+    {% for message in messages %}
+        <div class="message {{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div id="authModal" class="modal-overlay">
+    <div class="auth-modal">
+        <button class="close-btn" onclick="closeModal()">×</button>
+
+        <h2>Điểm TSA Với Aptis</h2>
+        <p id="modalDesc">Nhập thông tin để vào học.</p>
+
+        <div class="auth-tabs">
+            <button id="loginTab" onclick="switchTab('login')" class="active">Đăng nhập</button>
+            <button id="registerTab" onclick="switchTab('register')">Đăng ký</button>
+        </div>
+
+        <form id="loginForm" method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            {{ login_form.email }}
+            {{ login_form.password }}
+            <button class="submit-btn" type="submit">Đăng nhập</button>
+        </form>
+
+        <form id="registerForm" method="POST" action="{% url 'register' %}">
+            {% csrf_token %}
+            {{ register_form.full_name }}
+            {{ register_form.phone }}
+            {{ register_form.email }}
+            {{ register_form.password }}
+            <button class="submit-btn" type="submit">Tạo tài khoản</button>
+        </form>
+
+        <div class="note">
+            Tài khoản mới đăng ký cần được admin duyệt trước khi đăng nhập.
+        </div>
+    </div>
+</div>
+
+<script>
+    const modal = document.getElementById('authModal');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const loginTab = document.getElementById('loginTab');
+    const registerTab = document.getElementById('registerTab');
+    const modalDesc = document.getElementById('modalDesc');
+
+    function openModal(type) {
+        modal.classList.add('show');
+        switchTab(type);
+    }
+
+    function closeModal() {
+        modal.classList.remove('show');
+    }
+
+    function switchTab(type) {
+        if (type === 'login') {
+            loginForm.style.display = 'block';
+            registerForm.style.display = 'none';
+            loginTab.classList.add('active');
+            registerTab.classList.remove('active');
+            modalDesc.innerText = 'Nhập thông tin để vào học.';
+        } else {
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'block';
+            registerTab.classList.add('active');
+            loginTab.classList.remove('active');
+            modalDesc.innerText = 'Điền thông tin học viên để chờ duyệt.';
+        }
+    }
+
+    switchTab('login');
+</script>
+
+</body>
+</html>

@@ -1,0 +1,222 @@
+{% load static %}
+<!doctype html>
+<html lang="vi" class="tsa-protected">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="student-id" content="{{ student_id }}">
+<meta name="student-name" content="{{ student_name }}">
+<meta name="student-email" content="{{ student_email }}">
+<title>{{ part_title }} | Aptis</title>
+<link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
+<link rel="stylesheet" href="{% static 'core/security_protect.css' %}">
+<style>
+:root{--red:#e60023;--red2:#ff5f76;--deep:#7a0010;--dark:#3f0011;--line:#ffd1dc;--soft:#fff1f4;--muted:#667085;--green:#027a48}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(circle at top right,rgba(255,95,118,.18),transparent 34%),linear-gradient(135deg,#fffafa,#fff0f4 48%,#fff7f9);font-family:"Segoe UI",Tahoma,Arial,sans-serif;color:var(--dark)}
+.shell{max-width:1280px;margin:0 auto;padding:26px 18px 46px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:16px}
+.brand{display:flex;align-items:center;gap:12px;font-weight:950;color:#4a0010}
+.brand-logo{width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,var(--red),var(--red2));display:grid;place-items:center;color:white;font-size:22px;font-weight:950}
+.top-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.link{min-height:42px;padding:0 14px;border-radius:999px;background:#fff1f4;color:#8a0015;border:1px solid var(--line);text-decoration:none;font-weight:950;display:inline-flex;align-items:center}
+.hero,.panel,.side{background:white;border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:0 18px 44px rgba(180,0,30,.07)}
+.hero{margin-bottom:18px}
+.part-badge{width:62px;height:62px;border-radius:20px;background:linear-gradient(135deg,var(--red),var(--red2));display:grid;place-items:center;color:white;font-size:30px;font-weight:950;margin-bottom:14px}
+h1{margin:0;font-size:44px;line-height:1.05;letter-spacing:-.04em}
+.desc{margin-top:9px;color:var(--muted);font-weight:650;line-height:1.6}
+.layout{display:grid;grid-template-columns:310px 1fr;gap:18px;align-items:start}
+.side h2,.panel h2{margin:0 0 12px;color:#4a0010}
+.material-list{display:grid;gap:10px}
+.material-item{display:block;text-decoration:none;color:inherit;border:1px solid #ffe1e7;border-radius:18px;padding:13px;background:#fffafa}
+.material-item.active{border-color:#e60023;background:#fff1f4;box-shadow:0 12px 24px rgba(230,0,35,.08)}
+.material-name{font-weight:950;color:#4a0010}
+.material-meta{margin-top:6px;color:var(--muted);font-size:13px;font-weight:750}
+.audio-box,.instruction,.transcript{margin-top:14px;border:1px solid #ffe1e7;border-radius:18px;background:#fffafa;padding:16px}
+.audio-link,.btn{min-height:46px;border:0;border-radius:999px;padding:0 18px;background:linear-gradient(135deg,var(--red),var(--red2));color:white;text-decoration:none;font:inherit;font-weight:950;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 14px 28px rgba(230,0,35,.16)}
+.btn-light{background:#fff1f4;color:#8a0015;border:1px solid var(--line);box-shadow:none}
+.question-list{display:grid;gap:14px;margin-top:18px}
+.question-card{border:1px solid #ffe1e7;border-radius:20px;background:#fff;padding:18px}
+.question-title{display:flex;gap:12px;align-items:flex-start;margin-bottom:12px}
+.question-number{width:38px;height:38px;border-radius:14px;background:#fff1f4;color:#b8001c;display:grid;place-items:center;font-weight:950;border:1px solid var(--line);flex:0 0 auto}
+.question-text{font-size:18px;line-height:1.55;font-weight:850;color:#3f0011;white-space:pre-wrap}
+.options{display:grid;gap:10px}
+.option{width:100%;border:1px solid #ffd1dc;border-radius:16px;background:#fffafa;padding:12px 14px;text-align:left;font:inherit;color:#3f0011;cursor:pointer;display:grid;grid-template-columns:38px 1fr;gap:10px;align-items:center;position:relative}
+.option input{position:absolute;opacity:0;pointer-events:none}
+.option:hover,.option.selected{border-color:#e60023;background:#fff1f4}
+.option-letter{width:34px;height:34px;border-radius:12px;background:white;border:1px solid #ffb6c2;color:#b8001c;display:grid;place-items:center;font-weight:950}
+.option.correct{border-color:#12a150;background:#ecfdf3}
+.option.correct .option-letter{border-color:#12a150;color:#027a48}
+.option.wrong{border-color:#d92d20;background:#fff1f3}
+.result{display:none;margin-top:12px;padding:12px 14px;border-radius:16px;font-weight:850;line-height:1.55}
+.result.show{display:block}
+.result.ok{background:#ecfdf3;color:#027a48;border:1px solid #abefc6}
+.result.bad{background:#fff1f3;color:#b42318;border:1px solid #fecdd6}
+.toolbar{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:18px}
+.empty{padding:24px;border:1px dashed #ff9cac;border-radius:20px;background:#fffafa;color:#8a0015;font-weight:850;line-height:1.6}
+.transcript{display:none;white-space:pre-wrap;line-height:1.75;font-weight:650}
+.transcript.show{display:block}
+@media(max-width:900px){.topbar{align-items:flex-start;flex-direction:column}.layout{grid-template-columns:1fr}h1{font-size:34px}.top-actions{justify-content:flex-start}.student-identity{width:100%;white-space:normal}.option{grid-template-columns:34px 1fr}}
+</style>
+    <link rel="stylesheet" href="{% static 'css/sidebar_size_only.css' %}">
+    <link rel="stylesheet" href="{% static 'css/safe_dashboard_layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/student_watermark_security.css' %}">
+</head>
+<body data-watermark="{{ student_watermark }}">
+<div class="security-watermark" aria-hidden="true">
+    {% for _ in "123456789012345678901234567890" %}
+        <span>{{ student_watermark }} · <span data-security-time></span></span>
+    {% endfor %}
+</div>
+
+<main class="shell protected-content">
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-logo">A</div>
+            <div>
+                <div>Điểm TSA Với Aptis</div>
+                <div class="desc" style="margin:2px 0 0">Listening Practice</div>
+            </div>
+        </div>
+        <div class="top-actions">
+            <span class="student-identity">ID {{ student_id }} · {{ student_name }}</span>
+            <a class="link" href="/listening/">Listening</a>
+            <a class="link" href="/dang-xuat/">Đăng xuất</a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="part-badge">{{ part_number }}</div>
+        <h1>{{ part_title }}</h1>
+        <div class="desc">Chọn tài liệu, mở file nghe và tự kiểm tra đáp án sau khi làm xong.</div>
+    </section>
+
+    <section class="layout">
+        <aside class="side">
+            <h2>Tài liệu</h2>
+            <div class="material-list">
+                {% for material in materials %}
+                    <a class="material-item {% if selected and selected.id == material.id %}active{% endif %}" href="?material={{ material.id }}">
+                        <div class="material-name">{{ material.title }}</div>
+                        <div class="material-meta"></div>
+                    </a>
+                {% empty %}
+                    <div class="empty">Chưa có tài liệu Part {{ part_number }}.</div>
+                {% endfor %}
+            </div>
+        </aside>
+
+        <section class="panel">
+            {% if selected %}
+                <h2>{{ selected.title }}</h2>
+                {% if selected.description %}
+                    <div class="desc">{{ selected.description }}</div>
+                {% endif %}
+
+                <div class="audio-box">
+                    <strong>File nghe</strong>
+                    <div style="margin-top:10px">
+                        {% if selected.audio_url %}
+                            <a class="audio-link" href="{{ selected.audio_url }}" target="_blank" rel="noopener">Mở file nghe</a>
+                        {% else %}
+                            <span class="desc">Chưa có link audio cho tài liệu này.</span>
+                        {% endif %}
+                        {% if selected.document_file %}
+                            <a class="audio-link btn-light" href="{{ selected.document_file.url }}" target="_blank" rel="noopener" style="margin-left:8px">Mở tài liệu</a>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if selected.instructions %}
+                    <div class="instruction">{{ selected.instructions|linebreaksbr }}</div>
+                {% endif %}
+
+                <form method="post" action="?material={{ selected.id }}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="check_answers">
+
+                <div class="question-list">
+                    {% for row in question_rows %}
+                        {% with question=row.question %}
+                        <article class="question-card">
+                            <div class="question-title">
+                            </div>
+                            <div class="options">
+                                {% for label, text in row.options %}
+                                    <label class="option {% if row.selected_answer == label %}selected{% endif %}{% if row.is_checked and question.correct_answer == label %} correct{% endif %}{% if row.is_checked and row.selected_answer == label and question.correct_answer != label %} wrong{% endif %}">
+                                        <input type="radio" name="question_{{ question.id }}" value="{{ label }}" {% if row.selected_answer == label %}checked{% endif %}>
+                                        <span class="option-letter">{{ label }}</span>
+                                        <span>{{ text }}</span>
+                                    </label>
+                                {% empty %}
+                                    <div class="empty">Câu này chưa có lựa chọn đáp án.</div>
+                                {% endfor %}
+                            </div>
+                            {% if row.is_checked %}
+                                <div class="result show {% if row.is_correct %}ok{% else %}bad{% endif %}">
+                                    {% if not row.selected_answer %}
+                                        Bạn chưa chọn đáp án. Đáp án đúng là {{ question.correct_answer }}.
+                                    {% elif row.is_correct %}
+                                        Đúng. Đáp án là {{ question.correct_answer }}.
+                                    {% else %}
+                                        Chưa đúng. Đáp án đúng là {{ question.correct_answer }}.
+                                    {% endif %}
+                                    {% if question.explanation %}
+                                        <div style="margin-top:6px">{{ question.explanation }}</div>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        </article>
+                        {% endwith %}
+                    {% empty %}
+                        <div class="empty">Tài liệu này chưa có câu hỏi.</div>
+                    {% endfor %}
+                </div>
+
+                <div class="toolbar">
+                    {% if selected.transcript %}
+                        <button class="btn btn-light" type="button" id="toggleTranscript">Hiện transcript</button>
+                    {% endif %}
+                    <a class="btn btn-light" href="?material={{ selected.id }}">Làm lại</a>
+                    <button class="btn" type="submit">Kiểm tra đáp án</button>
+                </div>
+                </form>
+
+                {% if selected.transcript %}
+                    <div class="transcript" id="transcriptBox">{{ selected.transcript }}</div>
+                {% endif %}
+            {% else %}
+                <div class="empty">Hiện chưa có tài liệu Part {{ part_number }} để làm bài.</div>
+            {% endif %}
+        </section>
+    </section>
+</main>
+
+<script src="{% static 'core/security_protect.js' %}" defer></script>
+<script>
+(function(){
+    document.querySelectorAll(".option input").forEach(function(input){
+        input.addEventListener("change", function(){
+            const card = input.closest(".question-card");
+            if(!card) return;
+            card.querySelectorAll(".option").forEach(function(option){
+                option.classList.remove("selected");
+            });
+            input.closest(".option").classList.add("selected");
+        });
+    });
+
+    const transcriptButton = document.getElementById("toggleTranscript");
+    const transcriptBox = document.getElementById("transcriptBox");
+    if(transcriptButton && transcriptBox){
+        transcriptButton.addEventListener("click", function(){
+            transcriptBox.classList.toggle("show");
+            transcriptButton.textContent = transcriptBox.classList.contains("show") ? "Ẩn transcript" : "Hiện transcript";
+        });
+    }
+})();
+</script>
+    {% include "core/_student_watermark.html" %}
+    <script src="{% static 'js/student_watermark_security.js' %}"></script>
+</body>
+</html>

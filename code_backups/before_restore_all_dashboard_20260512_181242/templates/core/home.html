@@ -1,0 +1,532 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Điểm TSA Với Aptis</title>
+
+    <style>
+        :root {
+            --red-main: #d40000;
+            --red-soft: #ff7482;
+            --red-dark: #4a0010;
+            --pink-bg: #fff1f4;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.82);
+            --shadow: 0 24px 70px rgba(80, 0, 20, 0.22);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--red-dark);
+        }
+
+        body {
+            overflow-x: hidden;
+            background: #ffe5e8;
+        }
+
+        .home-page {
+            position: relative;
+            width: 100vw;
+            min-height: 100vh;
+            background-color: #ffe5e8;
+            background-image: {% if home_background %}url('{{ home_background.image.url }}'){% else %}linear-gradient(135deg, #ffe3e8, #fff4e6){% endif %};
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            isolation: isolate;
+        }
+
+        .home-page::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(circle at top left, rgba(255, 255, 255, 0.20), transparent 34%),
+                linear-gradient(180deg, rgba(255, 225, 230, 0.04), rgba(80, 0, 20, 0.10));
+        }
+
+        .home-header {
+            position: fixed;
+            top: 26px;
+            left: 0;
+            right: 0;
+            z-index: 20;
+            padding: 0 36px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .auth-actions {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 8px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.28);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 16px 44px rgba(80, 0, 20, 0.14);
+        }
+
+        .auth-btn {
+            border: none;
+            outline: none;
+            border-radius: 999px;
+            padding: 14px 28px;
+            font-size: 15px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .auth-btn.login {
+            color: white;
+            background: linear-gradient(135deg, var(--red-main), var(--red-soft));
+            box-shadow: 0 14px 30px rgba(212, 0, 0, 0.28);
+        }
+
+        .auth-btn.register {
+            color: #7a0018;
+            background: rgba(255, 255, 255, 0.94);
+            box-shadow: 0 12px 26px rgba(90, 0, 20, 0.13);
+        }
+
+        .message-box {
+            position: fixed;
+            top: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 90;
+            width: min(560px, calc(100% - 32px));
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 17px 20px;
+            border-radius: 22px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #650000;
+            box-shadow: var(--shadow);
+            font-weight: 900;
+            backdrop-filter: blur(18px);
+        }
+
+        .message.success {
+            border-left: 8px solid #12a150;
+        }
+
+        .message.error {
+            border-left: 8px solid var(--red-main);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 80;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: rgba(70, 0, 18, 0.46);
+            backdrop-filter: blur(14px);
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .auth-modal {
+            width: min(560px, 100%);
+            position: relative;
+            border-radius: 38px;
+            padding: 44px;
+            background:
+                radial-gradient(circle at top right, rgba(255, 220, 228, 0.85), transparent 36%),
+                rgba(255, 255, 255, 0.96);
+            box-shadow: 0 34px 100px rgba(70, 0, 18, 0.34);
+            border: 1px solid rgba(255, 255, 255, 0.86);
+            animation: modalIn 0.22s ease;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: translateY(16px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 28px;
+            right: 30px;
+            width: 44px;
+            height: 44px;
+            border: none;
+            border-radius: 50%;
+            background: #fff1f4;
+            color: var(--red-main);
+            font-size: 28px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .close-btn:hover {
+            transform: rotate(90deg) scale(1.04);
+            background: #ffe1e7;
+        }
+
+        .auth-modal h1 {
+            font-size: 32px;
+            line-height: 1.15;
+            color: #3b0012;
+            letter-spacing: -0.8px;
+            margin-bottom: 8px;
+            padding-right: 58px;
+        }
+
+        .auth-modal .subtitle {
+            color: #8a4254;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 28px;
+        }
+
+        .auth-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin-bottom: 24px;
+            padding: 6px;
+            border-radius: 999px;
+            background: #fff1f4;
+        }
+
+        .auth-tabs button {
+            border: none;
+            border-radius: 999px;
+            padding: 15px;
+            background: transparent;
+            color: #9b001f;
+            font-size: 16px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .auth-tabs button.active {
+            color: white;
+            background: linear-gradient(135deg, var(--red-main), var(--red-soft));
+            box-shadow: 0 12px 26px rgba(212, 0, 0, 0.24);
+        }
+
+        .auth-form {
+            display: grid;
+            gap: 15px;
+        }
+
+        .auth-input {
+            width: 100%;
+            border: 2px solid #ffe0e7;
+            background: #fff9fa;
+            border-radius: 22px;
+            padding: 17px 19px;
+            color: #3b0012;
+            font-size: 16px;
+            outline: none;
+            transition: border 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        .auth-input::placeholder {
+            color: #a88790;
+        }
+
+        .auth-input:focus {
+            border-color: #ff7182;
+            background: white;
+            box-shadow: 0 0 0 5px rgba(255, 113, 130, 0.12);
+        }
+
+        .submit-btn {
+            width: 100%;
+            margin-top: 4px;
+            border: none;
+            border-radius: 999px;
+            padding: 17px;
+            color: white;
+            background: linear-gradient(135deg, var(--red-main), var(--red-soft));
+            font-size: 17px;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 16px 36px rgba(212, 0, 0, 0.26);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 22px 48px rgba(212, 0, 0, 0.34);
+        }
+
+        .note {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 22px;
+            color: #8a001b;
+            background: #fff1f4;
+            font-size: 14px;
+            font-weight: 800;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .home-header {
+                top: 18px;
+                padding: 0 18px;
+                justify-content: center;
+            }
+
+            .auth-actions {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .auth-btn {
+                flex: 1;
+                padding: 13px 18px;
+            }
+
+            .auth-modal {
+                padding: 34px 24px;
+                border-radius: 30px;
+            }
+
+            .auth-modal h1 {
+                font-size: 27px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
+
+<style id="remember-login-style">
+.remember-login-row{
+    margin: 14px 0 18px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    background: rgba(255, 241, 244, .82);
+    border: 1px solid rgba(255, 95, 118, .22);
+    color: #5b0010;
+}
+.remember-login-label{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 900;
+    cursor: pointer;
+    user-select: none;
+}
+.remember-login-label input{
+    width: 18px;
+    height: 18px;
+    accent-color: #e60023;
+}
+.remember-login-row small{
+    display: block;
+    margin-top: 6px;
+    color: #9a5360;
+    font-weight: 700;
+    font-size: 13px;
+}
+</style>
+
+
+<style id="force-home-hero-bg">
+html, body{
+    min-height:100vh;
+}
+body{
+    background-image:url("{% static 'core/img/home_hero.jpg' %}") !important;
+    background-size:cover !important;
+    background-position:center center !important;
+    background-repeat:no-repeat !important;
+    background-attachment:fixed !important;
+}
+</style>
+
+    <link rel="stylesheet" href="{% static 'css/sidebar_compact_fix.css' %}">
+</head>
+<body>
+
+<main class="home-page">
+    <header class="home-header">
+        <nav class="auth-actions" aria-label="Tài khoản">
+            <button type="button" onclick="openModal('login')" class="auth-btn login">Đăng nhập</button>
+            <button type="button" onclick="openModal('register')" class="auth-btn register">Đăng ký</button>
+        </nav>
+    </header>
+</main>
+
+{% if messages %}
+<section class="message-box" aria-live="polite">
+    {% for message in messages %}
+        <div class="message {{ message.tags }}">{{ message }}</div>
+    {% endfor %}
+</section>
+{% endif %}
+
+<section id="authModal" class="modal-overlay" aria-hidden="true">
+    <article class="auth-modal">
+        <button type="button" class="close-btn" onclick="closeModal()">×</button>
+
+        <h1>Điểm TSA Với Aptis</h1>
+        <p class="subtitle" id="modalDesc">Nhập thông tin để vào học.</p>
+
+        <div class="auth-tabs">
+            <button type="button" id="loginTab" onclick="switchTab('login')" class="active">Đăng nhập</button>
+            <button type="button" id="registerTab" onclick="switchTab('register')">Đăng ký</button>
+        </div>
+
+        <form id="loginForm" class="auth-form" method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            {{ login_form.email }}
+            {{ login_form.password }}
+            
+<div class="remember-login-row">
+    <label class="remember-login-label">
+        <input type="checkbox" id="rememberLoginInfo">
+        <span>Lưu thông tin đăng nhập</span>
+    </label>
+    <small>Trình duyệt sẽ hỗ trợ lưu mật khẩu an toàn.</small>
+</div>
+
+<button class="submit-btn" type="submit">Đăng nhập</button>
+        </form>
+
+        <form id="registerForm" class="auth-form" method="POST" action="{% url 'register' %}">
+            {% csrf_token %}
+            {{ register_form.full_name }}
+            {{ register_form.phone }}
+            {{ register_form.email }}
+            {{ register_form.password }}
+            <button class="submit-btn" type="submit">Tạo tài khoản</button>
+        </form>
+
+        <div class="note">
+            Tài khoản mới đăng ký cần được admin duyệt trước khi đăng nhập.
+        </div>
+    </article>
+</section>
+
+<script>
+    const modal = document.getElementById('authModal');
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const loginTab = document.getElementById('loginTab');
+    const registerTab = document.getElementById('registerTab');
+    const modalDesc = document.getElementById('modalDesc');
+
+    function openModal(type) {
+        modal.classList.add('show');
+        modal.setAttribute('aria-hidden', 'false');
+        switchTab(type);
+    }
+
+    function closeModal() {
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden', 'true');
+    }
+
+    function switchTab(type) {
+        if (type === 'login') {
+            loginForm.style.display = 'grid';
+            registerForm.style.display = 'none';
+            loginTab.classList.add('active');
+            registerTab.classList.remove('active');
+            modalDesc.innerText = 'Nhập thông tin để vào học.';
+        } else {
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'grid';
+            registerTab.classList.add('active');
+            loginTab.classList.remove('active');
+            modalDesc.innerText = 'Điền thông tin học viên để chờ duyệt.';
+        }
+    }
+
+    modal.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    switchTab('login');
+</script>
+
+
+<script id="remember-login-script">
+(function(){
+    const STORAGE_KEY = "aptis_remember_login_value";
+    const CHECK_KEY = "aptis_remember_login_checked";
+
+    function findLoginInput(){
+        return document.querySelector(
+            'input[name="username"], input[name="email"], input[name="login"], input[type="email"], input[type="text"]'
+        );
+    }
+
+    function initRememberLogin(){
+        const checkbox = document.getElementById("rememberLoginInfo");
+        const loginInput = findLoginInput();
+        const form = checkbox ? checkbox.closest("form") : null;
+
+        if(!checkbox || !loginInput || !form) return;
+
+        const savedChecked = localStorage.getItem(CHECK_KEY) === "1";
+        const savedValue = localStorage.getItem(STORAGE_KEY) || "";
+
+        checkbox.checked = savedChecked;
+
+        if(savedChecked && savedValue && !loginInput.value){
+            loginInput.value = savedValue;
+        }
+
+        form.addEventListener("submit", function(){
+            if(checkbox.checked){
+                localStorage.setItem(CHECK_KEY, "1");
+                localStorage.setItem(STORAGE_KEY, loginInput.value || "");
+            }else{
+                localStorage.removeItem(CHECK_KEY);
+                localStorage.removeItem(STORAGE_KEY);
+            }
+        });
+    }
+
+    if(document.readyState === "loading"){
+        document.addEventListener("DOMContentLoaded", initRememberLogin);
+    }else{
+        initRememberLogin();
+    }
+})();
+</script>
+
+</body>
+</html>

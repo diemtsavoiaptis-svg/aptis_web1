@@ -1,0 +1,75 @@
+@'
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang học bài</title>
+    <link rel="stylesheet" href="{% static 'core/style.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sidebar_compact_fix.css' %}">
+</head>
+<body>
+
+<div class="dashboard">
+    <aside class="sidebar">
+        <h2>Điểm TSA<br>Với Aptis</h2>
+
+        <a class="active">🏠 Trang chủ</a>
+        <a>📚 Bài học</a>
+        <a>📝 Luyện đề</a>
+        <a>📂 Tài liệu</a>
+        <a>📊 Tiến độ</a>
+
+        <a href="{% url 'logout' %}" class="logout">Đăng xuất</a>
+    </aside>
+
+    <main class="learning-main">
+        <div class="learning-header">
+            <div>
+                <h1>Xin chào, {{ request.user.first_name }}</h1>
+                <p>Chọn bài học để bắt đầu luyện tập hôm nay.</p>
+            </div>
+        </div>
+
+        <div class="learning-cards">
+            <div class="learn-card">
+                <h3>Bài học hôm nay</h3>
+                <p>Luyện nghe, đọc, viết, nói theo lộ trình.</p>
+            </div>
+
+            <div class="learn-card">
+                <h3>Tài liệu PDF</h3>
+                <p>Tổng hợp tài liệu và ngân hàng đề.</p>
+            </div>
+
+            <div class="learn-card">
+                <h3>Luyện đề</h3>
+                <p>Làm bài test và theo dõi điểm số.</p>
+            </div>
+        </div>
+
+        <h2 class="section-title">Danh sách bài học</h2>
+
+        <div class="lesson-list">
+            {% for lesson in lessons %}
+                <div class="lesson-item">
+                    <h3>{{ lesson.title }}</h3>
+                    <p>{{ lesson.description }}</p>
+
+                    {% if lesson.video_url %}
+                        <a href="{{ lesson.video_url }}" target="_blank">Xem video</a>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <div class="empty-box">
+                    Chưa có bài học nào. Admin có thể thêm bài học trong trang quản trị.
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+</div>
+
+</body>
+</html>
+'@ | Set-Content -Path "templates\core\dashboard.html" -Encoding UTF8

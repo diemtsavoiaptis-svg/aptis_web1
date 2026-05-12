@@ -1,0 +1,310 @@
+{% load static %}
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ topic.title }} | Part 2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
+    <style>
+        :root{
+            --red:#e60023;
+            --red2:#ff5f76;
+            --deep:#7a0010;
+            --dark:#3f0011;
+            --soft:#fff1f4;
+            --line:#ffd1dc;
+            --muted:#667085;
+        }
+        *{box-sizing:border-box}
+        body{
+            margin:0;
+            min-height:100vh;
+            background:radial-gradient(circle at top right, rgba(255,95,118,.18), transparent 34%),
+                       linear-gradient(135deg,#fffafa,#fff0f4 48%,#fff7f9);
+            color:var(--dark);
+            font-family:"Segoe UI",Tahoma,Arial,sans-serif;
+        }
+        .wrap{
+            max-width:1520px;
+            margin:0 auto;
+            padding:28px 18px 42px;
+        }
+        .hero{
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-start;
+            gap:18px;
+            background:rgba(255,255,255,.94);
+            border:1px solid var(--line);
+            border-radius:28px;
+            padding:24px;
+            box-shadow:0 18px 44px rgba(180,0,30,.07);
+        }
+        h1{
+            margin:0;
+            font-size:38px;
+            letter-spacing:-.04em;
+            color:#3f0011;
+        }
+        .hint{
+            margin-top:8px;
+            color:var(--muted);
+            font-weight:650;
+            line-height:1.6;
+        }
+        .actions{
+            display:flex;
+            gap:10px;
+            flex-wrap:wrap;
+        }
+        .btn,.link-btn{
+            min-height:46px;
+            border:0;
+            border-radius:999px;
+            padding:0 18px;
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            background:linear-gradient(135deg,var(--red),var(--red2));
+            color:white;
+            font:inherit;
+            font-weight:950;
+            cursor:pointer;
+            text-decoration:none;
+            box-shadow:0 14px 28px rgba(230,0,35,.16);
+        }
+        .light{
+            background:#fff1f4;
+            color:#8a0015;
+            border:1px solid var(--line);
+            box-shadow:none;
+        }
+        .danger{
+            background:#fff1f4;
+            color:#b8001c;
+            border:1px solid #ff9cac;
+            box-shadow:none;
+        }
+        .card{
+            margin-top:16px;
+            background:rgba(255,255,255,.94);
+            border:1px solid var(--line);
+            border-radius:24px;
+            padding:20px;
+            box-shadow:0 18px 44px rgba(180,0,30,.06);
+        }
+        label{
+            display:block;
+            margin-bottom:7px;
+            color:var(--deep);
+            font-weight:900;
+        }
+        input,textarea,select{
+            width:100%;
+            border:1px solid var(--line);
+            border-radius:14px;
+            padding:10px 12px;
+            font:inherit;
+            background:white;
+            outline:none;
+        }
+        textarea{min-height:92px;resize:vertical}
+        input:focus,textarea:focus,select:focus{
+            border-color:var(--red);
+            box-shadow:0 0 0 4px rgba(230,0,35,.1);
+        }
+        .topic-grid{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:12px;
+        }
+        .table-wrap{
+            overflow:auto;
+            border:1px solid var(--line);
+            border-radius:20px;
+            margin-top:12px;
+        }
+        table{
+            width:100%;
+            min-width:1380px;
+            border-collapse:collapse;
+            background:white;
+        }
+        th{
+            background:linear-gradient(135deg,#e60023,#ff5f76);
+            color:white;
+            padding:12px;
+            text-align:left;
+            font-weight:950;
+            white-space:nowrap;
+            border-right:1px solid rgba(255,255,255,.18);
+        }
+        td{
+            padding:10px;
+            border-bottom:1px solid #ffe1e7;
+            vertical-align:top;
+        }
+        tr:nth-child(even) td{background:#fffafa}
+        .small-input{width:70px}
+        .audio-cell{min-width:210px}
+        .answer-cell{min-width:170px}
+        .transcript-cell{min-width:260px}
+        .data-cell{min-width:310px}
+        .messages{margin-top:16px;display:grid;gap:10px}
+        .message{
+            padding:12px 16px;
+            border-radius:16px;
+            background:#ecfdf3;
+            color:#027a48;
+            font-weight:850;
+            border:1px solid #abefc6;
+        }
+        .note{
+            margin-top:10px;
+            padding:13px 15px;
+            border-radius:16px;
+            background:#fff1f4;
+            border:1px solid var(--line);
+            color:#8a0015;
+            line-height:1.6;
+            font-weight:750;
+        }
+        @media(max-width:900px){
+            .hero{flex-direction:column}
+            .topic-grid{grid-template-columns:1fr}
+        }
+    </style>
+
+<style class="part-card-clickable-hover-fix">
+.card:hover,
+.part-card:hover,
+.part-item:hover,
+article:hover {
+    cursor: pointer;
+}
+</style>
+
+    <link rel="stylesheet" href="{% static 'css/sidebar_size_only.css' %}">
+    <link rel="stylesheet" href="{% static 'css/safe_dashboard_layout.css' %}">
+</head>
+<body>
+<main class="wrap">
+    <section class="hero">
+        <div>
+            <h1>{{ topic.title }}</h1>
+            <div class="hint">
+                Bảng dữ liệu Part 2: mỗi chủ đề có 4 voice tương ứng 4 người. Mỗi voice có audio, A/B/C/D, transcript và dữ liệu đáp án.
+            </div>
+        </div>
+        <div class="actions">
+            <a class="link-btn light" href="/dashboard/part-2/">← Danh sách chủ đề</a>
+            <a class="link-btn light" href="/listening/part-2/">Xem giao diện học viên</a>
+        </div>
+    </section>
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="message">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="save_topic">
+
+        <section class="card">
+            <div class="topic-grid">
+                <div>
+                    <label>Tên chủ đề</label>
+                    <input name="title" value="{{ topic.title }}">
+                </div>
+                <div>
+                    <label>Mô tả / ghi chú</label>
+                    <input name="description" value="{{ topic.description }}">
+                </div>
+            </div>
+
+            <div class="note">
+                Cột “Dữ liệu đáp án” có thể nhập nhiều dòng, nhưng khi làm bài chỉ khai thác 4 dữ liệu tương ứng 4 người.
+            </div>
+        </section>
+
+        <section class="card">
+            <h2 style="margin:0 0 8px;font-size:26px;color:#4a0010">Dữ liệu 4 voice</h2>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>File audio của chủ đề</th>
+                            <th>Đáp án A</th>
+                            <th>Đáp án B</th>
+                            <th>Đáp án C</th>
+                            <th>Đáp án D</th>
+                            <th>Nội dung file ghi âm</th>
+                            <th>Dữ liệu của các đáp án</th>
+                            <th>Đáp án đúng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for voice in voices %}
+                        <tr>
+                            <td>
+                                <input class="small-input" name="voice_{{ voice.id }}_order" value="{{ voice.order }}">
+                            </td>
+                            <td class="audio-cell">
+                                <textarea name="voice_{{ voice.id }}_audio_url" placeholder="Dán link audio hoặc file audio">{{ voice.audio_url }}</textarea>
+                            </td>
+                            <td class="answer-cell">
+                                <textarea name="voice_{{ voice.id }}_answer_a" placeholder="Đáp án A">{{ voice.answer_a }}</textarea>
+                            </td>
+                            <td class="answer-cell">
+                                <textarea name="voice_{{ voice.id }}_answer_b" placeholder="Đáp án B">{{ voice.answer_b }}</textarea>
+                            </td>
+                            <td class="answer-cell">
+                                <textarea name="voice_{{ voice.id }}_answer_c" placeholder="Đáp án C">{{ voice.answer_c }}</textarea>
+                            </td>
+                            <td class="answer-cell">
+                                <textarea name="voice_{{ voice.id }}_answer_d" placeholder="Đáp án D">{{ voice.answer_d }}</textarea>
+                            </td>
+                            <td class="transcript-cell">
+                                <textarea name="voice_{{ voice.id }}_transcript" placeholder="Transcript / nội dung file ghi âm">{{ voice.transcript }}</textarea>
+                            </td>
+                            <td class="data-cell">
+                                <textarea name="voice_{{ voice.id }}_data_choices" placeholder="Mỗi dữ liệu một dòng. Có thể nhập nhiều dòng, nhưng bài làm chỉ chọn 4 dữ liệu.">{{ voice.data_choices }}</textarea>
+                            </td>
+                            <td>
+                                <select name="voice_{{ voice.id }}_correct_answer">
+                                    <option value="">--</option>
+                                    <option value="A" {% if voice.correct_answer == "A" %}selected{% endif %}>A</option>
+                                    <option value="B" {% if voice.correct_answer == "B" %}selected{% endif %}>B</option>
+                                    <option value="C" {% if voice.correct_answer == "C" %}selected{% endif %}>C</option>
+                                    <option value="D" {% if voice.correct_answer == "D" %}selected{% endif %}>D</option>
+                                </select>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="actions" style="justify-content:flex-end;margin-top:16px">
+                <button class="btn" type="submit">Lưu dữ liệu chủ đề</button>
+            </div>
+        </section>
+    </form>
+
+    <form method="post" onsubmit="return confirm('Bạn chắc chắn muốn xóa toàn bộ chủ đề Part 2 này?');">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="delete_topic">
+        <section class="card">
+            <button class="btn danger" type="submit">Xóa chủ đề này</button>
+        </section>
+    </form>
+</main>
+</body>
+</html>

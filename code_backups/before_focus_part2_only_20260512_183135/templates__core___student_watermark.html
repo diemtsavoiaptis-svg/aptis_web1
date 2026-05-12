@@ -1,0 +1,9 @@
+{% if request.user.is_authenticated %}
+<div
+    id="tsaStudentWatermark"
+    class="tsa-student-watermark"
+    data-user-id="{{ request.user.id }}"
+    data-user-name="{{ request.user.get_username }}"
+    data-user-email="{{ request.user.email|default:request.user.get_username }}"
+></div>
+{% endif %}

@@ -1,0 +1,71 @@
+
+/* Expand right dashboard content only */
+body {
+    overflow-x: hidden !important;
+}
+
+/* Sidebar is compact, so content starts closer to the left */
+.main-content,
+.dashboard-main,
+.content,
+main {
+    margin-left: 260px !important;
+    width: calc(100vw - 260px) !important;
+    max-width: none !important;
+    padding-left: 28px !important;
+    padding-right: 28px !important;
+}
+
+/* Make dashboard content/card wider */
+.dashboard-content,
+.dashboard-shell,
+.admin-content,
+.page-content,
+.content-shell,
+.container,
+.container-fluid {
+    width: 100% !important;
+    max-width: none !important;
+}
+
+/* Big white/pink panels */
+.dashboard-card,
+.hero-card,
+.admin-hero,
+.card,
+.panel,
+.section-card {
+    max-width: none !important;
+}
+
+/* Make the right preview/interface area larger */
+iframe,
+.preview-frame,
+.student-preview,
+.interface-preview,
+.dashboard-iframe {
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 720px !important;
+}
+
+/* If preview is inside a wrapper, expand wrapper too */
+.preview-wrap,
+.preview-wrapper,
+.iframe-wrap,
+.iframe-wrapper,
+.student-interface-wrap {
+    width: 100% !important;
+    max-width: none !important;
+}
+
+/* Reduce empty gap caused by old sidebar size */
+@media (min-width: 900px) {
+    .main-content,
+    .dashboard-main,
+    .content,
+    main {
+        margin-left: 260px !important;
+        width: calc(100vw - 260px) !important;
+    }
+}

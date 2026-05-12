@@ -1,0 +1,236 @@
+{% load static %}
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quản lý {{ part_title }}</title>
+<link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
+<style>
+:root{--red:#e60023;--red2:#ff5f76;--deep:#7a0010;--dark:#3f0011;--line:#ffd1dc;--soft:#fff1f4;--muted:#667085;--ok:#027a48}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(circle at top right,rgba(255,95,118,.18),transparent 34%),linear-gradient(135deg,#fffafa,#fff0f4 48%,#fff7f9);font-family:"Segoe UI",Tahoma,Arial,sans-serif;color:var(--dark)}
+.wrap{max-width:1480px;margin:0 auto;padding:28px 18px 48px}
+.hero,.panel,.side-card{background:white;border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:0 18px 44px rgba(180,0,30,.07)}
+.hero{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:18px}
+.badge{width:62px;height:62px;border-radius:20px;background:linear-gradient(135deg,var(--red),var(--red2));display:grid;place-items:center;color:white;font-size:30px;font-weight:950;margin-bottom:14px}
+h1{margin:0;font-size:42px;line-height:1.08;letter-spacing:-.04em}
+.desc{margin-top:8px;color:var(--muted);line-height:1.6;font-weight:650}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn,.link{min-height:44px;border:0;border-radius:999px;padding:0 16px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;font:inherit;font-weight:950;cursor:pointer}
+.btn{background:linear-gradient(135deg,var(--red),var(--red2));color:white;box-shadow:0 14px 28px rgba(230,0,35,.16)}
+.btn-light,.link{background:var(--soft);color:#8a0015;border:1px solid var(--line)}
+.btn-danger{background:#7a0010;color:white}
+.layout{display:grid;grid-template-columns:340px 1fr;gap:18px;align-items:start}
+.side-card{padding:18px}
+.side-title{margin:0 0 12px;font-size:22px;color:#4a0010}
+.material-list{display:grid;gap:10px;margin-bottom:18px}
+.material-item{display:block;text-decoration:none;color:inherit;border:1px solid #ffe1e7;border-radius:18px;padding:13px;background:#fffafa}
+.material-item.active{border-color:#e60023;background:#fff1f4;box-shadow:0 12px 24px rgba(230,0,35,.08)}
+.material-name{font-weight:950;color:#4a0010}
+.material-meta{margin-top:6px;color:var(--muted);font-size:13px;font-weight:750}
+label{display:block;margin:12px 0 7px;color:var(--deep);font-weight:900}
+input,textarea,select{width:100%;border:1px solid var(--line);border-radius:14px;padding:10px 12px;font:inherit;background:white;outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--red);box-shadow:0 0 0 4px rgba(230,0,35,.09)}
+textarea{min-height:92px;resize:vertical}
+.mini{min-height:42px;padding:8px 10px}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.status-row{display:flex;align-items:center;gap:10px;margin-top:12px;font-weight:900;color:#4a0010}
+.status-row input{width:20px;height:20px;accent-color:#e60023}
+.message{margin:0 0 14px;padding:12px 16px;border-radius:16px;background:#ecfdf3;color:var(--ok);font-weight:850}
+.panel-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:14px}
+.panel h2{margin:0;color:#4a0010;font-size:28px}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:20px;background:white}
+table{width:100%;min-width:1220px;border-collapse:collapse}
+th{background:linear-gradient(135deg,var(--red),var(--red2));color:white;text-align:left;padding:12px;font-weight:950;white-space:nowrap}
+td{border-bottom:1px solid #ffe1e7;padding:12px;vertical-align:top}
+tr:nth-child(even) td{background:#fffafa}
+.order-col{width:76px}
+.answer-col{width:180px}
+.correct-col{width:110px}
+.delete-col{width:92px}
+.question-textarea{min-height:114px}
+.explain-textarea{min-height:80px}
+.note{margin-top:10px;padding:12px 14px;border-radius:16px;border:1px solid var(--line);background:#fffafa;color:#8a0015;font-weight:750;line-height:1.55}
+.empty{padding:24px;border:1px dashed #ff9cac;border-radius:20px;background:#fffafa;color:#8a0015;font-weight:850;line-height:1.6}
+.file-line{margin-top:10px;color:var(--muted);font-weight:750}
+.file-line a{color:#b8001c;font-weight:950}
+@media(max-width:980px){.hero{flex-direction:column}.layout{grid-template-columns:1fr}.field-grid{grid-template-columns:1fr}h1{font-size:34px}}
+</style>
+    <link rel="stylesheet" href="{% static 'css/sidebar_size_only.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard_right_expand.css' %}">
+</head>
+<body>
+<main class="wrap">
+    <section class="hero">
+        <div>
+            <div class="badge">{{ part_number }}</div>
+            <h1>Quản lý {{ part_title }}</h1>
+            <div class="desc">Tạo tài liệu, tải file, dán link audio, nhập câu hỏi và đáp án cho học viên tự kiểm tra.</div>
+        </div>
+        <div class="actions">
+            <a class="link" href="/dashboard/listening-parts/">← Chọn Part</a>
+            <a class="link" href="/listening/part-{{ part_number }}/">Xem học viên</a>
+        </div>
+    </section>
+
+    {% for message in messages %}
+        <div class="message">{{ message }}</div>
+    {% endfor %}
+
+    <section class="layout">
+        <aside class="side-card">
+            <h2 class="side-title">Danh sách tài liệu</h2>
+            <div class="material-list">
+                {% for material in materials %}
+                    <a class="material-item {% if selected and selected.id == material.id %}active{% endif %}" href="?material={{ material.id }}">
+                        <div class="material-name">{{ material.title }}</div>
+                        <div class="material-meta"> · {% if material.is_active %}đang hiển thị{% else %}đang ẩn{% endif %}</div>
+                    </a>
+                {% empty %}
+                    <div class="empty">Chưa có tài liệu cho Part {{ part_number }}.</div>
+                {% endfor %}
+            </div>
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="create_material">
+                <h2 class="side-title">Thêm tài liệu</h2>
+                <label>Tên tài liệu</label>
+                <input name="title" placeholder="Ví dụ: Part {{ part_number }} - Test 01">
+                <label>Mô tả ngắn</label>
+                <textarea name="description" placeholder="Ghi chú ngắn cho học viên"></textarea>
+                <label>Hướng dẫn làm bài</label>
+                <textarea name="instructions" placeholder="Hướng dẫn riêng cho tài liệu này"></textarea>
+                <label>Link audio / Google Drive</label>
+                <textarea name="audio_url" placeholder="Dán link file nghe"></textarea>
+                <label>File tài liệu</label>
+                <input type="file" name="document_file">
+                <label>Transcript</label>
+                <textarea name="transcript" placeholder="Nội dung nghe hoặc giải thích chung"></textarea>
+                <label class="status-row"><input type="checkbox" name="is_active" checked> Hiển thị cho học viên</label>
+                <button class="btn" type="submit" style="width:100%;margin-top:14px">Tạo tài liệu</button>
+            </form>
+        </aside>
+
+        <section class="panel">
+            {% if selected %}
+                <div class="panel-head">
+                    <div>
+                        <h2>{{ selected.title }}</h2>
+                        <div class="desc">Cập nhật tài liệu và nhập ngân hàng câu hỏi bên dưới.</div>
+                    </div>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="add_question">
+                        <input type="hidden" name="material_id" value="{{ selected.id }}">
+                        <button class="btn" type="submit">+ Thêm câu hỏi</button>
+                    </form>
+                </div>
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="material_id" value="{{ selected.id }}">
+                    <div class="field-grid">
+                        <div>
+                            <label>Tên tài liệu</label>
+                            <input name="title" value="{{ selected.title }}">
+                        </div>
+                        <div>
+                            <label>Link audio / Google Drive</label>
+                            <input name="audio_url" value="{{ selected.audio_url }}">
+                        </div>
+                    </div>
+                    <label>Mô tả</label>
+                    <textarea name="description">{{ selected.description }}</textarea>
+                    <label>Hướng dẫn làm bài</label>
+                    <textarea name="instructions">{{ selected.instructions }}</textarea>
+                    <label>Transcript / nội dung nghe</label>
+                    <textarea name="transcript">{{ selected.transcript }}</textarea>
+                    <label>Đổi file tài liệu</label>
+                    <input type="file" name="document_file">
+                    {% if selected.document_file %}
+                        <div class="file-line">File hiện tại: <a href="{{ selected.document_file.url }}" target="_blank">{{ selected.document_file.name }}</a></div>
+                        <label class="status-row"><input type="checkbox" name="clear_document"> Xóa file hiện tại</label>
+                    {% endif %}
+                    <label class="status-row"><input type="checkbox" name="is_active" {% if selected.is_active %}checked{% endif %}> Hiển thị cho học viên</label>
+                    <div class="actions" style="margin-top:14px">
+                        <button class="btn" type="submit" name="action" value="save_material">Lưu tài liệu</button>
+                        <button class="btn btn-danger" type="submit" name="action" value="delete_material" onclick="return confirm('Xóa tài liệu này và toàn bộ câu hỏi?')">Xóa tài liệu</button>
+                    </div>
+                </form>
+
+                <div class="note">Mỗi câu có tối đa 6 lựa chọn A-F. Học viên sẽ bấm chọn đáp án rồi tự kiểm tra, hệ thống không lưu bài nộp.</div>
+
+                <form method="post" style="margin-top:14px">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="save_questions">
+                    <input type="hidden" name="material_id" value="{{ selected.id }}">
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Câu hỏi</th>
+                                    <th>A</th>
+                                    <th>B</th>
+                                    <th>C</th>
+                                    <th>D</th>
+                                    <th>E</th>
+                                    <th>F</th>
+                                    <th>Đúng</th>
+                                    <th>Giải thích</th>
+                                    <th>Xóa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in question_rows %}
+                                    {% with question=row.question %}
+                                    <tr>
+                                        <td class="order-col">
+                                            <input type="hidden" name="question_id" value="{{ question.id }}">
+                                            <input class="mini" type="number" min="1" name="question_{{ question.id }}_order" value="{{ question.order }}">
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td class="answer-col"><textarea class="mini" name="question_{{ question.id }}_option_a">{{ question.option_a }}</textarea></td>
+                                        <td class="answer-col"><textarea class="mini" name="question_{{ question.id }}_option_b">{{ question.option_b }}</textarea></td>
+                                        <td class="answer-col"><textarea class="mini" name="question_{{ question.id }}_option_c">{{ question.option_c }}</textarea></td>
+                                        <td class="answer-col"><textarea class="mini" name="question_{{ question.id }}_option_d">{{ question.option_d }}</textarea></td>
+                                        <td class="answer-col"><textarea class="mini" name="question_{{ question.id }}_option_e">{{ question.option_e }}</textarea></td>
+                                        <td class="answer-col"><textarea class="mini" name="question_{{ question.id }}_option_f">{{ question.option_f }}</textarea></td>
+                                        <td class="correct-col">
+                                            <select name="question_{{ question.id }}_correct_answer">
+                                                {% for label in answer_labels %}
+                                                    <option value="{{ label }}" {% if question.correct_answer == label %}selected{% endif %}>{{ label }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </td>
+                                        <td><textarea class="explain-textarea" name="question_{{ question.id }}_explanation">{{ question.explanation }}</textarea></td>
+                                        <td class="delete-col">
+                                            <button class="btn btn-light" type="submit" name="delete_question" value="{{ question.id }}" onclick="return confirm('Xóa câu hỏi này?')">Xóa</button>
+                                        </td>
+                                    </tr>
+                                    {% endwith %}
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="11">
+                                            <div class="empty">Chưa có câu hỏi. Bấm “Thêm câu hỏi” để bắt đầu nhập dữ liệu.</div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="actions" style="justify-content:flex-end;margin-top:16px">
+                        <button class="btn" type="submit">Lưu câu hỏi và đáp án</button>
+                    </div>
+                </form>
+            {% else %}
+                <div class="empty">Hãy tạo tài liệu đầu tiên ở cột bên trái để nhập câu hỏi Part {{ part_number }}.</div>
+            {% endif %}
+        </section>
+    </section>
+</main>
+</body>
+</html>

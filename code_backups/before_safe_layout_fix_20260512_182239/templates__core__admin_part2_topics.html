@@ -1,0 +1,273 @@
+{% load static %}
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý Part 2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
+    <style>
+        :root{
+            --red:#e60023;
+            --red2:#ff5f76;
+            --deep:#7a0010;
+            --dark:#3f0011;
+            --soft:#fff1f4;
+            --line:#ffd1dc;
+            --muted:#667085;
+        }
+        *{box-sizing:border-box}
+        body{
+            margin:0;
+            min-height:100vh;
+            background:radial-gradient(circle at top right, rgba(255,95,118,.18), transparent 34%),
+                       linear-gradient(135deg,#fffafa,#fff0f4 48%,#fff7f9);
+            color:var(--dark);
+            font-family:"Segoe UI",Tahoma,Arial,sans-serif;
+        }
+        .wrap{
+            max-width:1240px;
+            margin:0 auto;
+            padding:30px 20px 42px;
+        }
+        .top{
+            display:flex;
+            justify-content:space-between;
+            align-items:flex-start;
+            gap:18px;
+            background:rgba(255,255,255,.92);
+            border:1px solid var(--line);
+            border-radius:28px;
+            padding:28px;
+            box-shadow:0 18px 44px rgba(180,0,30,.07);
+        }
+        .badge{
+            display:inline-grid;
+            place-items:center;
+            width:64px;
+            height:64px;
+            border-radius:20px;
+            background:linear-gradient(135deg,var(--red),var(--red2));
+            color:white;
+            font-size:30px;
+            font-weight:950;
+            box-shadow:0 16px 30px rgba(230,0,35,.18);
+        }
+        h1{
+            margin:16px 0 8px;
+            font-size:48px;
+            line-height:1;
+            letter-spacing:-.05em;
+            font-weight:950;
+        }
+        .desc{
+            color:var(--muted);
+            font-size:18px;
+            line-height:1.6;
+            font-weight:650;
+        }
+        .back{
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            min-height:46px;
+            padding:0 18px;
+            border-radius:999px;
+            background:#fff1f4;
+            border:1px solid var(--line);
+            color:#8a0015;
+            text-decoration:none;
+            font-weight:950;
+            white-space:nowrap;
+        }
+        .card{
+            margin-top:18px;
+            background:rgba(255,255,255,.92);
+            border:1px solid var(--line);
+            border-radius:28px;
+            padding:24px;
+            box-shadow:0 18px 44px rgba(180,0,30,.07);
+        }
+        .form-grid{
+            display:grid;
+            grid-template-columns:1fr 1fr auto;
+            gap:12px;
+            align-items:end;
+        }
+        label{
+            display:block;
+            margin-bottom:7px;
+            color:var(--deep);
+            font-weight:900;
+        }
+        input, textarea{
+            width:100%;
+            border:1px solid var(--line);
+            border-radius:16px;
+            min-height:48px;
+            padding:12px 15px;
+            font:inherit;
+            outline:none;
+            background:white;
+        }
+        textarea{height:48px;resize:vertical}
+        input:focus,textarea:focus{
+            border-color:var(--red);
+            box-shadow:0 0 0 4px rgba(230,0,35,.1);
+        }
+        .btn{
+            min-height:48px;
+            border:0;
+            border-radius:16px;
+            padding:0 20px;
+            background:linear-gradient(135deg,var(--red),var(--red2));
+            color:white;
+            font-weight:950;
+            font:inherit;
+            cursor:pointer;
+            box-shadow:0 14px 28px rgba(230,0,35,.17);
+        }
+        .topic-grid{
+            margin-top:18px;
+            display:grid;
+            grid-template-columns:repeat(3,minmax(0,1fr));
+            gap:16px;
+        }
+        .topic{
+            display:block;
+            padding:22px;
+            border:1px solid var(--line);
+            border-radius:24px;
+            background:#fffafa;
+            color:inherit;
+            text-decoration:none;
+            transition:.16s ease;
+        }
+        .topic:hover{
+            transform:translateY(-3px);
+            box-shadow:0 16px 34px rgba(180,0,30,.1);
+        }
+        .topic-title{
+            font-size:24px;
+            font-weight:950;
+            letter-spacing:-.03em;
+            color:#4a0010;
+            line-height:1.2;
+        }
+        .topic-meta{
+            margin-top:12px;
+            color:var(--muted);
+            font-weight:700;
+            line-height:1.55;
+        }
+        .pill{
+            display:inline-flex;
+            margin-top:16px;
+            min-height:34px;
+            padding:0 12px;
+            border-radius:999px;
+            align-items:center;
+            background:#fff1f4;
+            border:1px solid var(--line);
+            color:#b8001c;
+            font-weight:900;
+        }
+        .messages{margin-top:16px;display:grid;gap:10px}
+        .message{
+            padding:12px 16px;
+            border-radius:16px;
+            background:#ecfdf3;
+            color:#027a48;
+            font-weight:850;
+            border:1px solid #abefc6;
+        }
+        .empty{
+            padding:28px;
+            border:1px dashed #ff9cac;
+            border-radius:22px;
+            color:var(--muted);
+            line-height:1.7;
+            font-size:17px;
+        }
+        @media(max-width:900px){
+            .form-grid{grid-template-columns:1fr}
+            .topic-grid{grid-template-columns:1fr}
+            .top{flex-direction:column}
+        }
+    </style>
+
+<style class="part-card-clickable-hover-fix">
+.card:hover,
+.part-card:hover,
+.part-item:hover,
+article:hover {
+    cursor: pointer;
+}
+</style>
+
+    <link rel="stylesheet" href="{% static 'css/sidebar_size_only.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard_right_expand.css' %}">
+</head>
+<body>
+<main class="wrap">
+    <section class="top">
+        <div>
+            <div class="badge">2</div>
+            <h1>Quản lý Part 2</h1>
+            <div class="desc">
+                Hiển thị hàng loạt tên chủ đề. Bấm vào từng chủ đề để nhập audio, đáp án A/B/C/D, transcript và dữ liệu đáp án cho 4 người.
+            </div>
+        </div>
+        <a class="back" href="/dashboard/listening-parts/">← Quay lại chọn Part</a>
+    </section>
+
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="message">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <section class="card">
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="create_topic">
+            <div class="form-grid">
+                <div>
+                    <label>Tên chủ đề mới</label>
+                    <input name="title" placeholder="Ví dụ: When they like listening to music">
+                </div>
+                <div>
+                    <label>Mô tả</label>
+                    <textarea name="description" placeholder="Ghi chú ngắn cho chủ đề này..."></textarea>
+                </div>
+                <button class="btn" type="submit">Tạo chủ đề</button>
+            </div>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2 style="margin:0 0 16px;font-size:28px;color:#4a0010">Danh sách chủ đề</h2>
+
+        {% if topics %}
+            <div class="topic-grid">
+                {% for topic in topics %}
+                    <a class="topic" href="/dashboard/part-2/{{ topic.id }}/">
+                        <div class="topic-title">{{ topic.title }}</div>
+                        <div class="topic-meta">
+                            {{ topic.description|default:"Chưa có mô tả" }}
+                        </div>
+                        <div class="pill">{{ topic.voices.count }} voice</div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty">
+                Chưa có chủ đề Part 2 nào. Hãy tạo chủ đề đầu tiên ở ô bên trên.
+            </div>
+        {% endif %}
+    </section>
+</main>
+</body>
+</html>

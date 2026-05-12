@@ -1,0 +1,136 @@
+html.tsa-protected,
+html.tsa-protected body,
+html.tsa-protected * {
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    -webkit-touch-callout: none !important;
+}
+
+html.tsa-protected input,
+html.tsa-protected textarea {
+    -webkit-user-select: text !important;
+    user-select: text !important;
+}
+
+.protected-content {
+    position: relative;
+    z-index: 1;
+}
+
+.student-identity {
+    min-height: 38px;
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 12px;
+    border: 1px solid rgba(200, 0, 22, 0.18);
+    border-radius: 999px;
+    background: rgba(255, 241, 244, 0.92);
+    color: #8a0015;
+    font-size: 13px;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.security-watermark {
+    pointer-events: none;
+    position: fixed;
+    inset: -12vh -12vw;
+    z-index: 9999;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(220px, 1fr));
+    gap: 34px 24px;
+    padding: 30px;
+    opacity: 0.18;
+    transform: rotate(-18deg);
+    mix-blend-mode: multiply;
+}
+
+.security-watermark span {
+    color: #970019;
+    font-size: 13px;
+    font-weight: 1000;
+    line-height: 1.45;
+    white-space: nowrap;
+    text-transform: uppercase;
+}
+
+.security-focus-shield,
+.security-devtools-shield {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(60, 0, 15, 0.88);
+    backdrop-filter: blur(12px);
+    color: #fff;
+    text-align: center;
+    padding: 30px;
+}
+
+.security-focus-shield.show,
+.security-devtools-shield.show {
+    display: flex;
+}
+
+.security-focus-shield-box,
+.security-devtools-box {
+    max-width: 600px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.13);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 32px;
+    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.30);
+}
+
+.security-focus-shield-box h2,
+.security-devtools-box h2 {
+    margin: 0 0 10px;
+    font-size: 29px;
+}
+
+.security-focus-shield-box p,
+.security-devtools-box p {
+    margin: 0;
+    line-height: 1.6;
+    font-weight: 800;
+}
+
+@media print {
+    html,
+    body {
+        background: #fff !important;
+    }
+
+    body * {
+        visibility: hidden !important;
+        display: none !important;
+    }
+
+    body::before {
+        content: "Nội dung này không cho phép in, lưu PDF hoặc phát tán đề.";
+        visibility: visible !important;
+        display: block !important;
+        padding: 50px;
+        font-size: 24px;
+        line-height: 1.5;
+        font-weight: 1000;
+        color: #b80016;
+    }
+}
+
+@media (max-width: 720px) {
+    .security-watermark {
+        grid-template-columns: repeat(3, minmax(180px, 1fr));
+        gap: 28px 18px;
+        opacity: 0.16;
+    }
+
+    .student-identity {
+        width: 100%;
+        justify-content: center;
+        white-space: normal;
+        text-align: center;
+    }
+}

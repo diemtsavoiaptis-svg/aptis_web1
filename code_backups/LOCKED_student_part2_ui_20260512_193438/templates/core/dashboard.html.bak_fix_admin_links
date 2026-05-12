@@ -1,0 +1,111 @@
+{% load static %}
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin | Điểm TSA Với Aptis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'core/css/admin_panel.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
+</head>
+<body class="admin-page">
+<div class="admin-shell">
+    <aside class="admin-sidebar">
+        <div class="brand">
+            <div class="brand-logo">A</div>
+            <div>
+                <strong>Điểm TSA</strong>
+                <span>với Aptis</span>
+            </div>
+        </div>
+
+        <a class="side-link active" href="{% url 'dashboard' %}">🎧 Tổng quan Admin</a>
+
+        <a class="side-link" href="{% url 'admin_listening_parts' %}">🎧 Quản lý câu hỏi Listening</a>
+
+        <button class="side-link" data-title="Duyệt học viên" data-src="/admin/core/studentprofile/">
+            ✅ Duyệt học viên
+        </button>
+
+        <button class="side-link" data-title="Quản lý bài học" data-src="/admin/core/lesson/">
+            📚 Quản lý bài học
+        </button>
+
+        <button class="side-link" data-title="Cảnh báo bảo mật" data-src="/admin/core/securityalert/">
+            🛡️ Cảnh báo bảo mật
+        </button>
+
+        <a class="side-link" href="{% url 'listening' %}">
+            👀 Xem giao diện học viên
+        </a>
+
+        <a class="side-link logout" href="{% url 'logout' %}">
+            🚪 Đăng xuất
+        </a>
+    </aside>
+
+    <main class="admin-main">
+        <header class="admin-header">
+            <div>
+                <p class="eyebrow">Dashboard quản trị</p>
+                <h1 id="panelTitle">Xin chào, {{ request.user.username }}</h1>
+                <p class="muted">Bấm menu bên trái, nội dung sẽ hiện ở khung bên phải mà không đổi trang.</p>
+            </div>
+            <a class="primary-btn" href="/admin/" target="_blank">Mở Django Admin</a>
+        </header>
+
+        <section id="overviewPanel" class="overview-panel">
+            <div class="quick-grid">
+                <a class="quick-card" href="{% url 'admin_listening_parts' %}"><span>🎧</span><strong>Listening</strong>
+                    <small>Thêm/sửa câu hỏi, audio, đáp án và transcript.</small>
+                </a>
+
+                <button class="quick-card" data-title="Duyệt học viên" data-src="/admin/core/studentprofile/">
+                    <span>✅</span>
+                    <strong>Học viên</strong>
+                    <small>Duyệt tài khoản học viên mới đăng ký.</small>
+                </button>
+
+                <button class="quick-card" data-title="Quản lý bài học" data-src="/admin/core/lesson/">
+                    <span>📚</span>
+                    <strong>Bài học</strong>
+                    <small>Quản lý tài liệu, mô tả và video học tập.</small>
+                </button>
+            </div>
+
+            <div class="lesson-card">
+                <div class="section-head">
+                    <div>
+                        <h2>Danh sách bài học</h2>
+                        <p>Các bài học đang có trong hệ thống.</p>
+                    </div>
+                    <button class="ghost-btn" data-title="Thêm bài học" data-src="/admin/core/lesson/add/">
+                        + Thêm bài học
+                    </button>
+                </div>
+
+                <div class="lesson-list">
+                    {% for lesson in lessons %}
+                        <article class="lesson-item">
+                            <h3>{{ lesson.title }}</h3>
+                            <p>{{ lesson.description|default:"Chưa có mô tả." }}</p>
+                            {% if lesson.video_url %}
+                                <a href="{{ lesson.video_url }}" target="_blank">Xem video</a>
+                            {% endif %}
+                        </article>
+                    {% empty %}
+                        <div class="empty-box">
+                            Chưa có bài học nào. Bấm “Thêm bài học” để tạo nội dung đầu tiên.
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+
+        
+    </main>
+</div>
+
+
+</body>
+</html>

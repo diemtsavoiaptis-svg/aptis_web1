@@ -1,0 +1,51 @@
+
+/* Strong equal watermark for Part 1 / Part 2 / Part 3 / Part 4 */
+.tsa-student-watermark {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 2147483647 !important;
+    pointer-events: none !important;
+    opacity: 1 !important;
+    overflow: hidden !important;
+}
+
+.tsa-student-watermark::before {
+    content: attr(data-watermark-text) !important;
+    position: absolute !important;
+    inset: -30% !important;
+    display: block !important;
+    white-space: pre !important;
+    font-size: 19px !important;
+    font-weight: 900 !important;
+    line-height: 5.4 !important;
+    letter-spacing: 1px !important;
+    color: rgba(155, 0, 24, 0.20) !important;
+    transform: rotate(-22deg) !important;
+    text-transform: uppercase !important;
+    word-spacing: 28px !important;
+    text-shadow: 0 0 1px rgba(155, 0, 24, 0.18) !important;
+}
+
+/* Make watermark visible above white/pink cards in all student part pages */
+.student-page .tsa-student-watermark,
+.listening-page .tsa-student-watermark,
+.part2-page .tsa-student-watermark,
+.part3-page .tsa-student-watermark,
+.part4-page .tsa-student-watermark,
+body .tsa-student-watermark {
+    display: block !important;
+    visibility: visible !important;
+}
+
+/* Light security deterrent */
+body.tsa-student-secure {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+body.tsa-student-secure img,
+body.tsa-student-secure video,
+body.tsa-student-secure audio {
+    -webkit-user-drag: none;
+    user-drag: none;
+}

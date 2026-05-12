@@ -1,0 +1,181 @@
+{% extends "admin/base.html" %}
+{% load i18n static %}
+
+{% block title %}
+{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | Quản trị TSA Aptis
+<style>
+
+/* Tối ưu sidebar Django Admin: ẩn cột "+ Thêm vào", gọn dễ thao tác */
+#nav-sidebar .addlink,
+#nav-sidebar td.addlink,
+#nav-sidebar th.addlink,
+#nav-sidebar a.addlink,
+#nav-sidebar .model-addlink,
+#nav-sidebar .add-row,
+#nav-sidebar td:last-child a.addlink {
+    display: none !important;
+}
+
+/* Làm sidebar chỉ còn danh sách mục quản lý */
+#nav-sidebar table {
+    width: 100% !important;
+}
+
+#nav-sidebar table th,
+#nav-sidebar table td {
+    padding: 0 !important;
+}
+
+#nav-sidebar table td:last-child {
+    display: none !important;
+}
+
+#nav-sidebar .module th,
+#nav-sidebar .module td {
+    border-bottom: 1px solid rgba(230, 0, 35, 0.10) !important;
+}
+
+/* Tối ưu ô tìm kiếm */
+#nav-filter {
+    width: calc(100% - 20px) !important;
+    margin: 10px !important;
+    padding: 12px 14px !important;
+    border-radius: 14px !important;
+    border: 1px solid #ffd1dc !important;
+    background: #fffafa !important;
+    color: #3f0011 !important;
+    font-size: 16px !important;
+}
+
+/* Nhóm tiêu đề bên trái */
+#nav-sidebar caption,
+#nav-sidebar .module caption {
+    padding: 14px 18px !important;
+    background: linear-gradient(135deg, #e60023, #ff5f76) !important;
+    color: white !important;
+    font-weight: 900 !important;
+    letter-spacing: .03em !important;
+    text-align: left !important;
+}
+
+/* Link model dễ đọc, gọn hơn */
+#nav-sidebar .module th a,
+#nav-sidebar .module td a {
+    display: block !important;
+    padding: 13px 18px !important;
+    color: #7a0010 !important;
+    font-weight: 850 !important;
+    font-size: 17px !important;
+    line-height: 1.25 !important;
+    text-decoration: none !important;
+}
+
+/* Hover và dòng đang chọn */
+#nav-sidebar .module th a:hover,
+#nav-sidebar .module td a:hover {
+    background: #fff1f4 !important;
+    color: #e60023 !important;
+}
+
+#nav-sidebar .current-model {
+    background: #fff8b8 !important;
+}
+
+#nav-sidebar .current-model a {
+    color: #5b0010 !important;
+    font-weight: 950 !important;
+}
+
+/* Giảm độ rộng sidebar để phần nội dung rộng hơn */
+#nav-sidebar {
+    width: 270px !important;
+    background: #fff7f9 !important;
+    border-right: 1px solid #ffd1dc !important;
+}
+
+.main.shifted > #nav-sidebar + .content,
+#content {
+    max-width: none !important;
+}
+
+/* Làm chữ tiếng Việt không bị lỗi khoảng cách */
+#nav-sidebar,
+#nav-sidebar * {
+    word-break: normal !important;
+    overflow-wrap: anywhere !important;
+}
+
+</style>
+{% endblock %}
+
+{% block branding %}
+<div id="site-name">
+    <a href="{% url 'admin:index' %}">Quản trị TSA Aptis</a>
+</div>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
+<style>
+    :root {
+        --primary: #e60023;
+        --secondary: #8a0015;
+        --accent: #ff5f76;
+        --primary-fg: #fff;
+        --body-bg: #fff7f9;
+        --body-fg: #3f0011;
+        --header-color: #fff;
+        --breadcrumbs-bg: #fff1f4;
+        --breadcrumbs-fg: #7a0010;
+    }
+
+    #header {
+        background: linear-gradient(135deg, #e60023, #ff5f76);
+        color: white;
+    }
+
+    #site-name a {
+        color: white !important;
+        font-weight: 900;
+    }
+
+    .module h2,
+    .module caption,
+    .inline-group h2 {
+        background: linear-gradient(135deg, #e60023, #ff5f76);
+        color: white;
+    }
+
+    div.breadcrumbs {
+        background: #fff1f4;
+        color: #7a0010;
+    }
+
+    div.breadcrumbs a {
+        color: #7a0010;
+        font-weight: 700;
+    }
+
+    a:link,
+    a:visited {
+        color: #8a0015;
+    }
+
+    input[type=submit],
+    input[type=button],
+    .submit-row input,
+    a.button {
+        background: #e60023;
+        border-radius: 10px;
+        font-weight: 800;
+    }
+
+    input[type=submit]:hover,
+    input[type=button]:hover,
+    .submit-row input:hover,
+    a.button:hover {
+        background: #b8001c;
+    }
+</style>
+{% endblock %}

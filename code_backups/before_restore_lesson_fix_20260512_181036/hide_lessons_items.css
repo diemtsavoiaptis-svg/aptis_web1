@@ -1,0 +1,25 @@
+
+/* Hide only Lessons / Quản lý bài học items */
+a[href*="lesson"],
+a[href*="bai-hoc"],
+a[href*="lessons"],
+button[href*="lesson"],
+.lesson-card,
+.lessons-card,
+.admin-lessons-card,
+[data-section*="lesson"],
+[data-card*="lesson"] {
+    display: none !important;
+}
+
+/* Hide dashboard cards/blocks that contain only lesson management via modern browser selector */
+.card:has(a[href*="lesson"]),
+.card:has(a[href*="lessons"]),
+.dashboard-card:has(a[href*="lesson"]),
+.dashboard-card:has(a[href*="lessons"]),
+.admin-card:has(a[href*="lesson"]),
+.admin-card:has(a[href*="lessons"]),
+section:has(a[href*="lesson"]),
+section:has(a[href*="lessons"]) {
+    display: none !important;
+}

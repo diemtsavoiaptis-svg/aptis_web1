@@ -1,0 +1,102 @@
+{% load static %}
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý {{ part_title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
+    <style>
+        body{
+            margin:0;
+            min-height:100vh;
+            padding:34px;
+            background:linear-gradient(135deg,#fffafa,#fff1f4);
+            color:#3f0011;
+            font-family:"Segoe UI",Tahoma,Arial,sans-serif;
+        }
+        .card{
+            max-width:1100px;
+            margin:auto;
+            background:white;
+            border:1px solid #ffd1dc;
+            border-radius:30px;
+            padding:36px;
+            box-shadow:0 20px 46px rgba(180,0,30,.08);
+        }
+        .badge{
+            width:72px;
+            height:72px;
+            border-radius:22px;
+            background:linear-gradient(135deg,#e60023,#ff5f76);
+            color:white;
+            display:grid;
+            place-items:center;
+            font-size:34px;
+            font-weight:950;
+        }
+        h1{
+            font-size:48px;
+            margin:22px 0 12px;
+            letter-spacing:-.04em;
+        }
+        p{
+            font-size:18px;
+            color:#667085;
+            line-height:1.7;
+            max-width:760px;
+        }
+        .note{
+            margin-top:22px;
+            padding:22px;
+            border-radius:22px;
+            border:1px dashed #ff9cac;
+            background:#fffafa;
+            color:#8a0015;
+            font-weight:800;
+            line-height:1.7;
+        }
+        .actions{
+            display:flex;
+            gap:12px;
+            flex-wrap:wrap;
+            margin-top:24px;
+        }
+        a{
+            min-height:48px;
+            padding:0 20px;
+            border-radius:999px;
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            text-decoration:none;
+            font-weight:950;
+        }
+        .primary{
+            background:linear-gradient(135deg,#e60023,#ff5f76);
+            color:white;
+        }
+        .light{
+            background:#fff1f4;
+            color:#8a0015;
+            border:1px solid #ffd1dc;
+        }
+    </style>
+</head>
+<body>
+    <section class="card">
+        <div class="badge">{{ part_number }}</div>
+        <h1>Quản lý {{ part_title }}</h1>
+        <p>{{ part_desc }}</p>
+
+        <div class="note">
+            Đây là khu vực quản lý dữ liệu cho admin. Giao diện học viên của {{ part_title }} sẽ nằm riêng ở đường dẫn làm bài, không đặt trong trang quản lý dữ liệu.
+        </div>
+
+        <div class="actions">
+            <a class="primary" href="/dashboard/listening-parts/">← Quay lại chọn Part</a>
+            <a class="light" href="/listening/part-{{ part_number }}/">Xem giao diện học viên</a>
+        </div>
+    </section>
+</body>
+</html>

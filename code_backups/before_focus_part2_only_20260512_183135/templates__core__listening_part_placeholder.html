@@ -1,0 +1,271 @@
+{% load static %}
+<!doctype html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ part_title }} | Aptis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="{% static 'core/css/font_theme.css' %}">
+
+    <style>
+        :root {
+            --red: #e60023;
+            --red2: #ff5f76;
+            --deep: #7a0010;
+            --dark: #3f0011;
+            --soft: #fff1f4;
+            --line: #ffd1dc;
+            --muted: #667085;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top right, rgba(255, 95, 118, .18), transparent 34%),
+                linear-gradient(135deg, #fffafa 0%, #fff0f4 48%, #fff7f9 100%);
+            color: var(--dark);
+            font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+        }
+
+        .wrap {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 34px 22px;
+        }
+
+        .topbar {
+            border-left: 4px solid var(--red);
+            background: linear-gradient(90deg, #fff1f4, #fff7f9);
+            border-radius: 0 14px 14px 0;
+            padding: 15px 19px;
+            font-weight: 900;
+            color: var(--deep);
+            box-shadow: 0 10px 24px rgba(180, 0, 30, .06);
+        }
+
+        .hero {
+            margin-top: 18px;
+            background: rgba(255,255,255,.92);
+            border: 1px solid var(--line);
+            border-radius: 30px;
+            padding: 34px;
+            box-shadow: 0 20px 46px rgba(180,0,30,.08);
+        }
+
+        .badge {
+            width: 72px;
+            height: 72px;
+            border-radius: 22px;
+            display: grid;
+            place-items: center;
+            color: white;
+            font-size: 34px;
+            font-weight: 950;
+            background: linear-gradient(135deg, var(--red), var(--red2));
+            box-shadow: 0 18px 34px rgba(230, 0, 35, .18);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(38px, 5vw, 64px);
+            line-height: 1;
+            letter-spacing: -.05em;
+            color: var(--dark);
+            font-weight: 950;
+        }
+
+        p {
+            margin: 18px 0 0;
+            max-width: 760px;
+            color: var(--muted);
+            font-size: 20px;
+            line-height: 1.7;
+            font-weight: 650;
+        }
+
+        .empty-card {
+            margin-top: 26px;
+            border: 1px dashed #ff9cac;
+            border-radius: 24px;
+            padding: 28px;
+            background: #fffafa;
+            color: #8a0015;
+            font-size: 18px;
+            line-height: 1.6;
+            font-weight: 750;
+        }
+
+        .actions {
+            margin-top: 26px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            min-height: 50px;
+            padding: 0 22px;
+            border: 0;
+            border-radius: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-weight: 950;
+            font-size: 16px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--red), var(--red2));
+            color: white;
+            box-shadow: 0 14px 28px rgba(230,0,35,.18);
+        }
+
+        .btn-light {
+            background: #fff1f4;
+            color: #8a0015;
+            border: 1px solid var(--line);
+        }
+    
+.back-exit-btn{
+    position: fixed;
+    top: 18px;
+    right: 22px;
+    z-index: 9999;
+    min-height: 46px;
+    padding: 0 18px;
+    border-radius: 999px;
+    background: linear-gradient(135deg,#e60023,#ff5f76);
+    color: white !important;
+    text-decoration: none !important;
+    font-weight: 900;
+    font-size: 15px;
+    box-shadow: 0 14px 28px rgba(230,0,35,.18);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.back-exit-btn:hover{
+    filter: brightness(.96);
+    transform: translateY(-1px);
+}
+@media(max-width:700px){
+    .back-exit-btn{
+        top: 12px;
+        right: 12px;
+        min-height: 42px;
+        padding: 0 14px;
+        font-size: 14px;
+    }
+}
+
+</style>
+
+<style class="part-card-clickable-hover-fix">
+.card:hover,
+.part-card:hover,
+.part-item:hover,
+article:hover {
+    cursor: pointer;
+}
+</style>
+
+    <link rel="stylesheet" href="{% static 'css/sidebar_size_only.css' %}">
+    <link rel="stylesheet" href="{% static 'css/safe_dashboard_layout.css' %}">
+    <link rel="stylesheet" href="{% static 'css/student_watermark_security.css' %}">
+</head>
+
+<body>
+<a class="back-exit-btn" href="/dashboard/listening-parts/">← Thoát</a>
+    <main class="wrap">
+        <section class="topbar">{{ part_title }}</section>
+
+        <section class="hero">
+            <div class="badge">{{ part_number }}</div>
+            <h1>{{ part_title }}</h1>
+            <p>{{ part_desc }}</p>
+
+            <div class="empty-card">
+                Dữ liệu của {{ part_title }} hiện chưa được nhập. Khi bạn bắt đầu làm phần này, mình sẽ tạo giao diện quản lý chi tiết giống Part 1/Part 2 nhưng không ảnh hưởng dữ liệu Part 1.
+            </div>
+
+            <div class="actions">
+                <a class="btn btn-primary" href="/dashboard/listening-parts/">Quay lại chọn Part</a>
+                <a class="btn btn-light" href="/dashboard/">Về Dashboard</a>
+            </div>
+        </section>
+    </main>
+
+<script>
+(function safePartCardClickOnly(){
+    const path = window.location.pathname;
+
+    const isAdminPartPage =
+        path === "/dashboard/listening-parts/" ||
+        path === "/dashboard/listening-parts";
+
+    const isStudentListeningPage =
+        path === "/listening/" ||
+        path === "/listening";
+
+    if(!isAdminPartPage && !isStudentListeningPage) return;
+
+    const adminLinks = {
+        "1": "/dashboard/part-1/",
+        "2": "/dashboard/part-2/",
+        "3": "/dashboard/part-3/",
+        "4": "/dashboard/part-4/"
+    };
+
+    const studentLinks = {
+        "1": "/listening/",
+        "2": "/listening/part-2/",
+        "3": "/listening/part-3/",
+        "4": "/listening/part-4/"
+    };
+
+    const links = isStudentListeningPage ? studentLinks : adminLinks;
+
+    document.querySelectorAll(".part-card, .part-item, .card, article").forEach(card => {
+        const text = (card.innerText || "").replace(/\s+/g, " ");
+        const match = text.match(/\bPart\s*([1-4])\b/i);
+        if(!match) return;
+
+        const partNo = match[1];
+        const url = links[partNo];
+        if(!url) return;
+
+        const rect = card.getBoundingClientRect();
+        if(rect.width < 120 || rect.height < 80) return;
+
+        card.style.cursor = "pointer";
+        card.setAttribute("role", "button");
+        card.setAttribute("tabindex", "0");
+
+        card.addEventListener("click", function(e){
+            if(e.target.closest("a, button, input, textarea, select, label")) return;
+            window.location.href = url;
+        });
+
+        card.addEventListener("keydown", function(e){
+            if(e.key === "Enter" || e.key === " "){
+                e.preventDefault();
+                window.location.href = url;
+            }
+        });
+    });
+})();
+</script>
+
+    {% include "core/_student_watermark.html" %}
+    <script src="{% static 'js/student_watermark_security.js' %}"></script>
+</body>
+</html>
